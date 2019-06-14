@@ -6,7 +6,7 @@ This research project concerns the depiction of gender in historical English lan
 
 Currently, we have analyzed a corpus of over 4,200 books from [Project Gutenberg](https://www.gutenberg.org/), an online book repository, utilizing programming methods we developed. Among our findings, we discovered the ratio of male pronouns to female pronouns, the most common words after male and female pronouns, and the distance between repetitions of male and female pronouns.
 
-Our analysis and writeups are available at [The Gender Novels Project][http://gendernovels.digitalhumanitesmit.org] website.
+Our analysis and writeups are available at [The Gender Novels Project](http://gendernovels.digitalhumanitesmit.org) website.
 
 *This MIT Digital Humanities Lab project is part of the [MIT/SHASS Programs in Digital Humanities](https://digitalhumanities.mit.edu/) funded by the [Mellon Foundation](https://www.mellon.org/).*
 
