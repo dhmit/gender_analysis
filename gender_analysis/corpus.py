@@ -6,8 +6,8 @@ from pathlib import Path
 from collections import Counter
 import requests
 
-from . import common
-from .novel import Novel
+from gender_analysis import common
+from gender_analysis.novel import Novel
 
 
 class Corpus(common.FileLoaderMixin):
