@@ -2,7 +2,7 @@ import gender_analysis
 import doctest
 
 def print_test_header(test_name):
-    print('\n')
+    print('\n\n')
     print('================================================================================')
     print(f'Testing {test_name}')
     print('================================================================================')
@@ -27,3 +27,7 @@ if __name__ == '__main__':
     failures += new_failures
     tests += new_tests
 
+    if failures:
+        exit(1)
+    else:
+        exit(0)
