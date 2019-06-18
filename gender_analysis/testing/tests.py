@@ -4,7 +4,7 @@ def sum_to_num(max_number):
     """
     Returns the sum from 0 to max_number inclusive.
 
-    >>> from gender_novels.testing import tests
+    >>> from gender_analysis.testing import tests
     >>> x = tests.sum_to_num(3)
     >>> x
     6
@@ -20,7 +20,7 @@ def sum_to_num(max_number):
 
 def count_vowels(word):
     """
-    >>> from gender_novels.testing import tests
+    >>> from gender_analysis.testing import tests
     >>> tests.count_vowels('asdf')
     1
 
@@ -45,11 +45,11 @@ class Count(unittest.TestCase):
 
 class Imports(unittest.TestCase):
     """
-    Tests if the gender_novels and dh_testers modules are installed
+    Tests if the gender_analysis and dh_testers modules are installed
     """
     def test_imports(self):
         import importlib
-        for package in ['gender_novels', 'dh_testers']:
+        for package in ['gender_analysis', 'dh_testers']:
             try:
                 importlib.import_module(package)
                 self.assertTrue(True, f'{package} loaded successfully.')

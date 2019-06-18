@@ -1,10 +1,10 @@
-from gender_novels.corpus import Corpus
+from gender_analysis.corpus import Corpus
 from statistics import median, mean
 
 import numpy as np
 import matplotlib.pyplot as plt
-from gender_novels.analysis.analysis import find_male_adj, find_female_adj, find_gender_adj
-from gender_novels import common
+from gender_analysis.analysis.analysis import find_male_adj, find_female_adj, find_gender_adj
+from gender_analysis import common
 from pprint import pprint
 
 

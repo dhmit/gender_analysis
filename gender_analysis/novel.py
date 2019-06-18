@@ -12,7 +12,7 @@ nltk.download('punkt', quiet=True)
 nltk.download('averaged_perceptron_tagger', quiet=True)
 gutenberg_imported = True
 
-from gender_novels import common
+from gender_analysis import common
 from ast import literal_eval
 
 
@@ -21,7 +21,7 @@ try:
 except ImportError:
     print('Cannot import gutenberg')
     gutenberg_imported = False
-from gender_novels.common import TEXT_END_MARKERS, TEXT_START_MARKERS, LEGALESE_END_MARKERS, \
+from gender_analysis.common import TEXT_END_MARKERS, TEXT_START_MARKERS, LEGALESE_END_MARKERS, \
     LEGALESE_START_MARKERS
 
 
@@ -29,7 +29,7 @@ class Novel(common.FileLoaderMixin):
     """ The Novel class loads and holds the full text and
     metadata (author, title, publication date) of a novel
 
-    >>> from gender_novels import novel
+    >>> from gender_analysis import novel
     >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}
@@ -118,7 +118,7 @@ class Novel(common.FileLoaderMixin):
         The word_count attribute is useful for the get_word_freq function.
         However, it is performance-wise costly, so it's only loaded when it's actually required.
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
@@ -139,7 +139,7 @@ class Novel(common.FileLoaderMixin):
         Returns the filename without the extension - author and title word
         :return: str
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
@@ -159,7 +159,7 @@ class Novel(common.FileLoaderMixin):
 
         :return: string
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
@@ -175,7 +175,7 @@ class Novel(common.FileLoaderMixin):
         """
         Overload the equality operator to enable comparing and sorting novels.
 
-        >>> from gender_novels.novel import Novel
+        >>> from gender_analysis.novel import Novel
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
@@ -207,7 +207,7 @@ class Novel(common.FileLoaderMixin):
         """
         Overload less than operator to enable comparing and sorting novels
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
@@ -280,7 +280,7 @@ class Novel(common.FileLoaderMixin):
 
         :return: str
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'james_highway.txt'}
@@ -321,7 +321,7 @@ class Novel(common.FileLoaderMixin):
 
         :return: str
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'james_highway.txt'}
@@ -398,7 +398,7 @@ class Novel(common.FileLoaderMixin):
         better implementation that uses either regex or nltk
         E.g. this version doesn't handle dashes or contractions
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                   'corpus_name': 'sample_novels', 'filename': 'austen_persuasion.txt',
         ...                   'text': '?!All-kinds %$< of pun*ct(uatio)n {a}nd sp+ecial cha/rs'}
@@ -424,7 +424,7 @@ class Novel(common.FileLoaderMixin):
         """
         Finds all of the quoted statements in the novel text
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> test_text = '"This is a quote" and also "This is my quote"'
         >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
@@ -479,7 +479,7 @@ class Novel(common.FileLoaderMixin):
     def get_count_of_word(self, word):
         """
         Returns the number of instances of str word in the text.  N.B.: Not case-sensitive.
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> summary = "Hester was convicted of adultery. "
         >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
         >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
@@ -509,7 +509,7 @@ class Novel(common.FileLoaderMixin):
         when a user either runs Novel.get_count_of_word or Novel.get_wordcount_counter, hence
         the separate method.)
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> summary = "Hester was convicted of adultery was convicted."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
@@ -533,7 +533,7 @@ class Novel(common.FileLoaderMixin):
         new word
         Note: words always return lowercase
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> summary = "She took a lighter out of her purse and handed it over to him."
         >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
         >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
@@ -567,7 +567,7 @@ class Novel(common.FileLoaderMixin):
         window_size is the number of words before and after to return, so the total window is
         2x window_size + 1
 
-        >>> from gender_novels.novel import Novel
+        >>> from gender_analysis.novel import Novel
         >>> summary = "She took a lighter out of her purse and handed it over to him."
         >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
         >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
@@ -610,7 +610,7 @@ class Novel(common.FileLoaderMixin):
         :param words: str
         :return: double
 
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> summary = "Hester was convicted of adultery. "
         >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
         >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
@@ -632,7 +632,7 @@ class Novel(common.FileLoaderMixin):
         term, the second one the part of speech tag.
         Note: the same word can have a different part of speech tag. In the example below,
         see "refuse" and "permit"
-        >>> from gender_novels.novel import Novel
+        >>> from gender_analysis.novel import Novel
         >>> summary = "They refuse to permit us to obtain the refuse permit."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',

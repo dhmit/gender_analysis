@@ -4,8 +4,8 @@ from collections import Counter
 import nltk
 from scipy.stats import chi2
 
-from gender_novels.common import store_pickle, load_pickle
-from gender_novels.corpus import Corpus
+from gender_analysis.common import store_pickle, load_pickle
+from gender_analysis.corpus import Corpus
 
 # TODO: Rewrite all of this using a Dunning class in a non-messy way.
 

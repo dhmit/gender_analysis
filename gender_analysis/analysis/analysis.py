@@ -1,8 +1,8 @@
 """
-This file is intended for individual analyses of the gender_novels project
+This file is intended for individual analyses of the gender_analysis project
 """
 
-from gender_novels.corpus import Corpus
+from gender_analysis.corpus import Corpus
 import nltk
 import math
 from operator import itemgetter
@@ -34,7 +34,7 @@ def get_count_words(novel, words):
     Returns a dictionary where the keys are the elements of 'words' list
     and the values are the numbers of occurences of the elements in the novel.
     N.B.: Not case-sensitive.
-    >>> from gender_novels import novel
+    >>> from gender_analysis import novel
     >>> summary = "Hester was convicted of adultery. "
     >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
     >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
@@ -62,7 +62,7 @@ def get_comparative_word_freq(freqs):
     :param freqs: dictionary
     :return: dictionary
 
-    >>> from gender_novels import novel
+    >>> from gender_analysis import novel
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
@@ -287,7 +287,7 @@ def dunning_total(m_corpus, f_corpus):
 def instance_dist(novel, word):
     """
     Takes in a particular word, returns a list of distances between each instance of that word in the novel.
-    >>> from gender_novels import novel
+    >>> from gender_analysis import novel
     >>> summary = "Hester was her convicted of adultery. "
     >>> summary += "which made her very sad, and then her Arthur was also sad, and her everybody was "
     >>> summary += "sad and then Arthur her died and it was very sad. her Sadness."
@@ -323,7 +323,7 @@ def pronoun_instance_dist(novel, words):
     """
         Takes in a novel and list of gender pronouns, returns a list of distances between each
         instance of a pronoun in that novel
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> summary = "James was his convicted of adultery. "
         >>> summary += "which made him very sad, and then his Jane was also sad, and himself everybody was "
         >>> summary += "sad and then he died and it was very sad. His Sadness."
@@ -358,7 +358,7 @@ def pronoun_instance_dist(novel, words):
 def male_instance_dist(novel):
     """
         Takes in a novel, returns a list of distances between each instance of a female pronoun in that novel
-       >>> from gender_novels import novel
+       >>> from gender_analysis import novel
        >>> summary = "James was his convicted of adultery. "
        >>> summary += "which made him very sad, and then he Arthur was also sad, and himself everybody was "
        >>> summary += "sad and then he died and it was very sad. His Sadness."
@@ -378,7 +378,7 @@ def male_instance_dist(novel):
 def female_instance_dist(novel):
     """
         Takes in a novel, returns a list of distances between each instance of a female pronoun in that novel
-       >>> from gender_novels import novel
+       >>> from gender_analysis import novel
        >>> summary = "Hester was her convicted of adultery. "
        >>> summary += "which made her very sad, and then she Hester was also sad, and herself everybody was "
        >>> summary += "sad and then she died and it was very sad. Her Sadness."
@@ -399,7 +399,7 @@ def find_gender_adj(novel, female):
     """
         Takes in a novel and boolean indicating gender, returns a dictionary of adjectives that appear within
         a window of 5 words around each male pronoun
-        >>> from gender_novels import novel
+        >>> from gender_analysis import novel
         >>> summary = "James was convicted of adultery. "
         >>> summary += "he was a handsome guy, and everyone thought that he was so handsome, and everybody was "
         >>> summary += "sad and then he died a very handsome death. His Sadness."
@@ -456,7 +456,7 @@ def find_gender_adj(novel, female):
 def find_male_adj(novel):
     """
         Takes in a novel, returns a dictionary of adjectives that appear within a window of 5 words around each male pronoun
-       >>> from gender_novels import novel
+       >>> from gender_analysis import novel
        >>> summary = "James was convicted of adultery. "
        >>> summary += "he was a handsome guy, and everyone thought that he was so handsome, and everybody was "
        >>> summary += "sad and then he died a very handsome death. His Sadness."
@@ -476,7 +476,7 @@ def find_male_adj(novel):
 def find_female_adj(novel):
     """
         Takes in a novel, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun
-       >>> from gender_novels import novel
+       >>> from gender_analysis import novel
        >>> summary = "Jane was convicted of adultery. "
        >>> summary += "she was a beautiful gal, and everyone thought that she was very beautiful, and everybody was "
        >>> summary += "sad and then she died. Everyone agreed that she was a beautiful corpse that deserved peace."

@@ -403,7 +403,7 @@ def get_novel_text_gutenberg_with_boilerplate(gutenberg_id):
     """
     Extract text as as string from file
 
-    >>> from gender_novels.corpus_gen import get_novel_text_gutenberg
+    >>> from gender_analysis.corpus_gen import get_novel_text_gutenberg
     >>> text = get_novel_text_gutenberg_with_boilerplate(32)
     >>> text.split()[:3]
     ['The', 'Project', 'Gutenberg']
@@ -435,11 +435,11 @@ def get_publication_date(author, title, gutenberg_id):
     methods to try and find the publication date
     If it can't returns None
 
-    >>> from gender_novels import corpus_gen
+    >>> from gender_analysis import corpus_gen
     >>> get_publication_date("Hawthorne, Nathaniel", "The Scarlet Letter", 33)
     1850
 
-    # >>> from gender_novels import corpus_gen
+    # >>> from gender_analysis import corpus_gen
     # >>> get_publication_date("Dick, Phillip K.", "Mr. Spaceship", 32522)
     # 1953
 
@@ -469,7 +469,7 @@ def get_publication_date_wikidata(author, title):
     Adventures of Huckleberry Finn).  Should it be tried to fix that?
     Function also doesn't use author parameter
 
-    >>> from gender_novels import corpus_gen
+    >>> from gender_analysis import corpus_gen
     >>> get_publication_date_wikidata("Bacon, Francis", "Novum Organum")
     1620
     >>> get_publication_date_wikidata("Duan, Mingfei", "How I Became a Billionaire and also the President")
@@ -521,7 +521,7 @@ def get_publication_date_from_copyright_certain(novel_text):
 
     >>> novel_text = "This work blah blah blah blah COPYRIGHT, 1894 blah"
     >>> novel_text += "and they all died."
-    >>> from gender_novels.corpus_gen import get_publication_date_from_copyright_certain
+    >>> from gender_analysis.corpus_gen import get_publication_date_from_copyright_certain
     >>> get_publication_date_from_copyright_certain(novel_text)
     1894
 
@@ -544,7 +544,7 @@ def get_publication_date_from_copyright_uncertain(novel_text):
 
     >>> novel_text = "This work blah blah blah blah Brams and Co. 1894 blah"
     >>> novel_text += "and they all died."
-    >>> from gender_novels.corpus_gen import get_publication_date_from_copyright_uncertain
+    >>> from gender_analysis.corpus_gen import get_publication_date_from_copyright_uncertain
     >>> get_publication_date_from_copyright_uncertain(novel_text)
     1894
 
@@ -569,7 +569,7 @@ def get_country_publication(author, title):
     Don't separate countries of UK (England, Wales, etc.)
     TODO: should we separate those countries?  Easier to integrate later than separate
 
-    >>> from gender_novels import corpus_gen
+    >>> from gender_analysis import corpus_gen
     >>> get_country_publication("Hawthorne, Nathaniel", "The Scarlet Letter")
     'United States'
 
@@ -588,7 +588,7 @@ def get_country_publication_wikidata(author, title):
     """
     Tries to get country of publication from wikidata
     Otherwise, returns None
-    >>> from gender_novels import corpus_gen
+    >>> from gender_analysis import corpus_gen
     >>> get_country_publication_wikidata("Trump, Donald", "Trump: The Art of the Deal")
     'United States'
 
@@ -655,7 +655,7 @@ def format_author(author):
     and a string in the form "Lastname, Firstname, Sfx." into "Firstname Lastname, Sfx."
     If string is not in any of the above forms just returns the string.
 
-    >>> from gender_novels.corpus_gen import format_author
+    >>> from gender_analysis.corpus_gen import format_author
     >>> format_author("Washington, George")
     'George Washington'
     >>> format_author("Hurston, Zora Neale")
@@ -694,7 +694,7 @@ def get_author_gender(authors):
     #TODO: 'both' is ambiguous; Does it mean both female and male?  female and unknown?
     #TODO: male and nonbinary?
 
-    >>> from gender_novels.corpus_gen import get_author_gender
+    >>> from gender_analysis.corpus_gen import get_author_gender
     >>> get_author_gender(["Hawthorne, Nathaniel"])
     'male'
     >>> get_author_gender(["Cuthbert, Michael"])
@@ -748,7 +748,7 @@ def get_author_gender_wikidata(author):
     If it fails returns None
     N.B. Wikidata's categories for transgender male and female are treated as male and female, respectively
 
-    >>> from gender_novels.corpus_gen import get_author_gender_wikidata
+    >>> from gender_analysis.corpus_gen import get_author_gender_wikidata
     >>> get_author_gender_wikidata("Obama, Barack")
     'male'
     >>> get_author_gender_wikidata("Hurston, Zora Neale")
@@ -777,7 +777,7 @@ def get_gender_from_wiki_claims(clm_dict):
     If it fails returns None
     N.B. Wikidata's categories for transgender male and female are treated as male and female, respectively
 
-    >>> from gender_novels.corpus_gen import get_gender_from_wiki_claims
+    >>> from gender_analysis.corpus_gen import get_gender_from_wiki_claims
     >>> site = pywikibot.Site("en", "wikipedia")
     >>> page = pywikibot.Page(site, 'Zeus')
     >>> item = pywikibot.ItemPage.fromPage(page)
@@ -809,7 +809,7 @@ def get_author_gender_guesser(author):
     """
     Tries to get gender of author, 'female', 'male', 'non-binary' from the gender guesser module
 
-    >>> from gender_novels.corpus_gen import get_author_gender_guesser
+    >>> from gender_analysis.corpus_gen import get_author_gender_guesser
     >>> get_author_gender_guesser("Cuthbert, Michael")
     'male'
     >>> get_author_gender_guesser("Li, Michelle")
@@ -836,7 +836,7 @@ def get_subject_gutenberg(gutenberg_id):
     """
     Tries to get subjects
 
-    >>> from gender_novels import corpus_gen
+    >>> from gender_analysis import corpus_gen
     >>> get_subject_gutenberg(5200)
     ['Metamorphosis -- Fiction', 'PT', 'Psychological fiction']
 
@@ -855,7 +855,7 @@ def write_metadata(novel_metadata):
     Subject to change as metadata changes
 
     Running this doctest actually generates a file
-    # >>> from gender_novels import corpus_gen
+    # >>> from gender_analysis import corpus_gen
     # >>> corpus_gen.write_metadata({'id': 105, 'author': 'Austen, Jane', 'title': 'Persuasion',
     # ...                            'corpus_name': 'gutenberg', 'date': '1818',
     # ...                            'country_publication': 'England', 'subject': ['England -- Social life and customs -- 19th century -- Fiction'],
