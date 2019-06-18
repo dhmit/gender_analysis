@@ -21,11 +21,11 @@ if PYTHON_VERSION.major < 3 or (PYTHON_VERSION.major == 3 and PYTHON_VERSION.min
     sys.exit(ERR)
 
 setuptools.setup(
-    name="gender-novels",
+    name="gender-analysis",
     version="0.1.0",
     author="MIT Digital Humanities Lab",
     author_email="digitalhumanities@mit.edu",
-    description="Descriptions of Gender in Writing",
+    description="Toolkit for analyzing gender in documents",
     install_requires=REQUIRED_PACKAGES,
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdowns",

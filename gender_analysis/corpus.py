@@ -4,10 +4,10 @@ import nltk
 from nltk.tokenize import word_tokenize
 from pathlib import Path
 from collections import Counter
+import requests
 
 from gender_analysis import common
 from gender_analysis.novel import Document
-import requests
 
 
 class Corpus(common.FileLoaderMixin):
@@ -629,9 +629,6 @@ def get_metadata_fields(corpus_name):
         return ['author', 'date', 'title', 'country_publication', 'author_gender', 'filename', 'notes']
     else:
         return common.METADATA_LIST
-
-
-
 
 
 if __name__ == '__main__':
