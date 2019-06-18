@@ -30,7 +30,7 @@ sns.set_style(style_name,style_list)
 
 def get_count_words(novel, words):
     """
-    Takes in novel, a Novel object, and words, a list of words to be counted.
+    Takes in novel, a Document object, and words, a list of words to be counted.
     Returns a dictionary where the keys are the elements of 'words' list
     and the values are the numbers of occurences of the elements in the novel.
     N.B.: Not case-sensitive.
@@ -41,7 +41,7 @@ def get_count_words(novel, words):
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1850',
     ...                   'filename': None, 'text': summary}
-    >>> scarlett = novel.Novel(novel_metadata)
+    >>> scarlett = novel.Document(novel_metadata)
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
 
@@ -66,7 +66,7 @@ def get_comparative_word_freq(freqs):
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
-    >>> scarlet = novel.Novel(novel_metadata)
+    >>> scarlet = novel.Document(novel_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
     {'he': 0.007329554965683813, 'she': 0.005894731807638042}
@@ -126,7 +126,7 @@ def display_gender_freq(d, title):
     Takes in a dictionary sorted by author and gender frequencies, and a title.
     Outputs the resulting graph to 'visualizations/title.pdf' AND 'visualizations/title.png'
 
-    dictionary format {"Author/Novel": [he_freq, she_freq]}
+    dictionary format {"Author/Document": [he_freq, she_freq]}
 
     Will scale to allow inputs of larger dictionaries with non-binary values
 
@@ -294,7 +294,7 @@ def instance_dist(novel, word):
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1966',
     ...                   'filename': None, 'text': summary}
-    >>> scarlett = novel.Novel(novel_metadata)
+    >>> scarlett = novel.Document(novel_metadata)
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
 
@@ -330,7 +330,7 @@ def pronoun_instance_dist(novel, words):
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1966',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = novel.Document(novel_metadata)
         >>> pronoun_instance_dist(scarlett, ["his", "him", "he", "himself"])
         [6, 5, 6, 6, 7]
 
@@ -365,7 +365,7 @@ def male_instance_dist(novel):
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'sample_novels', 'date': '1966',
        ...                   'filename': None, 'text': summary}
-       >>> scarlett = novel.Novel(novel_metadata)
+       >>> scarlett = novel.Document(novel_metadata)
        >>> male_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
 
@@ -385,7 +385,7 @@ def female_instance_dist(novel):
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'sample_novels', 'date': '1966',
        ...                   'filename': None, 'text': summary}
-       >>> scarlett = novel.Novel(novel_metadata)
+       >>> scarlett = novel.Document(novel_metadata)
        >>> female_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
 
@@ -406,7 +406,7 @@ def find_gender_adj(novel, female):
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1966',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = novel.Document(novel_metadata)
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}
 
@@ -463,7 +463,7 @@ def find_male_adj(novel):
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'sample_novels', 'date': '1966',
        ...                   'filename': None, 'text': summary}
-       >>> scarlett = novel.Novel(novel_metadata)
+       >>> scarlett = novel.Document(novel_metadata)
        >>> find_male_adj(scarlett)
        {'handsome': 3, 'sad': 1}
 
@@ -483,7 +483,7 @@ def find_female_adj(novel):
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'sample_novels', 'date': '1966',
        ...                   'filename': None, 'text': summary}
-       >>> scarlett = novel.Novel(novel_metadata)
+       >>> scarlett = novel.Document(novel_metadata)
        >>> find_female_adj(scarlett)
        {'beautiful': 3, 'sad': 1}
 

@@ -178,7 +178,7 @@ class Document(common.FileLoaderMixin):
 <<<<<<< HEAD
         >>> from gender_analysis.novel import Document
 =======
-        >>> from gender_analysis.novel import Novel
+        >>> from gender_analysis.novel import Document
 >>>>>>> 1c5b9adf840e5ff837451e1b80e335dc4edb301b
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
@@ -574,7 +574,7 @@ class Document(common.FileLoaderMixin):
 <<<<<<< HEAD
         >>> from gender_analysis.novel import Document
 =======
-        >>> from gender_analysis.novel import Novel
+        >>> from gender_analysis.novel import Document
 >>>>>>> 1c5b9adf840e5ff837451e1b80e335dc4edb301b
         >>> summary = "She took a lighter out of her purse and handed it over to him."
         >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
@@ -643,7 +643,7 @@ class Document(common.FileLoaderMixin):
 <<<<<<< HEAD
         >>> from gender_analysis.novel import Document
 =======
-        >>> from gender_analysis.novel import Novel
+        >>> from gender_analysis.novel import Document
 >>>>>>> 1c5b9adf840e5ff837451e1b80e335dc4edb301b
         >>> summary = "They refuse to permit us to obtain the refuse permit."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',

@@ -2,7 +2,7 @@ import urllib
 from nltk.parse.stanford import StanfordDependencyParser
 from nltk.tokenize import sent_tokenize, word_tokenize
 from gender_analysis.corpus import Corpus
-from gender_analysis.novel import Novel
+from gender_analysis.novel import Document
 from gender_analysis.common import store_pickle, load_pickle
 import os.path
 import csv
@@ -31,7 +31,7 @@ def get_parser(path_to_jar, path_to_models_jar):
 def pickle(novel, parser):
     """
     This function returns a pickled tree
-    :param novel: Novel we are interested in
+    :param novel: Document we are interested in
     :param parser: Stanford parser object
     :return: tree in pickle format
 
@@ -74,7 +74,7 @@ def pickle(novel, parser):
 def parse_novel(novel, parser):
     """
     This function parses all sentences in the novel
-    :param novel: Novel object we want to analyze
+    :param novel: Document object we want to analyze
     :param parser: Stanford dependency parser
     :return: list containing the following:
     - Title of novel
@@ -92,7 +92,7 @@ def parse_novel(novel, parser):
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': None, 'text': "He told her"}
-    >>> toy_novel = Novel(novel_metadata)
+    >>> toy_novel = Document(novel_metadata)
     >>> parse_novel(toy_novel, parser)
     ('Scarlet Letter', 1, 0, 0, 1, [], ['told'], [], [])
 
