@@ -11,8 +11,8 @@ from gutenberg.acquire import get_metadata_cache
 from gutenberg.cleanup import strip_headers
 from gutenberg.query import get_metadata
 
-from gender_novels import common
-from gender_novels.common import AUTHOR_NAME_REGEX, BASE_PATH, METADATA_LIST
+from gender_analysis import common
+from gender_analysis.common import AUTHOR_NAME_REGEX, BASE_PATH, METADATA_LIST
 
 
 SUBJECTS_TO_IGNORE = ["nonfiction", "dictionaries", "bibliography", "poetry", "short stories", "biography", "encyclopedias",
@@ -153,7 +153,7 @@ def is_valid_novel_gutenberg(gutenberg_id):
     if novel is in correct publication range
     That novel is not a translation
 
-    >>> from gender_novels.corpus_gen import is_valid_novel_gutenberg
+    >>> from gender_analysis.corpus_gen import is_valid_novel_gutenberg
     >>> is_valid_novel_gutenberg(98) # Dickens, tale of two cities
     A Tale of Two Cities
     True
@@ -198,7 +198,7 @@ def language_invalidates_entry(gutenberg_id):
     """
     Returns False if book with gutenberg id is in English, True otherwise
 
-    >>> from gender_novels.corpus_gen import language_invalidates_entry
+    >>> from gender_analysis.corpus_gen import language_invalidates_entry
     >>> language_invalidates_entry(46) # A Christmas Carol
     False
     >>> language_invalidates_entry(27217) # Some Chinese thing
@@ -218,7 +218,7 @@ def rights_invalidate_entry(gutenberg_id):
     """
     Returns False if book with gutenberg id is in public domain in US, True otherwise
 
-    >>> from gender_novels.corpus_gen import rights_invalidate_entry
+    >>> from gender_analysis.corpus_gen import rights_invalidate_entry
     >>> rights_invalidate_entry(5200) # Metamorphosis by Franz Kafka
     True
     >>> rights_invalidate_entry(8066) # The Bible, King James version, Book 66: Revelation
@@ -238,7 +238,7 @@ def subject_invalidates_entry(gutenberg_id):
     """
     Checks if the Gutenberg subject indicates that the book is not a novel
 
-    >>> from gender_novels.corpus_gen import subject_invalidates_entry
+    >>> from gender_analysis.corpus_gen import subject_invalidates_entry
     >>> subject_invalidates_entry(2240) # Much Ado About Nothing
     True
     >>> subject_invalidates_entry(33) # The Scarlet Letter
@@ -267,7 +267,7 @@ def date_invalidates_entry(gutenberg_id):
     """
     Checks if book with gutenberg id is in correct date range.  If it can't get the date, simply
     returns False
-    >>> from gender_novels.corpus_gen import date_invalidates_entry
+    >>> from gender_analysis.corpus_gen import date_invalidates_entry
     >>> date_invalidates_entry(33) # Hawthorne, Scarlet Letter
     False
     >>> date_invalidates_entry(173) # no publication date
@@ -293,7 +293,7 @@ def title_invalidates_entry(title):
     """
     Determines if the title contains phrases that indicate that the book is invalid
 
-    >>> from gender_novels.corpus_gen import title_invalidates_entry
+    >>> from gender_analysis.corpus_gen import title_invalidates_entry
     >>> title_invalidates_entry("Index of the Project Gutenberg Works of Michael Cuthbert")
     True
     >>> title_invalidates_entry("Pride and Prejudice")
@@ -324,10 +324,10 @@ def text_invalidates_entry(text):
     """
     Determine if there is anything obvious in the text that would invalidate it as a valid novel
 
-    >>> from gender_novels.corpus_gen import text_invalidates_entry
+    >>> from gender_analysis.corpus_gen import text_invalidates_entry
     >>> text_invalidates_entry("Translator: George Fyler Townsend")
     True
-    >>> from gender_novels.corpus_gen import get_novel_text_gutenberg
+    >>> from gender_analysis.corpus_gen import get_novel_text_gutenberg
     >>> import os
     >>> current_dir = os.path.abspath(os.path.dirname(__file__))
     >>> filepath = Path(current_dir, r"corpora/sample_novels/texts/hawthorne_scarlet.txt")
@@ -353,7 +353,7 @@ def get_author_gutenberg(gutenberg_id):
     """
     Gets author or authors for novel with this gutenberg id
 
-    >>> from gender_novels import corpus_gen
+    >>> from gender_analysis import corpus_gen
     >>> get_author_gutenberg(33)
     ['Hawthorne, Nathaniel']
     >>> get_author_gutenberg(3178)
@@ -371,7 +371,7 @@ def get_title_gutenberg(gutenberg_id):
     """
     Gets title for novel with this gutenberg id
 
-    >>> from gender_novels import corpus_gen
+    >>> from gender_analysis import corpus_gen
     >>> get_title_gutenberg(33)
     'The Scarlet Letter'
 
@@ -387,7 +387,7 @@ def get_novel_text_gutenberg(gutenberg_id):
     """
     Extract text as as string from file, with boilerplate removed
 
-    >>> from gender_novels.corpus_gen import get_novel_text_gutenberg
+    >>> from gender_analysis.corpus_gen import get_novel_text_gutenberg
     >>> text = get_novel_text_gutenberg(32)
     >>> text[:7]
     'HERLAND'

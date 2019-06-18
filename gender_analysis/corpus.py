@@ -5,8 +5,8 @@ from nltk.tokenize import word_tokenize
 from pathlib import Path
 from collections import Counter
 
-from gender_novels import common
-from gender_novels.novel import Novel
+from gender_analysis import common
+from gender_analysis.novel import Novel
 import requests
 
 
@@ -16,7 +16,7 @@ class Corpus(common.FileLoaderMixin):
 
     Once loaded, each corpus contains a list of Novel objects
 
-    >>> from gender_novels.corpus import Corpus
+    >>> from gender_analysis.corpus import Corpus
     >>> c = Corpus('sample_novels')
     >>> type(c.novels), len(c)
     (<class 'list'>, 99)

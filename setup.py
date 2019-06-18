@@ -1,5 +1,5 @@
 """
-Setup script for gender_novels installation
+Setup script for gender_analysis installation
 """
 import sys
 import setuptools
@@ -13,7 +13,7 @@ with open("README.md", "r") as fh:
 # Check if Python 3.6 or 3.7 is installed.
 PYTHON_VERSION = sys.version_info
 if PYTHON_VERSION.major < 3 or (PYTHON_VERSION.major == 3 and PYTHON_VERSION.minor < 6):
-    ERR = ('gender_novels only supports Python Versions 3.6 and 3.7. '
+    ERR = ('gender_analysis only supports Python Versions 3.6 and 3.7. '
            + 'Your current Python version is {0}.{1}.'.format(
                str(PYTHON_VERSION.major),
                str(PYTHON_VERSION.minor)
@@ -29,7 +29,7 @@ setuptools.setup(
     install_requires=REQUIRED_PACKAGES,
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdowns",
-    url="https://github.com/dhmit/gender_novels",
+    url="https://github.com/dhmit/gender_analysis",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
