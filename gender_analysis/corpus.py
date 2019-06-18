@@ -4,10 +4,10 @@ import nltk
 from nltk.tokenize import word_tokenize
 from pathlib import Path
 from collections import Counter
-
-from gender_analysis import common
-from gender_analysis.novel import Novel
 import requests
+
+from . import common
+from .novel import Novel
 
 
 class Corpus(common.FileLoaderMixin):

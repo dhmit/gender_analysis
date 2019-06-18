@@ -11,6 +11,7 @@ python:
 
 install:
   - pip install -r requirements.txt
+  - pip install -e .
 
 script:
-  - python -c 'from gender_analysis.testing.travis import test as test; test()'
+  - python gender_analysis/testing/doctests.py 
