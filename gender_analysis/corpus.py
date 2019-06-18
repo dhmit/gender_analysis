@@ -294,21 +294,8 @@ class Corpus(common.FileLoaderMixin):
                 f'Gender must be {", ".join(supported_genders)} '
                 + f'but not {gender}.')
 
-        corpus_copy = self.clone()
-        corpus_copy.novels = []
+        return self.subcorpus('author_gender', gender)
 
-        for this_novel in self.novels:
-            # check if all novels have an author_gender attribute
-            if not hasattr(this_novel, 'author_gender'):
-                err = f'Cannot count author genders in {self.corpus_name} '
-                err += 'corpus. The novel '
-                err += f'{this_novel.title} by {this_novel.author} lacks '
-                err += 'the attribute "author_gender."'
-                raise AttributeError(err)
-            if this_novel.author_gender == gender:
-                corpus_copy.novels.append(this_novel)
-
-        return corpus_copy
 
     def get_wordcount_counter(self):
         """
