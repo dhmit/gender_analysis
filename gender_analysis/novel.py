@@ -175,7 +175,11 @@ class Document(common.FileLoaderMixin):
         """
         Overload the equality operator to enable comparing and sorting novels.
 
+<<<<<<< HEAD
         >>> from gender_analysis.novel import Document
+=======
+        >>> from gender_analysis.novel import Novel
+>>>>>>> 1c5b9adf840e5ff837451e1b80e335dc4edb301b
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
@@ -567,7 +571,11 @@ class Document(common.FileLoaderMixin):
         window_size is the number of words before and after to return, so the total window is
         2x window_size + 1
 
+<<<<<<< HEAD
         >>> from gender_analysis.novel import Document
+=======
+        >>> from gender_analysis.novel import Novel
+>>>>>>> 1c5b9adf840e5ff837451e1b80e335dc4edb301b
         >>> summary = "She took a lighter out of her purse and handed it over to him."
         >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
         >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
@@ -632,7 +640,11 @@ class Document(common.FileLoaderMixin):
         term, the second one the part of speech tag.
         Note: the same word can have a different part of speech tag. In the example below,
         see "refuse" and "permit"
+<<<<<<< HEAD
         >>> from gender_analysis.novel import Document
+=======
+        >>> from gender_analysis.novel import Novel
+>>>>>>> 1c5b9adf840e5ff837451e1b80e335dc4edb301b
         >>> summary = "They refuse to permit us to obtain the refuse permit."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',

@@ -1,10 +1,10 @@
-from gender_novels.corpus import Corpus
+from gender_analysis.corpus import Corpus
 from statistics import median, mean
 
 import numpy as np
 import matplotlib.pyplot as plt
-from gender_novels.analysis.analysis import male_instance_dist, female_instance_dist, pronoun_instance_dist
-from gender_novels import common
+from gender_analysis.analysis.analysis import male_instance_dist, female_instance_dist, pronoun_instance_dist
+from gender_analysis import common
 import pandas as pnds
 from scipy import stats
 from pprint import pprint

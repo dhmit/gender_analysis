@@ -27,12 +27,12 @@ Seaborn gives you more control over the styling of your graph. For this project,
 the same style codes. In order to do this, you must call the load_graph_settings method at the 
 beginning of the file with this code:
 ```angular2html
-from gender_novels.common import load_graph_settings
+from gender_analysis.common import load_graph_settings
 load_graph_settings()
 ```
 This defaults to putting grid lines in the graph. If you don't want grid lines, call this instead:
 ```angular2html
-from gender_novels.common import load_graph_settings
+from gender_analysis.common import load_graph_settings
 load_graph_settings(False)
 ```
 ## Other style requirements
@@ -63,7 +63,7 @@ Here's an example of a plot with fake data and correct styling:
 ```python
 # Here are the initial import and style statements
 import seaborn as sns
-from gender_novels.common import load_graph_settings
+from gender_analysis.common import load_graph_settings
 load_graph_settings()
 
 # This is the fake data I'm using

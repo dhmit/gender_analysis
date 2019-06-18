@@ -1,6 +1,6 @@
 """
-Runs all tests in the gender_novels folder IF the
-module is imported in gender_novels
+Runs all tests in the gender_analysis folder IF the
+module is imported in gender_analysis
 """
 
 if __name__ == '__main__':

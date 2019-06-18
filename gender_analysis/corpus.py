@@ -5,8 +5,8 @@ from nltk.tokenize import word_tokenize
 from pathlib import Path
 from collections import Counter
 
-from gender_novels import common
-from gender_novels.novel import Novel
+from gender_analysis import common
+from gender_analysis.novel import Novel
 import requests
 
 
@@ -16,7 +16,7 @@ class Corpus(common.FileLoaderMixin):
 
     Once loaded, each corpus contains a list of Novel objects
 
-    >>> from gender_novels.corpus import Corpus
+    >>> from gender_analysis.corpus import Corpus
     >>> c = Corpus('sample_novels')
     >>> type(c.novels), len(c)
     (<class 'list'>, 99)
@@ -110,7 +110,7 @@ class Corpus(common.FileLoaderMixin):
         For convenience: returns the number of novels in
         the corpus.
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> len(c)
         99
@@ -129,7 +129,7 @@ class Corpus(common.FileLoaderMixin):
 
         For convenience.
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> titles = []
         >>> for this_novel in c:
@@ -148,7 +148,7 @@ class Corpus(common.FileLoaderMixin):
         initializing a corpus.
         Presumes the novels to be sorted. (They get sorted by the initializer)
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> sample_corpus = Corpus('sample_novels')
         >>> sample_corpus.novels = sample_corpus.novels[:20]
         >>> male_corpus = sample_corpus.filter_by_gender('male')
@@ -179,7 +179,7 @@ class Corpus(common.FileLoaderMixin):
         Adds two corpora together and returns a copy of the result
         Note: retains the name of the first corpus
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> sample_corpus = Corpus('sample_novels')
         >>> sample_corpus.novels = sample_corpus.novels[:20]
         >>> male_corpus = sample_corpus.filter_by_gender('male')
@@ -204,7 +204,7 @@ class Corpus(common.FileLoaderMixin):
         """
         Return a copy of this Corpus
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> sample_corpus = Corpus('sample_novels')
         >>> corpus_copy = sample_corpus.clone()
         >>> len(corpus_copy) == len(sample_corpus)
@@ -245,7 +245,7 @@ class Corpus(common.FileLoaderMixin):
         This function returns the number of authors with the
         specified gender (male, female, non-binary, unknown)
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> c.count_authors_by_gender('female')
         39
@@ -270,7 +270,7 @@ class Corpus(common.FileLoaderMixin):
         Accepted inputs are 'male', 'female', 'non-binary' and 'unknown'
         but no abbreviations.
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> female_corpus = c.filter_by_gender('female')
         >>> len(female_corpus)
@@ -302,7 +302,7 @@ class Corpus(common.FileLoaderMixin):
         This function returns a Counter telling how many times a word appears in an entire
         corpus
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> c.get_wordcount_counter()['fire']
         2269
@@ -319,7 +319,7 @@ class Corpus(common.FileLoaderMixin):
         This function returns a sorted list of all metadata fields
         in the corpus as strings. This is different from the get_metadata_fields;
         this returns the fields which are specific to the corpus it is being called on.
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> c.get_corpus_metadata()
         ['author', 'author_gender', 'corpus_name', 'country_publication', 'date', 'filename', 'notes', 'title']
@@ -337,7 +337,7 @@ class Corpus(common.FileLoaderMixin):
         This function returns a sorted list of all values for a
         particular metadata field as strings.
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> c.get_field_vals('corpus_name')
         ['sample_novels']
@@ -367,7 +367,7 @@ class Corpus(common.FileLoaderMixin):
         Supported metadata fields are 'author', 'author_gender', 'corpus_name',
         'country_publication', 'date'
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
 
         >>> corp = Corpus('sample_novels')
         >>> female_corpus = corp.subcorpus('author_gender','female')
@@ -438,7 +438,7 @@ class Corpus(common.FileLoaderMixin):
         and returns a Corpus object which is the subcorpus of the input corpus which
         satisfies all the specified constraints.
 
-        #>>> from gender_novels.corpus import Corpus
+        #>>> from gender_analysis.corpus import Corpus
         #>>> c = Corpus('sample_novels')
         #>>> characteristics = {'author':'female',
                                 'country_publication':'England'}
@@ -513,7 +513,7 @@ class Corpus(common.FileLoaderMixin):
         more selectivity use get_novel_multiple_fields, or if you want multiple novels use the subcorpus
         function.
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> c.get_novel("author", "Dickens, Charles")
         <Novel (dickens_twocities)>
@@ -589,7 +589,7 @@ class Corpus(common.FileLoaderMixin):
         only one match in the Corpus or if you're not picky about which Novel you get.  If you want
         multiple novels use the subcorpus function.
 
-        >>> from gender_novels.corpus import Corpus
+        >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> c.get_novel_multiple_fields({"author": "Dickens, Charles", "author_gender": "male"})
         <Novel (dickens_twocities)>
@@ -618,7 +618,7 @@ class Corpus(common.FileLoaderMixin):
 def get_metadata_fields(corpus_name):
     """
     Gives a list of all metadata fields for corpus
-    >>> from gender_novels import corpus
+    >>> from gender_analysis import corpus
     >>> corpus.get_metadata_fields('gutenberg')
     ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'corpus_name', 'notes']
 

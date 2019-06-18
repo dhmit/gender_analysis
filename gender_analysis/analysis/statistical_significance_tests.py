@@ -2,8 +2,8 @@ import math
 import numpy as np
 from scipy import stats
 
-from gender_novels.analysis import gender_pronoun_freq_analysis
-from gender_novels.corpus import Corpus
+from gender_analysis.analysis import gender_pronoun_freq_analysis
+from gender_analysis.corpus import Corpus
 
 
 def ind_ttest(array1, array2, pvalue_target=0.05):

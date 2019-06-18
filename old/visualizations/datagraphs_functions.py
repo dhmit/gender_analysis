@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
-from gender_novels.corpus import Corpus
+from gender_analysis.corpus import Corpus
 from collections import Counter
 
 

@@ -112,22 +112,22 @@ venv.bak/
 .pydevproject
 
 # Scratch File
-gender_novels/scratch.py
+gender_analysis/scratch.py
 
 # Gutenberg module things
-gender_novels/apicache-py3/
-gender_novels/throttle.ctrl
+gender_analysis/apicache-py3/
+gender_analysis/throttle.ctrl
 
 # Stanford NLP Jar files
-gender_novels/analysis/assets/stanford-parser.jar
-gender_novels/analysis/assets/stanford-parser-3.9.1-models.jar
+gender_analysis/analysis/assets/stanford-parser.jar
+gender_analysis/analysis/assets/stanford-parser-3.9.1-models.jar
 
 # Corpus generator testing
-gender_novels/test_corpus/
-gender_novels/corpora/test_books_30/
+gender_analysis/test_corpus/
+gender_analysis/corpora/test_books_30/
 
 # The gutenberg corpus will be downloaded and initialized as a whole outside of version control.
-gender_novels/corpora/gutenberg/texts
+gender_analysis/corpora/gutenberg/texts
 
 # Line profiler files
 *.lprof

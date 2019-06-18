@@ -1,5 +1,5 @@
-from gender_novels.corpus import Corpus
-from gender_novels.analysis.analysis import get_comparative_word_freq
+from gender_analysis.corpus import Corpus
+from gender_analysis.analysis.analysis import get_comparative_word_freq
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -14,7 +14,7 @@ style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
 sns.set_color_codes(palette)
 sns.set_style(style_name, style_list)
 
-from gender_novels import common
+from gender_analysis import common
 
 
 def books_pronoun_freq(corp):
@@ -222,7 +222,7 @@ def freq_by_author_gender(d):
     :param d: dictionary
     :return: dictionary
 
-    >>> from gender_novels import novel
+    >>> from gender_analysis import novel
     >>> novel_metadata = {'author': 'Brontë, Anne', 'title': 'The Tenant of Wildfell Hall',
     ...                   'corpus_name': 'sample_novels', 'date': '1848', 'author_gender':'female',
     ...                   'filename': 'bronte_wildfell.txt'}
@@ -271,7 +271,7 @@ def freq_by_date(d):
     :param d: dictionary
     :return: dictionary
 
-    >>> from gender_novels import novel
+    >>> from gender_analysis import novel
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}
@@ -357,7 +357,7 @@ def freq_by_location(d):
     :param d: dictionary
     :return: dictionary
 
-    >>> from gender_novels import novel
+    >>> from gender_analysis import novel
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt'}
@@ -423,7 +423,7 @@ def sort_every_year(frequency_dict):
     Takes in a dictionary of novels mapped to pronoun frequencies and returns a dictionay of
         years mapped to lists of pronoun frequencies
 
-    >>> from gender_novels import novel
+    >>> from gender_analysis import novel
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}

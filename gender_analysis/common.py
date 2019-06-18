@@ -124,7 +124,7 @@ class FileLoaderMixin:
         When loading a txt file, load_file returns the text as a string
 
         >>> from pathlib import Path
-        >>> from gender_novels import common
+        >>> from gender_analysis import common
 
         >>> f = common.FileLoaderMixin()
         >>> novel_path = Path('corpora', 'sample_novels',
@@ -184,10 +184,10 @@ class FileLoaderMixin:
         try:
             local_path = os.path.abspath(os.path.dirname(__file__))
             is_local = True
-            if not local_path.endswith('gender_novels'):
+            if not local_path.endswith('gender_analysis'):
                 is_local = False
                 warning = "WARNING: The FileLoaderMixin should be placed "
-                warning += "in the main path of the gender_novels project."
+                warning += "in the main path of the gender_analysis project."
                 warning += f"It's currently in {local_path}. Until the Mixin "
                 warning += "is in the correct path, files are loaded "
                 warning += "from Github."
@@ -256,7 +256,7 @@ def store_pickle(obj, filename):
     Example in lieu of Doctest to avoid writing out a file.
 
         my_object = {'a': 4, 'b': 5, 'c': [1, 2, 3]}
-        gender_novels.common.store_pickle(my_object, 'example_pickle')
+        gender_analysis.common.store_pickle(my_object, 'example_pickle')
 
     :param obj: Any Python object to be pickled
     :param filename: str | Path
@@ -275,7 +275,7 @@ def load_pickle(filename):
 
     Example in lieu of Doctest to avoid writing out a file.
 
-        my_object = gender_novels.common.load_pickle('example_pickle')
+        my_object = gender_analysis.common.load_pickle('example_pickle')
         my_object
         {'a': 4, 'b': 5, 'c': [1, 2, 3]}
 
@@ -292,7 +292,7 @@ def get_text_file_encoding(filepath):
     """
     For text file at filepath returns the text encoding as a string (e.g. 'utf-8')
 
-    >>> from gender_novels import common
+    >>> from gender_analysis import common
     >>> common.get_text_file_encoding(r"corpora/sample_novels/texts/hawthorne_scarlet.txt")
     'UTF-8-SIG'
 
@@ -332,7 +332,7 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
     :param target_path: str or Path
     :param target_encoding: str
 
-    >>> from gender_novels.common import BASE_PATH
+    >>> from gender_analysis.common import BASE_PATH
     >>> text = ' ¶¶¶¶ here is a test file'
     >>> source_path = Path(BASE_PATH, 'source_file.txt')
     >>> target_path = Path(BASE_PATH, 'target_file.txt')
