@@ -293,7 +293,7 @@ def get_text_file_encoding(filepath):
     For text file at filepath returns the text encoding as a string (e.g. 'utf-8')
 
     >>> from gender_analysis import common
-    >>> path = r'corpora/sample_novels/texts/hawthorne_scarlet.txt'
+    >>> path = r'gender_analysis/corpora/sample_novels/texts/hawthorne_scarlet.txt'
     >>> common.get_text_file_encoding(path)
     'UTF-8-SIG'
 
