@@ -196,23 +196,6 @@ def run_gender_freq(corpus):
         num += 1
 
 
-def dunn_individual_word(total_words_m_corpus, total_words_f_corpus, wordcount_female,
-                         wordcount_male):
-
-    '''
-    applies dunning log likelihood to compare individual word usage in male and female corpus
-
-    :param word: desired word to compare
-    :param m_corpus: c.filter_by_gender('male')
-    :param f_corpus: c. filter_by_gender('female')
-    :return: log likelihoods and p value
-        >>> total_words_m_corpus = 8648489
-        >>> total_words_f_corpus = 8700765
-        >>> wordcount_female = 1000
-        >>> wordcount_male = 50
-        >>> dunn_individual_word(total_words_m_corpus,total_words_f_corpus,wordcount_male,wordcount_female)
-
-    '''
 
 def dunn_individual_word(total_words_corpus_1, total_words_corpus_2, count_of_word_corpus_1,
                      count_of_word_corpus_2):
