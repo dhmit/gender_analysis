@@ -1,7 +1,16 @@
+# only run travis on pushes to master, pull requests, or if the branch
+# name contains the case insensitive substring 'travis'
+branches:
+  only:
+  - master
+  - /.*(?i:travis).*$/
+
 language: python
 python:
- - "3.6"
+  - "3.6"
+
+install:
+  - pip install -r requirements.txt
 
 script:
-  #- python testing/travis.py
-  - python -c 'from gender_novels.testing.travis import test as test; test()'
+  - python -c 'from gender_analysis.testing.travis import test as test; test()'
