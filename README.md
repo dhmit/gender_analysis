@@ -1,12 +1,11 @@
-# Gender / Novels
+# Gender Analysis Toolkit
+A toolkit for analyzing of gender and gender relations across documents
 
-## Analysis of Gender and Gender Relations in English-Language Novels, 1770-1922
+##  History
 
-This research project concerns the depiction of gender in historical English language novels, exploring how authors of various backgrounds and experiences described gender in their works.
+This toolkit is an extension of work we began in Fall 2018 analyzing gender in English language novels.
 
-Currently, we have analyzed a corpus of over 4,200 books from [Project Gutenberg](https://www.gutenberg.org/), an online book repository, utilizing programming methods we developed. Among our findings, we discovered the ratio of male pronouns to female pronouns, the most common words after male and female pronouns, and the distance between repetitions of male and female pronouns.
-
-Our analysis and writeups are available at [The Gender Novels Project](http://gendernovels.digitalhumanitesmit.org) website.
+The results of that research is available at [The Gender Novels Project](http://gendernovels.digitalhumanitesmit.org) website, and our research code is available at https://github.com/dhmit/gender_novels/
 
 *This MIT Digital Humanities Lab project is part of the [MIT/SHASS Programs in Digital Humanities](https://digitalhumanities.mit.edu/) funded by the [Mellon Foundation](https://www.mellon.org/).*
 
@@ -28,5 +27,5 @@ For a user who’ll need some readily available methods for analyzing documents,
 
 *This document was prepared by the MIT Digital Humanities Lab.*
 
-Copyright © 2018, [MIT Programs in Digital Humanities](https://digitalhumanities.mit.edu/). Released under the [BSD license](https://github.com/dhmit/gender_novels/blob/master/LICENSE).
+Copyright © 2018-2019, [MIT Programs in Digital Humanities](https://digitalhumanities.mit.edu/). Released under the [BSD license](https://github.com/dhmit/gender_novels/blob/master/LICENSE).
 Some included texts might not be out of copyright in all jurisdictions of the world.
