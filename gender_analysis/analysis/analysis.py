@@ -279,7 +279,6 @@ def dunning_total(m_corpus, f_corpus):
             dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
     dunning_result = sorted(dunning_result.items(), key=itemgetter(1))
 
-    print(dunning_result)
     return dunning_result
 
 
