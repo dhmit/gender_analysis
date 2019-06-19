@@ -19,8 +19,9 @@ from ast import literal_eval
 try:
     from gutenberg.cleanup import strip_headers
 except ImportError:
-    print('Cannot import gutenberg')
+    # print('Cannot import gutenberg')
     gutenberg_imported = False
+
 from gender_analysis.common import TEXT_END_MARKERS, TEXT_START_MARKERS, LEGALESE_END_MARKERS, \
     LEGALESE_START_MARKERS
 
@@ -51,6 +52,7 @@ class Novel(common.FileLoaderMixin):
             if key not in novel_metadata_dict:
                 raise ValueError(f'novel_metadata_dict must have an entry for "{key}". Full ',
                                  f'metadata: {novel_metadata_dict}')
+        self.members = set(novel_metadata_dict.keys())
 
         # check that the author starts with a capital letter
         # TODO: Currently deactivated because Gutenberg authors are lists
@@ -110,6 +112,13 @@ class Novel(common.FileLoaderMixin):
                     f'The novel filename ({self.filename}) should end in .txt . Full metadata: '
                     f'{novel_metadata_dict}.')
             self.text = self._load_novel_text()
+
+    def getmembers(self):
+        """
+        Returns set of metadata field names included for this novel
+        :return: set
+        """
+        return self.members
 
     @property
     def word_count(self):
