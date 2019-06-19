@@ -246,7 +246,8 @@ def dunning_total(m_corpus, f_corpus):
          >>> f_corpus = c.filter_by_gender('female')
          >>> result = dunning_total(m_corpus, f_corpus)
          >>> print(result[0:10])
-         [('she', (-12292.762338290115, 29042, 45509)), ('her', (-11800.614222528242, 37517, 53463)),
+         [('she', (-12292.762338290115, 29042, 45509)),
+         ('her', (-11800.614222528242, 37517, 53463)),
          ('jo', (-3268.940103481869, 1, 1835)),
          ('carlyle', (-2743.3204833572668, 3, 1555)),
          ('mrs', (-2703.877430262923, 3437, 6786)),
@@ -707,4 +708,3 @@ if __name__ == '__main__':
     run_dist_inst(c)
     run_gender_freq(c)
     print("hello")
-
