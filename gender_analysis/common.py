@@ -147,7 +147,7 @@ class FileLoaderMixin:
         it gets loaded from Github.
 
         >>> novel_text_local = f.load_file_locally(novel_path, '.txt')
-        >>> novel_text_online = f.load_file_remotely(novel_path, '.txt')
+        >>> novel_text_online = f.load_file_remotely(novel_path.as_posix(), '.txt')
         >>> novel_text_local == novel_text_online
         True
 
