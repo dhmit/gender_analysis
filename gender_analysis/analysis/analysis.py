@@ -490,8 +490,7 @@ def process_medians(helst, shelst, authlst):
     >>> medians_she = [123, 52, 12, 345, 0,  13, 214, 12, 23]
     >>> books = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
     >>> process_medians(helst=medians_he, shelst=medians_she, authlst=books)
-    {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215], 'she': [10.25, 0, 28.75,
-    0, 14.266666666666667, 0, 0], 'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
+    {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215], 'she': [10.25, 0, 28.75, 0, 14.266666666666667, 0, 0], 'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
 
     :param helst:
     :param shelst:
