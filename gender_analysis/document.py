@@ -356,7 +356,7 @@ class Document(common.FileLoaderMixin):
 
         # new method copy-pasted from Gutenberg library
         lines = text.splitlines()
-        sep = str(os.linesep)
+        sep = '\n'
 
         out = []
         i = 0
