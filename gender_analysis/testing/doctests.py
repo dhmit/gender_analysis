@@ -40,6 +40,8 @@ if __name__ == '__main__':
         new_failures, new_tests = doctest.testmod(module)
         failures += new_failures
         tests += new_tests
+        if not new_failures:
+            print("All tests passed! Hurrah!")
 
     if failures:
         exit(1)
