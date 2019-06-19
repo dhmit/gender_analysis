@@ -7,7 +7,7 @@ from collections import Counter
 import requests
 
 from gender_analysis import common
-from gender_analysis.document import Novel
+from gender_analysis.document import Document
 
 
 class Corpus(common.FileLoaderMixin):
