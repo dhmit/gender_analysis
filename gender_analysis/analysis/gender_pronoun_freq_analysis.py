@@ -577,8 +577,9 @@ def overall_mean(d):
 
     >>> c = Corpus('test_corpus')
     >>> freq_dict = books_pronoun_freq(c)
-    >>> overall_mean(freq_dict)
-    0.4712966240691306
+    >>> mean = overall_mean(freq_dict)
+    >>> round(mean, 6)
+    0.47130
     '''
     l = dict_to_list(d)
     mean = np.mean(l)
