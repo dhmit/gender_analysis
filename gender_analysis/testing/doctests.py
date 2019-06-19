@@ -15,9 +15,11 @@ def print_test_header(test_name):
 def get_all_submodules(package, module_list):
     subpackages = pkgutil.walk_packages(package.__path__)
     for module_info in subpackages:
-        if 'corpus_gen' in module_info.name:
-            # TODO(ra) skipping corpus_gen bc of Gutenberg installation issues...
-            # we'll deal with this later...
+        if ('corpus_gen' in module_info.name) or ('dependency_parsing' in module_info.name):
+            # TODO(ra) - skipping corpus_gen bc of Gutenberg installation issues
+            # TODO(ra) - skipping dependency_parsing because it requires the user to have
+            #            downloaded a jar file that we're not hosting
+            # We should handle both of these eventually, but for now let's leave it
             continue
 
         absolute_module_name = package.__name__ + '.' + module_info.name
