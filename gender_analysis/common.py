@@ -11,6 +11,7 @@ import seaborn as sns
 DEBUG = False
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
+
 METADATA_LIST = ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender',
                  'subject', 'corpus_name', 'notes']
 # books from gutenberg downloaded from Dropbox folder shared by Keith
@@ -293,19 +294,27 @@ def get_text_file_encoding(filepath):
     For text file at filepath returns the text encoding as a string (e.g. 'utf-8')
 
     >>> from gender_analysis import common
-    >>> common.get_text_file_encoding(r"corpora/sample_novels/texts/hawthorne_scarlet.txt")
+    >>> from pathlib import Path
+    >>> import os
+
+    >>> path=Path(common.BASE_PATH,'corpora','sample_novels','texts','hawthorne_scarlet.txt')
+    >>> common.get_text_file_encoding(path)
     'UTF-8-SIG'
 
     Note: For files containing only ascii characters, this function will return 'ascii' even if
     the file was encoded with utf-8
 
     >>> import os
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
     >>> text = 'here is an ascii text'
-    >>> file_path = Path(BASE_PATH, 'example_file.txt')
+    >>> file_path = Path(common.BASE_PATH, 'example_file.txt')
     >>> with codecs.open(file_path, 'w', 'utf-8') as source:
     ...     source.write(text)
-    >>> get_text_file_encoding(file_path)
+    ...     source.close()
+    >>> common.get_text_file_encoding(file_path)
     'ascii'
+    >>> file_path = Path(common.BASE_PATH, 'example_file.txt')
     >>> os.remove(file_path)
 
     :param filepath: fstr
