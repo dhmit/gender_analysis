@@ -1,15 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-<<<<<<< HEAD
-from gender_novels.common import load_graph_settings
-load_graph_settings(False)
-from gender_novels.analysis.dunning import male_vs_female_authors_analysis_dunning, dunning_result_to_dict
-=======
+
 from gender_analysis.common import load_graph_settings
 load_graph_settings(False)
 from gender_analysis.analysis.dunning import male_vs_female_authors_analysis_dunning, dunning_result_to_dict
->>>>>>> master
 
 
 def score_plot_to_show(results):

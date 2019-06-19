@@ -2,7 +2,6 @@
 This file is intended for individual analyses of the gender_analysis project
 """
 
-from gender_analysis.corpus import Corpus
 import nltk
 import math
 from operator import itemgetter
@@ -12,13 +11,13 @@ import collections
 from scipy.stats import chi2
 from statistics import mean, median, mode
 from nltk.corpus import stopwords
+import unittest
 stop_words = set(stopwords.words('english'))
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 from more_itertools import windowed
-import unittest
 import seaborn as sns
 palette = "colorblind"
 style_name = "white"
@@ -27,6 +26,7 @@ style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
 sns.set_color_codes(palette)
 sns.set_style(style_name,style_list)
 
+from gender_analysis.corpus import Corpus
 
 def get_count_words(novel, words):
     """
