@@ -680,6 +680,8 @@ def run_all_analyses():
     pprint.pprint(get_mean(freq_by_location(sub_comp_gender)))
 
 if __name__ == '__main__':
+    pass
+
     # from dh_testers.testRunner import main_test
     # main_test()
 
