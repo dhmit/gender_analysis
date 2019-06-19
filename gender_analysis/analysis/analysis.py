@@ -69,7 +69,7 @@ def get_comparative_word_freq(freqs):
     >>> scarlet = novel.Novel(novel_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
-    {'he': 0.007329554965683813, 'she': 0.005894731807638042}
+    {'he': 0.0073307821095431715, 'she': 0.005895718727577134}
     >>> x = get_comparative_word_freq(d)
     >>> x
     {'he': 0.554249547920434, 'she': 0.445750452079566}
@@ -246,18 +246,12 @@ def dunning_total(m_corpus, f_corpus):
          >>> f_corpus = c.filter_by_gender('female')
          >>> result = dunning_total(m_corpus, f_corpus)
          >>> print(result[0:10])
-         [('she', (-12292.762338290115, 29042, 45509)),
-         ('her', (-11800.614222528242, 37517, 53463)),
-         ('jo', (-3268.940103481869, 1, 1835)),
-         ('carlyle', (-2743.3204833572668, 3, 1555)),
-         ('mrs', (-2703.877430262923, 3437, 6786)),
-         ('amy', (-2221.449213948045, 36, 1408)),
-         ('laurie', (-1925.9408323278521, 2, 1091)),
-         ('adeline', (-1896.0496657740907, 13, 1131)),
-         ('alessandro', (-1804.1775207769476, 3, 1029)),
-         ('mr', (-1772.0584351647658, 7900, 10220))]
-
-
+         [('she', (-12292.762338290115, 29042, 45509)), ('her', (-11800.614222528242, 37517, \
+53463)), ('jo', (-3268.940103481869, 1, 1835)), ('carlyle', (-2743.3204833572668, 3, \
+1555)), ('mrs', (-2703.877430262923, 3437, 6786)), ('amy', (-2221.449213948045, 36, \
+1408)), ('laurie', (-1925.9408323278521, 2, 1091)), ('adeline', (-1896.0496657740907, \
+13, 1131)), ('alessandro', (-1804.1775207769476, 3, 1029)), ('mr', (-1772.0584351647658, 7900, \
+10220))]
     '''
     wordcounter_male = m_corpus.get_wordcount_counter()
     wordcounter_female = f_corpus.get_wordcount_counter()
@@ -280,7 +274,6 @@ def dunning_total(m_corpus, f_corpus):
             dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
     dunning_result = sorted(dunning_result.items(), key=itemgetter(1))
 
-    print(dunning_result)
     return dunning_result
 
 
@@ -500,8 +493,8 @@ def process_medians(helst, shelst, authlst):
     >>> medians_she = [123, 52, 12, 345, 0,  13, 214, 12, 23]
     >>> books = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
     >>> process_medians(helst=medians_he, shelst=medians_she, authlst=books)
-    {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215], 'she': [10.25, 0, 28.75,
-    0, 14.266666666666667, 0, 0], 'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
+    {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215], 'she': [10.25, 0, 28.75, \
+0, 14.266666666666667, 0, 0], 'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
 
     :param helst:
     :param shelst:
@@ -538,8 +531,8 @@ def bubble_sort_across_lists(dictionary):
     ...     'she': [10.25, 0, 28.75, 0, 14.266666666666667, 0, 0],
     ...     'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
     >>> bubble_sort_across_lists(d)
-    {'he': [5.3478260869565215, 2.5, 1.3846153846153846, 1.0, 0, 0, 0], 'she': [0, 0, 0, 0,
-    10.25, 14.266666666666667, 28.75], 'book': ['i', 'b', 'f', 'h', 'a', 'g', 'd']}
+    {'he': [5.3478260869565215, 2.5, 1.3846153846153846, 1.0, 0, 0, 0], 'she': [0, 0, 0, 0, \
+10.25, 14.266666666666667, 28.75], 'book': ['i', 'b', 'f', 'h', 'a', 'g', 'd']}
 
     :param dictionary: containing 3 different list values.
     Note: dictionary keys MUST contain arguments 'he', 'she', and 'book'
