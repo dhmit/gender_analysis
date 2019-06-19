@@ -233,7 +233,7 @@ def dunn_individual_word(total_words_corpus_1, total_words_corpus_2, count_of_wo
 
 
 def dunning_total(m_corpus, f_corpus):
-    '''
+    """
     goes through gendered corpora
     runs dunning_indiviidual on all words that are in BOTH corpora
     returns sorted dictionary of words and their dunning scores
@@ -258,7 +258,7 @@ def dunning_total(m_corpus, f_corpus):
          ('mr', (-1772.0584351647658, 7900, 10220))]
 
 
-    '''
+    """
     wordcounter_male = m_corpus.get_wordcount_counter()
     wordcounter_female = f_corpus.get_wordcount_counter()
 
@@ -280,7 +280,6 @@ def dunning_total(m_corpus, f_corpus):
             dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
     dunning_result = sorted(dunning_result.items(), key=itemgetter(1))
 
-    print(dunning_result)
     return dunning_result
 
 
@@ -709,4 +708,3 @@ if __name__ == '__main__':
     run_dist_inst(c)
     run_gender_freq(c)
     print("hello")
-
