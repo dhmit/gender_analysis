@@ -26,15 +26,15 @@ from gender_analysis.common import TEXT_END_MARKERS, TEXT_START_MARKERS, LEGALES
     LEGALESE_START_MARKERS
 
 
-class Novel(common.FileLoaderMixin):
-    """ The Novel class loads and holds the full text and
+class Document(common.FileLoaderMixin):
+    """ The Document class loads and holds the full text and
     metadata (author, title, publication date) of a novel
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}
-    >>> austen = novel.Novel(novel_metadata)
+    >>> austen = document.Document(novel_metadata)
     >>> type(austen.text)
     <class 'str'>
     >>> len(austen.text)
@@ -123,15 +123,15 @@ class Novel(common.FileLoaderMixin):
     @property
     def word_count(self):
         """
-        Lazy-loading for Novel.word_count attribute. Returns the number of words in the novel.
+        Lazy-loading for Document.word_count attribute. Returns the number of words in the novel.
         The word_count attribute is useful for the get_word_freq function.
         However, it is performance-wise costly, so it's only loaded when it's actually required.
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = novel.Novel(novel_metadata)
+        >>> austen = document.Document(novel_metadata)
         >>> austen.word_count
         83285
 
@@ -144,15 +144,15 @@ class Novel(common.FileLoaderMixin):
 
     def __str__(self):
         """
-        Overrides python print method for user-defined objects for Novel class
+        Overrides python print method for user-defined objects for Document class
         Returns the filename without the extension - author and title word
         :return: str
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = novel.Novel(novel_metadata)
+        >>> austen = document.Document(novel_metadata)
         >>> novel_string = str(austen)
         >>> novel_string
         'austen_persuasion'
@@ -163,33 +163,33 @@ class Novel(common.FileLoaderMixin):
     def __repr__(self):
         '''
         Overrides the built-in __repr__ method
-        Returns the object type (Novel) and then the filename without the extension
+        Returns the object type (Document) and then the filename without the extension
             in <>.
 
         :return: string
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = novel.Novel(novel_metadata)
+        >>> austen = document.Document(novel_metadata)
         >>> repr(austen)
-        '<Novel (austen_persuasion)>'
+        '<Document (austen_persuasion)>'
         '''
 
         name = self.filename[0:len(self.filename) - 4]
-        return f'<Novel ({name})>'
+        return f'<Document ({name})>'
 
     def __eq__(self, other):
         """
         Overload the equality operator to enable comparing and sorting novels.
 
-        >>> from gender_analysis.novel import Novel
+        >>> from gender_analysis.novel import Document
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = Novel(austen_metadata)
-        >>> austen2 = Novel(austen_metadata)
+        >>> austen = Document(austen_metadata)
+        >>> austen2 = Document(austen_metadata)
         >>> austen == austen2
         True
         >>> austen.text += 'no longer equal'
@@ -198,8 +198,8 @@ class Novel(common.FileLoaderMixin):
 
         :return: bool
         """
-        if not isinstance(other, Novel):
-            raise NotImplementedError("Only a Novel can be compared to another Novel.")
+        if not isinstance(other, Document):
+            raise NotImplementedError("Only a Document can be compared to another Document.")
 
         attributes_required_to_be_equal = ['author', 'date', 'title', 'corpus_name', 'filename',
                                            'country_publication', 'author_gender', 'notes', 'text']
@@ -216,15 +216,15 @@ class Novel(common.FileLoaderMixin):
         """
         Overload less than operator to enable comparing and sorting novels
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = novel.Novel(austen_metadata)
+        >>> austen = document.Document(austen_metadata)
         >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1850',
         ...                   'filename': 'hawthorne_scarlet.txt'}
-        >>> hawthorne = novel.Novel(hawthorne_metadata)
+        >>> hawthorne = document.Document(hawthorne_metadata)
         >>> hawthorne < austen
         False
         >>> austen < hawthorne
@@ -232,14 +232,14 @@ class Novel(common.FileLoaderMixin):
 
         :return: bool
         """
-        if not isinstance(other, Novel):
-            raise NotImplementedError("Only a Novel can be compared to another Novel.")
+        if not isinstance(other, Document):
+            raise NotImplementedError("Only a Document can be compared to another Document.")
 
         return (self.author, self.title, self.date) < (other.author, other.title, other.date)
 
     def __hash__(self):
         """
-        Makes the Novel object hashable
+        Makes the Document object hashable
 
         :return:
         """
@@ -289,11 +289,11 @@ class Novel(common.FileLoaderMixin):
 
         :return: str
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'james_highway.txt'}
-        >>> austen = novel.Novel(novel_metadata)
+        >>> austen = document.Document(novel_metadata)
         >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text(raw_text)
@@ -330,11 +330,11 @@ class Novel(common.FileLoaderMixin):
 
         :return: str
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'james_highway.txt'}
-        >>> austen = novel.Novel(novel_metadata)
+        >>> austen = document.Document(novel_metadata)
         >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
@@ -407,11 +407,11 @@ class Novel(common.FileLoaderMixin):
         better implementation that uses either regex or nltk
         E.g. this version doesn't handle dashes or contractions
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                   'corpus_name': 'sample_novels', 'filename': 'austen_persuasion.txt',
         ...                   'text': '?!All-kinds %$< of pun*ct(uatio)n {a}nd sp+ecial cha/rs'}
-        >>> austin = novel.Novel(novel_metadata)
+        >>> austin = document.Document(novel_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
         ['allkinds', 'of', 'punctuation', 'and', 'special', 'chars']
@@ -433,12 +433,12 @@ class Novel(common.FileLoaderMixin):
         """
         Finds all of the quoted statements in the novel text
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> test_text = '"This is a quote" and also "This is my quote"'
         >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt', 'text' : test_text}
-        >>> test_novel = novel.Novel(novel_metadata)
+        >>> test_novel = document.Document(novel_metadata)
         >>> test_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
 
@@ -488,14 +488,14 @@ class Novel(common.FileLoaderMixin):
     def get_count_of_word(self, word):
         """
         Returns the number of instances of str word in the text.  N.B.: Not case-sensitive.
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "Hester was convicted of adultery. "
         >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
         >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Document(novel_metadata)
         >>> scarlett.get_count_of_word("sad")
         4
         >>> scarlett.get_count_of_word('ThisWordIsNotInTheWordCounts')
@@ -515,15 +515,15 @@ class Novel(common.FileLoaderMixin):
         """
         Returns a counter object of all of the words in the text.
         (The counter can also be accessed as self.word_counts. However, it only gets initialized
-        when a user either runs Novel.get_count_of_word or Novel.get_wordcount_counter, hence
+        when a user either runs Document.get_count_of_word or Document.get_wordcount_counter, hence
         the separate method.)
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "Hester was convicted of adultery was convicted."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Document(novel_metadata)
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
 
@@ -542,7 +542,7 @@ class Novel(common.FileLoaderMixin):
         new word
         Note: words always return lowercase
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "She took a lighter out of her purse and handed it over to him."
         >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
         >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
@@ -550,7 +550,7 @@ class Novel(common.FileLoaderMixin):
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Document(novel_metadata)
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
 
@@ -576,14 +576,14 @@ class Novel(common.FileLoaderMixin):
         window_size is the number of words before and after to return, so the total window is
         2x window_size + 1
 
-        >>> from gender_analysis.novel import Novel
+        >>> from gender_analysis.novel import Document
         >>> summary = "She took a lighter out of her purse and handed it over to him."
         >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
         >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = Novel(novel_metadata)
+        >>> scarlett = Document(novel_metadata)
 
         # search_terms can be either a string...
         >>> scarlett.get_word_windows("his", window_size=2)
@@ -619,14 +619,14 @@ class Novel(common.FileLoaderMixin):
         :param words: str
         :return: double
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "Hester was convicted of adultery. "
         >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
         >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Document(novel_metadata)
         >>> frequency = scarlett.get_word_freq('sad')
         >>> frequency
         0.13333333333333333
@@ -641,12 +641,12 @@ class Novel(common.FileLoaderMixin):
         term, the second one the part of speech tag.
         Note: the same word can have a different part of speech tag. In the example below,
         see "refuse" and "permit"
-        >>> from gender_analysis.novel import Novel
+        >>> from gender_analysis.novel import Document
         >>> summary = "They refuse to permit us to obtain the refuse permit."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',
         ...                   'filename': None, 'text': summary}
-        >>> novel = Novel(novel_metadata)
+        >>> novel = Document(novel_metadata)
         >>> novel.get_part_of_speech_tags()[:4]
         [('They', 'PRP'), ('refuse', 'VBP'), ('to', 'TO'), ('permit', 'VB')]
         >>> novel.get_part_of_speech_tags()[-4:]

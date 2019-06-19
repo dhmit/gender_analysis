@@ -2,7 +2,7 @@ import urllib
 from nltk.parse.stanford import StanfordDependencyParser
 from nltk.tokenize import sent_tokenize, word_tokenize
 from gender_analysis.corpus import Corpus
-from gender_analysis.novel import Novel
+from gender_analysis.document import Novel
 from gender_analysis.common import store_pickle, load_pickle
 import os.path
 import csv

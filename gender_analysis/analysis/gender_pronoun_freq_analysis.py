@@ -222,15 +222,15 @@ def freq_by_author_gender(d):
     :param d: dictionary
     :return: dictionary
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Brontë, Anne', 'title': 'The Tenant of Wildfell Hall',
     ...                   'corpus_name': 'sample_novels', 'date': '1848', 'author_gender':'female',
     ...                   'filename': 'bronte_wildfell.txt'}
-    >>> bronte = novel.Novel(novel_metadata)
+    >>> bronte = document.Novel(novel_metadata)
     >>> novel_metadata = {'author': 'Adams, William Taylor', 'title': 'Fighting for the Right',
     ...                   'corpus_name': 'sample_novels', 'date': '1892', 'author_gender':'male',
     ...                   'filename': 'adams_fighting.txt'}
-    >>> fighting = novel.Novel(novel_metadata)
+    >>> fighting = document.Novel(novel_metadata)
     >>> d = {}
     >>> d[fighting] = 0.3
     >>> d[bronte] = 0.6
@@ -271,15 +271,15 @@ def freq_by_date(d):
     :param d: dictionary
     :return: dictionary
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}
-    >>> austen = novel.Novel(novel_metadata)
+    >>> austen = document.Novel(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
-    >>> scarlet = novel.Novel(novel_metadata)
+    >>> scarlet = document.Novel(novel_metadata)
     >>> d = {}
     >>> d[scarlet] = 0.5
     >>> d[austen] = 0.3
@@ -355,15 +355,15 @@ def freq_by_location(d):
     :param d: dictionary
     :return: dictionary
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt'}
-    >>> austen = novel.Novel(novel_metadata)
+    >>> austen = document.Novel(novel_metadata)
     >>> novel_metadata2 = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt'}
-    >>> scarlet = novel.Novel(novel_metadata2)
+    >>> scarlet = document.Novel(novel_metadata2)
     >>> d = {}
     >>> d[scarlet] = 0.5
     >>> d[austen] = 0.3
@@ -421,15 +421,15 @@ def sort_every_year(frequency_dict):
     Takes in a dictionary of novels mapped to pronoun frequencies and returns a dictionay of
         years mapped to lists of pronoun frequencies
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}
-    >>> austen = novel.Novel(novel_metadata)
+    >>> austen = document.Novel(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
-    >>> scarlet = novel.Novel(novel_metadata)
+    >>> scarlet = document.Novel(novel_metadata)
     >>> d = {}
     >>> d[scarlet] = 0.5
     >>> d[austen] = 0.3

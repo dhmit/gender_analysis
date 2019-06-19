@@ -34,14 +34,14 @@ def get_count_words(novel, words):
     Returns a dictionary where the keys are the elements of 'words' list
     and the values are the numbers of occurences of the elements in the novel.
     N.B.: Not case-sensitive.
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> summary = "Hester was convicted of adultery. "
     >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
     >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1850',
     ...                   'filename': None, 'text': summary}
-    >>> scarlett = novel.Novel(novel_metadata)
+    >>> scarlett = document.Novel(novel_metadata)
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
 
@@ -62,11 +62,11 @@ def get_comparative_word_freq(freqs):
     :param freqs: dictionary
     :return: dictionary
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
-    >>> scarlet = novel.Novel(novel_metadata)
+    >>> scarlet = document.Novel(novel_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
     {'he': 0.0073307821095431715, 'she': 0.005895718727577134}
@@ -275,14 +275,14 @@ def dunning_total(m_corpus, f_corpus):
 def instance_dist(novel, word):
     """
     Takes in a particular word, returns a list of distances between each instance of that word in the novel.
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> summary = "Hester was her convicted of adultery. "
     >>> summary += "which made her very sad, and then her Arthur was also sad, and her everybody was "
     >>> summary += "sad and then Arthur her died and it was very sad. her Sadness."
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1966',
     ...                   'filename': None, 'text': summary}
-    >>> scarlett = novel.Novel(novel_metadata)
+    >>> scarlett = document.Novel(novel_metadata)
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
 
@@ -311,14 +311,14 @@ def pronoun_instance_dist(novel, words):
     """
         Takes in a novel and list of gender pronouns, returns a list of distances between each
         instance of a pronoun in that novel
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "James was his convicted of adultery. "
         >>> summary += "which made him very sad, and then his Jane was also sad, and himself everybody was "
         >>> summary += "sad and then he died and it was very sad. His Sadness."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1966',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Novel(novel_metadata)
         >>> pronoun_instance_dist(scarlett, ["his", "him", "he", "himself"])
         [6, 5, 6, 6, 7]
 
@@ -346,14 +346,14 @@ def pronoun_instance_dist(novel, words):
 def male_instance_dist(novel):
     """
         Takes in a novel, returns a list of distances between each instance of a female pronoun in that novel
-       >>> from gender_analysis import novel
+       >>> from gender_analysis import document
        >>> summary = "James was his convicted of adultery. "
        >>> summary += "which made him very sad, and then he Arthur was also sad, and himself everybody was "
        >>> summary += "sad and then he died and it was very sad. His Sadness."
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'sample_novels', 'date': '1966',
        ...                   'filename': None, 'text': summary}
-       >>> scarlett = novel.Novel(novel_metadata)
+       >>> scarlett = document.Novel(novel_metadata)
        >>> male_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
 
@@ -366,14 +366,14 @@ def male_instance_dist(novel):
 def female_instance_dist(novel):
     """
         Takes in a novel, returns a list of distances between each instance of a female pronoun in that novel
-       >>> from gender_analysis import novel
+       >>> from gender_analysis import document
        >>> summary = "Hester was her convicted of adultery. "
        >>> summary += "which made her very sad, and then she Hester was also sad, and herself everybody was "
        >>> summary += "sad and then she died and it was very sad. Her Sadness."
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'sample_novels', 'date': '1966',
        ...                   'filename': None, 'text': summary}
-       >>> scarlett = novel.Novel(novel_metadata)
+       >>> scarlett = document.Novel(novel_metadata)
        >>> female_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
 
@@ -387,14 +387,14 @@ def find_gender_adj(novel, female):
     """
         Takes in a novel and boolean indicating gender, returns a dictionary of adjectives that appear within
         a window of 5 words around each male pronoun
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "James was convicted of adultery. "
         >>> summary += "he was a handsome guy, and everyone thought that he was so handsome, and everybody was "
         >>> summary += "sad and then he died a very handsome death. His Sadness."
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1966',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Novel(novel_metadata)
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}
 
@@ -444,14 +444,14 @@ def find_gender_adj(novel, female):
 def find_male_adj(novel):
     """
         Takes in a novel, returns a dictionary of adjectives that appear within a window of 5 words around each male pronoun
-       >>> from gender_analysis import novel
+       >>> from gender_analysis import document
        >>> summary = "James was convicted of adultery. "
        >>> summary += "he was a handsome guy, and everyone thought that he was so handsome, and everybody was "
        >>> summary += "sad and then he died a very handsome death. His Sadness."
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'sample_novels', 'date': '1966',
        ...                   'filename': None, 'text': summary}
-       >>> scarlett = novel.Novel(novel_metadata)
+       >>> scarlett = document.Novel(novel_metadata)
        >>> find_male_adj(scarlett)
        {'handsome': 3, 'sad': 1}
 
@@ -464,14 +464,14 @@ def find_male_adj(novel):
 def find_female_adj(novel):
     """
         Takes in a novel, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun
-       >>> from gender_analysis import novel
+       >>> from gender_analysis import document
        >>> summary = "Jane was convicted of adultery. "
        >>> summary += "she was a beautiful gal, and everyone thought that she was very beautiful, and everybody was "
        >>> summary += "sad and then she died. Everyone agreed that she was a beautiful corpse that deserved peace."
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'sample_novels', 'date': '1966',
        ...                   'filename': None, 'text': summary}
-       >>> scarlett = novel.Novel(novel_metadata)
+       >>> scarlett = document.Novel(novel_metadata)
        >>> find_female_adj(scarlett)
        {'beautiful': 3, 'sad': 1}
 
