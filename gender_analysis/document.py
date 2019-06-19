@@ -297,7 +297,7 @@ class Document(common.FileLoaderMixin):
         >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text(raw_text)
-        >>> title_line = raw_text[0:raw_text.find('\\n')]
+        >>> title_line = raw_text.splitlines()[0]
         >>> title_line
         "THE KING'S HIGHWAY"
 
@@ -338,7 +338,7 @@ class Document(common.FileLoaderMixin):
         >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
-        >>> title_line = raw_text[0:raw_text.find('\\n')]
+        >>> title_line = raw_text.splitlines()[0]
         >>> title_line
         "THE KING'S HIGHWAY"
         """
