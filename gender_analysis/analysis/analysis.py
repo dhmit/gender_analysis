@@ -211,7 +211,7 @@ def dunn_individual_word(total_words_corpus_1, total_words_corpus_2, count_of_wo
     >>> wordcount_female = 1000
     >>> wordcount_male = 50
     >>> dunn_individual_word(total_words_m_corpus,total_words_f_corpus,wordcount_male,wordcount_female)
-    -800
+    -1047.8610274053995
 
     '''
     a = count_of_word_corpus_1
@@ -252,6 +252,7 @@ def dunning_total(m_corpus, f_corpus):
 1408)), ('laurie', (-1925.9408323278521, 2, 1091)), ('adeline', (-1896.0496657740907, \
 13, 1131)), ('alessandro', (-1804.1775207769476, 3, 1029)), ('mr', (-1772.0584351647658, 7900, \
 10220))]
+
     '''
     wordcounter_male = m_corpus.get_wordcount_counter()
     wordcounter_female = f_corpus.get_wordcount_counter()
