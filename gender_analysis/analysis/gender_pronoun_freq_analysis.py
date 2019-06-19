@@ -574,11 +574,13 @@ def overall_mean(d):
     Returns the average of all the values in a dictionary
     :param dictionary with numbers as values
     :return: float: average of all the values
-
+    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import overall_mean, books_pronoun_freq
+    >>> from gender_analysis.corpus import Corpus
     >>> c = Corpus('test_corpus')
-    >>> freq_dict = books_pronoun_freq(c)
-    >>> overall_mean(freq_dict)
-    0.4712966240691306
+    >>> freq = books_pronoun_freq(c)
+    >>> mean = overall_mean(freq)
+    >>> str(mean)[:7]
+    '0.47129'
     '''
     l = dict_to_list(d)
     mean = np.mean(l)
