@@ -69,7 +69,7 @@ def get_comparative_word_freq(freqs):
     >>> scarlet = novel.Novel(novel_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
-    {'he': 0.007329554965683813, 'she': 0.005894731807638042}
+    {'he': 0.0073307821095431715, 'she': 0.005895718727577134}
     >>> x = get_comparative_word_freq(d)
     >>> x
     {'he': 0.554249547920434, 'she': 0.445750452079566}
@@ -211,7 +211,7 @@ def dunn_individual_word(total_words_corpus_1, total_words_corpus_2, count_of_wo
     >>> wordcount_female = 1000
     >>> wordcount_male = 50
     >>> dunn_individual_word(total_words_m_corpus,total_words_f_corpus,wordcount_male,wordcount_female)
-    -800
+    -1047.8610274053995
 
     '''
     a = count_of_word_corpus_1
@@ -247,8 +247,6 @@ def dunning_total(m_corpus, f_corpus):
          >>> result = dunning_total(m_corpus, f_corpus)
          >>> print(result[0:10])
          [('she', (-12292.762338290115, 29042, 45509)), ('her', (-11800.614222528242, 37517, 53463)), ('jo', (-3268.940103481869, 1, 1835)), ('carlyle', (-2743.3204833572668, 3, 1555)), ('mrs', (-2703.877430262923, 3437, 6786)), ('amy', (-2221.449213948045, 36, 1408)), ('laurie', (-1925.9408323278521, 2, 1091)), ('adeline', (-1896.0496657740907, 13, 1131)), ('alessandro', (-1804.1775207769476, 3, 1029)), ('mr', (-1772.0584351647658, 7900, 10220))]
-
-
     """
     wordcounter_male = m_corpus.get_wordcount_counter()
     wordcounter_female = f_corpus.get_wordcount_counter()
