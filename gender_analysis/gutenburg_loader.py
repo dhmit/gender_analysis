@@ -2,6 +2,8 @@ import csv
 import os
 import re
 import time
+import urllib
+import requests
 from pathlib import Path
 from shutil import copyfile
 
@@ -353,7 +355,7 @@ def get_author_gutenberg(gutenberg_id):
     """
     Gets author or authors for novel with this gutenberg id
 
-    >>> from gender_analysis import corpus_gen
+    >>> from gender_analysis import gutenburg_loader
     >>> get_author_gutenberg(33)
     ['Hawthorne, Nathaniel']
     >>> get_author_gutenberg(3178)
@@ -371,7 +373,7 @@ def get_title_gutenberg(gutenberg_id):
     """
     Gets title for novel with this gutenberg id
 
-    >>> from gender_analysis import corpus_gen
+    >>> from gender_analysis import gutenburg_loader
     >>> get_title_gutenberg(33)
     'The Scarlet Letter'
 
@@ -435,7 +437,7 @@ def get_publication_date(author, title, gutenberg_id):
     methods to try and find the publication date
     If it can't returns None
 
-    >>> from gender_analysis import corpus_gen
+    >>> from gender_analysis import gutenburg_loader
     >>> get_publication_date("Hawthorne, Nathaniel", "The Scarlet Letter", 33)
     1850
 
@@ -469,7 +471,7 @@ def get_publication_date_wikidata(author, title):
     Adventures of Huckleberry Finn).  Should it be tried to fix that?
     Function also doesn't use author parameter
 
-    >>> from gender_analysis import corpus_gen
+    >>> from gender_analysis import gutenburg_loader
     >>> get_publication_date_wikidata("Bacon, Francis", "Novum Organum")
     1620
     >>> get_publication_date_wikidata("Duan, Mingfei", "How I Became a Billionaire and also the President")
@@ -569,7 +571,7 @@ def get_country_publication(author, title):
     Don't separate countries of UK (England, Wales, etc.)
     TODO: should we separate those countries?  Easier to integrate later than separate
 
-    >>> from gender_analysis import corpus_gen
+    >>> from gender_analysis import gutenburg_loader
     >>> get_country_publication("Hawthorne, Nathaniel", "The Scarlet Letter")
     'United States'
 
@@ -588,7 +590,7 @@ def get_country_publication_wikidata(author, title):
     """
     Tries to get country of publication from wikidata
     Otherwise, returns None
-    >>> from gender_analysis import corpus_gen
+    >>> from gender_analysis import gutenburg_loader
     >>> get_country_publication_wikidata("Trump, Donald", "Trump: The Art of the Deal")
     'United States'
 
@@ -836,7 +838,7 @@ def get_subject_gutenberg(gutenberg_id):
     """
     Tries to get subjects
 
-    >>> from gender_analysis import corpus_gen
+    >>> from gender_analysis import gutenburg_loader
     >>> get_subject_gutenberg(5200)
     ['Metamorphosis -- Fiction', 'PT', 'Psychological fiction']
 
@@ -906,6 +908,65 @@ def generate_gutenberg_rsync_path(gutenberg_id):
     novel_path = novel_path.joinpath(Path(id_str))
 
     return novel_path
+
+
+def download_gutenberg_if_not_locally_available():
+    """
+    Checks if the gutenberg corpus is available locally. If not, downloads the corpus
+    and extracts it to corpora/gutenberg
+
+    No tests because the function depends on user input
+
+    :return:
+    """
+
+    import os
+    gutenberg_path = Path(common.BASE_PATH, 'corpora', 'gutenberg')
+
+    # if there are more than 4000 text files available, we know that the corpus was downloaded
+    # and can return
+    try:
+        no_gutenberg_novels=  len(os.listdir(Path(gutenberg_path, 'texts')))
+        if no_gutenberg_novels > 4000:
+            gutenberg_available = True
+        else:
+            gutenberg_available = False
+    # if the texts path was not found, we know that we need to download the corpus
+    except FileNotFoundError:
+        gutenberg_available = False
+
+    if not gutenberg_available:
+
+        print("The Project Gutenberg corpus is currently not available on your system.",
+              "It consists of more than 4000 novels and 1.8 GB of data.")
+        download_prompt = input(
+              "If you want to download the corpus, please enter (y). Any other input will "
+              "terminate the program: ")
+        if not download_prompt in ['y', '(y)']:
+            raise ValueError("Project Gutenberg corpus will not be downloaded.")
+
+        import zipfile
+        import urllib
+        url = 'https://s3-us-west-2.amazonaws.com/gutenberg-cache/gutenberg_corpus.zip'
+        urllib.request.urlretrieve(url, 'gutenberg_corpus.zip')
+        zipf = zipfile.ZipFile('gutenberg_corpus.zip')
+        if not os.path.isdir(gutenberg_path):
+            os.mkdir(gutenberg_path)
+        zipf.extractall(gutenberg_path)
+        os.remove('gutenberg_corpus.zip')
+        metadata_url = r'https://raw.githubusercontent.com/dhmit/gender_novels/master' \
+            r'/gender_novels/corpora/gutenberg/gutenberg.csv'
+        r = requests.get(metadata_url, allow_redirects=True)
+        with open(gutenberg_path/Path('gutenberg.csv'), 'wb') as metadata_file:
+            metadata_file.write(r.content)
+
+        # check that we now have 4000 novels available
+        try:
+            no_gutenberg_novels = len(os.listdir(Path(gutenberg_path, 'texts')))
+            print(f'Successfully downloaded {no_gutenberg_novels} novels.')
+        except FileNotFoundError:
+            raise FileNotFoundError("Something went wrong while downloading the gutenberg"
+                                    "corpus.")
 
 
 if __name__ == '__main__':

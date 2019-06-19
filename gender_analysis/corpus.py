@@ -4,17 +4,17 @@ import nltk
 from nltk.tokenize import word_tokenize
 from pathlib import Path
 from collections import Counter
-import requests
 
 from gender_analysis import common
 from gender_analysis.novel import Novel
+from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
 
 
 class Corpus(common.FileLoaderMixin):
     """The corpus class is used to load the metadata and full
     texts of all novels in a corpus
 
-    Once loaded, each corpus contains a list of Novel objects
+    Once loaded, each corpus contains a list of Documents objects
 
     >>> from gender_analysis.corpus import Corpus
     >>> c = Corpus('sample_novels')
@@ -34,7 +34,7 @@ class Corpus(common.FileLoaderMixin):
     def __init__(self, corpus_name=None):
         self.corpus_name = corpus_name
         if self.corpus_name == 'gutenberg':
-            self._download_gutenberg_if_not_locally_available()
+            download_gutenberg_if_not_locally_available()
 
         self.load_test_corpus = False
         if self.corpus_name == 'test_corpus':
@@ -44,64 +44,6 @@ class Corpus(common.FileLoaderMixin):
         if corpus_name is not None:
             self.relative_corpus_path = Path('corpora', self.corpus_name)
             self.novels = self._load_novels()
-
-    def _download_gutenberg_if_not_locally_available(self):
-        """
-        Checks if the gutenberg corpus is available locally. If not, downloads the corpus
-        and extracts it to corpora/gutenberg
-
-        No tests because the function depends on user input
-
-        :return:
-        """
-
-        import os
-        gutenberg_path = Path(common.BASE_PATH, 'corpora', 'gutenberg')
-
-        # if there are more than 4000 text files available, we know that the corpus was downloaded
-        # and can return
-        try:
-            no_gutenberg_novels=  len(os.listdir(Path(gutenberg_path, 'texts')))
-            if no_gutenberg_novels > 4000:
-                gutenberg_available = True
-            else:
-                gutenberg_available = False
-        # if the texts path was not found, we know that we need to download the corpus
-        except FileNotFoundError:
-            gutenberg_available = False
-
-        if not gutenberg_available:
-
-            print("The Project Gutenberg corpus is currently not available on your system.",
-                  "It consists of more than 4000 novels and 1.8 GB of data.")
-            download_prompt = input(
-                  "If you want to download the corpus, please enter (y). Any other input will "
-                  "terminate the program: ")
-            if not download_prompt in ['y', '(y)']:
-                raise ValueError("Project Gutenberg corpus will not be downloaded.")
-
-            import zipfile
-            import urllib
-            url = 'https://s3-us-west-2.amazonaws.com/gutenberg-cache/gutenberg_corpus.zip'
-            urllib.request.urlretrieve(url, 'gutenberg_corpus.zip')
-            zipf = zipfile.ZipFile('gutenberg_corpus.zip')
-            if not os.path.isdir(gutenberg_path):
-                os.mkdir(gutenberg_path)
-            zipf.extractall(gutenberg_path)
-            os.remove('gutenberg_corpus.zip')
-            metadata_url = r'https://raw.githubusercontent.com/dhmit/gender_novels/master' \
-                        r'/gender_novels/corpora/gutenberg/gutenberg.csv'
-            r = requests.get(metadata_url, allow_redirects=True)
-            with open(gutenberg_path/Path('gutenberg.csv'), 'wb') as metadata_file:
-                metadata_file.write(r.content)
-
-            # check that we now have 4000 novels available
-            try:
-                no_gutenberg_novels = len(os.listdir(Path(gutenberg_path, 'texts')))
-                print(f'Successfully downloaded {no_gutenberg_novels} novels.')
-            except FileNotFoundError:
-                raise FileNotFoundError("Something went wrong while downloading the gutenberg"
-                                        "corpus.")
 
 
 
