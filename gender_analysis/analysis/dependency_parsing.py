@@ -31,47 +31,43 @@ import csv
 #     return parser
 
 
-# def pickle(novel, parser):
-#     """
-#     This function returns a pickled tree
-#     :param novel: Novel we are interested in
-#     :param parser: Stanford parser object
-#     :return: tree in pickle format
-#
-#     >>> tree = load_pickle(f'dep_tree_aanrud_longfrock')
-#     >>> tree == None
-#     False
-#     """
-#
-#     try:
-#         tree = load_pickle(f'dep_tree_{str(novel)}')
-#     except (IOError, FileNotFoundError):
-#         sentences = sent_tokenize(novel.text.lower().replace("\n", " "))
-#         he_she_sentences = []
-#         for sentence in sentences:
-#             add_sentence = False
-#             words = [word for word in word_tokenize(sentence)]
-#             for word in words:
-#                 if word == "he" or word == "she" or word == "him" or word == "her":
-#                     add_sentence = True
-#             if add_sentence:
-#                 he_she_sentences.append(sentence)
-#         sentences = he_she_sentences
-#         result = parser.raw_parse_sents(sentences)
-#         # dependency triples of the form ((head word, head tag), rel, (dep word, dep tag))
-#         # link defining dependencies: https://nlp.stanford.edu/software/dependencies_manual.pdf
-#         tree = list(result)
-#         tree_list = []
-#         i = 0
-#         for sentence in tree:
-#             tree_list.append([])
-#             triples = list(next(sentence).triples())
-#             for triple in triples:
-#                 tree_list[i].append(triple)
-#             i += 1
-#         tree = tree_list
-#         store_pickle(tree, f'dep_tree_{str(novel)}')
-#     return tree
+def pickle(novel, parser):
+    """
+    This function returns a pickled tree
+    :param novel: Novel we are interested in
+    :param parser: Stanford parser object
+    :return: tree in pickle format
+    """
+
+    try:
+        tree = load_pickle(f'dep_tree_{str(novel)}')
+    except (IOError, FileNotFoundError):
+        sentences = sent_tokenize(novel.text.lower().replace("\n", " "))
+        he_she_sentences = []
+        for sentence in sentences:
+            add_sentence = False
+            words = [word for word in word_tokenize(sentence)]
+            for word in words:
+                if word == "he" or word == "she" or word == "him" or word == "her":
+                    add_sentence = True
+            if add_sentence:
+                he_she_sentences.append(sentence)
+        sentences = he_she_sentences
+        result = parser.raw_parse_sents(sentences)
+        # dependency triples of the form ((head word, head tag), rel, (dep word, dep tag))
+        # link defining dependencies: https://nlp.stanford.edu/software/dependencies_manual.pdf
+        tree = list(result)
+        tree_list = []
+        i = 0
+        for sentence in tree:
+            tree_list.append([])
+            triples = list(next(sentence).triples())
+            for triple in triples:
+                tree_list[i].append(triple)
+            i += 1
+        tree = tree_list
+        store_pickle(tree, f'dep_tree_{str(novel)}')
+    return tree
 
 
 def parse_novel(novel, parser):
