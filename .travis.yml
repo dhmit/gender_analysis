@@ -6,6 +6,8 @@ branches:
   - /.*(?i:travis).*$/
 
 language: python
+cache: pip
+
 python:
   - "3.6"
 
