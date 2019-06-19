@@ -7,68 +7,71 @@ from gender_analysis.common import store_pickle, load_pickle
 import os.path
 import csv
 
-def get_parser(path_to_jar, path_to_models_jar):
-    """
-    The jar files are too big to commit directly, so download them
-    :param path_to_jar: local path to stanford-parser.jar
-    :param path_to_models_jar: local path to stanford-parser-3.9.1-models.jar
-    >>> parser = get_parser("assets/stanford-parser.jar","assets/stanford-parser-3.9.1-models.jar")
-    >>> parser == None
-    False
-    """
+#TODO: Investigate to see if these functions are used
 
-    url_to_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser.jar"
-    url_to_models_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser-3.9.1-models.jar"
-    if not os.path.isfile(path_to_jar):
-        urllib.request.urlretrieve(url_to_jar, path_to_jar)
-    if not os.path.isfile(path_to_models_jar):
-        urllib.request.urlretrieve(url_to_models_jar, path_to_models_jar)
+# def get_parser(path_to_jar, path_to_models_jar):
+#     """
+#     The jar files are too big to commit directly, so download them
+#     :param path_to_jar: local path to stanford-parser.jar
+#     :param path_to_models_jar: local path to stanford-parser-3.9.1-models.jar
+#     >>> parser = get_parser("assets/stanford-parser.jar","assets/stanford-parser-3.9.1-models.jar")
+#     >>> parser == None
+#     False
+#     """
+#
+#
+#     url_to_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser.jar"
+#     url_to_models_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser-3.9.1-models.jar"
+#     if not os.path.isfile(path_to_jar):
+#         urllib.request.urlretrieve(url_to_jar, path_to_jar)
+#     if not os.path.isfile(path_to_models_jar):
+#         urllib.request.urlretrieve(url_to_models_jar, path_to_models_jar)
+#
+#     parser = StanfordDependencyParser(path_to_jar, path_to_models_jar)
+#     return parser
 
-    parser = StanfordDependencyParser(path_to_jar, path_to_models_jar)
-    return parser
 
-
-def pickle(novel, parser):
-    """
-    This function returns a pickled tree
-    :param novel: Novel we are interested in
-    :param parser: Stanford parser object
-    :return: tree in pickle format
-
-    >>> tree = load_pickle(f'dep_tree_aanrud_longfrock')
-    >>> tree == None
-    False
-    """
-
-    try:
-        tree = load_pickle(f'dep_tree_{str(novel)}')
-    except (IOError, FileNotFoundError):
-        sentences = sent_tokenize(novel.text.lower().replace("\n", " "))
-        he_she_sentences = []
-        for sentence in sentences:
-            add_sentence = False
-            words = [word for word in word_tokenize(sentence)]
-            for word in words:
-                if word == "he" or word == "she" or word == "him" or word == "her":
-                    add_sentence = True
-            if add_sentence:
-                he_she_sentences.append(sentence)
-        sentences = he_she_sentences
-        result = parser.raw_parse_sents(sentences)
-        # dependency triples of the form ((head word, head tag), rel, (dep word, dep tag))
-        # link defining dependencies: https://nlp.stanford.edu/software/dependencies_manual.pdf
-        tree = list(result)
-        tree_list = []
-        i = 0
-        for sentence in tree:
-            tree_list.append([])
-            triples = list(next(sentence).triples())
-            for triple in triples:
-                tree_list[i].append(triple)
-            i += 1
-        tree = tree_list
-        store_pickle(tree, f'dep_tree_{str(novel)}')
-    return tree
+# def pickle(novel, parser):
+#     """
+#     This function returns a pickled tree
+#     :param novel: Novel we are interested in
+#     :param parser: Stanford parser object
+#     :return: tree in pickle format
+#
+#     >>> tree = load_pickle(f'dep_tree_aanrud_longfrock')
+#     >>> tree == None
+#     False
+#     """
+#
+#     try:
+#         tree = load_pickle(f'dep_tree_{str(novel)}')
+#     except (IOError, FileNotFoundError):
+#         sentences = sent_tokenize(novel.text.lower().replace("\n", " "))
+#         he_she_sentences = []
+#         for sentence in sentences:
+#             add_sentence = False
+#             words = [word for word in word_tokenize(sentence)]
+#             for word in words:
+#                 if word == "he" or word == "she" or word == "him" or word == "her":
+#                     add_sentence = True
+#             if add_sentence:
+#                 he_she_sentences.append(sentence)
+#         sentences = he_she_sentences
+#         result = parser.raw_parse_sents(sentences)
+#         # dependency triples of the form ((head word, head tag), rel, (dep word, dep tag))
+#         # link defining dependencies: https://nlp.stanford.edu/software/dependencies_manual.pdf
+#         tree = list(result)
+#         tree_list = []
+#         i = 0
+#         for sentence in tree:
+#             tree_list.append([])
+#             triples = list(next(sentence).triples())
+#             for triple in triples:
+#                 tree_list[i].append(triple)
+#             i += 1
+#         tree = tree_list
+#         store_pickle(tree, f'dep_tree_{str(novel)}')
+#     return tree
 
 
 def parse_novel(novel, parser):
