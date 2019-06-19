@@ -256,7 +256,7 @@ def freq_by_author_gender(d):
 
 
 def freq_by_date(d):
-    '''
+    """
     Takes in a dictionary of novel objects mapped to relative frequencies
         (output of above function)
     Returns a dictionary with frequencies binned by decades into lists
@@ -284,10 +284,8 @@ def freq_by_date(d):
     >>> d[scarlet] = 0.5
     >>> d[austen] = 0.3
     >>> freq_by_date(d)
-    {'1770 to 1810': [], '1810 to 1819': [0.3], '1820 to 1829': [], '1830 to 1839':
-    [], '1840 to 1849': [], '1850 to 1859': [], '1860 to 1869': [], '1870 to 1879':
-    [], '1880 to 1889': [], '1890 to 1899': [], '1900 to 1922': [0.5]}
-    '''
+    {'1770 to 1810': [], '1810 to 1819': [0.3], '1820 to 1829': [], '1830 to 1839': [], '1840 to 1849': [], '1850 to 1859': [], '1860 to 1869': [], '1870 to 1879': [], '1880 to 1889': [], '1890 to 1899': [], '1900 to 1922': [0.5]}
+    """
 
     date_to_1810 = []
     date_1810_to_1819 = []
@@ -679,11 +677,12 @@ def run_all_analyses():
     print('By location: ')
     pprint.pprint(get_mean(freq_by_location(sub_comp_gender)))
 
-if __name__ == '__main__':
-    pass
 
-    # from dh_testers.testRunner import main_test
-    # main_test()
+if __name__ == '__main__':
+    # pass
+
+    from dh_testers.testRunner import main_test
+    main_test()
 
     # TODO: change 'sample_novels' to 'gutenberg' and graph titles from 'sample' to 'gutenberg'
 
