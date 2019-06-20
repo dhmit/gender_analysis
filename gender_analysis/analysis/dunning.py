@@ -117,14 +117,16 @@ def dunning_total(counter1, counter2, filename_to_pickle=None):
     return dunning_result
 
 
-def male_vs_female_authors_analysis_dunning_lesser():
+def male_vs_female_authors_analysis_dunning_lesser(corpus):
     """
     tests word distinctiveness of shared words between male and female corpora using dunning
     :return: dictionary of common shared words and their distinctiveness
     """
-    c = Corpus('test_corpus')
-    m_corpus = c.filter_by_gender('male')
-    f_corpus = c.filter_by_gender('female')
+    if 'author_gender' not in corpus.get_corpus_metadata():
+        raise ValueError('Corpus does not contain author metadata.')
+
+    m_corpus = corpus.filter_by_gender('male')
+    f_corpus = corpus.filter_by_gender('female')
     wordcounter_male = m_corpus.get_wordcount_counter()
     wordcounter_female = f_corpus.get_wordcount_counter()
     results = dunning_total(wordcounter_male, wordcounter_female)
@@ -206,13 +208,14 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
     print(output)
 
 
-def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus):
+def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to_pickle=False):
     """
     Uses Dunning analysis to compare words associated with word1 vs words associated with word2 in
     the Corpus passed in as the parameter.
     :param word1: str
     :param word2: str
     :param corpus: Corpus
+    :param to_pickle: boolean
     :return: dict
     """
 
@@ -229,8 +232,11 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus):
             for novel in corpus.novels:
                 word1_counter.update(novel.words_associated(word1))
                 word2_counter.update(novel.words_associated(word2))
-            results = dunning_total(word1_counter, word2_counter,
-                                    filename_to_pickle=pickle_filename)
+            if to_pickle:
+                results = dunning_total(word1_counter, word2_counter,
+                                        filename_to_pickle=pickle_filename)
+            else:
+                results = dunning_total(word1_counter, word2_counter)
 
     for group in [None, 'verbs', 'adjectives', 'pronouns', 'adverbs']:
         dunning_result_displayer(results, number_of_terms_to_display=50,
@@ -288,24 +294,25 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
     return results
 
 
-def male_vs_female_analysis_dunning(corpus_name, display_data=False, to_pickle=False):
+def male_vs_female_analysis_dunning(corpus, display_data=False, to_pickle=False):
     """
     tests word distinctiveness of shared words between male and female corpora using dunning
     Prints out the most distinctive terms overall as well as grouped by verbs, adjectives etc.
 
     :return: dict
     """
+    if 'author_gender' not in corpus.get_corpus_metadata():
+        raise ValueError('Corpus does not contain author metadata.')
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
-    pickle_filename = f'dunning_male_vs_female_chars_{corpus_name}'
+    pickle_filename = f'dunning_male_vs_female_chars_{corpus.corpus_name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
 
-        c = Corpus(corpus_name)
-        m_corpus = c.filter_by_gender('male')
-        f_corpus = c.filter_by_gender('female')
+        m_corpus = corpus.filter_by_gender('male')
+        f_corpus = corpus.filter_by_gender('female')
 
         from collections import Counter
         wordcounter_male = Counter()
@@ -390,6 +397,8 @@ def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pi
 
     :return:dict
     """
+    if 'author_gender' not in corpus.get_corpus_metadata():
+        raise ValueError('Corpus does not contain author metadata.')
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
@@ -462,6 +471,9 @@ def female_characters_author_gender_differences(corpus, to_pickle=False):
     :param to_pickle
     :return:
     """
+    if 'author_gender' not in corpus.get_corpus_metadata():
+        raise ValueError('Corpus does not contain author metadata.')
+
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
     return compare_word_association_between_corpus_analysis_dunning(word='she',
@@ -481,6 +493,9 @@ def male_characters_author_gender_differences(corpus, to_pickle=False):
     :param to_pickle
     :return:
     """
+    if 'author_gender' not in corpus.get_corpus_metadata():
+        raise ValueError('Corpus does not contain author metadata.')
+
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
     return compare_word_association_between_corpus_analysis_dunning(word='he',
@@ -500,6 +515,9 @@ def god_author_gender_differences(corpus, to_pickle=False):
     :param to_pickle
     :return:
     """
+    if 'author_gender' not in corpus.get_corpus_metadata():
+        raise ValueError('Corpus does not contain author metadata.')
+
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
     return compare_word_association_between_corpus_analysis_dunning(word='God',
@@ -516,6 +534,9 @@ def money_author_gender_differences(corpus, to_pickle=False):
     :param to_pickle
     :return:
     """
+    if 'author_gender' not in corpus.get_corpus_metadata():
+        raise ValueError('Corpus does not contain author metadata.')
+
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
     return compare_word_association_between_corpus_analysis_dunning(word=['money', 'dollars',
@@ -538,6 +559,9 @@ def america_author_gender_differences(corpus, to_pickle=False):
     :param to_pickle
     :return:
     """
+    if 'author_gender' not in corpus.get_corpus_metadata():
+        raise ValueError('Corpus does not contain author metadata.')
+
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
     return compare_word_association_between_corpus_analysis_dunning(word='America',

@@ -103,8 +103,6 @@ class Corpus(common.FileLoaderMixin):
                 raise FileNotFoundError("Something went wrong while downloading the gutenberg"
                                         "corpus.")
 
-
-
     def __len__(self):
         """
         For convenience: returns the number of novels in
@@ -335,7 +333,7 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> c.get_corpus_metadata()
-        ['author', 'author_gender', 'corpus_name', 'country_publication', 'date', 'filename', 'notes', 'title']
+        ['author', 'author_gender', 'corpus_name', 'country_publication', 'date', 'filename', 'notes','title']
 
         :return: list
         """

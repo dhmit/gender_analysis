@@ -27,7 +27,7 @@ def run_distance_analysis(corpus):
     results = {}
 
     for novel in corpus:
-        print(novel.title, novel.author)
+        # print(novel.title, novel.author)
         male_results = male_instance_dist(novel)
         female_results = female_instance_dist(novel)
 
@@ -88,9 +88,10 @@ def results_by_author_gender(results, metric):
     metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
     try:
         stat = metric_indexes[metric]
-    except:
-        print("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+    except KeyError:
+        raise ValueError("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
     for novel in list(results.keys()):
+        # TODO: check if novel has author_gender attribute
         if novel.author_gender == "male":
             data['male'].append([results[novel]['male'][metric], results[novel]['female'][metric],
                                  results[novel]['difference'][metric]])
@@ -120,6 +121,8 @@ def results_by_date(results, metric):
     except:
         print("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
 
+    # TODO: remove hardcoded dates
+
     date_to_1810 = []
     date_1810_to_1819 = []
     date_1820_to_1829 = []
@@ -133,6 +136,7 @@ def results_by_date(results, metric):
     date_1900_on = []
 
     for k in list(results.keys()):
+        # TODO: check if k has date attribute
         if k.date < 1810:
             date_to_1810.append([results[k]['male'][metric], results[k]['female'][metric],
                                  results[k]['difference'][metric]])
@@ -201,11 +205,14 @@ def results_by_location(results, metric):
     except:
         print("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
 
+    # TODO: remove hardcoded locations
+
     location_UK = []
     location_US = []
     location_other = []
 
     for k in list(results.keys()):
+        # TODO: check if k has country_publication attribute
         if k.country_publication in ["United Kingdom", "England", "Scotland", "Wales"]:
             location_UK.append([results[k]['male'][metric], results[k]['female'][metric],
                                 results[k]['difference'][metric]])

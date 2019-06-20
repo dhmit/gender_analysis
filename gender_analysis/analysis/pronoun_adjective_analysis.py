@@ -107,6 +107,7 @@ def results_by_author_gender(full_results):
 
     for novel in list(full_results.keys()):
         # print("author gender analysis:", novel.title, novel.author)
+        # TODO: check if novel has author_gender attribute
         if novel.author_gender == "male":
             data['male_author']['male'] = merge(full_results[novel]['male'], data['male_author']['male'])
             data['male_author']['female'] = merge(full_results[novel]['female'], data['male_author']['female'])
@@ -126,6 +127,8 @@ def results_by_date(full_results):
     """
     data = {}
 
+    # TODO: remove hardcoded dates
+
     date_to_1810 = {'male': {}, 'female': {}}
     date_1810_to_1819 = {'male': {}, 'female': {}}
     date_1820_to_1829 = {'male': {}, 'female': {}}
@@ -139,7 +142,7 @@ def results_by_date(full_results):
     date_1900_on = {'male': {}, 'female': {}}
 
     for k in list(full_results.keys()):
-        print("date analysis:", k.title, k.author)
+        # TODO: check if k has date attribute
         if k.date < 1810:
             date_to_1810['male'] = merge(full_results[k]['male'], date_to_1810['male'])
             date_to_1810['female'] = merge(full_results[k]['female'], date_to_1810['female'])
@@ -196,12 +199,14 @@ def results_by_location(full_results):
     """
     data = {}
 
+    # TODO: remove hardcoded locations
+
     location_UK = {'male': {}, 'female': {}}
     location_US = {'male': {}, 'female': {}}
     location_other = {'male': {}, 'female': {}}
 
     for k in list(full_results.keys()):
-        print("location analysis:", k.title, k.author)
+        # TODO: check if k has country_publication attribute
         if k.country_publication == 'United Kingdom' or k.country_publication == "England":
             location_UK['male'] = merge(full_results[k]['male'], location_UK['male'])
             location_UK['female'] = merge(full_results[k]['female'], location_UK['female'])

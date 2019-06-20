@@ -241,6 +241,7 @@ def freq_by_author_gender(d):
     data = {}
 
     for k, v in d.items():
+        # TODO: check if k (document?) has author_gender attribute
         if k.author_gender == 'male':
             male_author.append(v)
 
@@ -283,6 +284,8 @@ def freq_by_date(d):
     {'1770 to 1810': [], '1810 to 1819': [0.3], '1820 to 1829': [], '1830 to 1839': [], '1840 to 1849': [], '1850 to 1859': [], '1860 to 1869': [], '1870 to 1879': [], '1880 to 1889': [], '1890 to 1899': [], '1900 to 1922': [0.5]}
     """
 
+    # TODO: remove hardcoded dates
+
     date_to_1810 = []
     date_1810_to_1819 = []
     date_1820_to_1829 = []
@@ -298,6 +301,7 @@ def freq_by_date(d):
     data = {}
 
     for k, v in d.items():
+        # TODO: check if k (document?) has date attribute
         if k.date < 1810:
             date_to_1810.append(v)
         elif k.date < 1820:
@@ -364,12 +368,13 @@ def freq_by_location(d):
     >>> freq_by_location(d)
     {'UK': [0.3], 'US': [0.5], 'Other': []}
     """
-
+    # TODO: remove hardcoded locations
     location_UK = []
     location_US = []
     location_other = []
 
     for k, v in d.items():
+        # TODO: check if k (document?) has country_publication attribute
         if k.country_publication == 'United Kingdom':
             location_UK.append(v)
         elif k.country_publication == 'United States':
@@ -429,8 +434,10 @@ def sort_every_year(frequency_dict):
     :param frequency_dict: dictionary of novels mapped to pronoun frequencies
     :return: dictionary of years mapped to lists of pronoun frequencies
     """
+
     every_year_dict = {}
     for key, value in frequency_dict.items():
+        # TODO: check if key (document?) has date attribute
         frequency_list = [frequency_dict[key]]
 
         if key.date not in every_year_dict.keys():
