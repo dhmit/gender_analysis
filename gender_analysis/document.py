@@ -2,7 +2,7 @@ import re
 import string
 from collections import Counter
 from pathlib import Path
-import os
+
 from more_itertools import windowed
 
 import nltk
@@ -26,74 +26,74 @@ from gender_analysis.common import TEXT_END_MARKERS, TEXT_START_MARKERS, LEGALES
     LEGALESE_START_MARKERS
 
 
-class Novel(common.FileLoaderMixin):
-    """ The Novel class loads and holds the full text and
-    metadata (author, title, publication date) of a novel
+class Document(common.FileLoaderMixin):
+    """ The Document class loads and holds the full text and
+    metadata (author, title, publication date) of a document
 
-    >>> from gender_analysis import novel
-    >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
+    >>> from gender_analysis import document
+    >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}
-    >>> austen = novel.Novel(novel_metadata)
+    >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
     >>> len(austen.text)
     466879
     """
 
-    def __init__(self, novel_metadata_dict):
+    def __init__(self, document_metadata_dict):
 
-        if not hasattr(novel_metadata_dict, 'items'):
+        if not hasattr(document_metadata_dict, 'items'):
             raise ValueError(
-                'novel_metadata_dict must be a dictionary or support .items()')
+                'document_metadata_dict must be a dictionary or support .items()')
 
-        # Check that the essential attributes for the novel exists.
+        # Check that the essential attributes for the document exists.
         for key in ('author', 'date', 'title', 'corpus_name'):
-            if key not in novel_metadata_dict:
-                raise ValueError(f'novel_metadata_dict must have an entry for "{key}". Full ',
-                                 f'metadata: {novel_metadata_dict}')
-        self.members = set(novel_metadata_dict.keys())
+            if key not in document_metadata_dict:
+                raise ValueError(f'document_metadata_dict must have an entry for "{key}". Full ',
+                                 f'metadata: {document_metadata_dict}')
+        self.members = set(document_metadata_dict.keys())
 
         # check that the author starts with a capital letter
         # TODO: Currently deactivated because Gutenberg authors are lists
         # TODO: re-implement with lists in mind.  Note: there are a few novels with no author
-        # if not novel_metadata_dict['author'][0].isupper():
+        # if not document_metadata_dict['author'][0].isupper():
         #    raise ValueError('The last name of the author should be upper case.',
-        #                     f'{novel_metadata_dict["author"]} is likely incorrect in',
-        #                     f'{novel_metadata_dict}.')
+        #                     f'{document_metadata_dict["author"]} is likely incorrect in',
+        #                     f'{document_metadata_dict}.')
 
         # Check that the date is a year (4 consecutive integers)
-        if 'date' in novel_metadata_dict:
-            if not re.match(r'^\d{4}$', novel_metadata_dict['date']):
+        if 'date' in document_metadata_dict:
+            if not re.match(r'^\d{4}$', document_metadata_dict['date']):
                 raise ValueError('The novel date should be a year (4 integers), not',
-                                 f'{novel_metadata_dict["date"]}. Full metadata: {novel_metadata_dict}')
+                                 f'{document_metadata_dict["date"]}. Full metadata: {document_metadata_dict}')
 
-        if '[' in novel_metadata_dict['author']:
-            self.author = literal_eval(novel_metadata_dict['author'])
+        if '[' in document_metadata_dict['author']:
+            self.author = literal_eval(document_metadata_dict['author'])
         else:
-            self.author = novel_metadata_dict['author']
-        self.title = novel_metadata_dict['title']
-        self.corpus_name = novel_metadata_dict['corpus_name']
+            self.author = document_metadata_dict['author']
+        self.title = document_metadata_dict['title']
+        self.corpus_name = document_metadata_dict['corpus_name']
 
         # optional attributes
         try:
-            self.gutenberg_id = int(novel_metadata_dict['gutenberg_id'])
+            self.gutenberg_id = int(document_metadata_dict['gutenberg_id'])
         except KeyError:
             self.gutenberg_id = None
-        self.country_publication = novel_metadata_dict.get('country_publication', None)
-        self.notes = novel_metadata_dict.get('notes', None)
-        self.author_gender = novel_metadata_dict.get('author_gender', 'unknown')
+        self.country_publication = document_metadata_dict.get('country_publication', None)
+        self.notes = document_metadata_dict.get('notes', None)
+        self.author_gender = document_metadata_dict.get('author_gender', 'unknown')
         try:
-            self.filename = novel_metadata_dict['filename']
+            self.filename = document_metadata_dict['filename']
         except KeyError:
             if (self.gutenberg_id):
                 self.filename = str(self.gutenberg_id) + r".txt"
             else:
                 raise ValueError('If you do not provide an explicit filename, you must provide the',
-                                 f'id. Full metadata: {novel_metadata_dict}')
-        self.subject = literal_eval(novel_metadata_dict.get('subject', 'None'))
+                                 f'id. Full metadata: {document_metadata_dict}')
+        self.subject = literal_eval(document_metadata_dict.get('subject', 'None'))
         try:
-            self.date = int(novel_metadata_dict['date'])
+            self.date = int(document_metadata_dict['date'])
         except KeyError:
             self.date = None
         self._word_counts_counter = None
@@ -101,21 +101,21 @@ class Novel(common.FileLoaderMixin):
 
         if self.author_gender not in {'female', 'male', 'non-binary', 'unknown', 'both'}:
             raise ValueError('Author gender has to be "female", "male" "non-binary," or "unknown" ',
-                             f'but not {self.author_gender}. Full metadata: {novel_metadata_dict}')
+                             f'but not {self.author_gender}. Full metadata: {document_metadata_dict}')
 
-        if 'text' in novel_metadata_dict:
-            self.text = novel_metadata_dict['text']
+        if 'text' in document_metadata_dict:
+            self.text = document_metadata_dict['text']
         else:
             # Check that the filename looks like a filename (ends in .txt)
             if not self.filename.endswith('.txt'):
                 raise ValueError(
-                    f'The novel filename ({self.filename}) should end in .txt . Full metadata: '
-                    f'{novel_metadata_dict}.')
-            self.text = self._load_novel_text()
+                    f'The document filename ({self.filename}) should end in .txt . Full metadata: '
+                    f'{document_metadata_dict}.')
+            self.text = self._load_document_text()
 
     def getmembers(self):
         """
-        Returns set of metadata field names included for this novel
+        Returns set of metadata field names included for this document
         :return: set
         """
         return self.members
@@ -123,15 +123,15 @@ class Novel(common.FileLoaderMixin):
     @property
     def word_count(self):
         """
-        Lazy-loading for Novel.word_count attribute. Returns the number of words in the novel.
+        Lazy-loading for Document.word_count attribute. Returns the number of words in the document.
         The word_count attribute is useful for the get_word_freq function.
         However, it is performance-wise costly, so it's only loaded when it's actually required.
 
-        >>> from gender_analysis import novel
-        >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
+        >>> from gender_analysis import document
+        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = novel.Novel(novel_metadata)
+        >>> austen = document.Document(document_metadata)
         >>> austen.word_count
         83285
 
@@ -144,17 +144,17 @@ class Novel(common.FileLoaderMixin):
 
     def __str__(self):
         """
-        Overrides python print method for user-defined objects for Novel class
+        Overrides python print method for user-defined objects for Document class
         Returns the filename without the extension - author and title word
         :return: str
 
-        >>> from gender_analysis import novel
-        >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
+        >>> from gender_analysis import document
+        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = novel.Novel(novel_metadata)
-        >>> novel_string = str(austen)
-        >>> novel_string
+        >>> austen = document.Document(document_metadata)
+        >>> document_string = str(austen)
+        >>> document_string
         'austen_persuasion'
         """
         name = self.filename[0:len(self.filename) - 4]
@@ -163,33 +163,33 @@ class Novel(common.FileLoaderMixin):
     def __repr__(self):
         '''
         Overrides the built-in __repr__ method
-        Returns the object type (Novel) and then the filename without the extension
+        Returns the object type (Document) and then the filename without the extension
             in <>.
 
         :return: string
 
-        >>> from gender_analysis import novel
-        >>> novel_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
+        >>> from gender_analysis import document
+        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = novel.Novel(novel_metadata)
+        >>> austen = document.Document(document_metadata)
         >>> repr(austen)
-        '<Novel (austen_persuasion)>'
+        '<Document (austen_persuasion)>'
         '''
 
         name = self.filename[0:len(self.filename) - 4]
-        return f'<Novel ({name})>'
+        return f'<Document ({name})>'
 
     def __eq__(self, other):
         """
-        Overload the equality operator to enable comparing and sorting novels.
+        Overload the equality operator to enable comparing and sorting documents.
 
-        >>> from gender_analysis.novel import Novel
+        >>> from gender_analysis.document import Document
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = Novel(austen_metadata)
-        >>> austen2 = Novel(austen_metadata)
+        >>> austen = Document(austen_metadata)
+        >>> austen2 = Document(austen_metadata)
         >>> austen == austen2
         True
         >>> austen.text += 'no longer equal'
@@ -198,15 +198,15 @@ class Novel(common.FileLoaderMixin):
 
         :return: bool
         """
-        if not isinstance(other, Novel):
-            raise NotImplementedError("Only a Novel can be compared to another Novel.")
+        if not isinstance(other, Document):
+            raise NotImplementedError("Only a Document can be compared to another Document.")
 
         attributes_required_to_be_equal = ['author', 'date', 'title', 'corpus_name', 'filename',
                                            'country_publication', 'author_gender', 'notes', 'text']
 
         for attribute in attributes_required_to_be_equal:
             if not hasattr(other, attribute):
-                raise AttributeError(f'Comparison novel lacks attribute {attribute}.')
+                raise AttributeError(f'Comparison document lacks attribute {attribute}.')
             if getattr(self, attribute) != getattr(other, attribute):
                 return False
 
@@ -214,17 +214,17 @@ class Novel(common.FileLoaderMixin):
 
     def __lt__(self, other):
         """
-        Overload less than operator to enable comparing and sorting novels
+        Overload less than operator to enable comparing and sorting documents
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt'}
-        >>> austen = novel.Novel(austen_metadata)
+        >>> austen = document.Document(austen_metadata)
         >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1850',
         ...                   'filename': 'hawthorne_scarlet.txt'}
-        >>> hawthorne = novel.Novel(hawthorne_metadata)
+        >>> hawthorne = document.Document(hawthorne_metadata)
         >>> hawthorne < austen
         False
         >>> austen < hawthorne
@@ -232,25 +232,25 @@ class Novel(common.FileLoaderMixin):
 
         :return: bool
         """
-        if not isinstance(other, Novel):
-            raise NotImplementedError("Only a Novel can be compared to another Novel.")
+        if not isinstance(other, Document):
+            raise NotImplementedError("Only a Document can be compared to another Document.")
 
         return (self.author, self.title, self.date) < (other.author, other.title, other.date)
 
     def __hash__(self):
         """
-        Makes the Novel object hashable
+        Makes the Document object hashable
 
         :return:
         """
 
         return hash(repr(self))
 
-    def _load_novel_text(self):
-        """Loads the text of a novel and uses the remove_boilerplate_text() and
-        remove_table_of_contents() functions on the text of the novel to remove the boilerplate
-        text and table of contents from the novel. After these actions, the novel's text should be
-        only the actual text of the novel.
+    def _load_document_text(self):
+        """Loads the text of a document and uses the remove_boilerplate_text() and
+        remove_table_of_contents() functions on the text of the document to remove the boilerplate
+        text and table of contents from the document. After these actions, the document's text should be
+        only the actual text of the document.
 
         Is a private function as it is unnecessary to access it outside the class.
 
@@ -264,12 +264,12 @@ class Novel(common.FileLoaderMixin):
         try:
             text = self.load_file(file_path)
         except FileNotFoundError:
-            err = "Could not find the novel text file "
+            err = "Could not find the document text file "
             err += "at the expected location ({file_path})."
             raise FileNotFoundError(err)
 
-        # This function will remove the boilerplate text from the novel's text. It has been
-        # placed into a separate function in the case that other novel text cleaning functions
+        # This function will remove the boilerplate text from the document's text. It has been
+        # placed into a separate function in the case that other document text cleaning functions
         # want to be added at a later date.
         text = self._remove_boilerplate_text(text)
 
@@ -277,7 +277,7 @@ class Novel(common.FileLoaderMixin):
 
     def _remove_boilerplate_text(self, text):
         """
-        Removes the boilerplate text from an input string of a novel.
+        Removes the boilerplate text from an input string of a document.
         Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
         strip_headers() function from the gutenberg module, which can remove even nonstandard
         headers.
@@ -289,15 +289,15 @@ class Novel(common.FileLoaderMixin):
 
         :return: str
 
-        >>> from gender_analysis import novel
-        >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
+        >>> from gender_analysis import document
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'james_highway.txt'}
-        >>> austen = novel.Novel(novel_metadata)
+        >>> austen = document.Document(document_metadata)
         >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text(raw_text)
-        >>> title_line = raw_text[0:raw_text.find('\\n')]
+        >>> title_line = raw_text.splitlines()[0]
         >>> title_line
         "THE KING'S HIGHWAY"
 
@@ -318,7 +318,7 @@ class Novel(common.FileLoaderMixin):
 
     def _remove_boilerplate_text_without_gutenberg(self, text):
         """
-        Removes the boilerplate text from an input string of a novel.
+        Removes the boilerplate text from an input string of a document.
         Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
         strip_headers() function, somewhat inelegantly copy-pasted from the gutenberg module, which can remove even nonstandard
         headers.
@@ -330,32 +330,22 @@ class Novel(common.FileLoaderMixin):
 
         :return: str
 
-        >>> from gender_analysis import novel
-        >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
+        >>> from gender_analysis import document
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'james_highway.txt'}
-        >>> austen = novel.Novel(novel_metadata)
+        >>> austen = document.Document(document_metadata)
         >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
-        >>> title_line = raw_text[0:raw_text.find('\\n')]
+        >>> title_line = raw_text.splitlines()[0]
         >>> title_line
         "THE KING'S HIGHWAY"
         """
 
-        # # old method
-        # if text.find('*** START OF THIS PROJECT GUTENBERG EBOOK') > -1:
-        #     end_intro_boilerplate = text.find(
-        #         '*** START OF THIS PROJECT GUTENBERG EBOOK')
-        #     # second set of *** indicates start
-        #     start_novel = text.find('***', end_intro_boilerplate + 5) + 3
-        #     end_novel = text.find('*** END OF THIS PROJECT GUTENBERG EBOOK')
-        #     text = text[start_novel:end_novel]
-        # return text
-
         # new method copy-pasted from Gutenberg library
         lines = text.splitlines()
-        sep = str(os.linesep)
+        sep = '\n'
 
         out = []
         i = 0
@@ -407,11 +397,11 @@ class Novel(common.FileLoaderMixin):
         better implementation that uses either regex or nltk
         E.g. this version doesn't handle dashes or contractions
 
-        >>> from gender_analysis import novel
-        >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        >>> from gender_analysis import document
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                   'corpus_name': 'sample_novels', 'filename': 'austen_persuasion.txt',
         ...                   'text': '?!All-kinds %$< of pun*ct(uatio)n {a}nd sp+ecial cha/rs'}
-        >>> austin = novel.Novel(novel_metadata)
+        >>> austin = document.Document(document_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
         ['allkinds', 'of', 'punctuation', 'and', 'special', 'chars']
@@ -431,15 +421,15 @@ class Novel(common.FileLoaderMixin):
 
     def find_quoted_text(self):
         """
-        Finds all of the quoted statements in the novel text
+        Finds all of the quoted statements in the document text
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> test_text = '"This is a quote" and also "This is my quote"'
-        >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt', 'text' : test_text}
-        >>> test_novel = novel.Novel(novel_metadata)
-        >>> test_novel.find_quoted_text()
+        >>> document_novel = document.Document(document_metadata)
+        >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
 
         # TODO: Make this test pass
@@ -456,7 +446,7 @@ class Novel(common.FileLoaderMixin):
 
         TODO(Redlon & Murray): Add and statements so that a broken up quote is treated as a
         TODO(Redlon & Murray): single quote
-        TODO: Look for more complicated test cases in our existing novels.
+        TODO: Look for more complicated test cases in our existing documents.
 
         :return: list of complete quotation strings
         """
@@ -488,14 +478,14 @@ class Novel(common.FileLoaderMixin):
     def get_count_of_word(self, word):
         """
         Returns the number of instances of str word in the text.  N.B.: Not case-sensitive.
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "Hester was convicted of adultery. "
         >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
         >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
-        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_count_of_word("sad")
         4
         >>> scarlett.get_count_of_word('ThisWordIsNotInTheWordCounts')
@@ -515,15 +505,15 @@ class Novel(common.FileLoaderMixin):
         """
         Returns a counter object of all of the words in the text.
         (The counter can also be accessed as self.word_counts. However, it only gets initialized
-        when a user either runs Novel.get_count_of_word or Novel.get_wordcount_counter, hence
+        when a user either runs Document.get_count_of_word or Document.get_wordcount_counter, hence
         the separate method.)
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "Hester was convicted of adultery was convicted."
-        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
 
@@ -542,15 +532,15 @@ class Novel(common.FileLoaderMixin):
         new word
         Note: words always return lowercase
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "She took a lighter out of her purse and handed it over to him."
         >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
         >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
         >>> summary += " TBH i know nothing about this story."
-        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Document(document_metadata)
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
 
@@ -576,14 +566,14 @@ class Novel(common.FileLoaderMixin):
         window_size is the number of words before and after to return, so the total window is
         2x window_size + 1
 
-        >>> from gender_analysis.novel import Novel
+        >>> from gender_analysis.document import Document
         >>> summary = "She took a lighter out of her purse and handed it over to him."
         >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
         >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
-        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = Novel(novel_metadata)
+        >>> scarlett = Document(document_metadata)
 
         # search_terms can be either a string...
         >>> scarlett.get_word_windows("his", window_size=2)
@@ -619,14 +609,14 @@ class Novel(common.FileLoaderMixin):
         :param words: str
         :return: double
 
-        >>> from gender_analysis import novel
+        >>> from gender_analysis import document
         >>> summary = "Hester was convicted of adultery. "
         >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
         >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
-        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',
         ...                   'filename': None, 'text': summary}
-        >>> scarlett = novel.Novel(novel_metadata)
+        >>> scarlett = document.Document(document_metadata)
         >>> frequency = scarlett.get_word_freq('sad')
         >>> frequency
         0.13333333333333333
@@ -641,15 +631,15 @@ class Novel(common.FileLoaderMixin):
         term, the second one the part of speech tag.
         Note: the same word can have a different part of speech tag. In the example below,
         see "refuse" and "permit"
-        >>> from gender_analysis.novel import Novel
+        >>> from gender_analysis.document import Document
         >>> summary = "They refuse to permit us to obtain the refuse permit."
-        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',
         ...                   'filename': None, 'text': summary}
-        >>> novel = Novel(novel_metadata)
-        >>> novel.get_part_of_speech_tags()[:4]
+        >>> document = Document(document_metadata)
+        >>> document.get_part_of_speech_tags()[:4]
         [('They', 'PRP'), ('refuse', 'VBP'), ('to', 'TO'), ('permit', 'VB')]
-        >>> novel.get_part_of_speech_tags()[-4:]
+        >>> document.get_part_of_speech_tags()[-4:]
         [('the', 'DT'), ('refuse', 'NN'), ('permit', 'NN'), ('.', '.')]
 
         :rtype: list

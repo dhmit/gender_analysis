@@ -27,7 +27,7 @@ def books_pronoun_freq(corp):
     :return: dictionary with data organized by groups
 
     >>> books_pronoun_freq(Corpus('test_corpus'))
-    {<Novel (aanrud_longfrock)>: 0.7623169107856191, <Novel (abbott_flatlandromance)>: 0.14321608040201003, <Novel (abbott_indiscreetletter)>: 0.4166666666666667, <Novel (adams_fighting)>: 0.1898395721925134, <Novel (alcott_josboys)>: 0.42152086422368146, <Novel (alcott_littlemen)>: 0.3111248200699157, <Novel (alcott_littlewomen)>: 0.6196978175713487, <Novel (alden_chautauqua)>: 0.7518623169791935, <Novel (austen_emma)>: 0.5662100456621004, <Novel (austen_persuasion)>: 0.5305111461382571}
+    {<Document (aanrud_longfrock)>: 0.7623169107856191, <Document (abbott_flatlandromance)>: 0.14321608040201003, <Document (abbott_indiscreetletter)>: 0.4166666666666667, <Document (adams_fighting)>: 0.1898395721925134, <Document (alcott_josboys)>: 0.42152086422368146, <Document (alcott_littlemen)>: 0.3111248200699157, <Document (alcott_littlewomen)>: 0.6196978175713487, <Document (alden_chautauqua)>: 0.7518623169791935, <Document (austen_emma)>: 0.5662100456621004, <Document (austen_persuasion)>: 0.5305111461382571}
     '''
 
     try:
@@ -72,7 +72,7 @@ def subject_vs_object_pronoun_freqs(corp):
     '''
     Takes in a Corpus of novels
     Returns a tuple of two dictionaries, one male and female
-    Each dictionary maps each Novel in the corpus to the proportion of the pronouns
+    Each dictionary maps each Document in the corpus to the proportion of the pronouns
         of the specified gender in that novel that are subject pronouns
 
     #TODO: add doctests
@@ -81,7 +81,7 @@ def subject_vs_object_pronoun_freqs(corp):
     :return: tuple of two dictionaries (male, female)
 
     >>> subject_vs_object_pronoun_freqs(Corpus('test_corpus'))
-    ({<Novel (aanrud_longfrock)>: 0.793233082706767, <Novel (abbott_flatlandromance)>: 0.6741573033707865, <Novel (abbott_indiscreetletter)>: 0.7906976744186047, <Novel (adams_fighting)>: 0.7184527584020292, <Novel (alcott_josboys)>: 0.6330049261083744, <Novel (alcott_littlemen)>: 0.6451612903225807, <Novel (alcott_littlewomen)>: 0.6577563540753725, <Novel (alden_chautauqua)>: 0.7577030812324931, <Novel (austen_emma)>: 0.7086120401337792, <Novel (austen_persuasion)>: 0.6739130434782609}, {<Novel (aanrud_longfrock)>: 0.5376532399299474, <Novel (abbott_flatlandromance)>: 0.17543859649122806, <Novel (abbott_indiscreetletter)>: 0.4424242424242424, <Novel (adams_fighting)>: 0.43485915492957744, <Novel (alcott_josboys)>: 0.3862487360970678, <Novel (alcott_littlemen)>: 0.4343501326259947, <Novel (alcott_littlewomen)>: 0.4124569980083288, <Novel (alden_chautauqua)>: 0.5461432506887053, <Novel (austen_emma)>: 0.4836730221345606, <Novel (austen_persuasion)>: 0.4872013651877133})
+    ({<Document (aanrud_longfrock)>: 0.793233082706767, <Document (abbott_flatlandromance)>: 0.6741573033707865, <Document (abbott_indiscreetletter)>: 0.7906976744186047, <Document (adams_fighting)>: 0.7184527584020292, <Document (alcott_josboys)>: 0.6330049261083744, <Document (alcott_littlemen)>: 0.6451612903225807, <Document (alcott_littlewomen)>: 0.6577563540753725, <Document (alden_chautauqua)>: 0.7577030812324931, <Document (austen_emma)>: 0.7086120401337792, <Document (austen_persuasion)>: 0.6739130434782609}, {<Document (aanrud_longfrock)>: 0.5376532399299474, <Document (abbott_flatlandromance)>: 0.17543859649122806, <Document (abbott_indiscreetletter)>: 0.4424242424242424, <Document (adams_fighting)>: 0.43485915492957744, <Document (alcott_josboys)>: 0.3862487360970678, <Document (alcott_littlemen)>: 0.4343501326259947, <Document (alcott_littlewomen)>: 0.4124569980083288, <Document (alden_chautauqua)>: 0.5461432506887053, <Document (austen_emma)>: 0.4836730221345606, <Document (austen_persuasion)>: 0.4872013651877133})
     '''
 
     try:
@@ -142,9 +142,9 @@ def subject_pronouns_gender_comparison(corp, subject_gender):
     :return: dictionary
 
     >>> subject_pronouns_gender_comparison(Corpus('test_corpus'), 'male')
-    {<Novel (aanrud_longfrock)>: 0.2557575757575758, <Novel (abbott_flatlandromance)>: 0.923076923076923, <Novel (abbott_indiscreetletter)>: 0.582857142857143, <Novel (adams_fighting)>: 0.8210144927536231, <Novel (alcott_josboys)>: 0.5736607142857142, <Novel (alcott_littlemen)>: 0.6812652068126521, <Novel (alcott_littlewomen)>: 0.39719502513892563, <Novel (alden_chautauqua)>: 0.2543488481429243, <Novel (austen_emma)>: 0.4343926191696566, <Novel (austen_persuasion)>: 0.45696623870660963}
+    {<Document (aanrud_longfrock)>: 0.2557575757575758, <Document (abbott_flatlandromance)>: 0.923076923076923, <Document (abbott_indiscreetletter)>: 0.582857142857143, <Document (adams_fighting)>: 0.8210144927536231, <Document (alcott_josboys)>: 0.5736607142857142, <Document (alcott_littlemen)>: 0.6812652068126521, <Document (alcott_littlewomen)>: 0.39719502513892563, <Document (alden_chautauqua)>: 0.2543488481429243, <Document (austen_emma)>: 0.4343926191696566, <Document (austen_persuasion)>: 0.45696623870660963}
     >>> subject_pronouns_gender_comparison(Corpus('test_corpus'), 'female')
-    {<Novel (aanrud_longfrock)>: 0.7442424242424243, <Novel (abbott_flatlandromance)>: 0.07692307692307691, <Novel (abbott_indiscreetletter)>: 0.4171428571428572, <Novel (adams_fighting)>: 0.17898550724637682, <Novel (alcott_josboys)>: 0.4263392857142857, <Novel (alcott_littlemen)>: 0.31873479318734793, <Novel (alcott_littlewomen)>: 0.6028049748610743, <Novel (alden_chautauqua)>: 0.7456511518570758, <Novel (austen_emma)>: 0.5656073808303435, <Novel (austen_persuasion)>: 0.5430337612933904}
+    {<Document (aanrud_longfrock)>: 0.7442424242424243, <Document (abbott_flatlandromance)>: 0.07692307692307691, <Document (abbott_indiscreetletter)>: 0.4171428571428572, <Document (adams_fighting)>: 0.17898550724637682, <Document (alcott_josboys)>: 0.4263392857142857, <Document (alcott_littlemen)>: 0.31873479318734793, <Document (alcott_littlewomen)>: 0.6028049748610743, <Document (alden_chautauqua)>: 0.7456511518570758, <Document (austen_emma)>: 0.5656073808303435, <Document (austen_persuasion)>: 0.5430337612933904}
     '''
 
     if not(subject_gender == 'male' or subject_gender == 'female'):
@@ -222,15 +222,15 @@ def freq_by_author_gender(d):
     :param d: dictionary
     :return: dictionary
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Brontë, Anne', 'title': 'The Tenant of Wildfell Hall',
     ...                   'corpus_name': 'sample_novels', 'date': '1848', 'author_gender':'female',
     ...                   'filename': 'bronte_wildfell.txt'}
-    >>> bronte = novel.Novel(novel_metadata)
+    >>> bronte = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Adams, William Taylor', 'title': 'Fighting for the Right',
     ...                   'corpus_name': 'sample_novels', 'date': '1892', 'author_gender':'male',
     ...                   'filename': 'adams_fighting.txt'}
-    >>> fighting = novel.Novel(novel_metadata)
+    >>> fighting = document.Document(novel_metadata)
     >>> d = {}
     >>> d[fighting] = 0.3
     >>> d[bronte] = 0.6
@@ -271,15 +271,15 @@ def freq_by_date(d):
     :param d: dictionary
     :return: dictionary
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}
-    >>> austen = novel.Novel(novel_metadata)
+    >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
-    >>> scarlet = novel.Novel(novel_metadata)
+    >>> scarlet = document.Document(novel_metadata)
     >>> d = {}
     >>> d[scarlet] = 0.5
     >>> d[austen] = 0.3
@@ -355,15 +355,15 @@ def freq_by_location(d):
     :param d: dictionary
     :return: dictionary
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt'}
-    >>> austen = novel.Novel(novel_metadata)
+    >>> austen = document.Document(novel_metadata)
     >>> novel_metadata2 = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt'}
-    >>> scarlet = novel.Novel(novel_metadata2)
+    >>> scarlet = document.Document(novel_metadata2)
     >>> d = {}
     >>> d[scarlet] = 0.5
     >>> d[austen] = 0.3
@@ -421,15 +421,15 @@ def sort_every_year(frequency_dict):
     Takes in a dictionary of novels mapped to pronoun frequencies and returns a dictionay of
         years mapped to lists of pronoun frequencies
 
-    >>> from gender_analysis import novel
+    >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}
-    >>> austen = novel.Novel(novel_metadata)
+    >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
-    >>> scarlet = novel.Novel(novel_metadata)
+    >>> scarlet = document.Document(novel_metadata)
     >>> d = {}
     >>> d[scarlet] = 0.5
     >>> d[austen] = 0.3

@@ -212,7 +212,7 @@ class FileLoaderMixin:
         # repo so it returns the correct path. But it will change once
         # this function gets moved.
         local_base_path = Path(os.path.abspath(os.path.dirname(__file__)))
-        file = open(local_base_path.joinpath(file_path), mode='r', encoding='utf8')
+        file = open(local_base_path.joinpath(file_path), encoding='utf-8')
 
         if current_file_type == '.csv':
             result = file.readlines()
