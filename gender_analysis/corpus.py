@@ -5,12 +5,12 @@ from pathlib import Path
 from collections import Counter
 
 from gender_analysis import common
-from gender_analysis.novel import Novel
+from gender_analysis.document import Document
 from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
 
 
-
 class Corpus(common.FileLoaderMixin):
+
     """The corpus class is used to load the metadata and full
     texts of all novels in a corpus
 
@@ -31,21 +31,35 @@ class Corpus(common.FileLoaderMixin):
 
     """
 
-    def __init__(self, corpus_name=None, csv_path=None):
-        self.corpus_name = corpus_name
+    def __init__(self, path_to_files, name=None, csv_path=None, pickle_on_load=False):
+
+        """
+
+        :param path_to_files: Must be either the path to a directory of txt files or an already-pickled corpus
+        :param name: Optional name of the corpus, for ease of use and readability
+        :param csv_path: Optional path to a csv metadata file
+        :param pickle_on_load:
+        """
+
+        if isinstance(path_to_files, str):
+            path_to_files = Path(path_to_files)
+        if not isinstance(path_to_files, Path):
+            raise ValueError(f'path_to_files must be a str or Path object, not type {type(path_to_files)}')
+
+        self.name = name
         self.csv_path = csv_path
-        if self.corpus_name == 'gutenberg' and csv_path is None:
-            download_gutenberg_if_not_locally_available()
-
-        self.load_test_corpus = False
-        if self.corpus_name == 'test_corpus' and csv_path is None:
-            self.load_test_corpus = True
-            self.corpus_name = 'sample_novels'
+        self.path_to_files = path_to_files
         self.novels = []
-        if corpus_name is not None:
-            self.relative_corpus_path = Path('corpora', self.corpus_name)
-            self.novels = self._load_novels()
 
+        if self.path_to_files.suffix == '.pgz':
+            pass
+        # if self.name == 'gutenberg' and csv_path is None:
+        #     download_gutenberg_if_not_locally_available()
+        #
+        # self.load_test_corpus = False
+        # if self.name == 'test_corpus' and csv_path is None:
+        #     self.load_test_corpus = True
+        #     self.name = 'sample_novels'
 
     def __len__(self):
         """
@@ -155,7 +169,7 @@ class Corpus(common.FileLoaderMixin):
         :return: Corpus
         """
         corpus_copy = Corpus()
-        corpus_copy.corpus_name = self.corpus_name
+        corpus_copy.name = self.name
         corpus_copy.novels = self.novels[:]
         return corpus_copy
 
@@ -163,18 +177,18 @@ class Corpus(common.FileLoaderMixin):
         novels = []
 
         # relative_csv_path = (self.relative_corpus_path
-        #                      / f'{self.corpus_name}.csv')
+        #                      / f'{self.name}.csv')
         try:
             csv_file = self.load_file(self.csv_path)
         except FileNotFoundError:
             err = "Could not find the metadata csv file for the "
-            err += "'{self.corpus_name}' corpus in the expected location "
+            err += "'{self.name}' corpus in the expected location "
             err += f"({self.csv_path})."
             raise FileNotFoundError(err)
         csv_reader = csv.DictReader(csv_file)
 
         for novel_metadata in csv_reader:
-            novel_metadata['corpus_name'] = self.corpus_name
+            novel_metadata['name'] = self.name
             this_novel = Document(document_metadata_dict=novel_metadata)
             novels.append(this_novel)
             if self.load_test_corpus and len(novels) == 10:
@@ -255,7 +269,7 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
         >>> c.get_corpus_metadata()
-        ['author', 'author_gender', 'corpus_name', 'country_publication', 'date', 'filename', 'notes', 'title']
+        ['author', 'author_gender', 'name', 'country_publication', 'date', 'filename', 'notes', 'title']
 
         :return: list
         """
@@ -272,7 +286,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
-        >>> c.get_field_vals('corpus_name')
+        >>> c.get_field_vals('name')
         ['sample_novels']
 
         :param field: str
@@ -297,7 +311,7 @@ class Corpus(common.FileLoaderMixin):
         a new Corpus object which includes the subset of novels in the original
         Corpus that have the specified value for the specified field.
 
-        Supported metadata fields are 'author', 'author_gender', 'corpus_name',
+        Supported metadata fields are 'author', 'author_gender', 'name',
         'country_publication', 'date'
 
         >>> from gender_analysis.corpus import Corpus
@@ -338,7 +352,7 @@ class Corpus(common.FileLoaderMixin):
         :return: Corpus
         """
 
-        supported_metadata_fields = ('author', 'author_gender', 'corpus_name',
+        supported_metadata_fields = ('author', 'author_gender', 'name',
                                      'country_publication', 'date')
         if metadata_field not in supported_metadata_fields:
             raise ValueError(
@@ -404,7 +418,7 @@ class Corpus(common.FileLoaderMixin):
         :param characteristic_dict:
         :return:
         """
-        supported_metadata_fields = ('author', 'author_gender', 'corpus_name',
+        supported_metadata_fields = ('author', 'author_gender', 'name',
                                      'country_publication', 'date')
 
         corpus_copy = self.clone()
@@ -463,7 +477,7 @@ class Corpus(common.FileLoaderMixin):
         :return: Document
         """
 
-        if metadata_field not in get_metadata_fields(self.corpus_name):
+        if metadata_field not in get_metadata_fields(self.name):
             raise AttributeError(f"Metadata field {metadata_field} invalid for this corpus")
 
         if (metadata_field == "date" or metadata_field == "gutenberg_id"):
@@ -534,7 +548,7 @@ class Corpus(common.FileLoaderMixin):
         """
 
         for field in metadata_dict.keys():
-            if field not in get_metadata_fields(self.corpus_name):
+            if field not in get_metadata_fields(self.name):
                 raise AttributeError(f"Metadata field {field} invalid for this corpus")
 
         for novel in self.novels:
@@ -548,17 +562,17 @@ class Corpus(common.FileLoaderMixin):
         raise ValueError("Document not found")
 
 
-def get_metadata_fields(corpus_name):
+def get_metadata_fields(name):
     """
     Gives a list of all metadata fields for corpus
     >>> from gender_analysis import corpus
     >>> corpus.get_metadata_fields('gutenberg')
-    ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'corpus_name', 'notes']
+    ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'name', 'notes']
 
-    :param: corpus_name: str
+    :param: name: str
     :return: list
     """
-    if corpus_name == 'sample_novels':
+    if name == 'sample_novels':
         return ['author', 'date', 'title', 'country_publication', 'author_gender', 'filename', 'notes']
     else:
         return common.METADATA_LIST
