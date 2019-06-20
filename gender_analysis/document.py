@@ -2,7 +2,7 @@ import re
 import string
 from collections import Counter
 from pathlib import Path
-import os
+
 from more_itertools import windowed
 
 import nltk
