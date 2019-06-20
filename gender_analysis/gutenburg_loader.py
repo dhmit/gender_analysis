@@ -2,7 +2,6 @@ import csv
 import os
 import re
 import time
-import urllib
 import requests
 from pathlib import Path
 from shutil import copyfile
@@ -942,7 +941,7 @@ def download_gutenberg_if_not_locally_available():
         download_prompt = input(
               "If you want to download the corpus, please enter (y). Any other input will "
               "terminate the program: ")
-        if not download_prompt in ['y', '(y)']:
+        if download_prompt not in ['y', '(y)']:
             raise ValueError("Project Gutenberg corpus will not be downloaded.")
 
         import zipfile

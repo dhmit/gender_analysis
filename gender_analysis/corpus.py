@@ -1,6 +1,5 @@
 import csv
 import random
-import nltk
 from nltk.tokenize import word_tokenize
 from pathlib import Path
 from collections import Counter
@@ -31,20 +30,20 @@ class Corpus(common.FileLoaderMixin):
 
     """
 
-    def __init__(self, corpus_name=None):
+    def __init__(self, corpus_name=None, csv_path=None):
         self.corpus_name = corpus_name
-        if self.corpus_name == 'gutenberg':
+        self.csv_path = csv_path
+        if self.corpus_name == 'gutenberg' and csv_path is None:
             download_gutenberg_if_not_locally_available()
 
         self.load_test_corpus = False
-        if self.corpus_name == 'test_corpus':
+        if self.corpus_name == 'test_corpus' and csv_path is None:
             self.load_test_corpus = True
             self.corpus_name = 'sample_novels'
         self.novels = []
         if corpus_name is not None:
             self.relative_corpus_path = Path('corpora', self.corpus_name)
             self.novels = self._load_novels()
-
 
 
     def __len__(self):
@@ -105,7 +104,7 @@ class Corpus(common.FileLoaderMixin):
         """
 
         if not isinstance(other, Corpus):
-            raise NotImplementedError("Only a Corpus can be added to another Corpus.")
+            raise NotImplementedError("Only a Corpus can be compared to another Corpus.")
 
         if len(self) != len(other):
             return False
@@ -162,14 +161,14 @@ class Corpus(common.FileLoaderMixin):
     def _load_novels(self):
         novels = []
 
-        relative_csv_path = (self.relative_corpus_path
-                             / f'{self.corpus_name}.csv')
+        # relative_csv_path = (self.relative_corpus_path
+        #                      / f'{self.corpus_name}.csv')
         try:
-            csv_file = self.load_file(relative_csv_path)
+            csv_file = self.load_file(self.csv_path)
         except FileNotFoundError:
             err = "Could not find the metadata csv file for the "
             err += "'{self.corpus_name}' corpus in the expected location "
-            err += f"({relative_csv_path})."
+            err += f"({self.csv_path})."
             raise FileNotFoundError(err)
         csv_reader = csv.DictReader(csv_file)
 
@@ -207,10 +206,7 @@ class Corpus(common.FileLoaderMixin):
     def filter_by_gender(self, gender):
         """
         Return a new Corpus object that contains only authors whose gender
-        matches gender_filter.
-
-        Accepted inputs are 'male', 'female', 'non-binary' and 'unknown'
-        but no abbreviations.
+        matches the given parameter.
 
         >>> from gender_analysis.corpus import Corpus
         >>> c = Corpus('sample_novels')
@@ -230,11 +226,6 @@ class Corpus(common.FileLoaderMixin):
         :param gender: gender name
         :return: Corpus
         """
-        supported_genders = ('male', 'female', 'non-binary', 'unknown')
-        if gender not in supported_genders:
-            raise ValueError(
-                f'Gender must be {", ".join(supported_genders)} '
-                + f'but not {gender}.')
 
         return self.subcorpus('author_gender', gender)
 
@@ -356,24 +347,24 @@ class Corpus(common.FileLoaderMixin):
         corpus_copy = self.clone()
         corpus_copy.novels = []
 
-        #adds novels to corpus_copy
+        # adds novels to corpus_copy
         if metadata_field == 'date':
             for this_novel in self.novels:
                 if this_novel.date == int(field_value):
                     corpus_copy.novels.append(this_novel)
         else:
             for this_novel in self.novels:
-                if getattr(this_novel,metadata_field) == field_value:
+                if getattr(this_novel, metadata_field) == field_value.lower():
                     corpus_copy.novels.append(this_novel)
 
         if not corpus_copy:
-            #displays for possible errors in field.value
+            # displays for possible errors in field.value
             err = f'This corpus is empty. You may have mistyped something.'
             raise AttributeError(err)
 
         return corpus_copy
 
-    def multi_filter(self,characteristic_dict):
+    def multi_filter(self, characteristic_dict):
         """
         This method takes a dictionary of metadata fields and corresponding values
         and returns a Corpus object which is the subcorpus of the input corpus which
@@ -570,9 +561,6 @@ def get_metadata_fields(corpus_name):
         return ['author', 'date', 'title', 'country_publication', 'author_gender', 'filename', 'notes']
     else:
         return common.METADATA_LIST
-
-
-
 
 
 if __name__ == '__main__':
