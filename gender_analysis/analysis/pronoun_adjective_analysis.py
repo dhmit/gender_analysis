@@ -99,14 +99,14 @@ def results_by_author_gender(full_results):
        takes in the full dictionary of results, returns a dictionary that maps 'male' (male author) and 'female'
        (female author) to a dictionary of adjectives and # occurrences across novels written by an author of
        that gender.
-       :param full_results dictionary
+       :param full_results: dictionary from result of run_adj_analysis
        :return: dictionary with two keys: 'male' (male author) or 'female' (female author). Each key maps
        a dictionary of adjectives/occurrences.
        """
     data = {'male_author': {'male': {}, 'female': {}}, "female_author": {'male': {}, 'female': {}}}
 
     for novel in list(full_results.keys()):
-        print("author gender analysis:", novel.title, novel.author)
+        # print("author gender analysis:", novel.title, novel.author)
         if novel.author_gender == "male":
             data['male_author']['male'] = merge(full_results[novel]['male'], data['male_author']['male'])
             data['male_author']['female'] = merge(full_results[novel]['female'], data['male_author']['female'])
@@ -121,7 +121,7 @@ def results_by_date(full_results):
     takes in a dictionary of results returns a dictionary that maps different time periods to a dictionary of
     adjectives/number of occurrences across novels written in that time_period
 
-    :param full_results:
+    :param full_results: dictionary from result of run_adj_analysis
     :return: dictionary
     """
     data = {}
@@ -191,7 +191,7 @@ def results_by_date(full_results):
 
 def results_by_location(full_results):
     """
-    :param full_results:
+    :param full_results: dictionary from result of run_adj_analysis
     :return:
     """
     data = {}
@@ -219,13 +219,19 @@ def results_by_location(full_results):
     return data
 
 
-def get_top_adj(corpus, num):
+def get_top_adj(full_results, num):
+    """
+    Takes dictionary of results from run_adj_analysis and number of top results to return.
+    Returns the top num adjectives associated with male pronouns and female pronouns
+    :param full_results: dictionary from result of run_adj_analysis
+    :param num: number of top results to return per gender
+    :return: tuple of lists of top adjectives associated with male pronouns and female pronouns,
+    respectively
+    """
     male_adj = []
     female_adj = []
 
-    data = common.load_pickle("pronoun_adj_final_results_"+corpus.corpus_name)
-
-    for adj, val in data.items():
+    for adj, val in full_results.items():
         male_adj.append((val[0]-val[1], adj))
         female_adj.append((val[1]-val[0], adj))
 

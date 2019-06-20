@@ -17,8 +17,8 @@ def run_distance_analysis(corpus):
      - median, mean, min, and max distances between female pronoun instances
      - for each of the above stats, the difference between male and female values. (male stat -
      female stat for all stats)
-        POSITIVE DIFFERENCE VALUES mean there is a LARGER DISTANCE BETWEEN MALE PRONOUNS and therefore
-        HIGHER FEMALE FREQUENCY.
+        POSITIVE DIFFERENCE VALUES mean there is a LARGER DISTANCE BETWEEN MALE PRONOUNS and
+        therefore HIGHER FEMALE FREQUENCY.
     dict order: [male, female]
 
     :param corpus:
@@ -73,11 +73,13 @@ def get_stats(distance_results):
 
 def results_by_author_gender(results, metric):
     """
-    takes in a dictionary of results and a specified metric from run_distance_analysis, returns a dictionary:
+    takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
+    dictionary:
      - key = 'male' or 'female' (indicating male or female author)
-      - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance, female pronoun
-       distance, and the difference (whether it is median, mean, min, or max depends on the specified metric)
-       order = [male distance, female distance, difference]
+     - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance,
+     female pronoun distance, and the difference (whether it is median, mean, min, or max depends on
+     the specified metric)
+     order = [male distance, female distance, difference]
     :param results dictionary
     :param metric ('median', 'mean', 'min', 'max')
     :return: dictionary
@@ -100,11 +102,13 @@ def results_by_author_gender(results, metric):
 
 def results_by_date(results, metric):
     """
-    takes in a dictionary of results and a specified metric from run_distance_analysis, returns a dictionary:
+    takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
+    dictionary:
      - key = date range
-      - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance, female pronoun
-       distance, and the difference (whether it is median, mean, min, or max depends on the specified metric)
-       order = [male distance, female distance, difference]
+     - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance,
+     female pronoun distance, and the difference (whether it is median, mean, min, or max depends on
+     the specified metric)
+     order = [male distance, female distance, difference]
     :param results dictionary
     :param metric ('median', 'mean', 'min', 'max')
     :return: dictionary
@@ -134,31 +138,31 @@ def results_by_date(results, metric):
                                  results[k]['difference'][metric]])
         elif k.date < 1820:
             date_1810_to_1819.append([results[k]['male'][metric], results[k]['female'][metric],
-                                        results[k]['difference'][metric]])
+                                      results[k]['difference'][metric]])
         elif k.date < 1830:
             date_1820_to_1829.append([results[k]['male'][metric], results[k]['female'][metric],
-                                        results[k]['difference'][metric]])
+                                      results[k]['difference'][metric]])
         elif k.date < 1840:
             date_1830_to_1839.append([results[k]['male'][metric], results[k]['female'][metric],
-                                        results[k]['difference'][metric]])
+                                      results[k]['difference'][metric]])
         elif k.date < 1850:
             date_1840_to_1849.append([results[k]['male'][metric], results[k]['female'][metric],
-                                        results[k]['difference'][metric]])
+                                      results[k]['difference'][metric]])
         elif k.date < 1860:
             date_1850_to_1859.append([results[k]['male'][metric], results[k]['female'][metric],
-                                        results[k]['difference'][metric]])
+                                      results[k]['difference'][metric]])
         elif k.date < 1870:
             date_1860_to_1869.append([results[k]['male'][metric], results[k]['female'][metric],
                                       results[k]['difference'][metric]])
         elif k.date < 1880:
             date_1870_to_1879.append([results[k]['male'][metric], results[k]['female'][metric],
-                                        results[k]['difference'][metric]])
+                                      results[k]['difference'][metric]])
         elif k.date < 1890:
             date_1880_to_1889.append([results[k]['male'][metric], results[k]['female'][metric],
-                                        results[k]['difference'][metric]])
+                                      results[k]['difference'][metric]])
         elif k.date < 1900:
             date_1890_to_1899.append([results[k]['male'][metric], results[k]['female'][metric],
-                                        results[k]['difference'][metric]])
+                                      results[k]['difference'][metric]])
         else:
             date_1900_on.append([results[k]['male'][metric], results[k]['female'][metric],
                                  results[k]['difference'][metric]])
@@ -180,11 +184,13 @@ def results_by_date(results, metric):
 
 def results_by_location(results, metric):
     """
-    takes in a dictionary of results and a specified metric from run_distance_analysis, returns a dictionary:
+    takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
+    dictionary:
      - key = location
-      - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance, female pronoun
-       distance, and the difference (whether it is median, mean, min, or max depends on the specified metric)
-       order = [male distance, female distance, difference]
+     - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance,
+      female pronoun distance, and the difference (whether it is median, mean, min,
+      or max depends on the specified metric)
+      order = [male distance, female distance, difference]
     :param results dictionary
     :param metric ('median', 'mean', 'min', 'max')
     :return: dictionary """
@@ -202,13 +208,13 @@ def results_by_location(results, metric):
     for k in list(results.keys()):
         if k.country_publication in ["United Kingdom", "England", "Scotland", "Wales"]:
             location_UK.append([results[k]['male'][metric], results[k]['female'][metric],
-                                 results[k]['difference'][metric]])
+                                results[k]['difference'][metric]])
         elif k.country_publication == 'United States':
             location_US.append([results[k]['male'][metric], results[k]['female'][metric],
-                                 results[k]['difference'][metric]])
+                                results[k]['difference'][metric]])
         else:
             location_other.append([results[k]['male'][metric], results[k]['female'][metric],
-                                 results[k]['difference'][metric]])
+                                   results[k]['difference'][metric]])
 
     data['location_UK'] = location_UK
     data['location_US'] = location_US
@@ -217,31 +223,29 @@ def results_by_location(results, metric):
     return data
 
 
-def get_highest_distances(corpus, num):
+def get_highest_distances(results, num):
     """
+    Takes results from instance_distance_analysis.run_distance_analysis and a number of top
+    results to return.
     Returns 3 lists.
         - Novels with the largest median male instance distance
         - Novels with the largest median female instance distance
         - Novels with the largest difference between median male & median female instance distances
     each list contains tuples, where each tuple has a novel and the median male/female/difference
     instance distance
-    :param corpus:
+    :param results: dictionary of results from run_distance_analysis
     :param num: number of top distances to get
     :return: 3 lists of tuples.
     """
-    try:
-        raw_results = common.load_pickle("instance_distance_raw_analysis_" + corpus.corpus_name)
-    except IOError:
-        print("No raw results available for this corpus")
 
     male_medians = []
     female_medians = []
     difference_medians = []
 
-    for novel in list(raw_results.keys()):
-        male_medians.append((raw_results[novel]['male']['median'], novel))
-        female_medians.append((raw_results[novel]['female']['median'], novel))
-        difference_medians.append((raw_results[novel]['difference']['median'], novel))
+    for novel in list(results.keys()):
+        male_medians.append((results[novel]['male']['median'], novel))
+        female_medians.append((results[novel]['female']['median'], novel))
+        difference_medians.append((results[novel]['difference']['median'], novel))
 
     male_top = sorted(male_medians, reverse=True)[0:num]
     female_top = sorted(female_medians, reverse=True)[0:num]
@@ -250,25 +254,26 @@ def get_highest_distances(corpus, num):
     return male_top, female_top, diff_top
 
 
-def get_p_vals(corpus):
+def get_p_vals(location_median_results, author_gender_median_results, date_median_results):
     """
+    Takes results from results_by_location(results, 'median'), results_by_author_gender,
+    results_by_date
     ANOVA test for independence of:
         - male vs female authors' median distance between female instances
         - UK vs. US vs. other country authors' median distance between female instances
         - Date ranges authors' median distance between female instances
-    :param corpus:
+    :param location_median_results: result of results_by_location(results, 'median')
+    :param author_gender_median_results: result of results_by_author_gender(results, 'median)
+    :param date_median_results: result of results_by_date(results, 'median')
     :return: data-frame with 3 p-values, one for each category comparison
     """
 
-    try:
-        r1 = common.load_pickle("median_instance_distances_by_location_" + corpus.corpus_name)
-        r2 = common.load_pickle("median_instance_distances_by_author_gender_" + corpus.corpus_name)
-        r3 = common.load_pickle("median_instance_distances_by_date_" + corpus.corpus_name)
-    except IOError:
-        print("results not available")
+    r1 = location_median_results
+    r2 = author_gender_median_results
+    r3 = date_median_results
 
     names = ["location", "male_vs_female_authors", "date"]
-    median_distance_between_female_pronouns_pvals = []
+    # median_distance_between_female_pronouns_pvals = []
 
     location_medians = []
     author_gender_medians = []
