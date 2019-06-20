@@ -41,59 +41,56 @@ class Document(common.FileLoaderMixin):
     466879
     """
 
-    def __init__(self, document_metadata_dict):
+    def __init__(self, metadata_dict):
 
-        if not hasattr(document_metadata_dict, 'items'):
+        if not hasattr(metadata_dict, 'items'):
             raise ValueError(
-                'document_metadata_dict must be a dictionary or support .items()')
+                'metadata_dict must be a dictionary or support .items()')
+
+        if not type(metadata_dict, dict):
+            raise TypeError(
+                'metadata must be passed in as a dictionary value'
+            )
+
 
         # Check that the essential attributes for the document exists.
-        for key in ('author', 'date', 'title', 'corpus_name'):
-            if key not in document_metadata_dict:
-                raise ValueError(f'document_metadata_dict must have an entry for "{key}". Full ',
-                                 f'metadata: {document_metadata_dict}')
-        self.members = set(document_metadata_dict.keys())
+        if 'filename' not in metadata_dict:
+            raise ValueError(f'metadata_dict must have an entry for filename')
 
-        # check that the author starts with a capital letter
-        # TODO: Currently deactivated because Gutenberg authors are lists
-        # TODO: re-implement with lists in mind.  Note: there are a few novels with no author
-        # if not document_metadata_dict['author'][0].isupper():
-        #    raise ValueError('The last name of the author should be upper case.',
-        #                     f'{document_metadata_dict["author"]} is likely incorrect in',
-        #                     f'{document_metadata_dict}.')
+        self.members = set(metadata_dict.keys())
 
         # Check that the date is a year (4 consecutive integers)
-        if 'date' in document_metadata_dict:
-            if not re.match(r'^\d{4}$', document_metadata_dict['date']):
+        if 'date' in metadata_dict:
+            if not re.match(r'^\d{4}$', metadata_dict['date']):
                 raise ValueError('The novel date should be a year (4 integers), not',
-                                 f'{document_metadata_dict["date"]}. Full metadata: {document_metadata_dict}')
+                                 f'{metadata_dict["date"]}. Full metadata: {metadata_dict}')
 
-        if '[' in document_metadata_dict['author']:
-            self.author = literal_eval(document_metadata_dict['author'])
-        else:
-            self.author = document_metadata_dict['author']
-        self.title = document_metadata_dict['title']
-        self.corpus_name = document_metadata_dict['corpus_name']
+        for k in metadata_dict:
+            if hasattr(self, k):
+                raise KeyError(
+                    'Key name ', str(k), ' is reserved in the Document class. Please use another name'
+                )
+            setattr(self, k, metadata_dict[k])
 
         # optional attributes
         try:
-            self.gutenberg_id = int(document_metadata_dict['gutenberg_id'])
+            self.gutenberg_id = int(metadata_dict['gutenberg_id'])
         except KeyError:
             self.gutenberg_id = None
-        self.country_publication = document_metadata_dict.get('country_publication', None)
-        self.notes = document_metadata_dict.get('notes', None)
-        self.author_gender = document_metadata_dict.get('author_gender', 'unknown')
+        self.country_publication = metadata_dict.get('country_publication', None)
+        self.notes = metadata_dict.get('notes', None)
+        self.author_gender = metadata_dict.get('author_gender', 'unknown')
         try:
-            self.filename = document_metadata_dict['filename']
+            self.filename = metadata_dict['filename']
         except KeyError:
             if (self.gutenberg_id):
                 self.filename = str(self.gutenberg_id) + r".txt"
             else:
                 raise ValueError('If you do not provide an explicit filename, you must provide the',
-                                 f'id. Full metadata: {document_metadata_dict}')
-        self.subject = literal_eval(document_metadata_dict.get('subject', 'None'))
+                                 f'id. Full metadata: {metadata_dict}')
+        self.subject = literal_eval(metadata_dict.get('subject', 'None'))
         try:
-            self.date = int(document_metadata_dict['date'])
+            self.date = int(metadata_dict['date'])
         except KeyError:
             self.date = None
         self._word_counts_counter = None
@@ -101,17 +98,18 @@ class Document(common.FileLoaderMixin):
 
         if self.author_gender not in {'female', 'male', 'non-binary', 'unknown', 'both'}:
             raise ValueError('Author gender has to be "female", "male" "non-binary," or "unknown" ',
-                             f'but not {self.author_gender}. Full metadata: {document_metadata_dict}')
+                             f'but not {self.author_gender}. Full metadata: {metadata_dict}')
 
-        if 'text' in document_metadata_dict:
-            self.text = document_metadata_dict['text']
+        if 'text' in metadata_dict:
+            self.text = metadata_dict['text']
         else:
             # Check that the filename looks like a filename (ends in .txt)
             if not self.filename.endswith('.txt'):
                 raise ValueError(
                     f'The document filename ({self.filename}) should end in .txt . Full metadata: '
-                    f'{document_metadata_dict}.')
+                    f'{metadata_dict}.')
             self.text = self._load_document_text()
+
 
     def getmembers(self):
         """
