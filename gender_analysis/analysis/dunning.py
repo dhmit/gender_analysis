@@ -205,15 +205,10 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
     print(output)
 
 
-def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus=None,
-                                                        corpus_name=None):
+def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus):
     """
     Uses Dunning analysis to compare words associated with word1 vs words associated with word2 in
-    the Corpus passed in as the parameter.  If a corpus and corpus_name are passsed in, then the
-    analysis will use the corpus but name the file after corpus_name.  If no corpus is passed in but
-    a corpus_name is, then the method will try to create a Corpus by corpus = Corpus(corpus_name).
-    If neither a corpus nor a corpus_name is passed in, analysis is simply done on the Gutenberg
-    corpus.
+    the Corpus passed in as the parameter.
     :param word1: str
     :param word2: str
     :param corpus: Corpus
@@ -221,20 +216,12 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus=Non
     :return: dict
     """
 
-    if corpus:
-        if not corpus_name:
-            corpus_name = corpus.corpus_name
-    else:
-        if not corpus_name:
-            corpus_name = "gutenberg"
-        corpus = Corpus(corpus_name)
-
-    pickle_filename = f'dunning_{word1}_vs_{word2}_associated_words_{corpus_name}'
+    pickle_filename = f'dunning_{word1}_vs_{word2}_associated_words_{corpus.corpus_name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
         try:
-            pickle_filename = f'dunning_{word2}_vs_{word1}_associated_words_{corpus_name}'
+            pickle_filename = f'dunning_{word2}_vs_{word1}_associated_words_{corpus.corpus_name}'
             results = load_pickle(pickle_filename)
         except:
             word1_counter = Counter()
@@ -252,8 +239,8 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus=Non
     return results
 
 
-def compare_word_association_between_corpus_analysis_dunning(word, corpus1=None, corpus1_name=None,
-                                                             corpus2=None, corpus2_name=None, use_word_window=False, word_window=None):
+def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corpus2,
+                                                             use_word_window=False, word_window=None):
     """
     Uses Dunning analysis to compare words associated with word between corpuses.  If a corpus and corpus_name are
     passsed in, then the analysis will use the corpus but name the file after corpus_name.  If no corpus is passed in but
@@ -261,9 +248,10 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1=None,
     If neither a corpus nor a corpus_name is passed in, analysis is simply done on the Gutenberg
     corpus.
 
-    :param word1: str
-    :param corpus: Corpus
-    :param corpus_name: str
+    :param word: str
+    :param corpus1, corpus2: Corpus
+    :param use_word_window
+    :param word_window
     :return: dict
     """
 
@@ -274,6 +262,7 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1=None,
         if not corpus1_name:
             corpus1_name = "gutenberg"
         corpus1 = Corpus(corpus1_name)
+        # TODO: remove or use different default corpus
 
     if corpus2:
         if not corpus2_name:
@@ -557,17 +546,3 @@ def america_author_gender_differences(corpus_name):
     compare_word_association_between_corpus_analysis_dunning(word='America',
             corpus1=female_corpus, corpus1_name='female aut',
             corpus2=male_corpus,   corpus2_name='male aut')
-
-if __name__ == '__main__':
-    #### Uncomment any of the lines below to run one of the analyses.
-    # male_vs_female_authors_analysis_dunning('gutenberg')
-    # he_vs_she_associations_analysis_dunning('gutenberg')
-    # female_characters_author_gender_differences('gutenberg')
-    # male_characters_author_gender_differences('gutenberg')
-    # god_author_gender_differences('gutenberg')
-    # money_author_gender_differences('gutenberg')
-    # dunning_result_to_dict(male_vs_female_authors_analysis_dunning('gutenberg'))
-
-    from dh_testers.testRunner import main_test
-    main_test()
-

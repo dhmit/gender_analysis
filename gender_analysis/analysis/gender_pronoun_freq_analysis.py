@@ -533,42 +533,6 @@ def bar_sub_obj_freq(she_freq_dict, he_freq_dict, title, x="N/A"):
     plt.savefig(filepdf, bbox_inches='tight')
 
 
-def run_pronoun_freq(corpus):
-    """
-    Runs a program that uses the instance distance analysis on all novels existing in a given
-    corpus, and outputs the data as graphs
-    :return:
-    """
-
-    all_data = books_pronoun_freq(corpus)
-
-    gender = freq_by_author_gender(all_data)
-    box_gender_pronoun_freq(gender, my_pal={"Male Author": "b", "Female Author": "r"},
-                            title="she_freq_by_author_gender_sample", x="Author Gender")
-    # date = freq_by_date(all_data)
-    # box_gender_pronoun_freq(date, my_pal="Greens", title="she_freq_by_date_sample", x="Years")
-    # location = freq_by_location(all_data)
-    # box_gender_pronoun_freq(location, my_pal="Blues", title="she_freq_by_location_sample",
-    #                         x="Location")
-
-    sub_v_ob = subject_vs_object_pronoun_freqs(corpus)
-
-    female_gender_sub_v_ob = get_mean(freq_by_author_gender(sub_v_ob[1]))
-    male_gender_sub_v_ob = get_mean(freq_by_author_gender(sub_v_ob[0]))
-    bar_sub_obj_freq(female_gender_sub_v_ob, male_gender_sub_v_ob, "obj_sub_by_auth_gender_sample",
-                     "Author Gender")
-    '''
-    female_date_sub_v_ob = get_mean(freq_by_date(sub_v_ob[1]))
-    male_date_sub_v_ob = get_mean(freq_by_date(sub_v_ob[0]))
-    bar_sub_obj_freq(female_date_sub_v_ob, male_date_sub_v_ob, "obj_sub_by_year_sample",
-                     "Years")
-
-    female_loc_sub_v_ob = get_mean(freq_by_location(sub_v_ob[1]))
-    male_loc_sub_v_ob = get_mean(freq_by_location(sub_v_ob[0]))
-    bar_sub_obj_freq(female_loc_sub_v_ob, male_loc_sub_v_ob, "obk_sub_by_location_sample",
-                     "Location")                
-
-    '''
 def overall_mean(d):
     '''
     Returns the average of all the values in a dictionary
@@ -586,8 +550,8 @@ def overall_mean(d):
     mean = np.mean(l)
     return mean
 
-def stat_analysis(corpus_name='sample_novels'):
-    corpus = Corpus(corpus_name)
+
+def stat_analysis(corpus):
     tot_female_dict = books_pronoun_freq(corpus)
     author_to_freq_dict = freq_by_author_gender(tot_female_dict)
 
@@ -608,89 +572,3 @@ def stat_analysis(corpus_name='sample_novels'):
     print("values for subject vs object pronouns between male and female authors: ", author_gender_sub_v_ob_correlation)
 
     #subject_pronouns_gender_comparison(Corpus('gutenberg'),'female')
-
-def run_all_analyses():
-    '''
-    Runs analyses for:
-        Female and Male pronoun frequency for:
-            author gender, publication date, publication, publication location
-        Female and Male Subject Object frequency Comparison for:
-            author gender, publication date, publication, publication location
-    Prints results nicely
-    :return: None
-    '''
-    all_data = books_pronoun_freq(Corpus('gutenberg'))
-
-    gender = freq_by_author_gender(all_data)
-    date = freq_by_date(all_data)
-    location = freq_by_location(all_data)
-
-    print('Male/Female pronoun comparison: ')
-    print('By author gender: ')
-    print(get_mean(gender))
-    print('\n By date: ')
-    print(get_mean(date))
-    print('\n By location: ')
-    print(get_mean(location))
-
-    sub_v_ob = subject_vs_object_pronoun_freqs(Corpus('gutenberg'))
-
-    female_gender_sub_v_ob = freq_by_author_gender(sub_v_ob[1])
-    female_date_sub_v_ob = freq_by_date(sub_v_ob[1])
-    female_loc_sub_v_ob = freq_by_location(sub_v_ob[1])
-
-    male_gender_sub_v_ob = freq_by_author_gender(sub_v_ob[0])
-    male_date_sub_v_ob = freq_by_date(sub_v_ob[0])
-    male_loc_sub_v_ob = freq_by_location(sub_v_ob[0])
-
-    male_tot = dict_to_list(sub_v_ob[0])
-    female_tot = dict_to_list(sub_v_ob[1])
-
-    print('Subject/Object comparisons: ')
-    print('Male vs Female in the subject: ')
-    print('Male: ')
-    pprint.pprint(np.mean(male_tot))
-    print('Female: ')
-    pprint.pprint(np.mean(female_tot))
-    print('\n Female pronouns: ')
-    print('By author gender: ')
-    pprint.pprint(get_mean(female_gender_sub_v_ob))
-    print('By date: ')
-    pprint.pprint(get_mean(female_date_sub_v_ob))
-    print('By location: ')
-    pprint.pprint(get_mean(female_loc_sub_v_ob))
-    print('\n Male pronouns: ')
-    print('By author gender: ')
-    pprint.pprint(get_mean(male_gender_sub_v_ob))
-    print('By date:')
-    pprint.pprint(get_mean(male_date_sub_v_ob))
-    print('By location: ')
-    pprint.pprint(get_mean(male_loc_sub_v_ob))
-
-    sub_comp_gender = subject_pronouns_gender_comparison(Corpus('gutenberg'), 'female')
-    sub_comp_gender_list = dict_to_list(sub_comp_gender)
-
-    print('Overall comparative female freq:')
-    pprint.pprint(np.mean(sub_comp_gender_list))
-    print('By author gender:')
-    pprint.pprint(get_mean(freq_by_author_gender(sub_comp_gender)))
-    print('By date: ')
-    pprint.pprint(get_mean(freq_by_date(sub_comp_gender)))
-    print('By location: ')
-    pprint.pprint(get_mean(freq_by_location(sub_comp_gender)))
-
-
-if __name__ == '__main__':
-    # pass
-
-    from dh_testers.testRunner import main_test
-    main_test()
-
-    # TODO: change 'sample_novels' to 'gutenberg' and graph titles from 'sample' to 'gutenberg'
-
-    # from dh_testers.testRunner import main_test
-    # main_test()
-    # print("mean relative female freq across corpus:")
-    # print(relative_frequency_overall(Corpus('sample_novels')))
-
-

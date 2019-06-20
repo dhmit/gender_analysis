@@ -1,21 +1,13 @@
-from gender_analysis.corpus import Corpus
 from statistics import median, mean
 
-import numpy as np
 import matplotlib.pyplot as plt
 from gender_analysis.analysis.analysis import male_instance_dist, female_instance_dist, pronoun_instance_dist
 from gender_analysis import common
 import pandas as pnds
 from scipy import stats
-from pprint import pprint
 
 import seaborn as sns
 sns.set()
-
-#def process_medians(lst1 ,lst2):
- #   return
-
-#TO-DO - get medians, means, max and min instance distances per novel per gender
 
 
 def run_distance_analysis(corpus):
@@ -53,16 +45,16 @@ def run_distance_analysis(corpus):
     return results
 
 
-def store_raw_results(results, corpus_name):
+def store_raw_results(results, corpus):
     try:
-        common.load_pickle("instance_distance_raw_analysis_" + corpus_name)
+        common.load_pickle("instance_distance_raw_analysis_" + corpus.corpus_name)
         x = input("results already stored. overwrite previous analysis? (y/n)")
         if x == 'y':
-            common.store_pickle(results, "instance_distance_raw_analysis_" + corpus_name)
+            common.store_pickle(results, "instance_distance_raw_analysis_" + corpus.corpus_name)
         else:
             pass
     except IOError:
-        common.store_pickle(results, "instance_distance_raw_analysis_" + corpus_name)
+        common.store_pickle(results, "instance_distance_raw_analysis_" + corpus.corpus_name)
 
 
 def get_stats(distance_results):
@@ -77,6 +69,7 @@ def get_stats(distance_results):
         return {'median': median(distance_results), 'mean': mean(distance_results), 'min': min(distance_results),
                 'max': max(distance_results)}
 
+
 def results_by_author_gender(results, metric):
     """
     takes in a dictionary of results and a specified metric from run_distance_analysis, returns a dictionary:
@@ -84,7 +77,8 @@ def results_by_author_gender(results, metric):
       - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance, female pronoun
        distance, and the difference (whether it is median, mean, min, or max depends on the specified metric)
        order = [male distance, female distance, difference]
-    :param results dictionary, a metric ('median', 'mean', 'min', 'max')
+    :param results dictionary
+    :param metric ('median', 'mean', 'min', 'max')
     :return: dictionary
     """
     data = {'male': [], "female": []}
@@ -102,6 +96,7 @@ def results_by_author_gender(results, metric):
                                    results[novel]['difference'][metric]])
     return data
 
+
 def results_by_date(results, metric):
     """
     takes in a dictionary of results and a specified metric from run_distance_analysis, returns a dictionary:
@@ -109,7 +104,8 @@ def results_by_date(results, metric):
       - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance, female pronoun
        distance, and the difference (whether it is median, mean, min, or max depends on the specified metric)
        order = [male distance, female distance, difference]
-    :param results dictionary, a metric ('median', 'mean', 'min', 'max')
+    :param results dictionary
+    :param metric ('median', 'mean', 'min', 'max')
     :return: dictionary
     """
     data = {}
@@ -188,7 +184,8 @@ def results_by_location(results, metric):
       - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance, female pronoun
        distance, and the difference (whether it is median, mean, min, or max depends on the specified metric)
        order = [male distance, female distance, difference]
-    :param results dictionary, a metric ('median', 'mean', 'min', 'max')
+    :param results dictionary
+    :param metric ('median', 'mean', 'min', 'max')
     :return: dictionary """
     data = {}
     metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
@@ -218,21 +215,23 @@ def results_by_location(results, metric):
 
     return data
 
-def get_highest_distances(corpus_name, num):
+
+def get_highest_distances(corpus, num):
     """
     Returns 3 lists.
         - Novels with the largest median male instance distance
         - Novels with the largest median female instance distance
         - Novels with the largest difference between median male & median female instance distances
     each list contains tuples, where each tuple has a novel and the median male/female/difference instance distance
-    :param corpus_name:
+    :param corpus:
     :param num: number of top distances to get
     :return: 3 lists of tuples.
     """
     try:
-        raw_results = common.load_pickle("instance_distance_raw_analysis_" + corpus_name)
+        raw_results = common.load_pickle("instance_distance_raw_analysis_" + corpus.corpus_name)
     except IOError:
         print("No raw results available for this corpus")
+
     male_medians = []
     female_medians = []
     difference_medians = []
@@ -249,20 +248,20 @@ def get_highest_distances(corpus_name, num):
     return male_top, female_top, diff_top
 
 
-def get_p_vals(corpus_name):
+def get_p_vals(corpus):
     """
     ANOVA test for independence of:
         - male vs female authors' median distance between female instances
         - UK vs. US vs. other country authors' median distance between female instances
         - Date ranges authors' median distance between female instances
-    :param corpus_name:
+    :param corpus:
     :return: data-frame with 3 p-values, one for each category comparison
     """
 
     try:
-        r1 = common.load_pickle("median_instance_distances_by_location_" + corpus_name)
-        r2 = common.load_pickle("median_instance_distances_by_author_gender_" + corpus_name)
-        r3 = common.load_pickle("median_instance_distances_by_date_" + corpus_name)
+        r1 = common.load_pickle("median_instance_distances_by_location_" + corpus.corpus_name)
+        r2 = common.load_pickle("median_instance_distances_by_author_gender_" + corpus.corpus_name)
+        r3 = common.load_pickle("median_instance_distances_by_date_" + corpus.corpus_name)
     except IOError:
         print("results not available")
 
@@ -287,12 +286,13 @@ def get_p_vals(corpus_name):
     _, date_pval = stats.f_oneway(*date_medians)
     median_distance_between_female_pronouns_pvals = [location_pval, author_gender_pval, date_pval]
 
-    return pnds.DataFrame({ "names": names, "pvals": median_distance_between_female_pronouns_pvals})
+    return pnds.DataFrame({"names": names, "pvals": median_distance_between_female_pronouns_pvals})
+
 
 def box_plots(inst_data, my_pal, title, x="N/A"):
     """
     Takes in a frequency dictionaries and exports its values as a bar-and-whisker graph
-    :param freq_dict: dictionary of frequencies grouped up
+    :param inst_data
     :param my_pal: palette to be used
     :param title: title of exported graph
     :param x: name of x-vars
@@ -320,63 +320,3 @@ def box_plots(inst_data, my_pal, title, x="N/A"):
     filepdf = "visualizations/" + title + ".pdf"
     plt.savefig(filepng, bbox_inches='tight')
     plt.savefig(filepdf, bbox_inches='tight')
-
-
-
-def run_analysis(corpus_name):
-    """
-    Run instance distance analyses on a particular corpus and saves results as pickle files.
-    Comment out sections of code or analyses that have already been run or are unnecessary.
-    :param corpus_name:
-    :return:
-    """
-    """
-    print('loading corpus')
-    corpus = Corpus(corpus_name)
-    novels = corpus.novels
-
-    print('running analysis')
-    results = run_distance_analysis(novels)
-
-    print('storing results')
-    store_raw_results(results, corpus_name)
-
-    r = common.load_pickle("instance_distance_raw_analysis_"+corpus_name)
-    r2 = results_by_location(r, "mean")
-    r3 = results_by_author_gender(r, "mean")
-    r4 = results_by_date(r, "median")
-    r5 = results_by_location(r, "median")
-    r6 = results_by_author_gender(r, "median")
-    r7 = results_by_date(r, "median")
-
-    common.store_pickle(r2, "mean_instance_distances_by_location_"+corpus_name)
-    common.store_pickle(r3, "mean_instance_distances_by_author_gender_"+corpus_name)
-    common.store_pickle(r4, "mean_instance_distances_by_date_"+corpus_name)
-
-    common.store_pickle(r5, "median_instance_distances_by_location_"+corpus_name)
-    common.store_pickle(r6, "median_instance_distances_by_author_gender_"+corpus_name)
-    common.store_pickle(r7, "median_instance_distances_by_date_"+corpus_name)
-
-    pvals = get_p_vals("gutenberg")
-    common.store_pickle(pvals, "instance_distance_comparison_pvals")
-
-    male_top_twenty, female_top_twenty, diff_top_twenty = get_highest_distances("gutenberg", 20)
-    top_twenties = {'male_pronoun_top_twenty': male_top_twenty, 'female_pronoun_top_twenty': female_top_twenty,
-                    "difference_top_twenty": diff_top_twenty}
-    common.store_pickle(top_twenties, "instance_distance_top_twenties")
-    """
-    inst_data = common.load_pickle("median_instance_distances_by_author_gender_gutenberg")
-    box_plots(inst_data, "Blues", "Median Female Instance Distance by Author Gender", x="Author Gender")
-
-    inst_data = common.load_pickle("median_instance_distances_by_location_gutenberg")
-    box_plots(inst_data, "Blues", "Median Female Instance Distance by Location", x="Location")
-
-    inst_data = common.load_pickle("median_instance_distances_by_date_gutenberg")
-    box_plots(inst_data, "Blues", "Median Female Instance Distance by Date", x="Date")
-
-
-if __name__ == '__main__':
-    print("running")
-    run_analysis("gutenberg")
-
-

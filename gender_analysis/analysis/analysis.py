@@ -4,21 +4,22 @@ This file is intended for individual analyses of the gender_analysis project
 
 import nltk
 import math
-from operator import itemgetter
-nltk.download('stopwords', quiet=True)
-# TODO: add prior two lines to setup, necessary to run
-import collections
-from scipy.stats import chi2
-from statistics import mean, median, mode
-from nltk.corpus import stopwords
-import unittest
-stop_words = set(stopwords.words('english'))
-
 import numpy as np
 import matplotlib.pyplot as plt
-
 from more_itertools import windowed
+import collections
+from scipy.stats import chi2
+from statistics import median
+from nltk.corpus import stopwords
+import unittest
+from operator import itemgetter
+from gender_analysis.corpus import Corpus
 import seaborn as sns
+
+nltk.download('stopwords', quiet=True)
+
+stop_words = set(stopwords.words('english'))
+
 palette = "colorblind"
 style_name = "white"
 style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
@@ -26,7 +27,6 @@ style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
 sns.set_color_codes(palette)
 sns.set_style(style_name,style_list)
 
-from gender_analysis.corpus import Corpus
 
 def get_count_words(novel, words):
     """
@@ -126,11 +126,10 @@ def display_gender_freq(d, title):
     Takes in a dictionary sorted by author and gender frequencies, and a title.
     Outputs the resulting graph to 'visualizations/title.pdf' AND 'visualizations/title.png'
 
-    dictionary format {"Author/Novel": [he_freq, she_freq]}
-
     Will scale to allow inputs of larger dictionaries with non-binary values
 
-    :param d, title:
+    :param d: dictionary in the format {"Author/Novel": [he_freq, she_freq]}
+    :param title: title of graph
     :return:
     """
     he_val = []
@@ -196,15 +195,15 @@ def run_gender_freq(corpus):
         num += 1
 
 
-
 def dunn_individual_word(total_words_corpus_1, total_words_corpus_2, count_of_word_corpus_1,
                      count_of_word_corpus_2):
     '''
     applies dunning log likelihood to compare individual word usage in male and female corpus
 
-    :param word: desired word to compare
-    :param m_corpus: c.filter_by_gender('male')
-    :param f_corpus: c. filter_by_gender('female')
+    :param total_words_corpus_1
+    :param total_words_corpus_2
+    :param count_of_word_corpus_1
+    :param count_of_word_corpus_2
     :return: log likelihoods and p value
     >>> total_words_m_corpus = 8648489
     >>> total_words_f_corpus = 8700765
@@ -671,25 +670,3 @@ class Test(unittest.TestCase):
         f_corpus = c.filter_by_gender('female')
         results = dunning_total(m_corpus, f_corpus)
         print(results[10::])
-        #print(reversed(results[-100::]))
-
-
-if __name__ == '__main__':
-    # unittest.main()
-    '''
-    print("loading corpus")
-    corpus = Corpus('sample_novels')
-    print("loading novel")
-    novel = corpus._load_novels()[15]
-    print(novel.author, novel.title, novel.word_count)
-    print("running function")
-    result = find_male_adj(novel)
-    output = []
-    for key in result.keys():
-        output.append((result[key], key))
-    print(sorted(output, reverse=True))
-    '''
-    c = Corpus('sample_novels')
-    run_dist_inst(c)
-    run_gender_freq(c)
-    print("hello")
