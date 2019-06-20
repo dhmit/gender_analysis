@@ -15,7 +15,8 @@ def run_distance_analysis(corpus):
     Takes in a corpus of novels. Return a dictionary with each novel mapped to an array of 3 lists:
      - median, mean, min, and max distances between male pronoun instances
      - median, mean, min, and max distances between female pronoun instances
-     - for each of the above stats, the difference between male and female values. (male stat- female stat for all stats)
+     - for each of the above stats, the difference between male and female values. (male stat -
+     female stat for all stats)
         POSITIVE DIFFERENCE VALUES mean there is a LARGER DISTANCE BETWEEN MALE PRONOUNS and therefore
         HIGHER FEMALE FREQUENCY.
     dict order: [male, female]
@@ -66,8 +67,8 @@ def get_stats(distance_results):
     if len(distance_results) == 0:
         return {'median': 0, 'mean': 0, 'min': 0, 'max': 0}
     else:
-        return {'median': median(distance_results), 'mean': mean(distance_results), 'min': min(distance_results),
-                'max': max(distance_results)}
+        return {'median': median(distance_results), 'mean': mean(distance_results), 'min': min(
+            distance_results), 'max': max(distance_results)}
 
 
 def results_by_author_gender(results, metric):
@@ -222,7 +223,8 @@ def get_highest_distances(corpus, num):
         - Novels with the largest median male instance distance
         - Novels with the largest median female instance distance
         - Novels with the largest difference between median male & median female instance distances
-    each list contains tuples, where each tuple has a novel and the median male/female/difference instance distance
+    each list contains tuples, where each tuple has a novel and the median male/female/difference
+    instance distance
     :param corpus:
     :param num: number of top distances to get
     :return: 3 lists of tuples.

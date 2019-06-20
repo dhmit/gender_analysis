@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+from gender_analysis import common
+from gender_analysis.analysis import statistical
 import pprint
 
 palette = "colorblind"
@@ -14,27 +16,24 @@ style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
 sns.set_color_codes(palette)
 sns.set_style(style_name, style_list)
 
-from gender_analysis import common
 
-
-def books_pronoun_freq(corp):
-    '''
+def books_pronoun_freq(corp, to_pickle=False):
+    """
     Counts male and female pronouns for every book and finds their relative frequencies per book
     Outputs dictionary mapping novel object to the relative frequency
         of female pronouns in that book
 
-    :param: Corpus object
+    :param: corp: Corpus object
     :return: dictionary with data organized by groups
 
     >>> books_pronoun_freq(Corpus('test_corpus'))
     {<Document (aanrud_longfrock)>: 0.7623169107856191, <Document (abbott_flatlandromance)>: 0.14321608040201003, <Document (abbott_indiscreetletter)>: 0.4166666666666667, <Document (adams_fighting)>: 0.1898395721925134, <Document (alcott_josboys)>: 0.42152086422368146, <Document (alcott_littlemen)>: 0.3111248200699157, <Document (alcott_littlewomen)>: 0.6196978175713487, <Document (alden_chautauqua)>: 0.7518623169791935, <Document (austen_emma)>: 0.5662100456621004, <Document (austen_persuasion)>: 0.5305111461382571}
-    '''
+    """
 
     try:
-        if (not corp.load_test_corpus):
-            relative_freq_male = common.load_pickle(f'{corp.corpus_name}_pronoun_freq_male')
-            relative_freq_female = common.load_pickle(f'{corp.corpus_name}_pronoun_freq_female')
-            return relative_freq_female
+        # relative_freq_male = common.load_pickle(f'{corp.corpus_name}_pronoun_freq_male')
+        relative_freq_female = common.load_pickle(f'{corp.corpus_name}_pronoun_freq_female')
+        return relative_freq_female
     except IOError:
         pass
 
@@ -61,15 +60,15 @@ def books_pronoun_freq(corp):
     book.text = ''
     book._word_counts_counter = None
 
-    if (not corp.load_test_corpus):
+    if to_pickle:
         common.store_pickle(relative_freq_male, f'{corp.corpus_name}_pronoun_freq_male')
         common.store_pickle(relative_freq_female, f'{corp.corpus_name}_pronoun_freq_female')
 
-    return (relative_freq_female)
+    return relative_freq_female
 
 
-def subject_vs_object_pronoun_freqs(corp):
-    '''
+def subject_vs_object_pronoun_freqs(corp, to_pickle=False):
+    """
     Takes in a Corpus of novels
     Returns a tuple of two dictionaries, one male and female
     Each dictionary maps each Document in the corpus to the proportion of the pronouns
@@ -78,19 +77,19 @@ def subject_vs_object_pronoun_freqs(corp):
     #TODO: add doctests
 
     :param corp: Corpus
+    :param to_pickle
     :return: tuple of two dictionaries (male, female)
 
     >>> subject_vs_object_pronoun_freqs(Corpus('test_corpus'))
     ({<Document (aanrud_longfrock)>: 0.793233082706767, <Document (abbott_flatlandromance)>: 0.6741573033707865, <Document (abbott_indiscreetletter)>: 0.7906976744186047, <Document (adams_fighting)>: 0.7184527584020292, <Document (alcott_josboys)>: 0.6330049261083744, <Document (alcott_littlemen)>: 0.6451612903225807, <Document (alcott_littlewomen)>: 0.6577563540753725, <Document (alden_chautauqua)>: 0.7577030812324931, <Document (austen_emma)>: 0.7086120401337792, <Document (austen_persuasion)>: 0.6739130434782609}, {<Document (aanrud_longfrock)>: 0.5376532399299474, <Document (abbott_flatlandromance)>: 0.17543859649122806, <Document (abbott_indiscreetletter)>: 0.4424242424242424, <Document (adams_fighting)>: 0.43485915492957744, <Document (alcott_josboys)>: 0.3862487360970678, <Document (alcott_littlemen)>: 0.4343501326259947, <Document (alcott_littlewomen)>: 0.4124569980083288, <Document (alden_chautauqua)>: 0.5461432506887053, <Document (austen_emma)>: 0.4836730221345606, <Document (austen_persuasion)>: 0.4872013651877133})
-    '''
+    """
 
     try:
-        if (not corp.load_test_corpus):
-            relative_freq_male_sub_v_ob = common.load_pickle(
-                f'{corp.corpus_name}_sub_v_ob_pronoun_freq_male')
-            relative_freq_female_sub_v_ob = common.load_pickle(
-                f'{corp.corpus_name}_sub_v_ob_pronoun_freq_female')
-            return (relative_freq_male_sub_v_ob, relative_freq_female_sub_v_ob)
+        relative_freq_male_sub_v_ob = common.load_pickle(
+            f'{corp.corpus_name}_sub_v_ob_pronoun_freq_male')
+        relative_freq_female_sub_v_ob = common.load_pickle(
+            f'{corp.corpus_name}_sub_v_ob_pronoun_freq_female')
+        return relative_freq_male_sub_v_ob, relative_freq_female_sub_v_ob
     except IOError:
         pass
 
@@ -119,7 +118,7 @@ def subject_vs_object_pronoun_freqs(corp):
     book.text = ''
     book._word_counts_counter = None
 
-    if (not corp.load_test_corpus):
+    if to_pickle:
         common.store_pickle(relative_freq_male_subject,
                             f'{corp.corpus_name}_sub_v_ob_pronoun_freq_male')
         common.store_pickle(relative_freq_female_subject,
@@ -130,8 +129,8 @@ def subject_vs_object_pronoun_freqs(corp):
     return result_tuple
 
 
-def subject_pronouns_gender_comparison(corp, subject_gender):
-    '''
+def subject_pronouns_gender_comparison(corp, subject_gender, to_pickle=False):
+    """
     Takes in a Corpus of novels and a gender.
     The gender determines whether the male frequency or female frequency will
         be returned
@@ -145,21 +144,20 @@ def subject_pronouns_gender_comparison(corp, subject_gender):
     {<Document (aanrud_longfrock)>: 0.2557575757575758, <Document (abbott_flatlandromance)>: 0.923076923076923, <Document (abbott_indiscreetletter)>: 0.582857142857143, <Document (adams_fighting)>: 0.8210144927536231, <Document (alcott_josboys)>: 0.5736607142857142, <Document (alcott_littlemen)>: 0.6812652068126521, <Document (alcott_littlewomen)>: 0.39719502513892563, <Document (alden_chautauqua)>: 0.2543488481429243, <Document (austen_emma)>: 0.4343926191696566, <Document (austen_persuasion)>: 0.45696623870660963}
     >>> subject_pronouns_gender_comparison(Corpus('test_corpus'), 'female')
     {<Document (aanrud_longfrock)>: 0.7442424242424243, <Document (abbott_flatlandromance)>: 0.07692307692307691, <Document (abbott_indiscreetletter)>: 0.4171428571428572, <Document (adams_fighting)>: 0.17898550724637682, <Document (alcott_josboys)>: 0.4263392857142857, <Document (alcott_littlemen)>: 0.31873479318734793, <Document (alcott_littlewomen)>: 0.6028049748610743, <Document (alden_chautauqua)>: 0.7456511518570758, <Document (austen_emma)>: 0.5656073808303435, <Document (austen_persuasion)>: 0.5430337612933904}
-    '''
+    """
 
     if not(subject_gender == 'male' or subject_gender == 'female'):
         raise ValueError('subject_gender must be \'male\' or \'female\'')
 
     try:
-        if (not corp.load_test_corpus):
-            relative_freq_male_subject = common.load_pickle(
-                f'{corp.corpus_name}_subject_pronoun_freq_male')
-            relative_freq_female_subject = common.load_pickle(
-                f'{corp.corpus_name}_subject_pronoun_freq_female')
-            if subject_gender == 'male':
-                return relative_freq_male_subject
-            else:
-                return relative_freq_female_subject
+        relative_freq_male_subject = common.load_pickle(
+            f'{corp.corpus_name}_subject_pronoun_freq_male')
+        relative_freq_female_subject = common.load_pickle(
+            f'{corp.corpus_name}_subject_pronoun_freq_female')
+        if subject_gender == 'male':
+            return relative_freq_male_subject
+        else:
+            return relative_freq_female_subject
     except IOError:
         pass
 
@@ -170,13 +168,13 @@ def subject_pronouns_gender_comparison(corp, subject_gender):
         he = book.get_word_freq('he')
         she = book.get_word_freq('she')
 
-        relative_freq_female_sub[book] = (she)/(he+she)
-        relative_freq_male_sub[book] = (he)/(he+she)
+        relative_freq_female_sub[book] = she/(he+she)
+        relative_freq_male_sub[book] = he/(he+she)
 
     book.text = ''
     book._word_counts_counter = None
 
-    if (not corp.load_test_corpus):
+    if to_pickle:
         common.store_pickle(relative_freq_female_sub,
                             f'{corp.corpus_name}_subject_pronoun_freq_female')
         common.store_pickle(relative_freq_male_sub, f'{corp.corpus_name}_subject_pronoun_freq_male')
@@ -188,8 +186,9 @@ def subject_pronouns_gender_comparison(corp, subject_gender):
     else:
         raise ValueError('subject_gender must be \'male\' or \'female\'')
 
+
 def dict_to_list(d):
-    '''
+    """
     Takes in a dictionary and returns a list of the values in the dictionary
     If there are repeats in the values, there will be repeats in the list
     :param d: dictionary
@@ -202,14 +201,15 @@ def dict_to_list(d):
     >>> d2 = {}
     >>> dict_to_list(d2)
     []
-    '''
+    """
     L = []
     for key, value in d.items():
         L.append(value)
     return L
 
+
 def freq_by_author_gender(d):
-    '''
+    """
     Takes in a dictionary of novel objects mapped to relative frequencies
         (output of above function)
     Returns a dictionary with frequencies binned by author gender into lists
@@ -231,12 +231,10 @@ def freq_by_author_gender(d):
     ...                   'corpus_name': 'sample_novels', 'date': '1892', 'author_gender':'male',
     ...                   'filename': 'adams_fighting.txt'}
     >>> fighting = document.Document(novel_metadata)
-    >>> d = {}
-    >>> d[fighting] = 0.3
-    >>> d[bronte] = 0.6
+    >>> d = {fighting:0.3, bronte:0.6}
     >>> freq_by_author_gender(d)
     {'Male Author': [0.3], 'Female Author': [0.6]}
-    '''
+    """
 
     male_author = []
     female_author = []
@@ -280,9 +278,7 @@ def freq_by_date(d):
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata)
-    >>> d = {}
-    >>> d[scarlet] = 0.5
-    >>> d[austen] = 0.3
+    >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_date(d)
     {'1770 to 1810': [], '1810 to 1819': [0.3], '1820 to 1829': [], '1830 to 1839': [], '1840 to 1849': [], '1850 to 1859': [], '1860 to 1869': [], '1870 to 1879': [], '1880 to 1889': [], '1890 to 1899': [], '1900 to 1922': [0.5]}
     """
@@ -341,7 +337,7 @@ def freq_by_date(d):
 
 
 def freq_by_location(d):
-    '''
+    """
     Takes in a dictionary of novel objects mapped to relative frequencies
         (output of above function)
     Returns a dictionary with frequencies binned by publication location into lists
@@ -364,12 +360,10 @@ def freq_by_location(d):
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata2)
-    >>> d = {}
-    >>> d[scarlet] = 0.5
-    >>> d[austen] = 0.3
+    >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_location(d)
     {'UK': [0.3], 'US': [0.5], 'Other': []}
-    '''
+    """
 
     location_UK = []
     location_US = []
@@ -383,17 +377,13 @@ def freq_by_location(d):
         else:
             location_other.append(v)
 
-    data = {}
-
-    data['UK'] = location_UK
-    data['US'] = location_US
-    data['Other'] = location_other
+    data = {'UK': location_UK, 'US': location_US, 'Other': location_other}
 
     return data
 
 
 def get_mean(data_dict):
-    '''
+    """
     Takes in a dictionary matching some object to lists and returns a dictionary of the
         original keys mapped to the mean of the lists
 
@@ -406,7 +396,7 @@ def get_mean(data_dict):
     >>> d['nothing'] = [0]
     >>> get_mean(d)
     {'fives': 5.0, 'halfway': 0.5, 'nothing': 0.0}
-    '''
+    """
     mean_dict = {}
     for k, v in data_dict.items():
         try:
@@ -417,7 +407,7 @@ def get_mean(data_dict):
 
 
 def sort_every_year(frequency_dict):
-    '''
+    """
     Takes in a dictionary of novels mapped to pronoun frequencies and returns a dictionay of
         years mapped to lists of pronoun frequencies
 
@@ -430,9 +420,7 @@ def sort_every_year(frequency_dict):
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata)
-    >>> d = {}
-    >>> d[scarlet] = 0.5
-    >>> d[austen] = 0.3
+    >>> d = {scarlet:0.5, austen:0.3}
     >>> sorted_years = sort_every_year(d)
     >>> print(sorted_years)
     {1900: [0.5], 1818: [0.3]}
@@ -440,9 +428,9 @@ def sort_every_year(frequency_dict):
 
     :param frequency_dict: dictionary of novels mapped to pronoun frequencies
     :return: dictionary of years mapped to lists of pronoun frequencies
-    '''
+    """
     every_year_dict = {}
-    for key,value in frequency_dict.items():
+    for key, value in frequency_dict.items():
         frequency_list = [frequency_dict[key]]
 
         if key.date not in every_year_dict.keys():
@@ -534,9 +522,9 @@ def bar_sub_obj_freq(she_freq_dict, he_freq_dict, title, x="N/A"):
 
 
 def overall_mean(d):
-    '''
+    """
     Returns the average of all the values in a dictionary
-    :param dictionary with numbers as values
+    :param d: dictionary with numbers as values
     :return: float: average of all the values
     >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import overall_mean, books_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
@@ -545,7 +533,7 @@ def overall_mean(d):
     >>> mean = overall_mean(freq)
     >>> str(mean)[:7]
     '0.47129'
-    '''
+    """
     l = dict_to_list(d)
     mean = np.mean(l)
     return mean
@@ -555,9 +543,9 @@ def stat_analysis(corpus):
     tot_female_dict = books_pronoun_freq(corpus)
     author_to_freq_dict = freq_by_author_gender(tot_female_dict)
 
-
-    author_gender_pronoun_analysis = get_p_and_ttest_value(author_to_freq_dict['male_author'],author_to_freq_dict[
-        "female_author"])
+    author_gender_pronoun_analysis = statistical.get_p_and_ttest_value(author_to_freq_dict[
+                                                                     'male_author'],
+                                                           author_to_freq_dict["female_author"])
     print("values for gender pronoun stats: ", author_gender_pronoun_analysis)
 
     sub_v_ob_tuple = subject_vs_object_pronoun_freqs(corpus)
@@ -568,7 +556,9 @@ def stat_analysis(corpus):
     sub_v_ob_female_dict = sub_v_ob_tuple[1]
     sub_v__ob_female_list = dict_to_list(sub_v_ob_female_dict)
 
-    author_gender_sub_v_ob_correlation = get_p_and_ttest_value(sub_v_ob_male_list, sub_v__ob_female_list)
-    print("values for subject vs object pronouns between male and female authors: ", author_gender_sub_v_ob_correlation)
+    author_gender_sub_v_ob_correlation = statistical.get_p_and_ttest_value(sub_v_ob_male_list,
+                                                                           sub_v__ob_female_list)
+    print("values for subject vs object pronouns between male and female authors: ",
+          author_gender_sub_v_ob_correlation)
 
-    #subject_pronouns_gender_comparison(Corpus('gutenberg'),'female')
+    # subject_pronouns_gender_comparison(Corpus('gutenberg'),'female')
