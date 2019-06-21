@@ -177,7 +177,7 @@ def run_gender_freq(corpus):
     :param corpus:
     :return:
     """
-    novels = corpus._load_novels()
+    novels = corpus.novels
     c = len(novels)
     loops = c//10 + 1
 
@@ -599,7 +599,7 @@ def run_dist_inst(corpus):
     :param corpus:
     :return:
     """
-    novels = corpus._load_novels()
+    novels = corpus.novels
     c = len(novels)
     loops = c//10 + 1
 
