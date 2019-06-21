@@ -53,11 +53,7 @@ class Document(common.FileLoaderMixin):
 
         self.members = metadata_dict.keys()
 
-        # Check that the date is a year (4 consecutive integers)
-        if 'date' in metadata_dict:
-            if not re.match(r'^\d{4}$', metadata_dict['date']):
-                raise ValueError('The novel date should be a year (4 integers), not',
-                                 f'{metadata_dict["date"]}. Full metadata: {metadata_dict}')
+
 
         for key in metadata_dict:
             if hasattr(self, key):
@@ -67,16 +63,22 @@ class Document(common.FileLoaderMixin):
             setattr(self, key, metadata_dict[key])
 
         # optional attributes
+        # Check that the date is a year (4 consecutive integers)
+        if 'date' in metadata_dict:
+            if not re.match(r'^\d{4}$', metadata_dict['date']):
+                raise ValueError('The novel date should be a year (4 integers), not',
+                                 f'{metadata_dict["date"]}. Full metadata: {metadata_dict}')
 
         self.country_publication = metadata_dict.get('country_publication', None)
         self.notes = metadata_dict.get('notes', None)
         self.author_gender = metadata_dict.get('author_gender', 'unknown')
-
         self.subject = literal_eval(metadata_dict.get('subject', 'None'))
+
         try:
             self.date = int(metadata_dict['date'])
         except KeyError:
             self.date = None
+
         self._word_counts_counter = None
         self._word_count = None
 
@@ -89,6 +91,7 @@ class Document(common.FileLoaderMixin):
                 f'The document filename ', str(metadata_dict['filename']), 'does not end in .txt . Full metadata: '
                 f'{metadata_dict}.'
             )
+
         self.text = self._load_document_text()
 
 
@@ -450,9 +453,6 @@ class Document(common.FileLoaderMixin):
         """
         Returns the number of instances of str word in the text.  N.B.: Not case-sensitive.
         >>> from gender_analysis import document
-        >>> summary = "Hester was convicted of adultery. "
-        >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
-        >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': 'summary_0.txt'}
@@ -480,7 +480,6 @@ class Document(common.FileLoaderMixin):
         the separate method.)
 
         >>> from gender_analysis import document
-        >>> summary = "Hester was convicted of adultery was convicted."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': 'summary_8.txt'}
@@ -504,10 +503,6 @@ class Document(common.FileLoaderMixin):
         Note: words always return lowercase
 
         >>> from gender_analysis import document
-        >>> summary = "She took a lighter out of her purse and handed it over to him."
-        >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
-        >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
-        >>> summary += " TBH i know nothing about this story."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': 'summary_9.txt'}
@@ -538,9 +533,6 @@ class Document(common.FileLoaderMixin):
         2x window_size + 1
 
         >>> from gender_analysis.document import Document
-        >>> summary = "She took a lighter out of her purse and handed it over to him."
-        >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
-        >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
         ...                   'filename': 'summary_10.txt'}
@@ -581,9 +573,6 @@ class Document(common.FileLoaderMixin):
         :return: double
 
         >>> from gender_analysis import document
-        >>> summary = "Hester was convicted of adultery. "
-        >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
-        >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',
         ...                   'filename': 'summary_0.txt'}
@@ -603,7 +592,6 @@ class Document(common.FileLoaderMixin):
         Note: the same word can have a different part of speech tag. In the example below,
         see "refuse" and "permit"
         >>> from gender_analysis.document import Document
-        >>> summary = "They refuse to permit us to obtain the refuse permit."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',
         ...                   'filename': 'summary_11.txt'}
