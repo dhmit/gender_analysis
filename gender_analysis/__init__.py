@@ -1,5 +1,8 @@
-from . import analysis
-from . import common
-from . import corpus
-from . import document
-from . import testing
+__all__ = [
+    'common',
+    'corpus',
+    'document',
+    'analysis',
+]
+
+from gender_analysis import *

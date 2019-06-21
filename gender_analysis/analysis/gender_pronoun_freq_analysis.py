@@ -1,12 +1,13 @@
-from gender_analysis.corpus import Corpus
-from gender_analysis.analysis.analysis import get_comparative_word_freq
 import numpy as np
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+
 from gender_analysis import common
 from gender_analysis.analysis import statistical
+from gender_analysis.analysis.analysis import get_comparative_word_freq
+
 import pprint
 
 palette = "colorblind"
@@ -30,8 +31,8 @@ def books_pronoun_freq(corp, to_pickle=False):
     >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import books_pronoun_freq
     >>> books_pronoun_freq(Corpus('test_corpus'))
     {<Document (aanrud_longfrock)>: 0.7623169107856191, <Document (abbott_flatlandromance)>: 0.14321608040201003, <Document (abbott_indiscreetletter)>: 0.4166666666666667, <Document (adams_fighting)>: 0.1898395721925134, <Document (alcott_josboys)>: 0.42152086422368146, <Document (alcott_littlemen)>: 0.3111248200699157, <Document (alcott_littlewomen)>: 0.6196978175713487, <Document (alden_chautauqua)>: 0.7518623169791935, <Document (austen_emma)>: 0.5662100456621004, <Document (austen_persuasion)>: 0.5305111461382571}
-    """
 
+    """
     try:
         # relative_freq_male = common.load_pickle(f'{corp.corpus_name}_pronoun_freq_male')
         relative_freq_female = common.load_pickle(f'{corp.corpus_name}_pronoun_freq_female')
