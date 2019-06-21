@@ -255,93 +255,6 @@ def freq_by_author_gender(d):
 
     return data
 
-'''
-def freq_by_date(d):
-    """
-    Takes in a dictionary of novel objects mapped to relative frequencies
-        (output of above function)
-    Returns a dictionary with frequencies binned by decades into lists
-        List name is mapped to the list of frequencies
-
-    list names key:
-    date_to_1810 - publication dates before and not including 1810
-    date_x_to_y (by decade) - publication dates from x to y
-        Example: date_1810_to_1819 - publication dates from 1810 to 1819
-    date_1900_on - publication dates in 1900 and onward
-
-    :param d: dictionary
-    :return: dictionary
-
-    >>> from gender_analysis import document
-    >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-    ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt'}
-    >>> austen = document.Document(novel_metadata)
-    >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-    ...                   'corpus_name': 'sample_novels', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt'}
-    >>> scarlet = document.Document(novel_metadata)
-    >>> d = {scarlet:0.5, austen:0.3}
-    >>> freq_by_date(d)
-    {'1770 to 1810': [], '1810 to 1819': [0.3], '1820 to 1829': [], '1830 to 1839': [], '1840 to 1849': [], '1850 to 1859': [], '1860 to 1869': [], '1870 to 1879': [], '1880 to 1889': [], '1890 to 1899': [], '1900 to 1922': [0.5]}
-    """
-
-    # TODO: remove hardcoded dates
-
-    date_to_1810 = []
-    date_1810_to_1819 = []
-    date_1820_to_1829 = []
-    date_1830_to_1839 = []
-    date_1840_to_1849 = []
-    date_1850_to_1859 = []
-    date_1860_to_1869 = []
-    date_1870_to_1879 = []
-    date_1880_to_1889 = []
-    date_1890_to_1899 = []
-    date_1900_on = []
-
-    data = {}
-
-    for k, v in d.items():
-        # TODO: check if k (document?) has date attribute
-        if k.date < 1810:
-            date_to_1810.append(v)
-        elif k.date < 1820:
-            date_1810_to_1819.append(v)
-        elif k.date < 1830:
-            date_1820_to_1829.append(v)
-        elif k.date < 1840:
-            date_1830_to_1839.append(v)
-        elif k.date < 1850:
-            date_1840_to_1849.append(v)
-        elif k.date < 1860:
-            date_1850_to_1859.append(v)
-        elif k.date < 1870:
-            date_1860_to_1869.append(v)
-        elif k.date < 1880:
-            date_1870_to_1879.append(v)
-        elif k.date < 1890:
-            date_1880_to_1889.append(v)
-        elif k.date < 1900:
-            date_1890_to_1899
-        else:
-            date_1900_on.append(v)
-
-    data['1770 to 1810'] = date_to_1810
-    data['1810 to 1819'] = date_1810_to_1819
-    data['1820 to 1829'] = date_1820_to_1829
-    data['1830 to 1839'] = date_1830_to_1839
-    data['1840 to 1849'] = date_1840_to_1849
-    data['1850 to 1859'] = date_1850_to_1859
-    data['1860 to 1869'] = date_1860_to_1869
-    data['1870 to 1879'] = date_1870_to_1879
-    data['1880 to 1889'] = date_1880_to_1889
-    data['1890 to 1899'] = date_1890_to_1899
-    data['1900 to 1922'] = date_1900_on
-
-    return data
-'''
-
 
 def freq_by_date(d, time_frame, bin_size):
     """
@@ -407,6 +320,7 @@ def freq_by_location(d):
     :return: dictionary
 
     >>> from gender_analysis import document
+    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_location
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt'}
@@ -417,23 +331,18 @@ def freq_by_location(d):
     >>> scarlet = document.Document(novel_metadata2)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_location(d)
-    {'UK': [0.3], 'US': [0.5], 'Other': []}
+    {'United States': [0.5], 'United Kingdom': [0.3]}
     """
-    # TODO: remove hardcoded locations
-    location_UK = []
-    location_US = []
-    location_other = []
+    data = {}
 
     for k, v in d.items():
-        # TODO: check if k (document?) has country_publication attribute
-        if k.country_publication == 'United Kingdom':
-            location_UK.append(v)
-        elif k.country_publication == 'United States':
-            location_US.append(v)
-        else:
-            location_other.append(v)
+        location = getattr(k, 'country_publication', None)
+        if location is None:
+            continue
 
-    data = {'UK': location_UK, 'US': location_US, 'Other': location_other}
+        if location not in data:
+            data[location] = []
+        data[location].append(v)
 
     return data
 

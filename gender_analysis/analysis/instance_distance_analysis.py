@@ -158,27 +158,15 @@ def results_by_location(results, metric):
     except:
         print("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
 
-    # TODO: remove hardcoded locations
+    for k in results.keys():
+        location = getattr(k, 'country_publication', None)
+        if location is None:
+            continue
 
-    location_UK = []
-    location_US = []
-    location_other = []
-
-    for k in list(results.keys()):
-        # TODO: check if k has country_publication attribute
-        if k.country_publication in ["United Kingdom", "England", "Scotland", "Wales"]:
-            location_UK.append([results[k]['male'][metric], results[k]['female'][metric],
-                                results[k]['difference'][metric]])
-        elif k.country_publication == 'United States':
-            location_US.append([results[k]['male'][metric], results[k]['female'][metric],
-                                results[k]['difference'][metric]])
-        else:
-            location_other.append([results[k]['male'][metric], results[k]['female'][metric],
-                                   results[k]['difference'][metric]])
-
-    data['location_UK'] = location_UK
-    data['location_US'] = location_US
-    data['location_other'] = location_other
+        if location not in data:
+            data[location] = []
+        data[location].append([results[k]['male'][metric], results[k]['female'][metric],
+                               results[k]['difference'][metric]])
 
     return data
 

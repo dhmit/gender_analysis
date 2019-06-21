@@ -149,27 +149,15 @@ def results_by_location(full_results):
     """
     data = {}
 
-    # TODO: remove hardcoded locations
+    for k in full_results.keys():
+        location = getattr(k, 'country_publication', None)
+        if location is None:
+            continue
 
-    location_UK = {'male': {}, 'female': {}}
-    location_US = {'male': {}, 'female': {}}
-    location_other = {'male': {}, 'female': {}}
-
-    for k in list(full_results.keys()):
-        # TODO: check if k has country_publication attribute
-        if k.country_publication == 'United Kingdom' or k.country_publication == "England":
-            location_UK['male'] = merge(full_results[k]['male'], location_UK['male'])
-            location_UK['female'] = merge(full_results[k]['female'], location_UK['female'])
-        elif k.country_publication == 'United States':
-            location_US['male'] = merge(full_results[k]['male'], location_US['male'])
-            location_US['female'] = merge(full_results[k]['female'], location_US['female'])
-        else:
-            location_other['male'] = merge(full_results[k]['male'], location_other['male'])
-            location_other['female'] = merge(full_results[k]['female'], location_other['female'])
-
-    data['location_UK'] = location_UK
-    data['location_US'] = location_US
-    data['location_other'] = location_other
+        if location not in data:
+            data[location] = {'male': {}, 'female': {}}
+        data[location]['male'] = merge(full_results[k]['male'], data[location]['male'])
+        data[location]['female'] = merge(full_results[k]['female'], data[location]['female'])
 
     return data
 
