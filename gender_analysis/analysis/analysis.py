@@ -263,7 +263,6 @@ def words_instance_dist(novel, words):
         ...                   'corpus_name': 'document_test_files', 'date': '1966',
         ...                   'filename': 'test_text_4.txt'}
         >>> scarlett = document.Document(novel_metadata)
-        >>> pronoun_instance_dist(scarlett, ["his", "him", "he", "himself"])
         >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
         [6, 5, 6, 6, 7]
 
