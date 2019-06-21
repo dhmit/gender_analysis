@@ -3,6 +3,7 @@ import random
 from nltk.tokenize import word_tokenize
 from pathlib import Path
 from collections import Counter
+from os import listdir
 
 from gender_analysis import common
 from gender_analysis.document import Document
@@ -52,7 +53,16 @@ class Corpus(common.FileLoaderMixin):
         self.novels = []
 
         if self.path_to_files.suffix == '.pgz':
-            pass
+            pickle_data = common.load_pickle(self.path_to_files)
+            self.novels = pickle_data.novels
+        elif self.path_to_files.suffix == '' and not self.csv_path:
+            files = listdir(self.path_to_files)
+            for file in files:
+                metadata_dict = {'filename': file}
+                self.novels.append(Document(metadata_dict))
+        elif self.csv_path and self.path_to_files.suffix == '':
+            files = listdir(self.path_to_files)
+
         # if self.name == 'gutenberg' and csv_path is None:
         #     download_gutenberg_if_not_locally_available()
         #
@@ -182,7 +192,7 @@ class Corpus(common.FileLoaderMixin):
             csv_file = self.load_file(self.csv_path)
         except FileNotFoundError:
             err = "Could not find the metadata csv file for the "
-            err += "'{self.name}' corpus in the expected location "
+            err += f"'{self.name}' corpus in the expected location "
             err += f"({self.csv_path})."
             raise FileNotFoundError(err)
         csv_reader = csv.DictReader(csv_file)
