@@ -62,7 +62,7 @@ def get_comparative_word_freq(freqs):
     >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
-    ...                   'filename': 'none.txt'}
+    ...                   'filename': 'hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d

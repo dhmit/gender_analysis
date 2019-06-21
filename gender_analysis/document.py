@@ -53,8 +53,6 @@ class Document(common.FileLoaderMixin):
 
         self.members = metadata_dict.keys()
 
-
-
         for key in metadata_dict:
             if hasattr(self, key):
                 raise KeyError(
