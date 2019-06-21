@@ -169,14 +169,16 @@ class Document(common.FileLoaderMixin):
         if not isinstance(other, Document):
             raise NotImplementedError("Only a Document can be compared to another Document.")
 
-        attributes_required_to_be_equal = ['author', 'date', 'title', 'corpus_name', 'filename',
-                                           'country_publication', 'author_gender', 'notes', 'text']
+        attributes_required_to_be_equal = ['filename']
 
         for attribute in attributes_required_to_be_equal:
             if not hasattr(other, attribute):
                 raise AttributeError(f'Comparison document lacks attribute {attribute}.')
             if getattr(self, attribute) != getattr(other, attribute):
                 return False
+
+        if self.text != other.text:
+            return False
 
         return True
 
