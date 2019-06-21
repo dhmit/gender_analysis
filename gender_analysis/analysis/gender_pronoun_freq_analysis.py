@@ -1,13 +1,11 @@
-from gender_analysis.corpus import Corpus
-from gender_analysis.analysis.analysis import get_comparative_word_freq
 import numpy as np
-
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from gender_analysis import common
+
+from gender_analysis.corpus import Corpus
+from gender_analysis.analysis.analysis import get_comparative_word_freq
 from gender_analysis.analysis import statistical
-import pprint
 
 palette = "colorblind"
 style_name = "white"

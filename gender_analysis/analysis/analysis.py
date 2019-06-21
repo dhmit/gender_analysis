@@ -198,7 +198,7 @@ def run_gender_freq(corpus):
 def dunning_total(m_corpus, f_corpus):
     """
     goes through gendered corpora
-    runs dunning_indiviidual on all words that are in BOTH corpora
+    runs dunning_individual on all words that are in BOTH corpora
     returns sorted dictionary of words and their dunning scores
     shows top 10 and lowest 10 words
 
@@ -253,24 +253,10 @@ def instance_dist(novel, word):
     :return: list of distances between instances of gendered word
 
     """
-    output = []
-    count = 0
-    start = False
-    text = novel.get_tokenized_text()
-
-    for e in text:
-        if not start:
-            if e == word:
-                start = True
-        else:
-            count += 1
-            if e == word:
-                output.append(count)
-                count = 0
-    return output
+    return words_instance_dist(novel, [word])
 
 
-def pronoun_instance_dist(novel, words):
+def words_instance_dist(novel, words):
     """
         Takes in a novel and list of gender pronouns, returns a list of distances between each
         instance of a pronoun in that novel
@@ -323,7 +309,7 @@ def male_instance_dist(novel):
        :param: novel
        :return: list of distances between instances of gendered word
     """
-    return pronoun_instance_dist(novel, ["his", "him", "he", "himself"])
+    return words_instance_dist(novel, ["his", "him", "he", "himself"])
 
 
 def female_instance_dist(novel):
@@ -343,7 +329,7 @@ def female_instance_dist(novel):
        :param: novel
        :return: list of distances between instances of gendered word
     """
-    return pronoun_instance_dist(novel, ["her", "hers", "she", "herself"])
+    return words_instance_dist(novel, ["her", "hers", "she", "herself"])
 
 
 def find_gender_adj(novel, female):

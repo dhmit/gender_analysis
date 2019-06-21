@@ -513,7 +513,6 @@ class Corpus(common.FileLoaderMixin):
 
         return corpus_copy
 
-
     def get_novel(self, metadata_field, field_val):
         """
         Returns a specific Document object from self.novels that has metadata matching field_val for
@@ -589,7 +588,6 @@ class Corpus(common.FileLoaderMixin):
                 break
             print_count += 1
             print(entry)
-
 
     def get_novel_multiple_fields(self, metadata_dict):
         """
