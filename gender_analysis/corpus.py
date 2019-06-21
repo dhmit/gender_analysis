@@ -231,7 +231,7 @@ class Corpus(common.FileLoaderMixin):
 
         for novel_metadata in csv_reader:
             novel_metadata['corpus_name'] = self.corpus_name
-            this_novel = Document(document_metadata_dict=novel_metadata)
+            this_novel = Document(metadata_dict=novel_metadata)
             novels.append(this_novel)
             if self.load_test_corpus and len(novels) == 10:
                 break
@@ -339,7 +339,7 @@ class Corpus(common.FileLoaderMixin):
         """
         metadata_fields = set()
         for novel in self.novels:
-            for field in novel.getmembers():
+            for field in novel.members:
                 metadata_fields.add(field)
         return sorted(list(metadata_fields))
 

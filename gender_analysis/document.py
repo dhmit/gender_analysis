@@ -41,84 +41,52 @@ class Document(common.FileLoaderMixin):
     466879
     """
 
-    def __init__(self, document_metadata_dict):
-
-        if not hasattr(document_metadata_dict, 'items'):
-            raise ValueError(
-                'document_metadata_dict must be a dictionary or support .items()')
+    def __init__(self, metadata_dict):
+        if not isinstance(metadata_dict, dict):
+            raise TypeError(
+                'metadata must be passed in as a dictionary value'
+            )
 
         # Check that the essential attributes for the document exists.
-        for key in ('author', 'date', 'title', 'corpus_name'):
-            if key not in document_metadata_dict:
-                raise ValueError(f'document_metadata_dict must have an entry for "{key}". Full ',
-                                 f'metadata: {document_metadata_dict}')
-        self.members = set(document_metadata_dict.keys())
+        if 'filename' not in metadata_dict:
+            raise ValueError(f'metadata_dict must have an entry for filename')
 
-        # check that the author starts with a capital letter
-        # TODO: Currently deactivated because Gutenberg authors are lists
-        # TODO: re-implement with lists in mind.  Note: there are a few novels with no author
-        # if not document_metadata_dict['author'][0].isupper():
-        #    raise ValueError('The last name of the author should be upper case.',
-        #                     f'{document_metadata_dict["author"]} is likely incorrect in',
-        #                     f'{document_metadata_dict}.')
+        self.members = metadata_dict.keys()
 
-        # Check that the date is a year (4 consecutive integers)
-        if 'date' in document_metadata_dict:
-            if not re.match(r'^\d{4}$', document_metadata_dict['date']):
-                raise ValueError('The novel date should be a year (4 integers), not',
-                                 f'{document_metadata_dict["date"]}. Full metadata: {document_metadata_dict}')
-
-        if '[' in document_metadata_dict['author']:
-            self.author = literal_eval(document_metadata_dict['author'])
-        else:
-            self.author = document_metadata_dict['author']
-        self.title = document_metadata_dict['title']
-        self.corpus_name = document_metadata_dict['corpus_name']
+        for key in metadata_dict:
+            if hasattr(self, key):
+                raise KeyError(
+                    'Key name ', str(key), ' is reserved in the Document class. Please use another name'
+                )
+            setattr(self, key, metadata_dict[key])
 
         # optional attributes
+        # Check that the date is a year (4 consecutive integers)
+        if 'date' in metadata_dict:
+            if not re.match(r'^\d{4}$', metadata_dict['date']):
+                raise ValueError('The novel date should be a year (4 integers), not',
+                                 f'{metadata_dict["date"]}. Full metadata: {metadata_dict}')
+
         try:
-            self.gutenberg_id = int(document_metadata_dict['gutenberg_id'])
-        except KeyError:
-            self.gutenberg_id = None
-        self.country_publication = document_metadata_dict.get('country_publication', None)
-        self.notes = document_metadata_dict.get('notes', None)
-        self.author_gender = document_metadata_dict.get('author_gender', 'unknown')
-        try:
-            self.filename = document_metadata_dict['filename']
-        except KeyError:
-            if (self.gutenberg_id):
-                self.filename = str(self.gutenberg_id) + r".txt"
-            else:
-                raise ValueError('If you do not provide an explicit filename, you must provide the',
-                                 f'id. Full metadata: {document_metadata_dict}')
-        self.subject = literal_eval(document_metadata_dict.get('subject', 'None'))
-        try:
-            self.date = int(document_metadata_dict['date'])
+            self.date = int(metadata_dict['date'])
         except KeyError:
             self.date = None
+
         self._word_counts_counter = None
         self._word_count = None
 
-        if self.author_gender not in {'female', 'male', 'non-binary', 'unknown', 'both'}:
+        if 'author_gender' in metadata_dict and self.author_gender not in {'female', 'male', 'non-binary', 'unknown', 'both'}:
             raise ValueError('Author gender has to be "female", "male" "non-binary," or "unknown" ',
-                             f'but not {self.author_gender}. Full metadata: {document_metadata_dict}')
+                             f'but not {self.author_gender}. Full metadata: {metadata_dict}')
 
-        if 'text' in document_metadata_dict:
-            self.text = document_metadata_dict['text']
-        else:
-            # Check that the filename looks like a filename (ends in .txt)
-            if not self.filename.endswith('.txt'):
-                raise ValueError(
-                    f'The document filename ({self.filename}) should end in .txt . Full metadata: '
-                    f'{document_metadata_dict}.')
-            self.text = self._load_document_text()
+        if not metadata_dict['filename'].endswith('.txt'):
+            raise ValueError(
+                f'The document filename ', str(metadata_dict['filename']), 'does not end in .txt . Full metadata: '
+                f'{metadata_dict}.'
+            )
 
-    def getmembers(self):
-        """
-        Returns set of metadata field names included for this document
-        :return: set
-        """
-        return self.members
+        self.text = self._load_document_text()
+
 
     @property
     def word_count(self):
@@ -201,14 +169,16 @@ class Document(common.FileLoaderMixin):
         if not isinstance(other, Document):
             raise NotImplementedError("Only a Document can be compared to another Document.")
 
-        attributes_required_to_be_equal = ['author', 'date', 'title', 'corpus_name', 'filename',
-                                           'country_publication', 'author_gender', 'notes', 'text']
+        attributes_required_to_be_equal = ['filename']
 
         for attribute in attributes_required_to_be_equal:
             if not hasattr(other, attribute):
                 raise AttributeError(f'Comparison document lacks attribute {attribute}.')
             if getattr(self, attribute) != getattr(other, attribute):
                 return False
+
+        if self.text != other.text:
+            return False
 
         return True
 
@@ -258,8 +228,11 @@ class Document(common.FileLoaderMixin):
 
         :return: str
         """
+        if self.corpus_name == 'sample_novels':
+            file_path = Path('corpora', self.corpus_name, 'texts', self.filename)
+        else:
+            file_path = Path('corpora', self.corpus_name, self.filename)
 
-        file_path = Path('corpora', self.corpus_name, 'texts', self.filename)
 
         try:
             text = self.load_file(file_path)
@@ -399,8 +372,7 @@ class Document(common.FileLoaderMixin):
 
         >>> from gender_analysis import document
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'corpus_name': 'sample_novels', 'filename': 'austen_persuasion.txt',
-        ...                   'text': '?!All-kinds %$< of pun*ct(uatio)n {a}nd sp+ecial cha/rs'}
+        ...                   'corpus_name': 'document_test_files', 'filename': 'test_text_1.txt'}
         >>> austin = document.Document(document_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
@@ -426,8 +398,8 @@ class Document(common.FileLoaderMixin):
         >>> from gender_analysis import document
         >>> test_text = '"This is a quote" and also "This is my quote"'
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'text' : test_text}
+        ...                   'corpus_name': 'document_test_files', 'date': '1818',
+        ...                   'filename': 'test_text_0.txt'}
         >>> document_novel = document.Document(document_metadata)
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
@@ -479,12 +451,9 @@ class Document(common.FileLoaderMixin):
         """
         Returns the number of instances of str word in the text.  N.B.: Not case-sensitive.
         >>> from gender_analysis import document
-        >>> summary = "Hester was convicted of adultery. "
-        >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
-        >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '2018',
-        ...                   'filename': None, 'text': summary}
+        ...                   'corpus_name': 'document_test_files', 'date': '2018',
+        ...                   'filename': 'test_text_2.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_count_of_word("sad")
         4
@@ -509,10 +478,9 @@ class Document(common.FileLoaderMixin):
         the separate method.)
 
         >>> from gender_analysis import document
-        >>> summary = "Hester was convicted of adultery was convicted."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '2018',
-        ...                   'filename': None, 'text': summary}
+        ...                   'corpus_name': 'document_test_files', 'date': '2018',
+        ...                   'filename': 'test_text_10.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
@@ -533,13 +501,9 @@ class Document(common.FileLoaderMixin):
         Note: words always return lowercase
 
         >>> from gender_analysis import document
-        >>> summary = "She took a lighter out of her purse and handed it over to him."
-        >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
-        >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
-        >>> summary += " TBH i know nothing about this story."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '2018',
-        ...                   'filename': None, 'text': summary}
+        ...                   'corpus_name': 'document_test_files', 'date': '2018',
+        ...                   'filename': 'test_text_11.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
@@ -567,12 +531,9 @@ class Document(common.FileLoaderMixin):
         2x window_size + 1
 
         >>> from gender_analysis.document import Document
-        >>> summary = "She took a lighter out of her purse and handed it over to him."
-        >>> summary += " He lit his cigarette and took a deep drag from it, and then began "
-        >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '2018',
-        ...                   'filename': None, 'text': summary}
+        ...                   'corpus_name': 'document_test_files', 'date': '2018',
+        ...                   'filename': 'test_text_12.txt'}
         >>> scarlett = Document(document_metadata)
 
         # search_terms can be either a string...
@@ -610,12 +571,9 @@ class Document(common.FileLoaderMixin):
         :return: double
 
         >>> from gender_analysis import document
-        >>> summary = "Hester was convicted of adultery. "
-        >>> summary += "which made her very sad, and then Arthur was also sad, and everybody was "
-        >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '1900',
-        ...                   'filename': None, 'text': summary}
+        ...                   'corpus_name': 'document_test_files', 'date': '1900',
+        ...                   'filename': 'test_text_2.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> frequency = scarlett.get_word_freq('sad')
         >>> frequency
@@ -632,10 +590,9 @@ class Document(common.FileLoaderMixin):
         Note: the same word can have a different part of speech tag. In the example below,
         see "refuse" and "permit"
         >>> from gender_analysis.document import Document
-        >>> summary = "They refuse to permit us to obtain the refuse permit."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '1900',
-        ...                   'filename': None, 'text': summary}
+        ...                   'corpus_name': 'document_test_files', 'date': '1900',
+        ...                   'filename': 'test_text_13.txt'}
         >>> document = Document(document_metadata)
         >>> document.get_part_of_speech_tags()[:4]
         [('They', 'PRP'), ('refuse', 'VBP'), ('to', 'TO'), ('permit', 'VB')]
