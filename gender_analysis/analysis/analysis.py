@@ -36,8 +36,8 @@ def get_count_words(novel, words):
     N.B.: Not case-sensitive.
     >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-    ...                   'corpus_name': 'sample_novels', 'date': '1850',
-    ...                   'filename': 'summary_0.txt'}
+    ...                   'corpus_name': 'document_test_files', 'date': '1850',
+    ...                   'filename': 'test_text_2.txt'}
     >>> scarlett = document.Document(novel_metadata)
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
@@ -274,8 +274,8 @@ def instance_dist(novel, word):
     Takes in a particular word, returns a list of distances between each instance of that word in the novel.
     >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-    ...                   'corpus_name': 'sample_novels', 'date': '1966',
-    ...                   'filename': 'summary_1.txt'}
+    ...                   'corpus_name': 'document_test_files', 'date': '1966',
+    ...                   'filename': 'test_text_3.txt'}
     >>> scarlett = document.Document(novel_metadata)
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
@@ -307,8 +307,8 @@ def pronoun_instance_dist(novel, words):
         instance of a pronoun in that novel
         >>> from gender_analysis import document
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '1966',
-        ...                   'filename': 'summary_2.txt'}
+        ...                   'corpus_name': 'document_test_files', 'date': '1966',
+        ...                   'filename': 'test_text_4.txt'}
         >>> scarlett = document.Document(novel_metadata)
 
         >>> pronoun_instance_dist(scarlett, ["his", "him", "he", "himself"])
@@ -340,8 +340,8 @@ def male_instance_dist(novel):
         Takes in a novel, returns a list of distances between each instance of a female pronoun in that novel
        >>> from gender_analysis import document
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-       ...                   'corpus_name': 'sample_novels', 'date': '1966',
-       ...                   'filename': 'summary_3.txt'}
+       ...                   'corpus_name': 'document_test_files', 'date': '1966',
+       ...                   'filename': 'test_text_5.txt'}
        >>> scarlett = document.Document(novel_metadata)
        >>> male_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
@@ -357,8 +357,8 @@ def female_instance_dist(novel):
         Takes in a novel, returns a list of distances between each instance of a female pronoun in that novel
        >>> from gender_analysis import document
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-       ...                   'corpus_name': 'sample_novels', 'date': '1966',
-       ...                   'filename': 'summary_4.txt'}
+       ...                   'corpus_name': 'document_test_files', 'date': '1966',
+       ...                   'filename': 'test_text_6.txt'}
        >>> scarlett = document.Document(novel_metadata)
        >>> female_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
@@ -375,8 +375,8 @@ def find_gender_adj(novel, female):
         a window of 5 words around each male pronoun
         >>> from gender_analysis import document
         >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '1966',
-        ...                   'filename': 'summary_5.txt'}
+        ...                   'corpus_name': 'document_test_files', 'date': '1966',
+        ...                   'filename': 'test_text_7.txt'}
         >>> scarlett = document.Document(novel_metadata)
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}
@@ -429,8 +429,8 @@ def find_male_adj(novel):
         Takes in a novel, returns a dictionary of adjectives that appear within a window of 5 words around each male pronoun
        >>> from gender_analysis import document
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-       ...                   'corpus_name': 'sample_novels', 'date': '1966',
-       ...                   'filename': 'summary_6.txt'}
+       ...                   'corpus_name': 'document_test_files', 'date': '1966',
+       ...                   'filename': 'test_text_8.txt'}
        >>> scarlett = document.Document(novel_metadata)
        >>> find_male_adj(scarlett)
        {'handsome': 3, 'sad': 1}
@@ -446,8 +446,8 @@ def find_female_adj(novel):
         Takes in a novel, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun
        >>> from gender_analysis import document
        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-       ...                   'corpus_name': 'sample_novels', 'date': '1966',
-       ...                   'filename': 'summary_7.txt'}
+       ...                   'corpus_name': 'document_test_files', 'date': '1966',
+       ...                   'filename': 'test_text_9.txt'}
        >>> scarlett = document.Document(novel_metadata)
        >>> find_female_adj(scarlett)
        {'beautiful': 3, 'sad': 1}
