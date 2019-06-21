@@ -116,77 +116,28 @@ def results_by_author_gender(full_results):
     return data
 
 
-def results_by_date(full_results):
+def results_by_date(full_results, time_frame, bin_size):
     """
     takes in a dictionary of results returns a dictionary that maps different time periods to a dictionary of
     adjectives/number of occurrences across novels written in that time_period
 
     :param full_results: dictionary from result of run_adj_analysis
+    :param time_frame: tuple (int start year, int end year) for the range of dates to return
+    frequencies
+    :param bin_size: int for the number of years represented in each list of frequencies
     :return: dictionary
     """
     data = {}
+    for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
+        data[bin_start_year] = {'male': {}, 'female': {}}
 
-    # TODO: remove hardcoded dates
-
-    date_to_1810 = {'male': {}, 'female': {}}
-    date_1810_to_1819 = {'male': {}, 'female': {}}
-    date_1820_to_1829 = {'male': {}, 'female': {}}
-    date_1830_to_1839 = {'male': {}, 'female': {}}
-    date_1840_to_1849 = {'male': {}, 'female': {}}
-    date_1850_to_1859 = {'male': {}, 'female': {}}
-    date_1860_to_1869 = {'male': {}, 'female': {}}
-    date_1870_to_1879 = {'male': {}, 'female': {}}
-    date_1880_to_1889 = {'male': {}, 'female': {}}
-    date_1890_to_1899 = {'male': {}, 'female': {}}
-    date_1900_on = {'male': {}, 'female': {}}
-
-    for k in list(full_results.keys()):
-        # TODO: check if k has date attribute
-        if k.date < 1810:
-            date_to_1810['male'] = merge(full_results[k]['male'], date_to_1810['male'])
-            date_to_1810['female'] = merge(full_results[k]['female'], date_to_1810['female'])
-        elif k.date < 1820:
-            date_1810_to_1819['male'] = merge(full_results[k]['male'], date_1810_to_1819['male'])
-            date_1810_to_1819['female'] = merge(full_results[k]['female'], date_1810_to_1819['female'])
-        elif k.date < 1830:
-            date_1820_to_1829['male'] = merge(full_results[k]['male'], date_1820_to_1829['male'])
-            date_1820_to_1829['female'] = merge(full_results[k]['female'], date_1820_to_1829['female'])
-        elif k.date < 1840:
-            date_1830_to_1839['male'] = merge(full_results[k]['male'], date_1830_to_1839['male'])
-            date_1830_to_1839['female'] = merge(full_results[k]['female'], date_1830_to_1839['female'])
-        elif k.date < 1850:
-            date_1840_to_1849['male'] = merge(full_results[k]['male'], date_1840_to_1849['male'])
-            date_1840_to_1849['female'] = merge(full_results[k]['female'], date_1840_to_1849['female'])
-        elif k.date < 1860:
-            date_1850_to_1859['male'] = merge(full_results[k]['male'], date_1850_to_1859['male'])
-            date_1850_to_1859['female'] = merge(full_results[k]['female'], date_1850_to_1859['female'])
-        elif k.date < 1870:
-            date_1860_to_1869['male'] = merge(full_results[k]['male'], date_1860_to_1869['male'])
-            date_1860_to_1869['female'] = merge(full_results[k]['female'], date_1860_to_1869['female'])
-        elif k.date < 1880:
-            date_1870_to_1879['male'] = merge(full_results[k]['male'], date_1870_to_1879['male'])
-            date_1870_to_1879['female'] = merge(full_results[k]['female'], date_1870_to_1879['female'])
-        elif k.date < 1890:
-            date_1880_to_1889['male'] = merge(full_results[k]['male'], date_1880_to_1889['male'])
-            date_1880_to_1889['female'] = merge(full_results[k]['female'], date_1880_to_1889['female'])
-        elif k.date < 1900:
-            date_1890_to_1899['male'] = merge(full_results[k]['male'], date_1890_to_1899['male'])
-            date_1890_to_1899['female'] = merge(full_results[k]['female'], date_1890_to_1899['female'])
-        else:
-            date_1900_on['male'] = merge(full_results[k]['male'], date_1900_on['male'])
-            date_1900_on['female'] = merge(full_results[k]['female'], date_1900_on['female'])
-
-    data['date_to_1810'] = date_to_1810
-    data['date_1810_to_1819'] = date_1810_to_1819
-    data['date_1820_to_1829'] = date_1820_to_1829
-    data['date_1830_to_1839'] = date_1830_to_1839
-    data['date_1840_to_1849'] = date_1840_to_1849
-    data['date_1850_to_1859'] = date_1850_to_1859
-    data['date_1860_to_1869'] = date_1860_to_1869
-    data['date_1870_to_1879'] = date_1870_to_1879
-    data['date_1880_to_1889'] = date_1880_to_1889
-    data['date_1890_to_1899'] = date_1890_to_1899
-    data['date_1900_on'] = date_1900_on
+    for k in full_results.keys():
+        date = getattr(k, 'date', None)
+        if date is None:
+            continue
+        bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
+        data[bin_year]['male'] = merge(full_results[k]['male'], data[bin_year]['male'])
+        data[bin_year]['female'] = merge(full_results[k]['female'], data[bin_year['female']])
 
     return data
 
@@ -198,27 +149,15 @@ def results_by_location(full_results):
     """
     data = {}
 
-    # TODO: remove hardcoded locations
+    for k in full_results.keys():
+        location = getattr(k, 'country_publication', None)
+        if location is None:
+            continue
 
-    location_UK = {'male': {}, 'female': {}}
-    location_US = {'male': {}, 'female': {}}
-    location_other = {'male': {}, 'female': {}}
-
-    for k in list(full_results.keys()):
-        # TODO: check if k has country_publication attribute
-        if k.country_publication == 'United Kingdom' or k.country_publication == "England":
-            location_UK['male'] = merge(full_results[k]['male'], location_UK['male'])
-            location_UK['female'] = merge(full_results[k]['female'], location_UK['female'])
-        elif k.country_publication == 'United States':
-            location_US['male'] = merge(full_results[k]['male'], location_US['male'])
-            location_US['female'] = merge(full_results[k]['female'], location_US['female'])
-        else:
-            location_other['male'] = merge(full_results[k]['male'], location_other['male'])
-            location_other['female'] = merge(full_results[k]['female'], location_other['female'])
-
-    data['location_UK'] = location_UK
-    data['location_US'] = location_US
-    data['location_other'] = location_other
+        if location not in data:
+            data[location] = {'male': {}, 'female': {}}
+        data[location]['male'] = merge(full_results[k]['male'], data[location]['male'])
+        data[location]['female'] = merge(full_results[k]['female'], data[location]['female'])
 
     return data
 
