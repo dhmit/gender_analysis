@@ -1,20 +1,5 @@
-from gender_analysis.corpus import Corpus
-from statistics import median, mean
-
-import numpy as np
-import matplotlib.pyplot as plt
-from gender_analysis.analysis.analysis import find_male_adj, find_female_adj, find_gender_adj
+from gender_analysis.analysis.analysis import find_male_adj, find_female_adj
 from gender_analysis import common
-from pprint import pprint
-
-
-# import seaborn as sns
-# sns.set()
-
-# def process_medians(lst1 ,lst2):
-#   return
-
-# TO-DO - get medians, means, max and min instance distances per novel per gender
 
 
 def run_adj_analysis(corpus):
@@ -41,16 +26,18 @@ def run_adj_analysis(corpus):
 
     return results
 
-def store_raw_results(results, corpus_name):
+
+def store_raw_results(results, corpus):
     try:
-        common.load_pickle("pronoun_adj_raw_analysis_" + corpus_name)
+        common.load_pickle("pronoun_adj_raw_analysis_" + corpus.corpus_name)
         x = input("results already stored. overwrite previous analysis? (y/n)")
         if x == 'y':
-            common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus_name)
+            common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.corpus_name)
         else:
             pass
     except IOError:
-        common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus_name)
+        common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.corpus_name)
+
 
 def merge(novel_adj_dict, full_adj_dict):
     """
@@ -88,6 +75,7 @@ def merge_raw_results(full_results):
 
     return merged_results
 
+
 def get_overlapping_adjectives_raw_results(merged_results):
     """
     Looks through the male adjectives and female adjectives across the corpus and extracts adjective
@@ -105,137 +93,88 @@ def get_overlapping_adjectives_raw_results(merged_results):
 
     return overlap_results
 
+
 def results_by_author_gender(full_results):
     """
        takes in the full dictionary of results, returns a dictionary that maps 'male' (male author) and 'female'
        (female author) to a dictionary of adjectives and # occurrences across novels written by an author of
        that gender.
-       :param results dictionary
+       :param full_results: dictionary from result of run_adj_analysis
        :return: dictionary with two keys: 'male' (male author) or 'female' (female author). Each key maps
        a dictionary of adjectives/occurrences.
        """
     data = {'male_author': {'male': {}, 'female': {}}, "female_author": {'male': {}, 'female': {}}}
 
     for novel in list(full_results.keys()):
-        print("author gender analysis:", novel.title, novel.author)
-        if novel.author_gender == "male":
+        author_gender = getattr(novel, 'author_gender', None)
+        if author_gender == "male":
             data['male_author']['male'] = merge(full_results[novel]['male'], data['male_author']['male'])
             data['male_author']['female'] = merge(full_results[novel]['female'], data['male_author']['female'])
-        else:
+        elif author_gender == 'female':
             data['female_author']['male'] = merge(full_results[novel]['male'], data['female_author']['male'])
             data['female_author']['female'] = merge(full_results[novel]['female'], data['female_author']['female'])
     return data
 
 
-def results_by_date(full_results):
+def results_by_date(full_results, time_frame, bin_size):
     """
     takes in a dictionary of results returns a dictionary that maps different time periods to a dictionary of
     adjectives/number of occurrences across novels written in that time_period
 
-    :param results:
+    :param full_results: dictionary from result of run_adj_analysis
+    :param time_frame: tuple (int start year, int end year) for the range of dates to return
+    frequencies
+    :param bin_size: int for the number of years represented in each list of frequencies
     :return: dictionary
     """
     data = {}
+    for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
+        data[bin_start_year] = {'male': {}, 'female': {}}
 
-    date_to_1810 = {'male': {}, 'female': {}}
-    date_1810_to_1819 = {'male': {}, 'female': {}}
-    date_1820_to_1829 = {'male': {}, 'female': {}}
-    date_1830_to_1839 = {'male': {}, 'female': {}}
-    date_1840_to_1849 = {'male': {}, 'female': {}}
-    date_1850_to_1859 = {'male': {}, 'female': {}}
-    date_1860_to_1869 = {'male': {}, 'female': {}}
-    date_1870_to_1879 = {'male': {}, 'female': {}}
-    date_1880_to_1889 = {'male': {}, 'female': {}}
-    date_1890_to_1899 = {'male': {}, 'female': {}}
-    date_1900_on = {'male': {}, 'female': {}}
-
-    for k in list(full_results.keys()):
-        print("date analysis:", k.title, k.author)
-        if k.date < 1810:
-            date_to_1810['male'] = merge(full_results[k]['male'], date_to_1810['male'])
-            date_to_1810['female'] = merge(full_results[k]['female'], date_to_1810['female'])
-        elif k.date < 1820:
-            date_1810_to_1819['male'] = merge(full_results[k]['male'], date_1810_to_1819['male'])
-            date_1810_to_1819['female'] = merge(full_results[k]['female'], date_1810_to_1819['female'])
-        elif k.date < 1830:
-            date_1820_to_1829['male'] = merge(full_results[k]['male'], date_1820_to_1829['male'])
-            date_1820_to_1829['female'] = merge(full_results[k]['female'], date_1820_to_1829['female'])
-        elif k.date < 1840:
-            date_1830_to_1839['male'] = merge(full_results[k]['male'], date_1830_to_1839['male'])
-            date_1830_to_1839['female'] = merge(full_results[k]['female'], date_1830_to_1839['female'])
-        elif k.date < 1850:
-            date_1840_to_1849['male'] = merge(full_results[k]['male'], date_1840_to_1849['male'])
-            date_1840_to_1849['female'] = merge(full_results[k]['female'], date_1840_to_1849['female'])
-        elif k.date < 1860:
-            date_1850_to_1859['male'] = merge(full_results[k]['male'], date_1850_to_1859['male'])
-            date_1850_to_1859['female'] = merge(full_results[k]['female'], date_1850_to_1859['female'])
-        elif k.date < 1870:
-            date_1860_to_1869['male'] = merge(full_results[k]['male'], date_1860_to_1869['male'])
-            date_1860_to_1869['female'] = merge(full_results[k]['female'], date_1860_to_1869['female'])
-        elif k.date < 1880:
-            date_1870_to_1879['male'] = merge(full_results[k]['male'], date_1870_to_1879['male'])
-            date_1870_to_1879['female'] = merge(full_results[k]['female'], date_1870_to_1879['female'])
-        elif k.date < 1890:
-            date_1880_to_1889['male'] = merge(full_results[k]['male'], date_1880_to_1889['male'])
-            date_1880_to_1889['female'] = merge(full_results[k]['female'], date_1880_to_1889['female'])
-        elif k.date < 1900:
-            date_1890_to_1899['male'] = merge(full_results[k]['male'], date_1890_to_1899['male'])
-            date_1890_to_1899['female'] = merge(full_results[k]['female'], date_1890_to_1899['female'])
-        else:
-            date_1900_on['male'] = merge(full_results[k]['male'], date_1900_on['male'])
-            date_1900_on['female'] = merge(full_results[k]['female'], date_1900_on['female'])
-
-    data['date_to_1810'] = date_to_1810
-    data['date_1810_to_1819'] = date_1810_to_1819
-    data['date_1820_to_1829'] = date_1820_to_1829
-    data['date_1830_to_1839'] = date_1830_to_1839
-    data['date_1840_to_1849'] = date_1840_to_1849
-    data['date_1850_to_1859'] = date_1850_to_1859
-    data['date_1860_to_1869'] = date_1860_to_1869
-    data['date_1870_to_1879'] = date_1870_to_1879
-    data['date_1880_to_1889'] = date_1880_to_1889
-    data['date_1890_to_1899'] = date_1890_to_1899
-    data['date_1900_on'] = date_1900_on
+    for k in full_results.keys():
+        date = getattr(k, 'date', None)
+        if date is None:
+            continue
+        bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
+        data[bin_year]['male'] = merge(full_results[k]['male'], data[bin_year]['male'])
+        data[bin_year]['female'] = merge(full_results[k]['female'], data[bin_year['female']])
 
     return data
 
 
 def results_by_location(full_results):
     """
-    :param results:
+    :param full_results: dictionary from result of run_adj_analysis
     :return:
     """
     data = {}
 
-    location_UK = {'male': {}, 'female': {}}
-    location_US = {'male': {}, 'female': {}}
-    location_other = {'male': {}, 'female': {}}
+    for k in full_results.keys():
+        location = getattr(k, 'country_publication', None)
+        if location is None:
+            continue
 
-    for k in list(full_results.keys()):
-        print("location analysis:", k.title, k.author)
-        if k.country_publication == 'United Kingdom' or k.country_publication == "England":
-            location_UK['male'] = merge(full_results[k]['male'], location_UK['male'])
-            location_UK['female'] = merge(full_results[k]['female'], location_UK['female'])
-        elif k.country_publication == 'United States':
-            location_US['male'] = merge(full_results[k]['male'], location_US['male'])
-            location_US['female'] = merge(full_results[k]['female'], location_US['female'])
-        else:
-            location_other['male'] = merge(full_results[k]['male'], location_other['male'])
-            location_other['female'] = merge(full_results[k]['female'], location_other['female'])
-
-    data['location_UK'] = location_UK
-    data['location_US'] = location_US
-    data['location_other'] = location_other
+        if location not in data:
+            data[location] = {'male': {}, 'female': {}}
+        data[location]['male'] = merge(full_results[k]['male'], data[location]['male'])
+        data[location]['female'] = merge(full_results[k]['female'], data[location]['female'])
 
     return data
 
-def get_top_adj(corpus_name, num):
+
+def get_top_adj(full_results, num):
+    """
+    Takes dictionary of results from run_adj_analysis and number of top results to return.
+    Returns the top num adjectives associated with male pronouns and female pronouns
+    :param full_results: dictionary from result of run_adj_analysis
+    :param num: number of top results to return per gender
+    :return: tuple of lists of top adjectives associated with male pronouns and female pronouns,
+    respectively
+    """
     male_adj = []
     female_adj = []
 
-    data = common.load_pickle("pronoun_adj_final_results_"+corpus_name)
-
-    for adj, val in data.items():
+    for adj, val in full_results.items():
         male_adj.append((val[0]-val[1], adj))
         female_adj.append((val[1]-val[0], adj))
 
@@ -243,58 +182,3 @@ def get_top_adj(corpus_name, num):
     female_top = sorted(female_adj, reverse=True)[0:num]
 
     return male_top, female_top
-
-def run_analysis(corpus_name):
-    """
-    print("loading corpus", corpus_name)
-    corpus = Corpus(corpus_name)
-    novels = corpus.novels
-
-    print("running analysis")
-    results = run_adj_analysis(novels)
-
-    print("storing results")
-    store_raw_results(results, corpus_name)
-
-    print("loading results")
-    r = common.load_pickle("pronoun_adj_raw_analysis_"+corpus_name)
-    print("merging and getting final results")
-    m = merge_raw_results(r)
-    print("getting final results")
-    final = get_overlapping_adjectives_raw_results(m)
-    print("storing final results")
-    common.store_pickle(final, "pronoun_adj_final_results_"+corpus_name)
-
-    #Comment out pprint for large databases where it's not practical to print out results
-    #pprint(final)
-    """
-    """"
-    r = common.load_pickle("pronoun_adj_raw_analysis_" + corpus_name)
-    print("getting results by location")
-    r2 = results_by_location(r)
-    print("storing 1")
-    common.store_pickle(r2, "pronoun_adj_by_location")
-    print("getting results by author gender")
-    r3 = results_by_author_gender(r)
-    print("storing 2")
-    common.store_pickle(r3, "pronoun_adj_by_author_gender")
-    print("getting results by date")
-    r4 = results_by_date(r)
-    print("storing 3")
-    common.store_pickle(r4, "pronoun_adj_by_date")
-    print("DONE")
-    """
-    """"
-    r = common.load_pickle("pronoun_adj_raw_analysis_" + corpus_name)
-    print("merging and getting final results")
-    m = merge_raw_results(r)
-    common.store_pickle(m, "pronoun_adj_merged_results_" + corpus_name)
-    """
-    male_top, female_top = get_top_adj("gutenberg", 30)
-    pprint("MALE TOP")
-    pprint(male_top)
-    pprint("FEMALE TOP")
-    pprint(female_top)
-if __name__ == '__main__':
-    run_analysis("gutenberg")
-

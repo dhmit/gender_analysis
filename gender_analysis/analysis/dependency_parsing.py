@@ -7,7 +7,7 @@ from gender_analysis.common import store_pickle, load_pickle
 import os.path
 import csv
 
-#TODO: Investigate to see if these functions are used
+# TODO: Investigate to see if these functions are used
 
 # def get_parser(path_to_jar, path_to_models_jar):
 #     """
@@ -152,7 +152,3 @@ def test_analysis():
                 writer.writerow(row)
         except OSError:
             continue
-
-if __name__ == "__main__":
-
-    test_analysis()
