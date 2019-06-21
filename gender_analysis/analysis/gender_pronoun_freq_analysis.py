@@ -26,6 +26,8 @@ def books_pronoun_freq(corp, to_pickle=False):
     :param: corp: Corpus object
     :return: dictionary with data organized by groups
 
+    >>> from gender_analysis.corpus import Corpus
+    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import books_pronoun_freq
     >>> books_pronoun_freq(Corpus('test_corpus'))
     {<Document (aanrud_longfrock)>: 0.7623169107856191, <Document (abbott_flatlandromance)>: 0.14321608040201003, <Document (abbott_indiscreetletter)>: 0.4166666666666667, <Document (adams_fighting)>: 0.1898395721925134, <Document (alcott_josboys)>: 0.42152086422368146, <Document (alcott_littlemen)>: 0.3111248200699157, <Document (alcott_littlewomen)>: 0.6196978175713487, <Document (alden_chautauqua)>: 0.7518623169791935, <Document (austen_emma)>: 0.5662100456621004, <Document (austen_persuasion)>: 0.5305111461382571}
     """
@@ -241,11 +243,11 @@ def freq_by_author_gender(d):
     data = {}
 
     for k, v in d.items():
-        # TODO: check if k (document?) has author_gender attribute
-        if k.author_gender == 'male':
+        author_gender = getattr(k, 'author_gender', None)
+        if author_gender == 'male':
             male_author.append(v)
 
-        if k.author_gender == 'female':
+        elif author_gender == 'female':
             female_author.append(v)
 
     data['Male Author'] = male_author
@@ -253,7 +255,7 @@ def freq_by_author_gender(d):
 
     return data
 
-
+'''
 def freq_by_date(d):
     """
     Takes in a dictionary of novel objects mapped to relative frequencies
@@ -297,6 +299,85 @@ def freq_by_date(d):
     date_1880_to_1889 = []
     date_1890_to_1899 = []
     date_1900_on = []
+
+    data = {}
+
+    for k, v in d.items():
+        # TODO: check if k (document?) has date attribute
+        if k.date < 1810:
+            date_to_1810.append(v)
+        elif k.date < 1820:
+            date_1810_to_1819.append(v)
+        elif k.date < 1830:
+            date_1820_to_1829.append(v)
+        elif k.date < 1840:
+            date_1830_to_1839.append(v)
+        elif k.date < 1850:
+            date_1840_to_1849.append(v)
+        elif k.date < 1860:
+            date_1850_to_1859.append(v)
+        elif k.date < 1870:
+            date_1860_to_1869.append(v)
+        elif k.date < 1880:
+            date_1870_to_1879.append(v)
+        elif k.date < 1890:
+            date_1880_to_1889.append(v)
+        elif k.date < 1900:
+            date_1890_to_1899
+        else:
+            date_1900_on.append(v)
+
+    data['1770 to 1810'] = date_to_1810
+    data['1810 to 1819'] = date_1810_to_1819
+    data['1820 to 1829'] = date_1820_to_1829
+    data['1830 to 1839'] = date_1830_to_1839
+    data['1840 to 1849'] = date_1840_to_1849
+    data['1850 to 1859'] = date_1850_to_1859
+    data['1860 to 1869'] = date_1860_to_1869
+    data['1870 to 1879'] = date_1870_to_1879
+    data['1880 to 1889'] = date_1880_to_1889
+    data['1890 to 1899'] = date_1890_to_1899
+    data['1900 to 1922'] = date_1900_on
+
+    return data
+'''
+
+
+def freq_by_date(d, time_frame, bin_size):
+    """
+    Takes in a dictionary of novel objects mapped to relative frequencies
+        (output of above function)
+    Returns a dictionary with frequencies binned by decades into lists
+        List name is mapped to the list of frequencies
+
+    list names key:
+    date_to_1810 - publication dates before and not including 1810
+    date_x_to_y (by decade) - publication dates from x to y
+        Example: date_1810_to_1819 - publication dates from 1810 to 1819
+    date_1900_on - publication dates in 1900 and onward
+
+    :param d: dictionary
+    :param time_frame: tuple (int start year, int end year) for the range of dates to return
+    frequencies
+    :param bin_size: int for the number of years represented in each list of frequencies
+    :return: dictionary
+
+    >>> from gender_analysis import document
+    >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
+    ...                   'corpus_name': 'sample_novels', 'date': '1818',
+    ...                   'filename': 'austen_persuasion.txt'}
+    >>> austen = document.Document(novel_metadata)
+    >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+    ...                   'corpus_name': 'sample_novels', 'date': '1900',
+    ...                   'filename': 'hawthorne_scarlet.txt'}
+    >>> scarlet = document.Document(novel_metadata)
+    >>> d = {scarlet:0.5, austen:0.3}
+    >>> freq_by_date(d)
+    {'1770 to 1810': [], '1810 to 1819': [0.3], '1820 to 1829': [], '1830 to 1839': [], '1840 to 1849': [], '1850 to 1859': [], '1860 to 1869': [], '1870 to 1879': [], '1880 to 1889': [], '1890 to 1899': [], '1900 to 1922': [0.5]}
+    """
+
+    # divide range into bins of bin_size
+    # data has key=start year, value=list of frequencies
 
     data = {}
 

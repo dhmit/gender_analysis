@@ -195,42 +195,6 @@ def run_gender_freq(corpus):
         num += 1
 
 
-def dunn_individual_word(total_words_corpus_1, total_words_corpus_2, count_of_word_corpus_1,
-                     count_of_word_corpus_2):
-    '''
-    applies dunning log likelihood to compare individual word usage in male and female corpus
-
-    :param total_words_corpus_1
-    :param total_words_corpus_2
-    :param count_of_word_corpus_1
-    :param count_of_word_corpus_2
-    :return: log likelihoods and p value
-    >>> total_words_m_corpus = 8648489
-    >>> total_words_f_corpus = 8700765
-    >>> wordcount_female = 1000
-    >>> wordcount_male = 50
-    >>> dunn_individual_word(total_words_m_corpus,total_words_f_corpus,wordcount_male,wordcount_female)
-    -1047.8610274053995
-
-    '''
-    a = count_of_word_corpus_1
-    b = count_of_word_corpus_2
-    c = total_words_corpus_1
-    d = total_words_corpus_2
-
-    e1 = c * (a + b) / (c + d)
-    e2 = d * (a + b) / (c + d)
-
-    dunning_log_likelihood = 2 * (a * math.log(a / e1) + b * math.log(b / e2))
-
-    if count_of_word_corpus_1 * math.log(count_of_word_corpus_1 / e1) < 0:
-        dunning_log_likelihood = -dunning_log_likelihood
-
-    p = 1 - chi2.cdf(abs(dunning_log_likelihood), 1)
-
-    return dunning_log_likelihood
-
-
 def dunning_total(m_corpus, f_corpus):
     """
     goes through gendered corpora
@@ -385,7 +349,7 @@ def female_instance_dist(novel):
 def find_gender_adj(novel, female):
     """
         Takes in a novel and boolean indicating gender, returns a dictionary of adjectives that appear within
-        a window of 5 words around each male pronoun
+        a window of 5 words around each pronoun
         >>> from gender_analysis import document
         >>> summary = "James was convicted of adultery. "
         >>> summary += "he was a handsome guy, and everyone thought that he was so handsome, and everybody was "

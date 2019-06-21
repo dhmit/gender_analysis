@@ -91,11 +91,11 @@ def results_by_author_gender(results, metric):
     except KeyError:
         raise ValueError("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
     for novel in list(results.keys()):
-        # TODO: check if novel has author_gender attribute
-        if novel.author_gender == "male":
+        author_gender = getattr(novel, 'author_gender', None)
+        if author_gender == "male":
             data['male'].append([results[novel]['male'][metric], results[novel]['female'][metric],
                                  results[novel]['difference'][metric]])
-        else:
+        elif author_gender == 'female':
             data['female'].append([results[novel]['male'][metric], results[novel]['female'][metric],
                                    results[novel]['difference'][metric]])
     return data

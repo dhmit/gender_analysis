@@ -106,12 +106,11 @@ def results_by_author_gender(full_results):
     data = {'male_author': {'male': {}, 'female': {}}, "female_author": {'male': {}, 'female': {}}}
 
     for novel in list(full_results.keys()):
-        # print("author gender analysis:", novel.title, novel.author)
-        # TODO: check if novel has author_gender attribute
-        if novel.author_gender == "male":
+        author_gender = getattr(novel, 'author_gender', None)
+        if author_gender == "male":
             data['male_author']['male'] = merge(full_results[novel]['male'], data['male_author']['male'])
             data['male_author']['female'] = merge(full_results[novel]['female'], data['male_author']['female'])
-        else:
+        elif author_gender == 'female':
             data['female_author']['male'] = merge(full_results[novel]['male'], data['female_author']['male'])
             data['female_author']['female'] = merge(full_results[novel]['female'], data['female_author']['female'])
     return data
