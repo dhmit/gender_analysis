@@ -360,9 +360,10 @@ def freq_by_date(d, time_frame, bin_size):
     :param time_frame: tuple (int start year, int end year) for the range of dates to return
     frequencies
     :param bin_size: int for the number of years represented in each list of frequencies
-    :return: dictionary
+    :return: dictionary {bin_start_year:[frequencies for documents in this bin of years]
 
     >>> from gender_analysis import document
+    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_date
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt'}
@@ -372,51 +373,20 @@ def freq_by_date(d, time_frame, bin_size):
     ...                   'filename': 'hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
-    >>> freq_by_date(d)
-    {'1770 to 1810': [], '1810 to 1819': [0.3], '1820 to 1829': [], '1830 to 1839': [], '1840 to 1849': [], '1850 to 1859': [], '1860 to 1869': [], '1870 to 1879': [], '1880 to 1889': [], '1890 to 1899': [], '1900 to 1922': [0.5]}
+    >>> freq_by_date(d, (1770, 1910), 10)
+    {1770: [], 1780: [], 1790: [], 1800: [], 1810: [0.3], 1820: [], 1830: [], 1840: [], 1850: [], 1860: [], 1870: [], 1880: [], 1890: [], 1900: [0.5]}
     """
 
-    # divide range into bins of bin_size
-    # data has key=start year, value=list of frequencies
-
     data = {}
+    for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
+        data[bin_start_year] = []
 
-    for k, v in d.items():
-        # TODO: check if k (document?) has date attribute
-        if k.date < 1810:
-            date_to_1810.append(v)
-        elif k.date < 1820:
-            date_1810_to_1819.append(v)
-        elif k.date < 1830:
-            date_1820_to_1829.append(v)
-        elif k.date < 1840:
-            date_1830_to_1839.append(v)
-        elif k.date < 1850:
-            date_1840_to_1849.append(v)
-        elif k.date < 1860:
-            date_1850_to_1859.append(v)
-        elif k.date < 1870:
-            date_1860_to_1869.append(v)
-        elif k.date < 1880:
-            date_1870_to_1879.append(v)
-        elif k.date < 1890:
-            date_1880_to_1889.append(v)
-        elif k.date < 1900:
-            date_1890_to_1899
-        else:
-            date_1900_on.append(v)
-
-    data['1770 to 1810'] = date_to_1810
-    data['1810 to 1819'] = date_1810_to_1819
-    data['1820 to 1829'] = date_1820_to_1829
-    data['1830 to 1839'] = date_1830_to_1839
-    data['1840 to 1849'] = date_1840_to_1849
-    data['1850 to 1859'] = date_1850_to_1859
-    data['1860 to 1869'] = date_1860_to_1869
-    data['1870 to 1879'] = date_1870_to_1879
-    data['1880 to 1889'] = date_1880_to_1889
-    data['1890 to 1899'] = date_1890_to_1899
-    data['1900 to 1922'] = date_1900_on
+    for k,v in d.items():
+        date = getattr(k, 'date', None)
+        if date is None:
+            continue
+        bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
+        data[bin_year].append(v)
 
     return data
 

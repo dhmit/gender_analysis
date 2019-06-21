@@ -101,7 +101,7 @@ def results_by_author_gender(results, metric):
     return data
 
 
-def results_by_date(results, metric):
+def results_by_date(results, metric, time_frame, bin_size):
     """
     takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
     dictionary:
@@ -112,76 +112,29 @@ def results_by_date(results, metric):
      order = [male distance, female distance, difference]
     :param results dictionary
     :param metric ('median', 'mean', 'min', 'max')
+    :param time_frame: tuple (int start year, int end year) for the range of dates to return
+    frequencies
+    :param bin_size: int for the number of years represented in each list of frequencies
     :return: dictionary
     """
-    data = {}
+
     metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
     try:
         stat = metric_indexes[metric]
-    except:
+    except KeyError:
         print("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
 
-    # TODO: remove hardcoded dates
+    data = {}
+    for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
+        data[bin_start_year] = []
 
-    date_to_1810 = []
-    date_1810_to_1819 = []
-    date_1820_to_1829 = []
-    date_1830_to_1839 = []
-    date_1840_to_1849 = []
-    date_1850_to_1859 = []
-    date_1860_to_1869 = []
-    date_1870_to_1879 = []
-    date_1880_to_1889 = []
-    date_1890_to_1899 = []
-    date_1900_on = []
-
-    for k in list(results.keys()):
-        # TODO: check if k has date attribute
-        if k.date < 1810:
-            date_to_1810.append([results[k]['male'][metric], results[k]['female'][metric],
-                                 results[k]['difference'][metric]])
-        elif k.date < 1820:
-            date_1810_to_1819.append([results[k]['male'][metric], results[k]['female'][metric],
-                                      results[k]['difference'][metric]])
-        elif k.date < 1830:
-            date_1820_to_1829.append([results[k]['male'][metric], results[k]['female'][metric],
-                                      results[k]['difference'][metric]])
-        elif k.date < 1840:
-            date_1830_to_1839.append([results[k]['male'][metric], results[k]['female'][metric],
-                                      results[k]['difference'][metric]])
-        elif k.date < 1850:
-            date_1840_to_1849.append([results[k]['male'][metric], results[k]['female'][metric],
-                                      results[k]['difference'][metric]])
-        elif k.date < 1860:
-            date_1850_to_1859.append([results[k]['male'][metric], results[k]['female'][metric],
-                                      results[k]['difference'][metric]])
-        elif k.date < 1870:
-            date_1860_to_1869.append([results[k]['male'][metric], results[k]['female'][metric],
-                                      results[k]['difference'][metric]])
-        elif k.date < 1880:
-            date_1870_to_1879.append([results[k]['male'][metric], results[k]['female'][metric],
-                                      results[k]['difference'][metric]])
-        elif k.date < 1890:
-            date_1880_to_1889.append([results[k]['male'][metric], results[k]['female'][metric],
-                                      results[k]['difference'][metric]])
-        elif k.date < 1900:
-            date_1890_to_1899.append([results[k]['male'][metric], results[k]['female'][metric],
-                                      results[k]['difference'][metric]])
-        else:
-            date_1900_on.append([results[k]['male'][metric], results[k]['female'][metric],
-                                 results[k]['difference'][metric]])
-
-    data['date_to_1810'] = date_to_1810
-    data['date_1810_to_1819'] = date_1810_to_1819
-    data['date_1820_to_1829'] = date_1820_to_1829
-    data['date_1830_to_1839'] = date_1830_to_1839
-    data['date_1840_to_1849'] = date_1840_to_1849
-    data['date_1850_to_1859'] = date_1850_to_1859
-    data['date_1860_to_1869'] = date_1860_to_1869
-    data['date_1870_to_1879'] = date_1870_to_1879
-    data['date_1880_to_1889'] = date_1880_to_1889
-    data['date_1890_to_1899'] = date_1890_to_1899
-    data['date_1900_on'] = date_1900_on
+    for k in results.keys():
+        date = getattr(k, 'date', None)
+        if date is None:
+            continue
+        bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
+        data[bin_year].append([results[k]['male'][metric], results[k]['female'][metric],
+                               results[k]['difference'][metric]])
 
     return data
 
