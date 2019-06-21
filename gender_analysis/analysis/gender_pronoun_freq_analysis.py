@@ -75,12 +75,11 @@ def subject_vs_object_pronoun_freqs(corp, to_pickle=False):
     Each dictionary maps each Document in the corpus to the proportion of the pronouns
         of the specified gender in that novel that are subject pronouns
 
-    #TODO: add doctests
-
     :param corp: Corpus
     :param to_pickle
     :return: tuple of two dictionaries (male, female)
 
+    >>> from gender_analysis.corpus import Corpus
     >>> subject_vs_object_pronoun_freqs(Corpus('test_corpus'))
     ({<Document (aanrud_longfrock)>: 0.793233082706767, <Document (abbott_flatlandromance)>: 0.6741573033707865, <Document (abbott_indiscreetletter)>: 0.7906976744186047, <Document (adams_fighting)>: 0.7184527584020292, <Document (alcott_josboys)>: 0.6330049261083744, <Document (alcott_littlemen)>: 0.6451612903225807, <Document (alcott_littlewomen)>: 0.6577563540753725, <Document (alden_chautauqua)>: 0.7577030812324931, <Document (austen_emma)>: 0.7086120401337792, <Document (austen_persuasion)>: 0.6739130434782609}, {<Document (aanrud_longfrock)>: 0.5376532399299474, <Document (abbott_flatlandromance)>: 0.17543859649122806, <Document (abbott_indiscreetletter)>: 0.4424242424242424, <Document (adams_fighting)>: 0.43485915492957744, <Document (alcott_josboys)>: 0.3862487360970678, <Document (alcott_littlemen)>: 0.4343501326259947, <Document (alcott_littlewomen)>: 0.4124569980083288, <Document (alden_chautauqua)>: 0.5461432506887053, <Document (austen_emma)>: 0.4836730221345606, <Document (austen_persuasion)>: 0.4872013651877133})
     """
@@ -141,6 +140,7 @@ def subject_pronouns_gender_comparison(corp, subject_gender, to_pickle=False):
     :param subject_gender: string 'male' or string 'female'
     :return: dictionary
 
+    >>> from gender_analysis.corpus import Corpus
     >>> subject_pronouns_gender_comparison(Corpus('test_corpus'), 'male')
     {<Document (aanrud_longfrock)>: 0.2557575757575758, <Document (abbott_flatlandromance)>: 0.923076923076923, <Document (abbott_indiscreetletter)>: 0.582857142857143, <Document (adams_fighting)>: 0.8210144927536231, <Document (alcott_josboys)>: 0.5736607142857142, <Document (alcott_littlemen)>: 0.6812652068126521, <Document (alcott_littlewomen)>: 0.39719502513892563, <Document (alden_chautauqua)>: 0.2543488481429243, <Document (austen_emma)>: 0.4343926191696566, <Document (austen_persuasion)>: 0.45696623870660963}
     >>> subject_pronouns_gender_comparison(Corpus('test_corpus'), 'female')

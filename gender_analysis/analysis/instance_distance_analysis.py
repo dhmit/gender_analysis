@@ -1,7 +1,8 @@
 from statistics import median, mean
 
 import matplotlib.pyplot as plt
-from gender_analysis.analysis.analysis import male_instance_dist, female_instance_dist, pronoun_instance_dist
+from gender_analysis.analysis.analysis import male_instance_dist, female_instance_dist, \
+    words_instance_dist
 from gender_analysis import common
 import pandas as pnds
 from scipy import stats

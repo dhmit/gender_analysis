@@ -9,7 +9,7 @@ from gender_analysis.corpus import Corpus
 
 # TODO: Rewrite all of this using a Dunning class in a non-messy way.
 
-'''
+
 def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
                          count_of_word_in_corpus_1,
                          count_of_word_in_corpus_2):
@@ -43,10 +43,9 @@ def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
     p = 1 - chi2.cdf(abs(dunning_log_likelihood),1)
 
     return dunning_log_likelihood
-'''
 
 
-def dunn_individual_word(corpus1, corpus2, word):
+def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     """
     applies dunning log likelihood to compare individual word in two counter objects
 
@@ -68,9 +67,9 @@ def dunn_individual_word(corpus1, corpus2, word):
     d = 0  # total words in corpus2
 
     for document in corpus1.novels:
-        c += document.word_count()
+        c += document.word_count
     for document in corpus2.novels:
-        d += document.word_count()
+        d += document.word_count
 
     e1 = c * (a + b) / (c + d)
     e2 = d * (a + b) / (c + d)
@@ -95,6 +94,7 @@ def dunning_total(counter1, counter2, filename_to_pickle=None):
     used for multiple analyses.
 
     >>> from collections import Counter
+    >>> from gender_analysis.analysis.dunning import dunning_total
     >>> female_counter = Counter({'he': 1,  'she': 10, 'and': 10})
     >>> male_counter =   Counter({'he': 10, 'she': 1,  'and': 10})
     >>> results = dunning_total(female_counter, male_counter)
@@ -136,7 +136,7 @@ def dunning_total(counter1, counter2, filename_to_pickle=None):
                 continue
 
             dunning_word = dunn_individual_word(total_words_counter1,  total_words_counter2,
-                                                 counter1_wordcount,counter2_wordcount)
+                                                counter1_wordcount,counter2_wordcount)
 
             dunning_result[word] = {
                 'dunning': dunning_word,

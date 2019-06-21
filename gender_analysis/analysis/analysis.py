@@ -16,6 +16,8 @@ from operator import itemgetter
 from gender_analysis.corpus import Corpus
 import seaborn as sns
 
+from gender_analysis.analysis.dunning import dunn_individual_word
+
 nltk.download('stopwords', quiet=True)
 
 stop_words = set(stopwords.words('english'))
@@ -204,6 +206,7 @@ def dunning_total(m_corpus, f_corpus):
 
     :return: dictionary of common word with dunning value and p value
 
+         >>> from gender_analysis.analysis.analysis import dunning_total
          >>> c = Corpus('sample_novels')
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')
@@ -228,7 +231,8 @@ def dunning_total(m_corpus, f_corpus):
         if word in wordcounter_female:
             wordcount_female = wordcounter_female[word]
 
-            dunning_word = dunn_individual_word(totalmale_words, totalfemale_words,wordcount_male, wordcount_female)
+            dunning_word = dunn_individual_word(totalmale_words, totalfemale_words,
+                                                wordcount_male, wordcount_female)
             dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
     dunning_result = sorted(dunning_result.items(), key=itemgetter(1))
 
@@ -268,7 +272,7 @@ def words_instance_dist(novel, words):
         ...                   'corpus_name': 'sample_novels', 'date': '1966',
         ...                   'filename': None, 'text': summary}
         >>> scarlett = document.Document(novel_metadata)
-        >>> pronoun_instance_dist(scarlett, ["his", "him", "he", "himself"])
+        >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
         [6, 5, 6, 6, 7]
 
         :param:novel
