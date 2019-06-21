@@ -42,22 +42,16 @@ class Document(common.FileLoaderMixin):
     """
 
     def __init__(self, metadata_dict):
-
-        if not hasattr(metadata_dict, 'items'):
-            raise ValueError(
-                'metadata_dict must be a dictionary or support .items()')
-
-        if not type(metadata_dict, dict):
+        if not isinstance(metadata_dict, dict):
             raise TypeError(
                 'metadata must be passed in as a dictionary value'
             )
-
 
         # Check that the essential attributes for the document exists.
         if 'filename' not in metadata_dict:
             raise ValueError(f'metadata_dict must have an entry for filename')
 
-        self.members = set(metadata_dict.keys())
+        self.members = metadata_dict.keys()
 
         # Check that the date is a year (4 consecutive integers)
         if 'date' in metadata_dict:
@@ -65,29 +59,19 @@ class Document(common.FileLoaderMixin):
                 raise ValueError('The novel date should be a year (4 integers), not',
                                  f'{metadata_dict["date"]}. Full metadata: {metadata_dict}')
 
-        for k in metadata_dict:
-            if hasattr(self, k):
+        for key in metadata_dict:
+            if hasattr(self, key):
                 raise KeyError(
-                    'Key name ', str(k), ' is reserved in the Document class. Please use another name'
+                    'Key name ', str(key), ' is reserved in the Document class. Please use another name'
                 )
-            setattr(self, k, metadata_dict[k])
+            setattr(self, key, metadata_dict[key])
 
         # optional attributes
-        try:
-            self.gutenberg_id = int(metadata_dict['gutenberg_id'])
-        except KeyError:
-            self.gutenberg_id = None
+
         self.country_publication = metadata_dict.get('country_publication', None)
         self.notes = metadata_dict.get('notes', None)
         self.author_gender = metadata_dict.get('author_gender', 'unknown')
-        try:
-            self.filename = metadata_dict['filename']
-        except KeyError:
-            if (self.gutenberg_id):
-                self.filename = str(self.gutenberg_id) + r".txt"
-            else:
-                raise ValueError('If you do not provide an explicit filename, you must provide the',
-                                 f'id. Full metadata: {metadata_dict}')
+
         self.subject = literal_eval(metadata_dict.get('subject', 'None'))
         try:
             self.date = int(metadata_dict['date'])
@@ -100,23 +84,13 @@ class Document(common.FileLoaderMixin):
             raise ValueError('Author gender has to be "female", "male" "non-binary," or "unknown" ',
                              f'but not {self.author_gender}. Full metadata: {metadata_dict}')
 
-        if 'text' in metadata_dict:
-            self.text = metadata_dict['text']
-        else:
-            # Check that the filename looks like a filename (ends in .txt)
-            if not self.filename.endswith('.txt'):
-                raise ValueError(
-                    f'The document filename ({self.filename}) should end in .txt . Full metadata: '
-                    f'{metadata_dict}.')
-            self.text = self._load_document_text()
+        if not metadata_dict['filename'].endswith('.txt'):
+            raise ValueError(
+                f'The document filename ', str(metadata_dict['filename']), 'does not end in .txt . Full metadata: '
+                f'{metadata_dict}.'
+            )
+        self.text = self._load_document_text()
 
-
-    def getmembers(self):
-        """
-        Returns set of metadata field names included for this document
-        :return: set
-        """
-        return self.members
 
     @property
     def word_count(self):
@@ -397,8 +371,7 @@ class Document(common.FileLoaderMixin):
 
         >>> from gender_analysis import document
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'corpus_name': 'sample_novels', 'filename': 'austen_persuasion.txt',
-        ...                   'text': '?!All-kinds %$< of pun*ct(uatio)n {a}nd sp+ecial cha/rs'}
+        ...                   'corpus_name': 'sample_novels', 'filename': 'test_text_1.txt'}
         >>> austin = document.Document(document_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
@@ -425,7 +398,7 @@ class Document(common.FileLoaderMixin):
         >>> test_text = '"This is a quote" and also "This is my quote"'
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'text' : test_text}
+        ...                   'filename': 'test_text_0.txt'}
         >>> document_novel = document.Document(document_metadata)
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
@@ -482,7 +455,7 @@ class Document(common.FileLoaderMixin):
         >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
-        ...                   'filename': None, 'text': summary}
+        ...                   'filename': 'summary_0.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_count_of_word("sad")
         4
@@ -510,7 +483,7 @@ class Document(common.FileLoaderMixin):
         >>> summary = "Hester was convicted of adultery was convicted."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
-        ...                   'filename': None, 'text': summary}
+        ...                   'filename': 'summary_8.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
@@ -537,7 +510,7 @@ class Document(common.FileLoaderMixin):
         >>> summary += " TBH i know nothing about this story."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
-        ...                   'filename': None, 'text': summary}
+        ...                   'filename': 'summary_9.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
@@ -570,7 +543,7 @@ class Document(common.FileLoaderMixin):
         >>> summary += "his speech which ended in a proposal. Her tears drowned the ring."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '2018',
-        ...                   'filename': None, 'text': summary}
+        ...                   'filename': 'summary_10.txt'}
         >>> scarlett = Document(document_metadata)
 
         # search_terms can be either a string...
@@ -613,7 +586,7 @@ class Document(common.FileLoaderMixin):
         >>> summary += "sad and then Arthur died and it was very sad.  Sadness."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',
-        ...                   'filename': None, 'text': summary}
+        ...                   'filename': 'summary_0.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> frequency = scarlett.get_word_freq('sad')
         >>> frequency
@@ -633,7 +606,7 @@ class Document(common.FileLoaderMixin):
         >>> summary = "They refuse to permit us to obtain the refuse permit."
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'sample_novels', 'date': '1900',
-        ...                   'filename': None, 'text': summary}
+        ...                   'filename': 'summary_11.txt'}
         >>> document = Document(document_metadata)
         >>> document.get_part_of_speech_tags()[:4]
         [('They', 'PRP'), ('refuse', 'VBP'), ('to', 'TO'), ('permit', 'VB')]

@@ -341,7 +341,7 @@ class Corpus(common.FileLoaderMixin):
         """
         metadata_fields = set()
         for novel in self.novels:
-            for field in novel.getmembers():
+            for field in novel.members:
                 metadata_fields.add(field)
         return sorted(list(metadata_fields))
 
