@@ -1,13 +1,13 @@
 import csv
 import random
 from nltk.tokenize import word_tokenize
-from pathlib import Path
+from pathlib import Path, PosixPath
 from collections import Counter
 from os import listdir
 
 from gender_analysis import common
 from gender_analysis.document import Document
-from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
+# from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
 
 
 class Corpus(common.FileLoaderMixin):
@@ -18,17 +18,12 @@ class Corpus(common.FileLoaderMixin):
     Once loaded, each corpus contains a list of Document objects
 
     >>> from gender_analysis.corpus import Corpus
-    >>> c = Corpus('sample_novels')
+    >>> c = Corpus('gender_analysis/corpora/sample_novels/texts')
     >>> type(c.novels), len(c)
     (<class 'list'>, 99)
 
     >>> c.novels[0].author
     'Aanrud, Hans'
-
-    You can use 'test_corpus' to load a test corpus of 10 novels:
-    >>> test_corpus = Corpus('test_corpus')
-    >>> len(test_corpus)
-    10
 
     """
 
@@ -44,7 +39,7 @@ class Corpus(common.FileLoaderMixin):
 
         if isinstance(path_to_files, str):
             path_to_files = Path(path_to_files)
-        if not isinstance(path_to_files, Path):
+        if not isinstance(path_to_files, PosixPath):
             raise ValueError(f'path_to_files must be a str or Path object, not type {type(path_to_files)}')
 
         self.name = name
@@ -61,7 +56,7 @@ class Corpus(common.FileLoaderMixin):
                 metadata_dict = {'filename': file}
                 self.novels.append(Document(metadata_dict))
         elif self.csv_path and self.path_to_files.suffix == '':
-            files = listdir(self.path_to_files)
+            self._load_novels()
 
         # if self.name == 'gutenberg' and csv_path is None:
         #     download_gutenberg_if_not_locally_available()
@@ -199,10 +194,8 @@ class Corpus(common.FileLoaderMixin):
 
         for novel_metadata in csv_reader:
             novel_metadata['name'] = self.name
-            this_novel = Document(document_metadata_dict=novel_metadata)
+            this_novel = Document(novel_metadata)
             novels.append(this_novel)
-            if self.load_test_corpus and len(novels) == 10:
-                break
 
         return sorted(novels)
 
