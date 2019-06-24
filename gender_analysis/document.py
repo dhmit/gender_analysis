@@ -205,7 +205,6 @@ class Document(common.FileLoaderMixin):
         if not isinstance(other, Document):
             raise NotImplementedError("Only a Document can be compared to another Document.")
 
-        # return (self.author, self.title, self.date) < (other.author, other.title, other.date)
         return self.filename < other.filename
 
     def __hash__(self):
