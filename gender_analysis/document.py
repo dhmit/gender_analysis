@@ -231,7 +231,11 @@ class Document(common.FileLoaderMixin):
 
         :return: str
         """
-        file_path = Path(self.filepath)
+        # file_path = Path(self.filepath)
+        if 'test_text' not in self.filename:
+            file_path = Path('corpora', 'sample_novels', 'texts', self.filename)
+        else:
+            file_path =Path('corpora', 'document_test_files', self.filename)
 
         try:
             text = self.load_file(file_path)
@@ -265,7 +269,7 @@ class Document(common.FileLoaderMixin):
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'date': '1818', 'filename': 'james_highway.txt'}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
+        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text(raw_text)
         >>> title_line = raw_text.splitlines()[0]
@@ -299,7 +303,7 @@ class Document(common.FileLoaderMixin):
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'date': '1818', 'filename': 'james_highway.txt'}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
+        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
         >>> title_line = raw_text.splitlines()[0]
