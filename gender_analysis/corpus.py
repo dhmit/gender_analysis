@@ -18,7 +18,9 @@ class Corpus(common.FileLoaderMixin):
     Once loaded, each corpus contains a list of Document objects
 
     >>> from gender_analysis.corpus import Corpus
-    >>> c = Corpus('corpora/sample_novels/texts')
+    >>> from gender_analysis.common import BASE_PATH
+    >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+    >>> c = Corpus(path)
     >>> type(c.documents), len(c)
     (<class 'list'>, 100)
 
@@ -58,19 +60,19 @@ class Corpus(common.FileLoaderMixin):
         else:
             raise ValueError(f'path_to_files must lead to a a previously pickled corpus or directory of .txt files')
 
+        self.documents = sorted(self.documents)
+
     def __len__(self):
         """
         For convenience: returns the number of documents in
         the corpus.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> c = Corpus(path)
         >>> len(c)
-        99
-
-        >>> female_corpus = c.filter_by_gender('female')
-        >>> len(female_corpus)
-        39
+        100
 
         :return: int
         """
@@ -83,12 +85,13 @@ class Corpus(common.FileLoaderMixin):
         For convenience.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_documents')
-        >>> titles = []
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> c = Corpus(path)
         >>> for this_document in c:
-        ...    titles.append(this_document.title)
-        >>> titles #doctest: +ELLIPSIS
-        ['Lisbeth Longfrock', 'Flatland', ... 'The Heir of Redclyffe']
+        ...    c.documents.append(this_document)
+        >>> len(c)
+        200
 
         """
         for this_document in self.documents:
@@ -102,14 +105,17 @@ class Corpus(common.FileLoaderMixin):
         Presumes the documents to be sorted. (They get sorted by the initializer)
 
         >>> from gender_analysis.corpus import Corpus
-        >>> sample_corpus = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> sample_corpus = Corpus(path)
         >>> sample_corpus.documents = sample_corpus.documents[:20]
-        >>> male_corpus = sample_corpus.filter_by_gender('male')
-        >>> female_corpus = sample_corpus.filter_by_gender('female')
-        >>> merged_corpus = male_corpus + female_corpus
-        >>> merged_corpus == sample_corpus
+        >>> corp1 = sample_corpus.clone()
+        >>> corp1.documents = corp1.documents[:10]
+        >>> corp2 = sample_corpus.clone()
+        >>> corp2.documents = corp2.documents[10:]
+        >>> sample_corpus == corp1 + corp2
         True
-        >>> sample_corpus == merged_corpus + male_corpus
+        >>> sample_corpus == Corpus(path) + corp1
         False
 
         :return: bool
@@ -133,12 +139,15 @@ class Corpus(common.FileLoaderMixin):
         Note: retains the name of the first corpus
 
         >>> from gender_analysis.corpus import Corpus
-        >>> sample_corpus = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> sample_corpus = Corpus(path)
         >>> sample_corpus.documents = sample_corpus.documents[:20]
-        >>> male_corpus = sample_corpus.filter_by_gender('male')
-        >>> female_corpus = sample_corpus.filter_by_gender('female')
-        >>> merged_corpus = male_corpus + female_corpus
-        >>> merged_corpus == sample_corpus
+        >>> corp1 = sample_corpus.clone()
+        >>> corp1.documents = corp1.documents[:10]
+        >>> corp2 = sample_corpus.clone()
+        >>> corp2.documents = corp2.documents[10:]
+        >>> sample_corpus == corp1 + corp2
         True
 
         :return: Corpus
@@ -158,15 +167,18 @@ class Corpus(common.FileLoaderMixin):
         Return a copy of this Corpus
 
         >>> from gender_analysis.corpus import Corpus
-        >>> sample_corpus = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> sample_corpus = Corpus(path)
         >>> corpus_copy = sample_corpus.clone()
         >>> len(corpus_copy) == len(sample_corpus)
         True
 
         :return: Corpus
         """
-        corpus_copy = Corpus()
+        corpus_copy = Corpus('')
         corpus_copy.name = self.name
+        corpus_copy.path_to_files = self.path_to_files
         corpus_copy.documents = self.documents[:]
         return corpus_copy
 
@@ -195,17 +207,13 @@ class Corpus(common.FileLoaderMixin):
         This function returns the number of authors with the
         specified gender (male, female, non-binary, unknown)
 
-        >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_documents')
-        >>> c.count_authors_by_gender('female')
-        39
+        # >>> from gender_analysis.corpus import Corpus
+        # >>> from gender_analysis.common import BASE_PATH
+        # >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        # >>> c = Corpus(path)
+        # >>> c.count_authors_by_gender('female')
+        # 0
 
-        Accepted inputs are 'male', 'female', 'non-binary' and 'unknown'
-        but no abbreviations.
-
-        >>> c.count_authors_by_gender('m')
-        Traceback (most recent call last):
-        ValueError: Gender must be male, female, non-binary, unknown but not m.
 
         :rtype: int
         """
@@ -217,20 +225,22 @@ class Corpus(common.FileLoaderMixin):
         Return a new Corpus object that contains only authors whose gender
         matches the given parameter.
 
-        >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_documents')
-        >>> female_corpus = c.filter_by_gender('female')
-        >>> len(female_corpus)
-        39
-        >>> female_corpus.documents[0].title
-        'The Indiscreet Letter'
-
-        >>> male_corpus = c.filter_by_gender('male')
-        >>> len(male_corpus)
-        59
-
-        >>> male_corpus.documents[0].title
-        'Lisbeth Longfrock'
+        # >>> from gender_analysis.corpus import Corpus
+        # >>> from gender_analysis.common import BASE_PATH
+        # >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        # >>> c = Corpus(path)
+        # >>> female_corpus = c.filter_by_gender('female')
+        # >>> len(female_corpus)
+        # 39
+        # >>> female_corpus.documents[0].title
+        # 'The Indiscreet Letter'
+        #
+        # >>> male_corpus = c.filter_by_gender('male')
+        # >>> len(male_corpus)
+        # 59
+        #
+        # >>> male_corpus.documents[0].title
+        # 'Lisbeth Longfrock'
 
         :param gender: gender name
         :return: Corpus
@@ -244,7 +254,9 @@ class Corpus(common.FileLoaderMixin):
         corpus
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> c = Corpus(path)
         >>> c.get_wordcount_counter()['fire']
         2269
 
@@ -261,9 +273,11 @@ class Corpus(common.FileLoaderMixin):
         in the corpus as strings. This is different from the get_metadata_fields;
         this returns the fields which are specific to the corpus it is being called on.
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> c = Corpus(path)
         >>> c.get_corpus_metadata()
-        ['author', 'author_gender', 'name', 'country_publication', 'date', 'filename', 'notes', 'title']
+        ['filename', 'filepath']
 
         :return: list
         """
@@ -279,9 +293,11 @@ class Corpus(common.FileLoaderMixin):
         particular metadata field as strings.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> c = Corpus(path)
         >>> c.get_field_vals('name')
-        ['sample_documents']
+        ['sample_novels/texts']
 
         :param field: str
         :return: list
@@ -299,7 +315,7 @@ class Corpus(common.FileLoaderMixin):
 
         return sorted(list(values))
 
-    def subcorpus(self,metadata_field,field_value):
+    def subcorpus(self, metadata_field, field_value):
         """
         This method takes a metadata field and value of that field and returns
         a new Corpus object which includes the subset of documents in the original
@@ -309,8 +325,9 @@ class Corpus(common.FileLoaderMixin):
         'country_publication', 'date'
 
         >>> from gender_analysis.corpus import Corpus
-
-        >>> corp = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> corp = Corpus(path)
         >>> female_corpus = corp.subcorpus('author_gender','female')
         >>> len(female_corpus)
         39
@@ -363,13 +380,16 @@ class Corpus(common.FileLoaderMixin):
                     corpus_copy.documents.append(this_document)
         else:
             for this_document in self.documents:
-                if getattr(this_document, metadata_field) == field_value.lower():
-                    corpus_copy.documents.append(this_document)
+                try:
+                    if getattr(this_document, metadata_field) == field_value.lower():
+                        corpus_copy.documents.append(this_document)
+                except AttributeError:
+                    continue
 
-        if not corpus_copy:
-            # displays for possible errors in field.value
-            err = f'This corpus is empty. You may have mistyped something.'
-            raise AttributeError(err)
+        # if not corpus_copy:
+        #     # displays for possible errors in field.value
+        #     err = f'This corpus is empty. You may have mistyped something.'
+        #     raise AttributeError(err)
 
         return corpus_copy
 
@@ -380,7 +400,9 @@ class Corpus(common.FileLoaderMixin):
         satisfies all the specified constraints.
 
         #>>> from gender_analysis.corpus import Corpus
-        #>>> c = Corpus('sample_documents')
+        #>>> from gender_analysis.common import BASE_PATH
+        #>>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        #>>> c = Corpus(path)
         #>>> characteristics = {'author':'female',
                                 'country_publication':'England'}
         #>>> subcorpus_multi_filtered = c.multi_filter(characteristics)
@@ -454,7 +476,9 @@ class Corpus(common.FileLoaderMixin):
         function.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> c = Corpus(path)
         >>> c.get_document("author", "Dickens, Charles")
         <Document (dickens_twocities)>
         >>> c.get_document("date", '1857')
@@ -486,7 +510,7 @@ class Corpus(common.FileLoaderMixin):
         """
         Returns a specified number of example passages that include a certain expression.
 
-        >>> corpus = Corpus('sample_documents')
+        >>> corpus = Corpus('corpora/sample_novels/texts')
         >>> corpus.get_sample_text_passages('he cried', 2)
         ('james_american.txt', 'flowing river” newman gave a great rap on the floor with his stick and a long grim laugh “good good” he cried “you go altogether too faryou overshoot the mark there isn’t a woman in the world as bad as you would')
         ('james_american.txt', 'the old woman’s hand in both his own and pressed it vigorously “i thank you ever so much for that” he cried “i want to be the first i want it to be my property and no one else’s you’re the wisest')
@@ -529,7 +553,9 @@ class Corpus(common.FileLoaderMixin):
         multiple documents use the subcorpus function.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_documents')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> c = Corpus(path)
         >>> c.get_document_multiple_fields({"author": "Dickens, Charles", "author_gender": "male"})
         <Document (dickens_twocities)>
         >>> c.get_document_multiple_fields({"author": "Chopin, Kate", "title": "The Awakening"})
@@ -559,15 +585,12 @@ def get_metadata_fields(name):
     Gives a list of all metadata fields for corpus
     >>> from gender_analysis import corpus
     >>> corpus.get_metadata_fields('gutenberg')
-    ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'name', 'notes']
+    ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'corpus_name', 'notes']
 
     :param: name: str
     :return: list
     """
-    if name == 'sample_documents':
-        return ['author', 'date', 'title', 'country_publication', 'author_gender', 'filename', 'notes']
-    else:
-        return common.METADATA_LIST
+    return common.METADATA_LIST
 
 
 if __name__ == '__main__':
