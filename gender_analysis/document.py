@@ -49,16 +49,16 @@ class Document(common.FileLoaderMixin):
 
         # Check that the essential attributes for the document exists.
         if 'filename' not in metadata_dict:
-            raise ValueError(f'metadata_dict must have an entry for filename')
+            raise ValueError(str(metadata_dict)+f'metadata_dict must have an entry for filename')
 
         self.members = metadata_dict.keys()
 
         for key in metadata_dict:
-            if hasattr(self, key):
+            if hasattr(self, str(key)):
                 raise KeyError(
                     'Key name ', str(key), ' is reserved in the Document class. Please use another name'
                 )
-            setattr(self, key, metadata_dict[key])
+            setattr(self, str(key), metadata_dict[key])
 
         # optional attributes
         # Check that the date is a year (4 consecutive integers)
@@ -205,7 +205,8 @@ class Document(common.FileLoaderMixin):
         if not isinstance(other, Document):
             raise NotImplementedError("Only a Document can be compared to another Document.")
 
-        return (self.author, self.title, self.date) < (other.author, other.title, other.date)
+        # return (self.author, self.title, self.date) < (other.author, other.title, other.date)
+        return self.filename < other.filename
 
     def __hash__(self):
         """

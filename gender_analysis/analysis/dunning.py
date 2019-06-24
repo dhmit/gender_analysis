@@ -52,12 +52,12 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     :param corpus2: Corpus
     :return: log likelihoods and p value
     # TODO: fix doctest for new corpus input
-    >>> total_words_m_corpus = 8648489
-    >>> total_words_f_corpus = 8700765
-    >>> wordcount_female = 1000
-    >>> wordcount_male = 50
-    >>> dunn_individual_word(total_words_m_corpus,total_words_f_corpus,wordcount_male,wordcount_female)
-    -1047.8610274053995
+    >>> from gender_analysis.corpus import Corpus
+    >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
+    >>> corpus1 = Corpus('document_test_files')
+    >>> corpus2 = Corpus('test_corpus')
+    >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
+    -332112.16673673474
     """
 
     counter1 = corpus1.get_wordcount_counter()
@@ -68,12 +68,6 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     c = 0  # total words in corpus1
     d = 0  # total words in corpus2
 
-    ''' SLOW
-    for document in corpus1.novels:
-        c += document.word_count
-    for document in corpus2.novels:
-        d += document.word_count
-    '''
     for word in counter1:
         c += counter1[word]
     for word in counter2:
