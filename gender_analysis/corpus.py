@@ -60,8 +60,6 @@ class Corpus(common.FileLoaderMixin):
         else:
             raise ValueError(f'path_to_files must lead to a a previously pickled corpus or directory of .txt files')
 
-        self.documents = sorted(self.documents)
-
     def __len__(self):
         """
         For convenience: returns the number of documents in
@@ -108,7 +106,7 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
-        >>> sample_corpus.documents = sample_corpus.documents[:20]
+        >>> sample_corpus.documents = sorted(sample_corpus.documents[:20])
         >>> corp1 = sample_corpus.clone()
         >>> corp1.documents = corp1.documents[:10]
         >>> corp2 = sample_corpus.clone()
@@ -142,7 +140,7 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
-        >>> sample_corpus.documents = sample_corpus.documents[:20]
+        >>> sample_corpus.documents = sorted(sample_corpus.documents[:20])
         >>> corp1 = sample_corpus.clone()
         >>> corp1.documents = corp1.documents[:10]
         >>> corp2 = sample_corpus.clone()
