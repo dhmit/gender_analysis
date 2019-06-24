@@ -29,7 +29,7 @@ GUTENBERG_RSYNC_PATH = Path(BASE_PATH, 'corpora', 'gutenberg_mirror_sample')
 
 def generate_corpus_gutenberg():
     """
-    Generate metadata sheet of all documents we want from gutenberg
+    Generate metadata sheet of all novels we want from gutenberg
     To test this run main
     """
 
@@ -58,12 +58,12 @@ def generate_corpus_gutenberg():
     # gutenberg_id-0.txt means utf8 file (preferred)
     filepaths = []
     for gutenberg_id in range(70000):
-        document_directory = generate_gutenberg_rsync_path(gutenberg_id)
-        utf8_path = document_directory.joinpath(f'{gutenberg_id}-0.txt')
+        novel_directory = generate_gutenberg_rsync_path(gutenberg_id)
+        utf8_path = novel_directory.joinpath(f'{gutenberg_id}-0.txt')
         if os.path.isfile(utf8_path):
             filepaths.append(utf8_path)
             continue
-        ascii_path = document_directory.joinpath(f'{gutenberg_id}.txt')
+        ascii_path = novel_directory.joinpath(f'{gutenberg_id}.txt')
         if os.path.isfile(ascii_path):
             filepaths.append(ascii_path)
 
@@ -76,14 +76,14 @@ def generate_corpus_gutenberg():
             start_book = time.time()
             print("Filepath:", filepath)
             print("ID:", gutenberg_id)
-            # check if book is valid document by our definition
-            if (not is_valid_document_gutenberg(gutenberg_id)):
-                print("Not a document")
+            # check if book is valid novel by our definition
+            if (not is_valid_novel_gutenberg(gutenberg_id)):
+                print("Not a novel")
                 print("Time for this book:", time.time() - start_book, "seconds")
                 print('')
                 continue
-            document_metadata = get_gutenberg_metadata_for_single_document(gutenberg_id)
-            write_metadata(document_metadata)
+            novel_metadata = get_gutenberg_metadata_for_single_novel(gutenberg_id)
+            write_metadata(novel_metadata)
 
             # Strip headers when storing the text file.
             with open(filepath, encoding='utf-8') as infile:
@@ -111,11 +111,11 @@ def generate_corpus_gutenberg():
     print("Average Time per Book", (end_time-corpus_gen_start_time) / number_books)
 
 
-def get_gutenberg_metadata_for_single_document(gutenberg_id):
+def get_gutenberg_metadata_for_single_novel(gutenberg_id):
     """
-    Retrieves the document_metadata dict for one gutenberg book based on the gutenberg_id
+    Retrieves the novel_metadata dict for one gutenberg book based on the gutenberg_id
 
-    >>> get_gutenberg_metadata_for_single_document(98) # doctest: +ELLIPSIS
+    >>> get_gutenberg_metadata_for_single_novel(98) # doctest: +ELLIPSIS
     {'gutenberg_id': 98, 'corpus_name': 'gutenberg', 'author': ['Dickens, Charles'], ...
 
     :param gutenberg_id: int
