@@ -405,15 +405,15 @@ class Document(common.FileLoaderMixin):
         ['"This is a quote"', '"This is my quote"']
 
         # TODO: Make this test pass
-        # >>> test_novel.text = 'Test case: "Miss A.E.--," [...] "a quote."'
-        # >>> test_novel.find_quoted_text()
+        # >>> test_document.text = 'Test case: "Miss A.E.--," [...] "a quote."'
+        # >>> test_document.find_quoted_text()
         # ['"Miss A.E.-- a quote."']
 
         # TODO: Make this test pass
         # One approach would be to find the shortest possible closed quote.
         #
-        # >>> test_novel.text = 'Test case: "Open quote. [...] "Closed quote."'
-        # >>> test_novel.find_quoted_text()
+        # >>> test_document.text = 'Test case: "Open quote. [...] "Closed quote."'
+        # >>> test_document.find_quoted_text()
         # ['"Closed quote."']
 
         TODO(Redlon & Murray): Add and statements so that a broken up quote is treated as a
