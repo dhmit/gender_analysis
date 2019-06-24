@@ -64,7 +64,7 @@ class Document(common.FileLoaderMixin):
         # Check that the date is a year (4 consecutive integers)
         if 'date' in metadata_dict:
             if not re.match(r'^\d{4}$', metadata_dict['date']):
-                raise ValueError('The novel date should be a year (4 integers), not',
+                raise ValueError('The document date should be a year (4 integers), not',
                                  f'{metadata_dict["date"]}. Full metadata: {metadata_dict}')
 
         try:
