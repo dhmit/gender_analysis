@@ -13,17 +13,14 @@ from gender_analysis.document import Document
 class Corpus(common.FileLoaderMixin):
 
     """The corpus class is used to load the metadata and full
-    texts of all novels in a corpus
+    texts of all documents in a corpus
 
     Once loaded, each corpus contains a list of Document objects
 
     >>> from gender_analysis.corpus import Corpus
-    >>> c = Corpus('gender_analysis/corpora/sample_novels/texts')
-    >>> type(c.novels), len(c)
-    (<class 'list'>, 99)
-
-    >>> c.novels[0].author
-    'Aanrud, Hans'
+    >>> c = Corpus('corpora/sample_novels/texts')
+    >>> type(c.documents), len(c)
+    (<class 'list'>, 100)
 
     """
 
@@ -39,40 +36,35 @@ class Corpus(common.FileLoaderMixin):
 
         if isinstance(path_to_files, str):
             path_to_files = Path(path_to_files)
-        if not isinstance(path_to_files, PosixPath):
+        if not isinstance(path_to_files, Path):
             raise ValueError(f'path_to_files must be a str or Path object, not type {type(path_to_files)}')
 
         self.name = name
         self.csv_path = csv_path
         self.path_to_files = path_to_files
-        self.novels = []
+        self.documents = []
 
         if self.path_to_files.suffix == '.pgz':
             pickle_data = common.load_pickle(self.path_to_files)
-            self.novels = pickle_data.novels
+            self.documents = pickle_data.documents
         elif self.path_to_files.suffix == '' and not self.csv_path:
             files = listdir(self.path_to_files)
             for file in files:
-                metadata_dict = {'filename': file}
-                self.novels.append(Document(metadata_dict))
+                if file.endswith('.txt'):
+                    metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
+                    self.documents.append(Document(metadata_dict))
         elif self.csv_path and self.path_to_files.suffix == '':
-            self._load_novels()
-
-        # if self.name == 'gutenberg' and csv_path is None:
-        #     download_gutenberg_if_not_locally_available()
-        #
-        # self.load_test_corpus = False
-        # if self.name == 'test_corpus' and csv_path is None:
-        #     self.load_test_corpus = True
-        #     self.name = 'sample_novels'
+            self._load_documents()
+        else:
+            raise ValueError(f'path_to_files must lead to a a previously pickled corpus or directory of .txt files')
 
     def __len__(self):
         """
-        For convenience: returns the number of novels in
+        For convenience: returns the number of documents in
         the corpus.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_novels')
+        >>> c = Corpus('sample_documents')
         >>> len(c)
         99
 
@@ -82,36 +74,36 @@ class Corpus(common.FileLoaderMixin):
 
         :return: int
         """
-        return len(self.novels)
+        return len(self.documents)
 
     def __iter__(self):
         """
-        Yield each of the novels from the .novels list.
+        Yield each of the documents from the .documents list.
 
         For convenience.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_novels')
+        >>> c = Corpus('sample_documents')
         >>> titles = []
-        >>> for this_novel in c:
-        ...    titles.append(this_novel.title)
+        >>> for this_document in c:
+        ...    titles.append(this_document.title)
         >>> titles #doctest: +ELLIPSIS
         ['Lisbeth Longfrock', 'Flatland', ... 'The Heir of Redclyffe']
 
         """
-        for this_novel in self.novels:
-            yield this_novel
+        for this_document in self.documents:
+            yield this_document
 
     def __eq__(self, other):
         """
-        Returns true if both corpora contain the same novels
+        Returns true if both corpora contain the same documents
         Note: ignores differences in the corpus name as that attribute is not used apart from
         initializing a corpus.
-        Presumes the novels to be sorted. (They get sorted by the initializer)
+        Presumes the documents to be sorted. (They get sorted by the initializer)
 
         >>> from gender_analysis.corpus import Corpus
-        >>> sample_corpus = Corpus('sample_novels')
-        >>> sample_corpus.novels = sample_corpus.novels[:20]
+        >>> sample_corpus = Corpus('sample_documents')
+        >>> sample_corpus.documents = sample_corpus.documents[:20]
         >>> male_corpus = sample_corpus.filter_by_gender('male')
         >>> female_corpus = sample_corpus.filter_by_gender('female')
         >>> merged_corpus = male_corpus + female_corpus
@@ -130,7 +122,7 @@ class Corpus(common.FileLoaderMixin):
             return False
 
         for i in range(len(self)):
-            if self.novels[i] != other.novels[i]:
+            if self.documents[i] != other.documents[i]:
                 return False
 
         return True
@@ -141,8 +133,8 @@ class Corpus(common.FileLoaderMixin):
         Note: retains the name of the first corpus
 
         >>> from gender_analysis.corpus import Corpus
-        >>> sample_corpus = Corpus('sample_novels')
-        >>> sample_corpus.novels = sample_corpus.novels[:20]
+        >>> sample_corpus = Corpus('sample_documents')
+        >>> sample_corpus.documents = sample_corpus.documents[:20]
         >>> male_corpus = sample_corpus.filter_by_gender('male')
         >>> female_corpus = sample_corpus.filter_by_gender('female')
         >>> merged_corpus = male_corpus + female_corpus
@@ -155,9 +147,9 @@ class Corpus(common.FileLoaderMixin):
             raise NotImplementedError("Only a Corpus can be added to another Corpus.")
 
         output_corpus = self.clone()
-        for novel in other:
-            output_corpus.novels.append(novel)
-        output_corpus.novels = sorted(output_corpus.novels)
+        for document in other:
+            output_corpus.documents.append(document)
+        output_corpus.documents = sorted(output_corpus.documents)
 
         return output_corpus
 
@@ -166,7 +158,7 @@ class Corpus(common.FileLoaderMixin):
         Return a copy of this Corpus
 
         >>> from gender_analysis.corpus import Corpus
-        >>> sample_corpus = Corpus('sample_novels')
+        >>> sample_corpus = Corpus('sample_documents')
         >>> corpus_copy = sample_corpus.clone()
         >>> len(corpus_copy) == len(sample_corpus)
         True
@@ -175,14 +167,12 @@ class Corpus(common.FileLoaderMixin):
         """
         corpus_copy = Corpus()
         corpus_copy.name = self.name
-        corpus_copy.novels = self.novels[:]
+        corpus_copy.documents = self.documents[:]
         return corpus_copy
 
-    def _load_novels(self):
-        novels = []
+    def _load_documents(self):
+        documents = []
 
-        # relative_csv_path = (self.relative_corpus_path
-        #                      / f'{self.name}.csv')
         try:
             csv_file = self.load_file(self.csv_path)
         except FileNotFoundError:
@@ -192,12 +182,13 @@ class Corpus(common.FileLoaderMixin):
             raise FileNotFoundError(err)
         csv_reader = csv.DictReader(csv_file)
 
-        for novel_metadata in csv_reader:
-            novel_metadata['name'] = self.name
-            this_novel = Document(novel_metadata)
-            novels.append(this_novel)
+        for document_metadata in csv_reader:
+            document_metadata['name'] = self.name
+            document_metadata['filepath'] = self.path_to_files / document_metadata['filename']
+            this_document = Document(document_metadata)
+            documents.append(this_document)
 
-        return sorted(novels)
+        return sorted(documents)
 
     def count_authors_by_gender(self, gender):
         """
@@ -205,7 +196,7 @@ class Corpus(common.FileLoaderMixin):
         specified gender (male, female, non-binary, unknown)
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_novels')
+        >>> c = Corpus('sample_documents')
         >>> c.count_authors_by_gender('female')
         39
 
@@ -227,18 +218,18 @@ class Corpus(common.FileLoaderMixin):
         matches the given parameter.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_novels')
+        >>> c = Corpus('sample_documents')
         >>> female_corpus = c.filter_by_gender('female')
         >>> len(female_corpus)
         39
-        >>> female_corpus.novels[0].title
+        >>> female_corpus.documents[0].title
         'The Indiscreet Letter'
 
         >>> male_corpus = c.filter_by_gender('male')
         >>> len(male_corpus)
         59
 
-        >>> male_corpus.novels[0].title
+        >>> male_corpus.documents[0].title
         'Lisbeth Longfrock'
 
         :param gender: gender name
@@ -253,15 +244,15 @@ class Corpus(common.FileLoaderMixin):
         corpus
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_novels')
+        >>> c = Corpus('sample_documents')
         >>> c.get_wordcount_counter()['fire']
         2269
 
         """
         corpus_counter = Counter()
-        for current_novel in self.novels:
-            novel_counter = current_novel.get_wordcount_counter()
-            corpus_counter += novel_counter
+        for current_document in self.documents:
+            document_counter = current_document.get_wordcount_counter()
+            corpus_counter += document_counter
         return corpus_counter
 
     def get_corpus_metadata(self):
@@ -270,15 +261,15 @@ class Corpus(common.FileLoaderMixin):
         in the corpus as strings. This is different from the get_metadata_fields;
         this returns the fields which are specific to the corpus it is being called on.
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_novels')
+        >>> c = Corpus('sample_documents')
         >>> c.get_corpus_metadata()
         ['author', 'author_gender', 'name', 'country_publication', 'date', 'filename', 'notes', 'title']
 
         :return: list
         """
         metadata_fields = set()
-        for novel in self.novels:
-            for field in novel.members:
+        for document in self.documents:
+            for field in document.members:
                 metadata_fields.add(field)
         return sorted(list(metadata_fields))
 
@@ -288,9 +279,9 @@ class Corpus(common.FileLoaderMixin):
         particular metadata field as strings.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_novels')
+        >>> c = Corpus('sample_documents')
         >>> c.get_field_vals('name')
-        ['sample_novels']
+        ['sample_documents']
 
         :param field: str
         :return: list
@@ -303,15 +294,15 @@ class Corpus(common.FileLoaderMixin):
             )
 
         values = set()
-        for novel in self.novels:
-            values.add(getattr(novel,field))
+        for document in self.documents:
+            values.add(getattr(document,field))
 
         return sorted(list(values))
 
     def subcorpus(self,metadata_field,field_value):
         """
         This method takes a metadata field and value of that field and returns
-        a new Corpus object which includes the subset of novels in the original
+        a new Corpus object which includes the subset of documents in the original
         Corpus that have the specified value for the specified field.
 
         Supported metadata fields are 'author', 'author_gender', 'name',
@@ -319,35 +310,35 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
 
-        >>> corp = Corpus('sample_novels')
+        >>> corp = Corpus('sample_documents')
         >>> female_corpus = corp.subcorpus('author_gender','female')
         >>> len(female_corpus)
         39
-        >>> female_corpus.novels[0].title
+        >>> female_corpus.documents[0].title
         'The Indiscreet Letter'
 
         >>> male_corpus = corp.subcorpus('author_gender','male')
         >>> len(male_corpus)
         59
-        >>> male_corpus.novels[0].title
+        >>> male_corpus.documents[0].title
         'Lisbeth Longfrock'
 
         >>> eighteen_fifty_corpus = corp.subcorpus('date','1850')
         >>> len(eighteen_fifty_corpus)
         1
-        >>> eighteen_fifty_corpus.novels[0].title
+        >>> eighteen_fifty_corpus.documents[0].title
         'The Scarlet Letter'
 
         >>> jane_austen_corpus = corp.subcorpus('author','Austen, Jane')
         >>> len(jane_austen_corpus)
         2
-        >>> jane_austen_corpus.novels[0].title
+        >>> jane_austen_corpus.documents[0].title
         'Emma'
 
         >>> england_corpus = corp.subcorpus('country_publication','England')
         >>> len(england_corpus)
         51
-        >>> england_corpus.novels[0].title
+        >>> england_corpus.documents[0].title
         'Flatland'
 
         :param metadata_field: str
@@ -363,17 +354,17 @@ class Corpus(common.FileLoaderMixin):
                 + f'but not {metadata_field}.')
 
         corpus_copy = self.clone()
-        corpus_copy.novels = []
+        corpus_copy.documents = []
 
-        # adds novels to corpus_copy
+        # adds documents to corpus_copy
         if metadata_field == 'date':
-            for this_novel in self.novels:
-                if this_novel.date == int(field_value):
-                    corpus_copy.novels.append(this_novel)
+            for this_document in self.documents:
+                if this_document.date == int(field_value):
+                    corpus_copy.documents.append(this_document)
         else:
-            for this_novel in self.novels:
-                if getattr(this_novel, metadata_field) == field_value.lower():
-                    corpus_copy.novels.append(this_novel)
+            for this_document in self.documents:
+                if getattr(this_document, metadata_field) == field_value.lower():
+                    corpus_copy.documents.append(this_document)
 
         if not corpus_copy:
             # displays for possible errors in field.value
@@ -389,7 +380,7 @@ class Corpus(common.FileLoaderMixin):
         satisfies all the specified constraints.
 
         #>>> from gender_analysis.corpus import Corpus
-        #>>> c = Corpus('sample_novels')
+        #>>> c = Corpus('sample_documents')
         #>>> characteristics = {'author':'female',
                                 'country_publication':'England'}
         #>>> subcorpus_multi_filtered = c.multi_filter(characteristics)
@@ -425,7 +416,7 @@ class Corpus(common.FileLoaderMixin):
                                      'country_publication', 'date')
 
         corpus_copy = self.clone()
-        corpus_copy.novels = []
+        corpus_copy.documents = []
 
         for metadata_field in characteristic_dict:
             if metadata_field not in supported_metadata_fields:
@@ -433,17 +424,17 @@ class Corpus(common.FileLoaderMixin):
                     f'Metadata field must be {", ".join(supported_metadata_fields)} '
                     + f'but not {metadata_field}.')
 
-        for this_novel in self.novels:
-            add_novel = True
+        for this_document in self.documents:
+            add_document = True
             for metadata_field in characteristic_dict:
                 if metadata_field == 'date':
-                    if this_novel.date != int(characteristic_dict['date']):
-                        add_novel = False
+                    if this_document.date != int(characteristic_dict['date']):
+                        add_document = False
                 else:
-                    if getattr(this_novel, metadata_field) != field_value:
-                        add_novel = False
-            if add_novel:
-                corpus_copy.novels.append(this_novel)
+                    if getattr(this_document, metadata_field) != field_value:
+                        add_document = False
+            if add_document:
+                corpus_copy.documents.append(this_document)
 
         if not corpus_copy:
             # displays for possible errors in field.value
@@ -452,24 +443,24 @@ class Corpus(common.FileLoaderMixin):
 
         return corpus_copy
 
-    def get_novel(self, metadata_field, field_val):
+    def get_document(self, metadata_field, field_val):
         """
-        Returns a specific Document object from self.novels that has metadata matching field_val for
+        Returns a specific Document object from self.documents that has metadata matching field_val for
         metadata_field.  Otherwise raises a ValueError.
-        N.B. This function will only return the first novel in the self.novels (which is sorted as
+        N.B. This function will only return the first document in the self.documents (which is sorted as
         defined by the Document.__lt__ function).  It should only be used if you're certain there is
         only one match in the Corpus or if you're not picky about which Document you get.  If you want
-        more selectivity use get_novel_multiple_fields, or if you want multiple novels use the subcorpus
+        more selectivity use get_document_multiple_fields, or if you want multiple documents use the subcorpus
         function.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_novels')
-        >>> c.get_novel("author", "Dickens, Charles")
+        >>> c = Corpus('sample_documents')
+        >>> c.get_document("author", "Dickens, Charles")
         <Document (dickens_twocities)>
-        >>> c.get_novel("date", '1857')
+        >>> c.get_document("date", '1857')
         <Document (bronte_professor)>
         >>> try:
-        ...     c.get_novel("meme_quality", "over 9000")
+        ...     c.get_document("meme_quality", "over 9000")
         ... except AttributeError as exception:
         ...     print(exception)
         Metadata field meme_quality invalid for this corpus
@@ -485,9 +476,9 @@ class Corpus(common.FileLoaderMixin):
         if (metadata_field == "date" or metadata_field == "gutenberg_id"):
             field_val = int(field_val)
 
-        for novel in self.novels:
-            if getattr(novel, metadata_field) == field_val:
-                return novel
+        for document in self.documents:
+            if getattr(document, metadata_field) == field_val:
+                return document
 
         raise ValueError("Document not found")
 
@@ -495,7 +486,7 @@ class Corpus(common.FileLoaderMixin):
         """
         Returns a specified number of example passages that include a certain expression.
 
-        >>> corpus = Corpus('sample_novels')
+        >>> corpus = Corpus('sample_documents')
         >>> corpus.get_sample_text_passages('he cried', 2)
         ('james_american.txt', 'flowing river” newman gave a great rap on the floor with his stick and a long grim laugh “good good” he cried “you go altogether too faryou overshoot the mark there isn’t a woman in the world as bad as you would')
         ('james_american.txt', 'the old woman’s hand in both his own and pressed it vigorously “i thank you ever so much for that” he cried “i want to be the first i want it to be my property and no one else’s you’re the wisest')
@@ -506,18 +497,18 @@ class Corpus(common.FileLoaderMixin):
         output = []
         phrase = word_tokenize(expression)
         random.seed(expression)
-        random_novels = self.novels.copy()
-        random.shuffle(random_novels)
+        random_documents = self.documents.copy()
+        random.shuffle(random_documents)
 
-        for novel in random_novels:
+        for document in random_documents:
             if count >= no_passages:
                 break
-            current_novel = novel.get_tokenized_text()
-            for index in range(len(current_novel)):
-                if current_novel[index] == phrase[0]:
-                    if current_novel[index:index+len(phrase)] == phrase:
-                        passage = " ".join(current_novel[index-20:index+len(phrase)+20])
-                        output.append((novel.filename, passage))
+            current_document = document.get_tokenized_text()
+            for index in range(len(current_document)):
+                if current_document[index] == phrase[0]:
+                    if current_document[index:index+len(phrase)] == phrase:
+                        passage = " ".join(current_document[index-20:index+len(phrase)+20])
+                        output.append((document.filename, passage))
                         count += 1
 
         random.shuffle(output)
@@ -528,20 +519,20 @@ class Corpus(common.FileLoaderMixin):
             print_count += 1
             print(entry)
 
-    def get_novel_multiple_fields(self, metadata_dict):
+    def get_document_multiple_fields(self, metadata_dict):
         """
-        Returns a specific Document object from self.novels that has metadata that matches a partial
+        Returns a specific Document object from self.documents that has metadata that matches a partial
         dict of metadata.  Otherwise raises a ValueError.
-        N.B. This method will only return the first novel in the self.novels (which is sorted as
+        N.B. This method will only return the first document in the self.documents (which is sorted as
         defined by the Document.__lt__ function).  It should only be used if you're certain there is
         only one match in the Corpus or if you're not picky about which Document you get.  If you want
-        multiple novels use the subcorpus function.
+        multiple documents use the subcorpus function.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> c = Corpus('sample_novels')
-        >>> c.get_novel_multiple_fields({"author": "Dickens, Charles", "author_gender": "male"})
+        >>> c = Corpus('sample_documents')
+        >>> c.get_document_multiple_fields({"author": "Dickens, Charles", "author_gender": "male"})
         <Document (dickens_twocities)>
-        >>> c.get_novel_multiple_fields({"author": "Chopin, Kate", "title": "The Awakening"})
+        >>> c.get_document_multiple_fields({"author": "Chopin, Kate", "title": "The Awakening"})
         <Document (chopin_awakening)>
 
         :param metadata_dict: dict
@@ -552,13 +543,13 @@ class Corpus(common.FileLoaderMixin):
             if field not in get_metadata_fields(self.name):
                 raise AttributeError(f"Metadata field {field} invalid for this corpus")
 
-        for novel in self.novels:
+        for document in self.documents:
             match = True
             for field, val in metadata_dict.items():
-                if getattr(novel, field) != val:
+                if getattr(document, field) != val:
                     match = False
             if match:
-                return novel
+                return document
 
         raise ValueError("Document not found")
 
@@ -573,7 +564,7 @@ def get_metadata_fields(name):
     :param: name: str
     :return: list
     """
-    if name == 'sample_novels':
+    if name == 'sample_documents':
         return ['author', 'date', 'title', 'country_publication', 'author_gender', 'filename', 'notes']
     else:
         return common.METADATA_LIST

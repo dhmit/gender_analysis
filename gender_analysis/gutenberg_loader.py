@@ -354,7 +354,7 @@ def get_author_gutenberg(gutenberg_id):
     """
     Gets author or authors for novel with this gutenberg id
 
-    >>> from gender_analysis import gutenburg_loader
+    >>> from gender_analysis import gutenberg_loader
     >>> get_author_gutenberg(33)
     ['Hawthorne, Nathaniel']
     >>> get_author_gutenberg(3178)
@@ -372,7 +372,7 @@ def get_title_gutenberg(gutenberg_id):
     """
     Gets title for novel with this gutenberg id
 
-    >>> from gender_analysis import gutenburg_loader
+    >>> from gender_analysis import gutenberg_loader
     >>> get_title_gutenberg(33)
     'The Scarlet Letter'
 
@@ -436,7 +436,7 @@ def get_publication_date(author, title, gutenberg_id):
     methods to try and find the publication date
     If it can't returns None
 
-    >>> from gender_analysis import gutenburg_loader
+    >>> from gender_analysis import gutenberg_loader
     >>> get_publication_date("Hawthorne, Nathaniel", "The Scarlet Letter", 33)
     1850
 
@@ -470,7 +470,7 @@ def get_publication_date_wikidata(author, title):
     Adventures of Huckleberry Finn).  Should it be tried to fix that?
     Function also doesn't use author parameter
 
-    >>> from gender_analysis import gutenburg_loader
+    >>> from gender_analysis import gutenberg_loader
     >>> get_publication_date_wikidata("Bacon, Francis", "Novum Organum")
     1620
     >>> get_publication_date_wikidata("Duan, Mingfei", "How I Became a Billionaire and also the President")
@@ -570,7 +570,7 @@ def get_country_publication(author, title):
     Don't separate countries of UK (England, Wales, etc.)
     TODO: should we separate those countries?  Easier to integrate later than separate
 
-    >>> from gender_analysis import gutenburg_loader
+    >>> from gender_analysis import gutenberg_loader
     >>> get_country_publication("Hawthorne, Nathaniel", "The Scarlet Letter")
     'United States'
 
@@ -589,7 +589,7 @@ def get_country_publication_wikidata(author, title):
     """
     Tries to get country of publication from wikidata
     Otherwise, returns None
-    >>> from gender_analysis import gutenburg_loader
+    >>> from gender_analysis import gutenberg_loader
     >>> get_country_publication_wikidata("Trump, Donald", "Trump: The Art of the Deal")
     'United States'
 
@@ -837,7 +837,7 @@ def get_subject_gutenberg(gutenberg_id):
     """
     Tries to get subjects
 
-    >>> from gender_analysis import gutenburg_loader
+    >>> from gender_analysis import gutenberg_loader
     >>> get_subject_gutenberg(5200)
     ['Metamorphosis -- Fiction', 'PT', 'Psychological fiction']
 
