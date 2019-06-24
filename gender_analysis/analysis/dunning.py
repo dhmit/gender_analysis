@@ -40,8 +40,6 @@ def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
     if count_of_word_in_corpus_1 * math.log(count_of_word_in_corpus_1 / e1) < 0:
         dunning_log_likelihood = -dunning_log_likelihood
 
-    p = 1 - chi2.cdf(abs(dunning_log_likelihood),1)
-
     return dunning_log_likelihood
 
 
@@ -54,32 +52,28 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     :param corpus2: Corpus
     :return: log likelihoods and p value
     # TODO: fix doctest for new corpus input
-    >>> total_words_m_corpus = 8648489
-    >>> total_words_f_corpus = 8700765
-    >>> wordcount_female = 1000
-    >>> wordcount_male = 50
-    >>> dunn_individual_word(total_words_m_corpus,total_words_f_corpus,wordcount_male,wordcount_female)
-    -1047.8610274053995
+    >>> from gender_analysis.corpus import Corpus
+    >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
+    >>> corpus1 = Corpus('document_test_files')
+    >>> corpus2 = Corpus('test_corpus')
+    >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
+    -332112.16673673474
     """
-    a = corpus1.get_wordcount_counter()[word]
-    b = corpus2.get_wordcount_counter()[word]
+
+    counter1 = corpus1.get_wordcount_counter()
+    counter2 = corpus2.get_wordcount_counter()
+
+    a = counter1[word]
+    b = counter2[word]
     c = 0  # total words in corpus1
     d = 0  # total words in corpus2
 
-    for document in corpus1.novels:
-        c += document.word_count
-    for document in corpus2.novels:
-        d += document.word_count
+    for word in counter1:
+        c += counter1[word]
+    for word in counter2:
+        d += counter2[word]
 
-    e1 = c * (a + b) / (c + d)
-    e2 = d * (a + b) / (c + d)
-
-    dunning_log_likelihood = 2 * (a * math.log(a / e1) + b * math.log(b / e2))
-
-    if a * math.log(a / e1) < 0:
-        dunning_log_likelihood = -dunning_log_likelihood
-
-    return dunning_log_likelihood
+    return dunn_individual_word(a, b, c, d)
 
 
 def dunning_total(counter1, counter2, filename_to_pickle=None):

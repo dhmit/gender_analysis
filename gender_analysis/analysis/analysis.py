@@ -16,7 +16,7 @@ from operator import itemgetter
 from gender_analysis.corpus import Corpus
 import seaborn as sns
 
-from gender_analysis.analysis.dunning import dunn_individual_word
+from gender_analysis.analysis.dunning import dunn_individual_word, dunn_individual_word_by_corpus
 
 nltk.download('stopwords', quiet=True)
 
@@ -204,6 +204,7 @@ def dunning_total(m_corpus, f_corpus):
     :return: dictionary of common word with dunning value and p value
 
          >>> from gender_analysis.analysis.analysis import dunning_total
+         >>> from gender_analysis.corpus import Corpus
          >>> c = Corpus('sample_novels')
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')
@@ -231,6 +232,17 @@ def dunning_total(m_corpus, f_corpus):
             dunning_word = dunn_individual_word(totalmale_words, totalfemale_words,
                                                 wordcount_male, wordcount_female)
             dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
+    '''
+    wordcounter_male = m_corpus.get_wordcount_counter()
+    wordcounter_female = f_corpus.get_wordcount_counter()
+    dunning_result = {}
+    for word in wordcounter_male:
+        wordcount_male = wordcounter_male[word]
+        if word in wordcounter_female:
+            wordcount_female = wordcounter_female[word]
+            dunning_word = dunn_individual_word_by_corpus(m_corpus, f_corpus, word)
+            dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
+    '''
     dunning_result = sorted(dunning_result.items(), key=itemgetter(1))
 
     return dunning_result
