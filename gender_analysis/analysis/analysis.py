@@ -16,7 +16,7 @@ from operator import itemgetter
 from gender_analysis.corpus import Corpus
 import seaborn as sns
 
-from gender_analysis.analysis.dunning import dunn_individual_word
+from gender_analysis.analysis.dunning import dunn_individual_word, dunn_individual_word_by_corpus
 
 nltk.download('stopwords', quiet=True)
 
@@ -30,17 +30,17 @@ sns.set_color_codes(palette)
 sns.set_style(style_name,style_list)
 
 
-def get_count_words(novel, words):
+def get_count_words(document, words):
     """
-    Takes in novel, a Novel object, and words, a list of words to be counted.
+    Takes in document, a Document object, and words, a list of words to be counted.
     Returns a dictionary where the keys are the elements of 'words' list
-    and the values are the numbers of occurences of the elements in the novel.
+    and the values are the numbers of occurences of the elements in the document.
     N.B.: Not case-sensitive.
     >>> from gender_analysis import document
-    >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'document_test_files', 'date': '1850',
     ...                   'filename': 'test_text_2.txt'}
-    >>> scarlett = document.Document(novel_metadata)
+    >>> scarlett = document.Document(document_metadata)
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
 
@@ -49,7 +49,7 @@ def get_count_words(novel, words):
     """
     dic_word_counts = {}
     for word in words:
-        dic_word_counts[word] = novel.get_count_of_word(word)
+        dic_word_counts[word] = document.get_count_of_word(word)
     return dic_word_counts
 
 
@@ -62,10 +62,10 @@ def get_comparative_word_freq(freqs):
     :return: dictionary
 
     >>> from gender_analysis import document
-    >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': 'hawthorne_scarlet.txt'}
-    >>> scarlet = document.Document(novel_metadata)
+    >>> scarlet = document.Document(document_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
     {'he': 0.0073307821095431715, 'she': 0.005895718727577134}
@@ -127,7 +127,7 @@ def display_gender_freq(d, title):
 
     Will scale to allow inputs of larger dictionaries with non-binary values
 
-    :param d: dictionary in the format {"Author/Novel": [he_freq, she_freq]}
+    :param d: dictionary in the format {"Author/Document": [he_freq, she_freq]}
     :param title: title of graph
     :return:
     """
@@ -171,24 +171,24 @@ def display_gender_freq(d, title):
 
 def run_gender_freq(corpus):
     """
-    Runs a program that uses the gender frequency analysis on all novels existing in a given
+    Runs a program that uses the gender frequency analysis on all documents existing in a given
     corpus, and outputs the data as graphs
     :param corpus:
     :return:
     """
-    novels = corpus.novels
-    c = len(novels)
+    documents = corpus.documents
+    c = len(documents)
     loops = c//10 + 1
 
     num = 0
 
     while num < loops:
         dictionary = {}
-        for novel in novels[num * 10: min(c, num * 10 + 9)]:
-            d = {'he': novel.get_word_freq('he'), 'she': novel.get_word_freq('she')}
+        for document in documents[num * 10: min(c, num * 10 + 9)]:
+            d = {'he': document.get_word_freq('he'), 'she': document.get_word_freq('she')}
             d = get_comparative_word_freq(d)
             lst = [d["he"], d["she"]]
-            book = novel.title[0:20] + "\n" + novel.author
+            book = document.title[0:20] + "\n" + document.author
             dictionary[book] = lst
         display_gender_freq(dictionary, str(num))
         num += 1
@@ -204,6 +204,7 @@ def dunning_total(m_corpus, f_corpus):
     :return: dictionary of common word with dunning value and p value
 
          >>> from gender_analysis.analysis.analysis import dunning_total
+         >>> from gender_analysis.corpus import Corpus
          >>> c = Corpus('sample_novels')
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')
@@ -231,45 +232,56 @@ def dunning_total(m_corpus, f_corpus):
             dunning_word = dunn_individual_word(totalmale_words, totalfemale_words,
                                                 wordcount_male, wordcount_female)
             dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
+    '''
+    wordcounter_male = m_corpus.get_wordcount_counter()
+    wordcounter_female = f_corpus.get_wordcount_counter()
+    dunning_result = {}
+    for word in wordcounter_male:
+        wordcount_male = wordcounter_male[word]
+        if word in wordcounter_female:
+            wordcount_female = wordcounter_female[word]
+            dunning_word = dunn_individual_word_by_corpus(m_corpus, f_corpus, word)
+            dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
+    '''
     dunning_result = sorted(dunning_result.items(), key=itemgetter(1))
 
     return dunning_result
 
 
-def instance_dist(novel, word):
+def instance_dist(document, word):
     """
-    Takes in a particular word, returns a list of distances between each instance of that word in the novel.
+    Takes in a particular word, returns a list of distances between each instance of that word in the document.
     >>> from gender_analysis import document
-    >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'document_test_files', 'date': '1966',
     ...                   'filename': 'test_text_3.txt'}
-    >>> scarlett = document.Document(novel_metadata)
+    >>> scarlett = document.Document(document_metadata)
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
 
-    :param:novel to analyze, gendered word
+    :param:document to analyze, gendered word
     :return: list of distances between instances of gendered word
 
     """
-    return words_instance_dist(novel, [word])
+    return words_instance_dist(document, [word])
 
 
-def words_instance_dist(novel, words):
+def words_instance_dist(document, words):
     """
-        Takes in a novel and list of gender pronouns, returns a list of distances between each
-        instance of a pronoun in that novel
+        Takes in a document and list of gender pronouns, returns a list of distances between each
+        instance of a pronoun in that document
         >>> from gender_analysis import document
-        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'document_test_files', 'date': '1966',
         ...                   'filename': 'test_text_4.txt'}
-        >>> scarlett = document.Document(novel_metadata)
+        >>> scarlett = document.Document(document_metadata)
         >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
         [6, 5, 6, 6, 7]
 
-        :param:novel
+        :param:document
         :return: list of distances between instances of pronouns
     """
-    text = novel.get_tokenized_text()
+    text = document.get_tokenized_text()
     output = []
     count = 0
     start = False
@@ -287,64 +299,64 @@ def words_instance_dist(novel, words):
     return output
 
 
-def male_instance_dist(novel):
+def male_instance_dist(document):
     """
-        Takes in a novel, returns a list of distances between each instance of a female pronoun in that novel
+        Takes in a document, returns a list of distances between each instance of a female pronoun in that document
        >>> from gender_analysis import document
-       >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'document_test_files', 'date': '1966',
        ...                   'filename': 'test_text_5.txt'}
-       >>> scarlett = document.Document(novel_metadata)
+       >>> scarlett = document.Document(document_metadata)
        >>> male_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
 
-       :param: novel
+       :param: document
        :return: list of distances between instances of gendered word
     """
-    return words_instance_dist(novel, ["his", "him", "he", "himself"])
+    return words_instance_dist(document, ["his", "him", "he", "himself"])
 
 
-def female_instance_dist(novel):
+def female_instance_dist(document):
     """
-        Takes in a novel, returns a list of distances between each instance of a female pronoun in that novel
+        Takes in a document, returns a list of distances between each instance of a female pronoun in that document
        >>> from gender_analysis import document
-       >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'document_test_files', 'date': '1966',
        ...                   'filename': 'test_text_6.txt'}
-       >>> scarlett = document.Document(novel_metadata)
+       >>> scarlett = document.Document(document_metadata)
        >>> female_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
 
-       :param: novel
+       :param: document
        :return: list of distances between instances of gendered word
     """
-    return words_instance_dist(novel, ["her", "hers", "she", "herself"])
+    return words_instance_dist(document, ["her", "hers", "she", "herself"])
 
 
-def find_gender_adj(novel, female):
+def find_gender_adj(document, female):
     """
-        Takes in a novel and boolean indicating gender, returns a dictionary of adjectives that appear within
+        Takes in a document and boolean indicating gender, returns a dictionary of adjectives that appear within
         a window of 5 words around each pronoun
         >>> from gender_analysis import document
-        >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'document_test_files', 'date': '1966',
         ...                   'filename': 'test_text_7.txt'}
-        >>> scarlett = document.Document(novel_metadata)
+        >>> scarlett = document.Document(document_metadata)
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}
 
-        :param:novel, boolean indicating whether to search for female adjectives (true) or male adj (false)
+        :param:document, boolean indicating whether to search for female adjectives (true) or male adj (false)
         :return: dictionary of adjectives that appear around male pronouns and the number of occurences
     """
     output = {}
-    text = novel.get_tokenized_text()
+    text = document.get_tokenized_text()
 
     if female:
-        distances = female_instance_dist(novel)
+        distances = female_instance_dist(document)
         pronouns1 = ["her", "hers", "she", "herself"]
         pronouns2 = ["his", "him", "he", "himself"]
     else:
-        distances = male_instance_dist(novel)
+        distances = male_instance_dist(document)
         pronouns1 = ["his", "him", "he", "himself"]
         pronouns2 = ["her", "hers", "she", "herself"]
     if len(distances) == 0:
@@ -376,39 +388,39 @@ def find_gender_adj(novel, female):
     return output
 
 
-def find_male_adj(novel):
+def find_male_adj(document):
     """
-        Takes in a novel, returns a dictionary of adjectives that appear within a window of 5 words around each male pronoun
+        Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each male pronoun
        >>> from gender_analysis import document
-       >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'document_test_files', 'date': '1966',
        ...                   'filename': 'test_text_8.txt'}
-       >>> scarlett = document.Document(novel_metadata)
+       >>> scarlett = document.Document(document_metadata)
        >>> find_male_adj(scarlett)
        {'handsome': 3, 'sad': 1}
 
-       :param:novel
+       :param:document
        :return: dictionary of adjectives that appear around male pronouns and the number of occurences
     """
-    return find_gender_adj(novel, False)
+    return find_gender_adj(document, False)
 
 
-def find_female_adj(novel):
+def find_female_adj(document):
     """
-        Takes in a novel, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun
+        Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun
        >>> from gender_analysis import document
-       >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'document_test_files', 'date': '1966',
        ...                   'filename': 'test_text_9.txt'}
-       >>> scarlett = document.Document(novel_metadata)
+       >>> scarlett = document.Document(document_metadata)
        >>> find_female_adj(scarlett)
        {'beautiful': 3, 'sad': 1}
 
-       :param:novel
+       :param:document
        :return: dictionary of adjectives that appear around female pronouns and the number of occurences
 
        """
-    return find_gender_adj(novel, True)
+    return find_gender_adj(document, True)
 
 
 def process_medians(helst, shelst, authlst):
@@ -560,13 +572,13 @@ def instance_stats(book, medians1, medians2, title):
 
 def run_dist_inst(corpus):
     """
-    Runs a program that uses the instance distance analysis on all novels existing in a given
+    Runs a program that uses the instance distance analysis on all documents existing in a given
     corpus, and outputs the data as graphs
     :param corpus:
     :return:
     """
-    novels = corpus.novels
-    c = len(novels)
+    documents = corpus.documents
+    c = len(documents)
     loops = c//10 + 1
 
     num = 0
@@ -575,9 +587,9 @@ def run_dist_inst(corpus):
         medians_he = []
         medians_she = []
         books = []
-        for novel in novels[num * 10: min(c, num * 10 + 9)]:
-            result_he = instance_dist(novel, "he")
-            result_she = instance_dist(novel, "she")
+        for document in documents[num * 10: min(c, num * 10 + 9)]:
+            result_he = instance_dist(document, "he")
+            result_she = instance_dist(document, "she")
             try:
                 medians_he.append(median(result_he))
             except:
@@ -586,7 +598,7 @@ def run_dist_inst(corpus):
                 medians_she.append(median(result_she))
             except:
                 medians_she.append(0)
-            books.append(novel.title[0:20] + "\n" + novel.author)
+            books.append(document.title[0:20] + "\n" + document.author)
         d = process_medians(helst=medians_he, shelst=medians_she, authlst=books)
         d = bubble_sort_across_lists(d)
         instance_stats(d["book"], d["he"], d["she"], "inst_dist" + str(num))

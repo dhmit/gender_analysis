@@ -508,11 +508,11 @@ class Corpus(common.FileLoaderMixin):
         """
         Returns a specified number of example passages that include a certain expression.
 
+        >>> from gender_analysis.corpus import Corpus
         >>> corpus = Corpus('corpora/sample_novels/texts')
         >>> corpus.get_sample_text_passages('he cried', 2)
-        ('james_american.txt', 'flowing river” newman gave a great rap on the floor with his stick and a long grim laugh “good good” he cried “you go altogether too faryou overshoot the mark there isn’t a woman in the world as bad as you would')
-        ('james_american.txt', 'the old woman’s hand in both his own and pressed it vigorously “i thank you ever so much for that” he cried “i want to be the first i want it to be my property and no one else’s you’re the wisest')
-
+        ('james_highway.txt', 'in less than an hour this place shall be surrounded by a hundred men plessis hesitated no longer force majeure he cried force majeure no one can resist that what am i to do i will act exactly according to your bidding')
+        ('james_highway.txt', 'that you love me have you not neglected me have you not forgotten me have you not never never caroline he cried vehementlyin my wildest follies in my rashest acts i have thought of you and loved you i have remembered you')
         """
 
         count = 0

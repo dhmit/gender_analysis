@@ -49,22 +49,22 @@ class Document(common.FileLoaderMixin):
 
         # Check that the essential attributes for the document exists.
         if 'filename' not in metadata_dict:
-            raise ValueError(f'metadata_dict must have an entry for filename')
+            raise ValueError(str(metadata_dict)+f'metadata_dict must have an entry for filename')
 
         self.members = metadata_dict.keys()
 
         for key in metadata_dict:
-            if hasattr(self, key):
+            if hasattr(self, str(key)):
                 raise KeyError(
                     'Key name ', str(key), ' is reserved in the Document class. Please use another name'
                 )
-            setattr(self, key, metadata_dict[key])
+            setattr(self, str(key), metadata_dict[key])
 
         # optional attributes
         # Check that the date is a year (4 consecutive integers)
         if 'date' in metadata_dict:
             if not re.match(r'^\d{4}$', metadata_dict['date']):
-                raise ValueError('The novel date should be a year (4 integers), not',
+                raise ValueError('The document date should be a year (4 integers), not',
                                  f'{metadata_dict["date"]}. Full metadata: {metadata_dict}')
 
         try:
@@ -399,15 +399,15 @@ class Document(common.FileLoaderMixin):
         ['"This is a quote"', '"This is my quote"']
 
         # TODO: Make this test pass
-        # >>> test_novel.text = 'Test case: "Miss A.E.--," [...] "a quote."'
-        # >>> test_novel.find_quoted_text()
+        # >>> test_document.text = 'Test case: "Miss A.E.--," [...] "a quote."'
+        # >>> test_document.find_quoted_text()
         # ['"Miss A.E.-- a quote."']
 
         # TODO: Make this test pass
         # One approach would be to find the shortest possible closed quote.
         #
-        # >>> test_novel.text = 'Test case: "Open quote. [...] "Closed quote."'
-        # >>> test_novel.find_quoted_text()
+        # >>> test_document.text = 'Test case: "Open quote. [...] "Closed quote."'
+        # >>> test_document.find_quoted_text()
         # ['"Closed quote."']
 
         TODO(Redlon & Murray): Add and statements so that a broken up quote is treated as a
