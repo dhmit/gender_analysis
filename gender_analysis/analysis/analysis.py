@@ -204,11 +204,8 @@ def dunning_total(m_corpus, f_corpus):
     :return: dictionary of common word with dunning value and p value
 
          >>> from gender_analysis.analysis.analysis import dunning_total
-         >>> from pathlib import Path
          >>> from gender_analysis.corpus import Corpus
-         >>> import os
-         >>> BASE_PATH = Path(os.path.abspath(os.path.dirname(os.getcwd())))
-         >>> c = Corpus(Path(BASE_PATH, 'corpora', 'sample_novels'))
+         >>> c = Corpus('sample_novels')
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')
          >>> result = dunning_total(m_corpus, f_corpus)
