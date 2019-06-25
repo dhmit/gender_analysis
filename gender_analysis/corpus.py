@@ -296,9 +296,9 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
         >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
-        >>> c = Corpus(path, csv_path=csvpath)
+        >>> c = Corpus(path, name='sample_novels', csv_path=csvpath)
         >>> c.get_field_vals('name')
-        ['sample_novels/texts']
+        ['sample_novels']
 
         :param field: str
         :return: list
@@ -383,7 +383,8 @@ class Corpus(common.FileLoaderMixin):
         else:
             for this_document in self.documents:
                 try:
-                    if getattr(this_document, metadata_field) == field_value.lower():
+                    this_value = getattr(this_document, metadata_field, None)
+                    if this_value is not None and this_value.lower() == field_value.lower():
                         corpus_copy.documents.append(this_document)
                 except AttributeError:
                     continue
@@ -514,10 +515,12 @@ class Corpus(common.FileLoaderMixin):
         Returns a specified number of example passages that include a certain expression.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> corpus = Corpus('corpora/sample_novels/texts')
+        >>> from gender_analysis.common import BASE_PATH
+        >>> filepath = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> corpus = Corpus(filepath)
         >>> corpus.get_sample_text_passages('he cried', 2)
-        ('james_highway.txt', 'in less than an hour this place shall be surrounded by a hundred men plessis hesitated no longer force majeure he cried force majeure no one can resist that what am i to do i will act exactly according to your bidding')
-        ('james_highway.txt', 'that you love me have you not neglected me have you not forgotten me have you not never never caroline he cried vehementlyin my wildest follies in my rashest acts i have thought of you and loved you i have remembered you')
+        ('austen_emma.txt', 'janes countenance that she too was really hearing him though trying to seem deaf “such an extraordinary dream of mine” he cried “i can never think of it without laughingshe hears us she hears us miss woodhouse i see it in her')
+        ('austen_emma.txt', 'most beloved emmatell me at once say no if it is to be said”she could really say nothing“you are silent” he cried with great animation “absolutely silent at present i ask no more” emma was almost ready to sink under the agitation')
         """
 
         count = 0
