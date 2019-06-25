@@ -518,11 +518,12 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.common import BASE_PATH
         >>> filepath = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
         >>> corpus = Corpus(filepath)
-        >>> corpus.get_sample_text_passages('he cried', 2)
-        ('austen_emma.txt', 'janes countenance that she too was really hearing him though trying to seem deaf “such an extraordinary dream of mine” he cried “i can never think of it without laughingshe hears us she hears us miss woodhouse i see it in her')
-        ('austen_emma.txt', 'most beloved emmatell me at once say no if it is to be said”she could really say nothing“you are silent” he cried with great animation “absolutely silent at present i ask no more” emma was almost ready to sink under the agitation')
+        >>> results = corpus.get_sample_text_passages('he cried', 2)
+        >>> 'he cried' in results[0][1]
+        True
+        >>> 'he cried' in results[1][1]
+        True
         """
-
         count = 0
         output = []
         phrase = word_tokenize(expression)
@@ -541,6 +542,7 @@ class Corpus(common.FileLoaderMixin):
                         output.append((document.filename, passage))
                         count += 1
 
+        '''
         random.shuffle(output)
         print_count = 0
         for entry in output:
@@ -548,6 +550,10 @@ class Corpus(common.FileLoaderMixin):
                 break
             print_count += 1
             print(entry)
+        '''
+        if len(output) <= no_passages:
+            return output
+        return output[:no_passages]
 
     def get_document_multiple_fields(self, metadata_dict):
         """
