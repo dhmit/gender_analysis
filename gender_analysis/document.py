@@ -49,22 +49,22 @@ class Document(common.FileLoaderMixin):
 
         # Check that the essential attributes for the document exists.
         if 'filename' not in metadata_dict:
-            raise ValueError(f'metadata_dict must have an entry for filename')
+            raise ValueError(str(metadata_dict)+f'metadata_dict must have an entry for filename')
 
         self.members = metadata_dict.keys()
 
         for key in metadata_dict:
-            if hasattr(self, key):
+            if hasattr(self, str(key)):
                 raise KeyError(
                     'Key name ', str(key), ' is reserved in the Document class. Please use another name'
                 )
-            setattr(self, key, metadata_dict[key])
+            setattr(self, str(key), metadata_dict[key])
 
         # optional attributes
         # Check that the date is a year (4 consecutive integers)
         if 'date' in metadata_dict:
             if not re.match(r'^\d{4}$', metadata_dict['date']):
-                raise ValueError('The novel date should be a year (4 integers), not',
+                raise ValueError('The document date should be a year (4 integers), not',
                                  f'{metadata_dict["date"]}. Full metadata: {metadata_dict}')
 
         try:
@@ -205,7 +205,10 @@ class Document(common.FileLoaderMixin):
         if not isinstance(other, Document):
             raise NotImplementedError("Only a Document can be compared to another Document.")
 
-        return (self.author, self.title, self.date) < (other.author, other.title, other.date)
+        try:
+            return (self.author, self.title, self.date) < (other.author, other.title, other.date)
+        except AttributeError:
+            return self.filename < other.filename
 
     def __hash__(self):
         """
@@ -228,7 +231,11 @@ class Document(common.FileLoaderMixin):
 
         :return: str
         """
-        file_path = Path(self.filepath)
+        # file_path = Path(self.filepath)
+        if 'test_text' not in self.filename:
+            file_path = Path('corpora', 'sample_novels', 'texts', self.filename)
+        else:
+            file_path =Path('corpora', 'document_test_files', self.filename)
 
         try:
             text = self.load_file(file_path)
@@ -262,7 +269,7 @@ class Document(common.FileLoaderMixin):
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'date': '1818', 'filename': 'james_highway.txt'}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
+        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text(raw_text)
         >>> title_line = raw_text.splitlines()[0]
@@ -296,7 +303,7 @@ class Document(common.FileLoaderMixin):
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'date': '1818', 'filename': 'james_highway.txt'}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
+        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
         >>> title_line = raw_text.splitlines()[0]
@@ -392,15 +399,15 @@ class Document(common.FileLoaderMixin):
         ['"This is a quote"', '"This is my quote"']
 
         # TODO: Make this test pass
-        # >>> test_novel.text = 'Test case: "Miss A.E.--," [...] "a quote."'
-        # >>> test_novel.find_quoted_text()
+        # >>> test_document.text = 'Test case: "Miss A.E.--," [...] "a quote."'
+        # >>> test_document.find_quoted_text()
         # ['"Miss A.E.-- a quote."']
 
         # TODO: Make this test pass
         # One approach would be to find the shortest possible closed quote.
         #
-        # >>> test_novel.text = 'Test case: "Open quote. [...] "Closed quote."'
-        # >>> test_novel.find_quoted_text()
+        # >>> test_document.text = 'Test case: "Open quote. [...] "Closed quote."'
+        # >>> test_document.find_quoted_text()
         # ['"Closed quote."']
 
         TODO(Redlon & Murray): Add and statements so that a broken up quote is treated as a
