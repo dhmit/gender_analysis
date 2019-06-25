@@ -84,12 +84,13 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'corpora' / 'test_corpus'
         >>> c = Corpus(path)
-        >>> for this_document in c:
-        ...    c.documents.append(this_document)
-        >>> len(c)
-        200
+        >>> docs = []
+        >>> for doc in c:
+        ...    docs.append(doc)
+        >>> len(docs)
+        10
 
         """
         for this_document in self.documents:
@@ -254,7 +255,8 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> c = Corpus(path)
+        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_wordcount_counter()['fire']
         2269
 
@@ -293,7 +295,8 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> c = Corpus(path)
+        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_field_vals('name')
         ['sample_novels/texts']
 
@@ -309,7 +312,7 @@ class Corpus(common.FileLoaderMixin):
 
         values = set()
         for document in self.documents:
-            values.add(getattr(document,field))
+            values.add(getattr(document, field))
 
         return sorted(list(values))
 
@@ -325,7 +328,8 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> corp = Corpus(path)
+        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> corp = Corpus(path, csv_path=csvpath)
         >>> female_corpus = corp.subcorpus('author_gender','female')
         >>> len(female_corpus)
         39
@@ -476,7 +480,8 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> c = Corpus(path)
+        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_document("author", "Dickens, Charles")
         <Document (dickens_twocities)>
         >>> c.get_document("date", '1857')
@@ -553,7 +558,8 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> c = Corpus(path)
+        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_document_multiple_fields({"author": "Dickens, Charles", "author_gender": "male"})
         <Document (dickens_twocities)>
         >>> c.get_document_multiple_fields({"author": "Chopin, Kate", "title": "The Awakening"})
@@ -570,7 +576,7 @@ class Corpus(common.FileLoaderMixin):
         for document in self.documents:
             match = True
             for field, val in metadata_dict.items():
-                if getattr(document, field) != val:
+                if getattr(document, field, None) != val:
                     match = False
             if match:
                 return document
