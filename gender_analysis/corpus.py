@@ -56,7 +56,7 @@ class Corpus(common.FileLoaderMixin):
                     metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
                     self.documents.append(Document(metadata_dict))
         elif self.csv_path and self.path_to_files.suffix == '':
-            self._load_documents()
+            self.documents = self._load_documents()
         else:
             raise ValueError(f'path_to_files must lead to a a previously pickled corpus or directory of .txt files')
 
