@@ -397,9 +397,25 @@ class Corpus(common.FileLoaderMixin):
 
     def multi_filter(self, characteristic_dict):
         """
-        This needs documentation and tests but it's 5:59! To be added after moratorium.
-        :param characteristic_dict:
+        Returns a copy of the corpus, but with only the documents that fulfill the metadata parameters passed in by
+        characteristic_dict. Multiple metadata keys can be searched at one time, provided that the metadata is
+        available for the documents in the corpus.
+
+        :param characteristic_dict: Dictionary of metadata keys and search terms as
         :return:
+
+        >>> from gender_analysis.corpus import Corpus
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path_to_csv = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> c = Corpus(path, csv_path=path_to_csv)
+        >>> corpus_filter = {'author_gender': 'male'}
+        >>> len(c.multi_filter(corpus_filter))
+        59
+
+        >>> corpus_filter['filename'] = 'aanrud_longfrock.txt'
+        >>> len(c.multi_filter(corpus_filter))
+        1
         """
         supported_metadata_fields = self.get_corpus_metadata()
 
