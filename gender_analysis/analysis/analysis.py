@@ -37,9 +37,10 @@ def get_count_words(document, words):
     and the values are the numbers of occurences of the elements in the document.
     N.B.: Not case-sensitive.
     >>> from gender_analysis import document
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-    ...                   'corpus_name': 'document_test_files', 'date': '1850',
-    ...                   'filename': 'test_text_2.txt'}
+    >>> from gender_analysis import common
+    >>> from pathlib import Path
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
+    ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt'}
     >>> scarlett = document.Document(document_metadata)
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
@@ -62,9 +63,8 @@ def get_comparative_word_freq(freqs):
     :return: dictionary
 
     >>> from gender_analysis import document
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-    ...                   'corpus_name': 'sample_novels', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt'}
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(document_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
@@ -244,9 +244,10 @@ def instance_dist(document, word):
     """
     Takes in a particular word, returns a list of distances between each instance of that word in the document.
     >>> from gender_analysis import document
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-    ...                   'corpus_name': 'document_test_files', 'date': '1966',
-    ...                   'filename': 'test_text_3.txt'}
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+    ...                   'filename': 'test_text_3.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_3.txt'}
     >>> scarlett = document.Document(document_metadata)
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
@@ -263,9 +264,10 @@ def words_instance_dist(document, words):
         Takes in a document and list of gender pronouns, returns a list of distances between each
         instance of a pronoun in that document
         >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '1966',
-        ...                   'filename': 'test_text_4.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+        ...                   'filename': 'test_text_4.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_4.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
         [6, 5, 6, 6, 7]
@@ -295,9 +297,10 @@ def male_instance_dist(document):
     """
         Takes in a document, returns a list of distances between each instance of a female pronoun in that document
        >>> from gender_analysis import document
-       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-       ...                   'corpus_name': 'document_test_files', 'date': '1966',
-       ...                   'filename': 'test_text_5.txt'}
+       >>> from pathlib import Path
+       >>> from gender_analysis import common
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+       ...                   'filename': 'test_text_5.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_5.txt'}
        >>> scarlett = document.Document(document_metadata)
        >>> male_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
@@ -312,9 +315,8 @@ def female_instance_dist(document):
     """
         Takes in a document, returns a list of distances between each instance of a female pronoun in that document
        >>> from gender_analysis import document
-       >>> from pathlib import Path
        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-       ...                   'filename': 'test_text_6.txt', 'filepath': Path('')}
+       ...                   'filename': 'test_text_6.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_6.txt'}
        >>> scarlett = document.Document(document_metadata)
        >>> female_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
@@ -329,10 +331,11 @@ def find_gender_adj(document, female):
     """
         Takes in a document and boolean indicating gender, returns a dictionary of adjectives that appear within
         a window of 5 words around each pronoun
-        >>> from pathlib import Path
         >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-        ...                   'filename': 'test_text_7.txt', 'filepath': Path('testing', 'corpora', 'document_test_files', 'test_text_7.txt')}
+        ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_7.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}
@@ -384,9 +387,10 @@ def find_male_adj(document):
     """
         Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each male pronoun
        >>> from gender_analysis import document
-       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-       ...                   'corpus_name': 'document_test_files', 'date': '1966',
-       ...                   'filename': 'test_text_8.txt'}
+       >>> from pathlib import Path
+       >>> from gender_analysis import common
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+       ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_8.txt'}
        >>> scarlett = document.Document(document_metadata)
        >>> find_male_adj(scarlett)
        {'handsome': 3, 'sad': 1}
@@ -401,9 +405,10 @@ def find_female_adj(document):
     """
         Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun
        >>> from gender_analysis import document
-       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-       ...                   'corpus_name': 'document_test_files', 'date': '1966',
-       ...                   'filename': 'test_text_9.txt'}
+       >>> from pathlib import Path
+       >>> from gender_analysis import common
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+       ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_9.txt'}
        >>> scarlett = document.Document(document_metadata)
        >>> find_female_adj(scarlett)
        {'beautiful': 3, 'sad': 1}

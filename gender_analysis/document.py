@@ -231,7 +231,7 @@ class Document(common.FileLoaderMixin):
 
         :return: str
         """
-        file_path = Path(self.filepath )
+        file_path = self.filepath
 
 
         try:
