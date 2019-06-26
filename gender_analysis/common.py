@@ -212,15 +212,15 @@ class FileLoaderMixin:
         # This file is currently in the base of the
         # repo so it returns the correct path. But it will change once
         # this function gets moved.
-        local_base_path = Path(os.path.abspath(os.path.dirname(__file__)))
-        file = open(local_base_path.joinpath(file_path), encoding='utf-8')
-        # TODO: look here, change back to utf-8 maybe
+
+        print(file_path)
+        this_file = open(BASE_PATH.joinpath(file_path), encoding='utf-8')
 
         if current_file_type == '.csv':
-            result = file.readlines()
+            result = this_file.readlines()
         elif current_file_type == '.txt':
             try:
-                result = file.read()
+                result = this_file.read()
             except UnicodeDecodeError as err:
                 print(f'File loading error with {file_path}.')
                 raise err
@@ -229,7 +229,7 @@ class FileLoaderMixin:
             raise Exception(
                 'Cannot load if current_file_type is not .csv or .txt')
 
-        file.close()
+        this_file.close()
         return result
 
     @staticmethod
