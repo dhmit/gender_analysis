@@ -46,6 +46,10 @@ def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
 def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     """
     applies dunning log likelihood to compare individual word in two counter objects
+    (-) end of spectrum is words for counter_2
+    (+) end of spectrum is words for counter_1
+    the larger the magnitude of the number, the more distinctive that word is in its
+    respective counter object
 
     :param word: desired word to compare
     :param corpus1: Corpus
@@ -437,7 +441,7 @@ def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pi
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
-    pickle_filename = f'dunning_male_vs_female_authors_{corpus.corpus_name}'
+    pickle_filename = f'dunning_male_vs_female_authors_{corpus.name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
