@@ -32,7 +32,7 @@ def get_count_words(document, words):
     """
     Takes in document, a Document object, and words, a list of words to be counted.
     Returns a dictionary where the keys are the elements of 'words' list
-    and the values are the numbers of occurences of the elements in the document.
+    and the values are the numbers of occurrences of the elements in the document.
     N.B.: Not case-sensitive.
     >>> from gender_analysis import document
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -42,7 +42,7 @@ def get_count_words(document, words):
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
 
-    :param:words: a list of words to be counted in text
+    :param: words: a list of words to be counted in text
     :return: a dictionary where the key is the word and the value is the count
     """
     dic_word_counts = {}
@@ -56,8 +56,8 @@ def get_comparative_word_freq(freqs):
     Returns a dictionary of the frequency of words counted relative to each other.
     If frequency passed in is zero, returns zero
 
-    :param freqs: dictionary
-    :return: dictionary
+    :param freqs: dictionary in the form {'word':overall_frequency}
+    :return: dictionary in the form {'word':relative_frequency}
 
     >>> from gender_analysis import document
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -99,8 +99,9 @@ def get_counts_by_pos(freqs):
     >>> get_counts_by_pos(collections.Counter({'is':10,'usually':7,'quietly':42}))
     {'RB': Counter({'quietly': 42, 'usually': 7})}
 
-    :param freqs:
-    :return:
+    :param freqs: Counter object of words mapped to their word count
+    :return: dictionary with key as part of speech, value as Counter object of words (of that
+    part of speech) mapped to their word count
     """
 
     sorted_words = {}
@@ -171,7 +172,7 @@ def run_gender_freq(corpus):
     """
     Runs a program that uses the gender frequency analysis on all documents existing in a given
     corpus, and outputs the data as graphs
-    :param corpus:
+    :param corpus: Corpus
     :return:
     """
     documents = corpus.documents
@@ -206,7 +207,10 @@ def dunning_total(m_corpus, f_corpus):
     returns sorted dictionary of words and their dunning scores
     shows top 10 and lowest 10 words
 
-    :return: dictionary of common word with dunning value and p value
+    :param m_corpus: Corpus
+    :param f_corpus: Corpus
+
+    :return: list of tuples (common word, (dunning value, m_corpus_count, f_corpus_count))
 
          >>> from gender_analysis.analysis.analysis import dunning_total
          >>> from gender_analysis.corpus import Corpus
