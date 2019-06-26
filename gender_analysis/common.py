@@ -302,7 +302,7 @@ def get_text_file_encoding(filepath):
     >>> from pathlib import Path
     >>> import os
 
-    >>> path=Path(common.BASE_PATH,'corpora','sample_novels','texts','hawthorne_scarlet.txt')
+    >>> path=Path(common.BASE_PATH,'testing', 'corpora','sample_novels','texts','hawthorne_scarlet.txt')
     >>> common.get_text_file_encoding(path)
     'UTF-8-SIG'
 
