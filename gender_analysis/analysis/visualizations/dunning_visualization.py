@@ -44,6 +44,7 @@ def freq_plot_to_show(results):
 
 
 if __name__ == '__main__':
+    '''
     from gender_analysis.corpus import Corpus
     from gender_analysis.common import BASE_PATH
     filepath = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
@@ -55,3 +56,4 @@ if __name__ == '__main__':
     analysis_results_sorted = sorted(analysis_results_unsorted.items(), key=lambda x: x[1][
         'dunning'], reverse=True)
     score_plot_to_show(analysis_results_sorted)
+    '''

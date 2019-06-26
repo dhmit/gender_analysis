@@ -161,9 +161,11 @@ def create_corpus_summary_visualizations(corpus):
 
 
 if __name__ == '__main__':
+    '''
     from gender_analysis.corpus import Corpus
     from gender_analysis.common import BASE_PATH
     path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
     csv_path = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
     sample = Corpus(path, csv_path=csv_path)
     create_corpus_summary_visualizations(sample)
+    '''
