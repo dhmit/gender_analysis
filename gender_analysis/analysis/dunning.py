@@ -54,10 +54,13 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     # TODO: fix doctest for new corpus input
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
-    >>> corpus1 = Corpus('document_test_files')
-    >>> corpus2 = Corpus('test_corpus')
+    >>> from gender_analysis.common import BASE_PATH
+    >>> filepath1 = BASE_PATH / 'corpora' / 'document_test_files'
+    >>> filepath2 = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+    >>> corpus1 = Corpus(filepath1)
+    >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
-    -332112.16673673474
+    -411748.9475344888
     """
 
     counter1 = corpus1.get_wordcount_counter()

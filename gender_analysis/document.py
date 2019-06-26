@@ -33,7 +33,7 @@ class Document(common.FileLoaderMixin):
     >>> from gender_analysis import document
     >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt'}
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': 'corpora/sample_novels/texts/austen_persuasion.txt'}
     >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
@@ -205,7 +205,10 @@ class Document(common.FileLoaderMixin):
         if not isinstance(other, Document):
             raise NotImplementedError("Only a Document can be compared to another Document.")
 
-        return self.filename < other.filename
+        try:
+            return (self.author, self.title, self.date) < (other.author, other.title, other.date)
+        except AttributeError:
+            return self.filename < other.filename
 
     def __hash__(self):
         """
@@ -228,11 +231,11 @@ class Document(common.FileLoaderMixin):
 
         :return: str
         """
-        if self.corpus_name == 'sample_novels':
-            file_path = Path('corpora', self.corpus_name, 'texts', self.filename)
+        # file_path = Path(self.filepath)
+        if 'test_text' not in self.filename:
+            file_path = Path('corpora', 'sample_novels', 'texts', self.filename)
         else:
-            file_path = Path('corpora', self.corpus_name, self.filename)
-
+            file_path =Path('corpora', 'document_test_files', self.filename)
 
         try:
             text = self.load_file(file_path)
@@ -264,10 +267,9 @@ class Document(common.FileLoaderMixin):
 
         >>> from gender_analysis import document
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'james_highway.txt'}
+        ...                   'date': '1818', 'filename': 'james_highway.txt'}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
+        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text(raw_text)
         >>> title_line = raw_text.splitlines()[0]
@@ -277,12 +279,6 @@ class Document(common.FileLoaderMixin):
         TODO: neither version of remove_boilerplate_text works on Persuasion, and it doesn't look like it's
         easily fixable
         """
-
-        # the gutenberg books are stored locally with the boilerplate already removed
-        # (removing the boilerplate is slow and would mean that just loading the corpus would take
-        # up to 5 minutes
-        if self.corpus_name == 'gutenberg':
-            return text
 
         if gutenberg_imported:
             return strip_headers(text).strip()
@@ -305,10 +301,9 @@ class Document(common.FileLoaderMixin):
 
         >>> from gender_analysis import document
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'james_highway.txt'}
+        ...                   'date': '1818', 'filename': 'james_highway.txt'}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', austen.corpus_name, 'texts', austen.filename)
+        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
         >>> title_line = raw_text.splitlines()[0]
@@ -372,7 +367,7 @@ class Document(common.FileLoaderMixin):
 
         >>> from gender_analysis import document
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'corpus_name': 'document_test_files', 'filename': 'test_text_1.txt'}
+        ...                   'filename': 'test_text_1.txt'}
         >>> austin = document.Document(document_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
@@ -398,8 +393,7 @@ class Document(common.FileLoaderMixin):
         >>> from gender_analysis import document
         >>> test_text = '"This is a quote" and also "This is my quote"'
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'document_test_files', 'date': '1818',
-        ...                   'filename': 'test_text_0.txt'}
+        ...                   'date': '1818', 'filename': 'test_text_0.txt'}
         >>> document_novel = document.Document(document_metadata)
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
@@ -452,8 +446,7 @@ class Document(common.FileLoaderMixin):
         Returns the number of instances of str word in the text.  N.B.: Not case-sensitive.
         >>> from gender_analysis import document
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '2018',
-        ...                   'filename': 'test_text_2.txt'}
+        ...                   'date': '2018', 'filename': 'test_text_2.txt'}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_count_of_word("sad")
         4

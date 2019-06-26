@@ -15,7 +15,7 @@ def print_test_header(test_name):
 def get_all_submodules(package, module_list):
     subpackages = pkgutil.walk_packages(package.__path__)
     for module_info in subpackages:
-        if ('corpus_gen' in module_info.name) or ('dependency_parsing' in module_info.name):
+        if ('gutenberg_loader' in module_info.name) or ('dependency_parsing' in module_info.name):
             # TODO(ra) - skipping corpus_gen bc of Gutenberg installation issues
             # TODO(ra) - skipping dependency_parsing because it requires the user to have
             #            downloaded a jar file that we're not hosting

@@ -214,7 +214,10 @@ def dunning_total(m_corpus, f_corpus):
 
          >>> from gender_analysis.analysis.analysis import dunning_total
          >>> from gender_analysis.corpus import Corpus
-         >>> c = Corpus('sample_novels')
+         >>> from gender_analysis.common import BASE_PATH
+         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+         >>> csv_path = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+         >>> c = Corpus(path, csv_path=csv_path)
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')
          >>> result = dunning_total(m_corpus, f_corpus)
@@ -241,7 +244,6 @@ def dunning_total(m_corpus, f_corpus):
             dunning_word = dunn_individual_word(totalmale_words, totalfemale_words,
                                                 wordcount_male, wordcount_female)
             dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
-
     dunning_result = sorted(dunning_result.items(), key=itemgetter(1))
 
     return dunning_result
