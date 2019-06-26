@@ -297,7 +297,8 @@ def words_instance_dist(document, words):
 
 def male_instance_dist(document):
     """
-        Takes in a document, returns a list of distances between each instance of a female pronoun in that document
+        Takes in a document, returns a list of distances between each instance of a female pronoun
+        in that document.
        >>> from gender_analysis import document
        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'document_test_files', 'date': '1966',
@@ -314,7 +315,8 @@ def male_instance_dist(document):
 
 def female_instance_dist(document):
     """
-        Takes in a document, returns a list of distances between each instance of a female pronoun in that document
+        Takes in a document, returns a list of distances between each instance of a female pronoun
+        in that document.
        >>> from gender_analysis import document
        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'document_test_files', 'date': '1966',
@@ -331,8 +333,8 @@ def female_instance_dist(document):
 
 def find_gender_adj(document, female):
     """
-        Takes in a document and boolean indicating gender, returns a dictionary of adjectives that appear within
-        a window of 5 words around each pronoun
+        Takes in a document and boolean indicating gender, returns a dictionary of adjectives that
+        appear within a window of 5 words around each pronoun
         >>> from gender_analysis import document
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'document_test_files', 'date': '1966',
@@ -341,8 +343,10 @@ def find_gender_adj(document, female):
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}
 
-        :param:document, boolean indicating whether to search for female adjectives (true) or male adj (false)
-        :return: dictionary of adjectives that appear around male pronouns and the number of occurences
+        :param: document, boolean indicating whether to search for female adjectives (true) or
+        male adj (false)
+        :return: dictionary of adjectives that appear around male pronouns and the number of
+        occurrences
     """
     output = {}
     text = document.get_tokenized_text()
@@ -386,7 +390,8 @@ def find_gender_adj(document, female):
 
 def find_male_adj(document):
     """
-        Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each male pronoun
+        Takes in a document, returns a dictionary of adjectives that appear within a window of 5
+        words around each male pronoun.
        >>> from gender_analysis import document
        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'document_test_files', 'date': '1966',
@@ -396,14 +401,16 @@ def find_male_adj(document):
        {'handsome': 3, 'sad': 1}
 
        :param:document
-       :return: dictionary of adjectives that appear around male pronouns and the number of occurences
+       :return: dictionary of adjectives that appear around male pronouns and the number of
+       occurrences
     """
     return find_gender_adj(document, False)
 
 
 def find_female_adj(document):
     """
-        Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun
+        Takes in a document, returns a dictionary of adjectives that appear within a window of 5
+        words around each female pronoun
        >>> from gender_analysis import document
        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
        ...                   'corpus_name': 'document_test_files', 'date': '1966',
@@ -413,7 +420,8 @@ def find_female_adj(document):
        {'beautiful': 3, 'sad': 1}
 
        :param:document
-       :return: dictionary of adjectives that appear around female pronouns and the number of occurences
+       :return: dictionary of adjectives that appear around female pronouns and the number of
+       occurrences
 
        """
     return find_gender_adj(document, True)
@@ -594,7 +602,14 @@ def run_dist_inst(corpus):
                 medians_she.append(median(result_she))
             except:
                 medians_she.append(0)
-            books.append(document.title[0:20] + "\n" + document.author)
+            title = hasattr(document, 'title')
+            author = hasattr(document, 'author')
+            if title and author:
+                books.append(document.title[0:20] + "\n" + document.author)
+            elif title:
+                books.append(document.title[0:20])
+            else:
+                books.append(document.filename[0:20])
         d = process_medians(helst=medians_he, shelst=medians_she, authlst=books)
         d = bubble_sort_across_lists(d)
         instance_stats(d["book"], d["he"], d["she"], "inst_dist" + str(num))
