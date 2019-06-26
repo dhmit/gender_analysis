@@ -111,6 +111,7 @@ LEGALESE_END_MARKERS = frozenset(("SERVICE THAT CHARGES FOR DOWNLOAD",))
 # TODO(elsa): Investigate doctest errors in this file, may be a result of
 # my own system, not actual code errors
 
+
 class FileLoaderMixin:
     """ The FileLoaderMixin loads files either locally or
     remotely from Github (if run from an ipython notebook)
@@ -129,7 +130,7 @@ class FileLoaderMixin:
         >>> from gender_analysis import common
 
         >>> f = common.FileLoaderMixin()
-        >>> novel_path = Path('corpora', 'sample_novels',
+        >>> novel_path = Path('testing', 'corpora', 'sample_novels',
         ...                   'texts', 'austen_persuasion.txt')
         >>> novel_text = f.load_file(novel_path)
         >>> type(novel_text), len(novel_text)
@@ -138,7 +139,7 @@ class FileLoaderMixin:
         csv files are returned as a list of strings, which can be
         further processed with Python's csv module
 
-        >>> corpus_metadata_path = Path('corpora', 'sample_novels',
+        >>> corpus_metadata_path = Path('testing', 'corpora', 'sample_novels',
         ...                             'sample_novels.csv')
         >>> corpus_metadata = f.load_file(corpus_metadata_path)
         >>> type(corpus_metadata)
@@ -155,12 +156,12 @@ class FileLoaderMixin:
         file_path can be a string or Path object
 
         >>> import os
-        >>> novel_path_str = os.sep.join(['corpora', 'sample_novels',
+        >>> novel_path_str = os.sep.join(['testing', 'corpora', 'sample_novels',
         ...                               'texts', 'austen_persuasion.txt'])
         >>> novel_text_str = f.load_file(novel_path_str)
         >>> novel_text == novel_text_str
         True
-        >>> novel_path2 = Path(r"corpora/test_books_30/20-0.txt")
+        >>> novel_path2 = Path(r"testing/corpora/test_books_30/20-0.txt")
         >>> paradise_lost = f.load_file(novel_path2)
         >>> paradise_lost[1:61]
         'The Project Gutenberg EBook of Paradise Lost, by John Milton'
@@ -390,6 +391,7 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
         text = source_file.read()
     with codecs.open(target_path, 'w', encoding=target_encoding) as target_file:
         target_file.write(text)
+
 
 def load_graph_settings(show_grid_lines=True):
     '''
