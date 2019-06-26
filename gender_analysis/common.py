@@ -214,7 +214,6 @@ class FileLoaderMixin:
         # this function gets moved.
         local_base_path = Path(os.path.abspath(os.path.dirname(__file__)))
         file = open(local_base_path.joinpath(file_path), encoding='utf-8')
-        # TODO: look here, change back to utf-8 maybe
 
         if current_file_type == '.csv':
             result = file.readlines()

@@ -3,12 +3,10 @@ This file is intended for individual analyses of the gender_analysis project
 """
 
 import nltk
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 from more_itertools import windowed
 import collections
-from scipy.stats import chi2
 from statistics import median
 from nltk.corpus import stopwords
 import unittest
@@ -30,11 +28,11 @@ sns.set_color_codes(palette)
 sns.set_style(style_name,style_list)
 
 
-def get_count_words(novel, words):
+def get_count_words(document, words):
     """
-    Takes in novel, a Novel object, and words, a list of words to be counted.
+    Takes in novel, a Document object, and words, a list of words to be counted.
     Returns a dictionary where the keys are the elements of 'words' list
-    and the values are the numbers of occurences of the elements in the novel.
+    and the values are the numbers of occurrences of the elements in the document.
     N.B.: Not case-sensitive.
     >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -49,7 +47,7 @@ def get_count_words(novel, words):
     """
     dic_word_counts = {}
     for word in words:
-        dic_word_counts[word] = novel.get_count_of_word(word)
+        dic_word_counts[word] = document.get_count_of_word(word)
     return dic_word_counts
 
 
@@ -171,32 +169,39 @@ def display_gender_freq(d, title):
 
 def run_gender_freq(corpus):
     """
-    Runs a program that uses the gender frequency analysis on all novels existing in a given
+    Runs a program that uses the gender frequency analysis on all documents existing in a given
     corpus, and outputs the data as graphs
     :param corpus:
     :return:
     """
-    novels = corpus.novels
-    c = len(novels)
+    documents = corpus.documents
+    c = len(documents)
     loops = c//10 + 1
 
     num = 0
 
     while num < loops:
         dictionary = {}
-        for novel in novels[num * 10: min(c, num * 10 + 9)]:
-            d = {'he': novel.get_word_freq('he'), 'she': novel.get_word_freq('she')}
+        for doc in documents[num * 10: min(c, num * 10 + 9)]:
+            d = {'he': doc.get_word_freq('he'), 'she': doc.get_word_freq('she')}
             d = get_comparative_word_freq(d)
             lst = [d["he"], d["she"]]
-            book = novel.title[0:20] + "\n" + novel.author
-            dictionary[book] = lst
+            title = hasattr(doc, 'title')
+            author = hasattr(doc, 'author')
+            if title and author:
+                doc_label = doc.title[0:20] + "\n" + doc.author
+            elif title:
+                doc_label = doc.title[0:20]
+            else:
+                doc_label = doc.filename[0:20]
+            dictionary[doc_label] = lst
         display_gender_freq(dictionary, str(num))
         num += 1
 
 
 def dunning_total(m_corpus, f_corpus):
     """
-    goes through gendered corpora
+    goes through two corpora, e.g. corpus of male authors and corpus of female authors
     runs dunning_individual on all words that are in BOTH corpora
     returns sorted dictionary of words and their dunning scores
     shows top 10 and lowest 10 words
@@ -232,25 +237,16 @@ def dunning_total(m_corpus, f_corpus):
             dunning_word = dunn_individual_word(totalmale_words, totalfemale_words,
                                                 wordcount_male, wordcount_female)
             dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
-    '''
-    wordcounter_male = m_corpus.get_wordcount_counter()
-    wordcounter_female = f_corpus.get_wordcount_counter()
-    dunning_result = {}
-    for word in wordcounter_male:
-        wordcount_male = wordcounter_male[word]
-        if word in wordcounter_female:
-            wordcount_female = wordcounter_female[word]
-            dunning_word = dunn_individual_word_by_corpus(m_corpus, f_corpus, word)
-            dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
-    '''
+
     dunning_result = sorted(dunning_result.items(), key=itemgetter(1))
 
     return dunning_result
 
 
-def instance_dist(novel, word):
+def instance_dist(document, word):
     """
-    Takes in a particular word, returns a list of distances between each instance of that word in the novel.
+    Takes in a particular word, returns a list of distances between each instance of that word in
+    the document.
     >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'document_test_files', 'date': '1966',
@@ -259,11 +255,11 @@ def instance_dist(novel, word):
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
 
-    :param:novel to analyze, gendered word
+    :param: document to analyze, gendered word
     :return: list of distances between instances of gendered word
 
     """
-    return words_instance_dist(novel, [word])
+    return words_instance_dist(document, [word])
 
 
 def words_instance_dist(novel, words):
@@ -286,14 +282,14 @@ def words_instance_dist(novel, words):
     count = 0
     start = False
 
-    for e in text:
-        e = e.lower()
+    for token in text:
+        token = token.lower()
         if not start:
-            if e in words:
+            if token in words:
                 start = True
         else:
             count += 1
-            if e in words:
+            if token in words:
                 output.append(count)
                 count = 0
     return output
