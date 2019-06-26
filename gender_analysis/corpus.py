@@ -177,11 +177,8 @@ class Corpus(common.FileLoaderMixin):
 
         :return: Corpus
         """
-        corpus_copy = Corpus('')
-        corpus_copy.name = self.name
-        corpus_copy.path_to_files = self.path_to_files
-        corpus_copy.documents = self.documents[:]
-        return corpus_copy
+        from copy import copy
+        return copy(self)
 
     def _load_documents(self):
         documents = []
