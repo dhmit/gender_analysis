@@ -145,14 +145,6 @@ class FileLoaderMixin:
         >>> type(corpus_metadata)
         <class 'list'>
 
-        If the file is not available locally (e.g. in an ipython notebook,
-        it gets loaded from Github.
-
-        >>> novel_text_local = f.load_file_locally(novel_path, '.txt')
-        >>> novel_text_online = f.load_file_remotely(novel_path.as_posix(), '.txt')
-        >>> novel_text_local == novel_text_online
-        True
-
         file_path can be a string or Path object
 
         >>> import os
@@ -232,22 +224,6 @@ class FileLoaderMixin:
 
         file.close()
         return result
-
-    @staticmethod
-    def load_file_remotely(file_path, current_file_type):
-        base_path = ('https://raw.githubusercontent.com/dhmit/'
-                     + 'gender_novels/master/gender_novels/')
-        url = f'{base_path}/{file_path}'
-        response = urllib.request.urlopen(url)
-        encoding = response.headers.get_param('charset')
-
-        if current_file_type == '.csv':
-            return [line.decode(encoding) for line in response.readlines()]
-        elif current_file_type == '.txt':
-            text = response.read().decode(encoding)
-            # When loading the text online, each end of line
-            # has \r and \n -> replace with only \n
-            return text.replace('\r\n', '\n')
 
 
 def store_pickle(obj, filename):
