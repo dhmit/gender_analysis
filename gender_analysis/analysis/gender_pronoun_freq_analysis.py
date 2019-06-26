@@ -287,11 +287,11 @@ def freq_by_date(d, time_frame, bin_size):
     >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_date
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': 'gender_analysis/testing/corpora/sample_novels/texts/austen_persuasion.txt'}
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': 'testing/corpora/sample_novels/texts/austen_persuasion.txt'}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': 'gender_analysis/testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': 'testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_date(d, (1770, 1910), 10)
@@ -332,12 +332,12 @@ def freq_by_location(d):
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt',
-    ...                   'filepath': 'gender_analysis/testing/corpora/sample_novels/texts/austen_persuasion.txt'}
+    ...                   'filepath': 'testing/corpora/sample_novels/texts/austen_persuasion.txt'}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata2 = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt',
-    ...                   'filepath': 'gender_analysis/testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
+    ...                   'filepath': 'testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata2)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_location(d)
@@ -389,11 +389,11 @@ def sort_every_year(frequency_dict):
     >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': 'gender_analysis/testing/corpora/sample_novels/texts/austen_persuasion.txt'}
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': 'testing/corpora/sample_novels/texts/austen_persuasion.txt'}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': 'gender_analysis/testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': 'testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> sorted_years = sort_every_year(d)
