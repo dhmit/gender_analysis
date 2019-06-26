@@ -55,8 +55,8 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
     >>> from gender_analysis.common import BASE_PATH
-    >>> filepath1 = BASE_PATH / 'corpora' / 'document_test_files'
-    >>> filepath2 = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+    >>> filepath1 = BASE_PATH / 'testing' / 'corpora' / 'document_test_files'
+    >>> filepath2 = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
     >>> corpus1 = Corpus(filepath1)
     >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
