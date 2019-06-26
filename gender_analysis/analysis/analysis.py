@@ -40,7 +40,7 @@ def get_count_words(document, words):
     >>> from gender_analysis import common
     >>> from pathlib import Path
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
-    ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt'}
+    ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
@@ -63,8 +63,10 @@ def get_comparative_word_freq(freqs):
     :return: dictionary
 
     >>> from gender_analysis import document
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'hawthorne_scarlet.txt'}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(document_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
@@ -206,8 +208,8 @@ def dunning_total(m_corpus, f_corpus):
          >>> from gender_analysis.analysis.analysis import dunning_total
          >>> from gender_analysis.corpus import Corpus
          >>> from gender_analysis.common import BASE_PATH
-         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-         >>> csv_path = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+         >>> csv_path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
          >>> c = Corpus(path, csv_path=csv_path)
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')
@@ -247,7 +249,7 @@ def instance_dist(document, word):
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-    ...                   'filename': 'test_text_3.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_3.txt'}
+    ...                   'filename': 'test_text_3.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_3.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
@@ -267,7 +269,7 @@ def words_instance_dist(document, words):
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-        ...                   'filename': 'test_text_4.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_4.txt'}
+        ...                   'filename': 'test_text_4.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_4.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
         [6, 5, 6, 6, 7]
@@ -300,7 +302,7 @@ def male_instance_dist(document):
        >>> from pathlib import Path
        >>> from gender_analysis import common
        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-       ...                   'filename': 'test_text_5.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_5.txt'}
+       ...                   'filename': 'test_text_5.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_5.txt')}
        >>> scarlett = document.Document(document_metadata)
        >>> male_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
@@ -315,8 +317,10 @@ def female_instance_dist(document):
     """
         Takes in a document, returns a list of distances between each instance of a female pronoun in that document
        >>> from gender_analysis import document
+       >>> from pathlib import Path
+       >>> from gender_analysis import common
        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-       ...                   'filename': 'test_text_6.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_6.txt'}
+       ...                   'filename': 'test_text_6.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_6.txt')}
        >>> scarlett = document.Document(document_metadata)
        >>> female_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
@@ -335,7 +339,7 @@ def find_gender_adj(document, female):
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-        ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_7.txt'}
+        ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_7.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}
@@ -390,7 +394,7 @@ def find_male_adj(document):
        >>> from pathlib import Path
        >>> from gender_analysis import common
        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-       ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_8.txt'}
+       ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_8.txt')}
        >>> scarlett = document.Document(document_metadata)
        >>> find_male_adj(scarlett)
        {'handsome': 3, 'sad': 1}
@@ -408,7 +412,7 @@ def find_female_adj(document):
        >>> from pathlib import Path
        >>> from gender_analysis import common
        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-       ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_9.txt'}
+       ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_9.txt')}
        >>> scarlett = document.Document(document_metadata)
        >>> find_female_adj(scarlett)
        {'beautiful': 3, 'sad': 1}
