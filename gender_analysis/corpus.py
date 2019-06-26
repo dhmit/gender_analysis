@@ -286,7 +286,7 @@ class Corpus(common.FileLoaderMixin):
                 metadata_fields.add(field)
         return sorted(list(metadata_fields))
 
-    def get_field_vals(self,field):
+    def get_field_vals(self, field):
         """
         This function returns a sorted list of all values for a
         particular metadata field as strings.
@@ -364,8 +364,8 @@ class Corpus(common.FileLoaderMixin):
         :return: Corpus
         """
 
-        supported_metadata_fields = ('author', 'author_gender', 'name',
-                                     'country_publication', 'date')
+        supported_metadata_fields = self.get_corpus_metadata()
+        
         if metadata_field not in supported_metadata_fields:
             raise ValueError(
                 f'Metadata field must be {", ".join(supported_metadata_fields)} '
@@ -397,47 +397,28 @@ class Corpus(common.FileLoaderMixin):
 
     def multi_filter(self, characteristic_dict):
         """
-        This method takes a dictionary of metadata fields and corresponding values
-        and returns a Corpus object which is the subcorpus of the input corpus which
-        satisfies all the specified constraints.
+        Returns a copy of the corpus, but with only the documents that fulfill the metadata parameters passed in by
+        characteristic_dict. Multiple metadata keys can be searched at one time, provided that the metadata is
+        available for the documents in the corpus.
 
-        #>>> from gender_analysis.corpus import Corpus
-        #>>> from gender_analysis.common import BASE_PATH
-        #>>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        #>>> c = Corpus(path)
-        #>>> characteristics = {'author':'female',
-                                'country_publication':'England'}
-        #>>> subcorpus_multi_filtered = c.multi_filter(characteristics)
-        #>>> female_subcorpus = c.filter_by_gender('female')
-        #>>> subcorpus_repeated_method = female_subcorpus.Subcorpus('country_publication','England')
-        #>>> subcorpus_multi_filtered == subcorpus_repeated_method
-        True
 
-        :param characteristic_dict: dict
-        :return: Corpus
-        """
-
-        new_corp = self.clone()
-        metadata_fields = self.get_corpus_metadata()
-
-        for field in characteristic_dict:
-            if field not in metadata_fields:
-                raise ValueError(f'\'{field}\' is not a valid metadata field for this corpus')
-            new_corp = new_corp.subcorpus(field, characteristic_dict[field])
-
-        return new_corp
-
-        #TODO: add date range support
-        #TODO: apply all filters at once instead of recursing Subcorpus method
-
-    def multi_filter_integrated(self,characteristic_dict):
-        """
-        This needs documentation and tests but it's 5:59! To be added after moratorium.
-        :param characteristic_dict:
+        :param characteristic_dict: Dictionary of metadata keys and search terms as
         :return:
+
+        >>> from gender_analysis.corpus import Corpus
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> c = Corpus(path, csv_path=path_to_csv)
+        >>> corpus_filter = {'author_gender': 'male'}
+        >>> len(c.multi_filter(corpus_filter))
+        59
+
+        >>> corpus_filter['filename'] = 'aanrud_longfrock.txt'
+        >>> len(c.multi_filter(corpus_filter))
+        1
         """
-        supported_metadata_fields = ('author', 'author_gender', 'name',
-                                     'country_publication', 'date')
+        supported_metadata_fields = self.get_corpus_metadata()
 
         corpus_copy = self.clone()
         corpus_copy.documents = []
@@ -455,7 +436,7 @@ class Corpus(common.FileLoaderMixin):
                     if this_document.date != int(characteristic_dict['date']):
                         add_document = False
                 else:
-                    if getattr(this_document, metadata_field) != field_value:
+                    if getattr(this_document, metadata_field) != characteristic_dict[metadata_field]:
                         add_document = False
             if add_document:
                 corpus_copy.documents.append(this_document)
