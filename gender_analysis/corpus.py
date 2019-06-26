@@ -107,7 +107,8 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
-        >>> sample_corpus.documents = sorted(sample_corpus.documents[:20])
+        >>> sorted_docs = sorted(sample_corpus.documents[:20])
+        >>> sample_corpus.documents = sorted_docs
         >>> corp1 = sample_corpus.clone()
         >>> corp1.documents = corp1.documents[:10]
         >>> corp2 = sample_corpus.clone()
@@ -141,7 +142,8 @@ class Corpus(common.FileLoaderMixin):
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
-        >>> sample_corpus.documents = sorted(sample_corpus.documents[:20])
+        >>> sorted_docs = sorted(sample_corpus.documents[:20])
+        >>> sample_corpus.documents = sorted_docs
         >>> corp1 = sample_corpus.clone()
         >>> corp1.documents = corp1.documents[:10]
         >>> corp2 = sample_corpus.clone()
