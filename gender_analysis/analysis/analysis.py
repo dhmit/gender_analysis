@@ -259,8 +259,9 @@ def instance_dist(document, word):
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
 
-    :param: document to analyze, gendered word
-    :return: list of distances between instances of gendered word
+    :param: document: Document to analyze
+    :param: word: str
+    :return: list of distances between consecutive instances of word
 
     """
     return words_instance_dist(document, [word])
@@ -268,8 +269,8 @@ def instance_dist(document, word):
 
 def words_instance_dist(document, words):
     """
-        Takes in a document and list of gender pronouns, returns a list of distances between each
-        instance of a pronoun in that document
+        Takes in a document and list of words (e.g. gendered pronouns), returns a list of distances
+        between each instance of one of the words in that document
         >>> from gender_analysis import document
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                   'corpus_name': 'document_test_files', 'date': '1966',
@@ -278,8 +279,9 @@ def words_instance_dist(document, words):
         >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
         [6, 5, 6, 6, 7]
 
-        :param:document
-        :return: list of distances between instances of pronouns
+        :param: document: Document
+        :param: words: list of strings
+        :return: list of distances between instances of any word in words
     """
     text = document.get_tokenized_text()
     output = []
@@ -347,7 +349,8 @@ def find_gender_adj(document, female):
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}
 
-        :param: document, boolean indicating whether to search for female adjectives (true) or
+        :param: document: Document
+        :param: female: boolean indicating whether to search for female adjectives (true) or
         male adj (false)
         :return: dictionary of adjectives that appear around male pronouns and the number of
         occurrences
@@ -542,9 +545,9 @@ def instance_stats(book, medians1, medians2, title):
     :param book:
     :param medians1:
     :param medians2:
-    :param title:
-    :return: file written to visualizations folder depicting the ratio of two values given as a
-    bar graph
+    :param title: str, desired name of file
+    :return: None, file written to visualizations folder depicting the ratio of two values given
+    as a bar graph
     """
     fig, ax = plt.subplots()
     plt.ylim(0, 50)

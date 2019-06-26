@@ -2,7 +2,6 @@ import math
 from collections import Counter
 
 import nltk
-from scipy.stats import chi2
 
 from gender_analysis.common import store_pickle, load_pickle
 from gender_analysis.corpus import Corpus
@@ -14,12 +13,13 @@ def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
                          count_of_word_in_corpus_1,
                          count_of_word_in_corpus_2):
     """
-    applies dunning log likelihood to compare individual word in two counter objects
+    applies Dunning log likelihood to compare individual word in two counter objects
 
-    :param word: desired word to compare
-    :param m_corpus: c.filter_by_gender('male')
-    :param f_corpus: c. filter_by_gender('female')
-    :return: log likelihoods and p value
+    :param total_words_in_corpus_1: int, total wordcount in corpus 1
+    :param total_words_in_corpus_2: int, total wordcount in corpus 2
+    :param count_of_word_in_corpus_1: int, wordcount of one word in corpus 1
+    :param count_of_word_in_corpus_2: int, wordcount of one word in corpus 2
+    :return: Dunning log likelihood
     >>> total_words_m_corpus = 8648489
     >>> total_words_f_corpus = 8700765
     >>> wordcount_female = 1000
