@@ -312,9 +312,9 @@ def female_instance_dist(document):
     """
         Takes in a document, returns a list of distances between each instance of a female pronoun in that document
        >>> from gender_analysis import document
-       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-       ...                   'corpus_name': 'document_test_files', 'date': '1966',
-       ...                   'filename': 'test_text_6.txt'}
+       >>> from pathlib import Path
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+       ...                   'filename': 'test_text_6.txt', 'filepath': Path('')}
        >>> scarlett = document.Document(document_metadata)
        >>> female_instance_dist(scarlett)
        [6, 5, 6, 6, 7]
@@ -329,10 +329,10 @@ def find_gender_adj(document, female):
     """
         Takes in a document and boolean indicating gender, returns a dictionary of adjectives that appear within
         a window of 5 words around each pronoun
+        >>> from pathlib import Path
         >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '1966',
-        ...                   'filename': 'test_text_7.txt'}
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+        ...                   'filename': 'test_text_7.txt', 'filepath': Path('testing', 'corpora', 'document_test_files', 'test_text_7.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}

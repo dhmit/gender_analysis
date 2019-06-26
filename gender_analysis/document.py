@@ -231,11 +231,8 @@ class Document(common.FileLoaderMixin):
 
         :return: str
         """
-        # file_path = Path(self.filepath)
-        if 'test_text' not in self.filename:
-            file_path = Path('corpora', 'sample_novels', 'texts', self.filename)
-        else:
-            file_path =Path('corpora', 'document_test_files', self.filename)
+        file_path = Path(self.filepath )
+
 
         try:
             text = self.load_file(file_path)
