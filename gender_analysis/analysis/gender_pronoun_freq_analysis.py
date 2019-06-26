@@ -235,11 +235,11 @@ def freq_by_author_gender(d):
     >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Brontë, Anne', 'title': 'The Tenant of Wildfell Hall',
     ...                   'corpus_name': 'sample_novels', 'date': '1848', 'author_gender':'female',
-    ...                   'filename': 'bronte_wildfell.txt'}
+    ...                   'filename': 'bronte_wildfell.txt', 'filepath': 'testing/corpora/sample_novels/texts/bronte_wildfell.txt'}
     >>> bronte = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Adams, William Taylor', 'title': 'Fighting for the Right',
     ...                   'corpus_name': 'sample_novels', 'date': '1892', 'author_gender':'male',
-    ...                   'filename': 'adams_fighting.txt'}
+    ...                   'filename': 'adams_fighting.txt', 'filepath': 'testing/corpora/sample_novels/texts/adams_fighting.txt'}
     >>> fighting = document.Document(novel_metadata)
     >>> d = {fighting:0.3, bronte:0.6}
     >>> freq_by_author_gender(d)
@@ -331,12 +331,12 @@ def freq_by_location(d):
     >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_location
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt'
+    ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt',
     ...                   'filepath': 'gender_analysis/testing/corpora/sample_novels/texts/austen_persuasion.txt'}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata2 = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
-    ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt'
+    ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt',
     ...                   'filepath': 'gender_analysis/testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata2)
     >>> d = {scarlet:0.5, austen:0.3}
