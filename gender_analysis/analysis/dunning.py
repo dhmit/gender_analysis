@@ -205,8 +205,8 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
                 'freq_corp1', 'freq_corp2']
 
     output = f'\nDisplaying Part of Speech: {part_of_speech_to_include}\n'
-    for i, corpus_name in enumerate([corpus1_display_name, corpus2_display_name]):
-        output += f'\nDunning Log-Likelihood results for {corpus_name}\n|'
+    for i, name in enumerate([corpus1_display_name, corpus2_display_name]):
+        output += f'\nDunning Log-Likelihood results for {name}\n|'
 
         for heading in headings:
             heading = heading.replace('_corp1', ' ' + corpus1_display_name).replace('_corp2',
@@ -254,12 +254,12 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to
     :return: dict
     """
 
-    pickle_filename = f'dunning_{word1}_vs_{word2}_associated_words_{corpus.corpus_name}'
+    pickle_filename = f'dunning_{word1}_vs_{word2}_associated_words_{corpus.name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
         try:
-            pickle_filename = f'dunning_{word2}_vs_{word1}_associated_words_{corpus.corpus_name}'
+            pickle_filename = f'dunning_{word2}_vs_{word1}_associated_words_{corpus.name}'
             results = load_pickle(pickle_filename)
         except:
             word1_counter = Counter()
@@ -295,7 +295,7 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
     """
 
     pickle_filename = (f'dunning_{word}_associated_words_{corpus1_name}_vs_{corpus2_name}_in_'
-                       f'{corpus1.corpus_name}')
+                       f'{corpus1.name}')
     if word_window:
         pickle_filename += f'_word_window_{word_window}'
     try:
@@ -341,7 +341,7 @@ def male_vs_female_analysis_dunning(corpus, display_data=False, to_pickle=False)
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
-    pickle_filename = f'dunning_male_vs_female_chars_{corpus.corpus_name}'
+    pickle_filename = f'dunning_male_vs_female_chars_{corpus.name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
@@ -437,7 +437,7 @@ def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pi
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
-    pickle_filename = f'dunning_male_vs_female_authors_{corpus.corpus_name}'
+    pickle_filename = f'dunning_male_vs_female_authors_{corpus.name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
@@ -467,13 +467,12 @@ def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pi
 def he_vs_she_associations_analysis_dunning(corpus, to_pickle=False):
     """
     Uses Dunning analysis to compare words associated with 'he' vs words associated with 'she' in
-    the Corpus passed in as the parameter.  The corpus_name parameter is if you want to name the file
-    something other than Gutenberg (e.g. Gutenberg_female_authors)
+    the Corpus passed in as the parameter.(e.g. Gutenberg_female_authors)
     :param corpus: Corpus
     :param to_pickle: boolean
     """
 
-    pickle_filename = f'dunning_he_vs_she_associated_words_{corpus.corpus_name}'
+    pickle_filename = f'dunning_he_vs_she_associated_words_{corpus.name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:

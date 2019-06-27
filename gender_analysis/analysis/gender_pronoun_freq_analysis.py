@@ -35,7 +35,7 @@ def books_pronoun_freq(corp, to_pickle=False):
 
     """
     try:
-        # relative_freq_male = common.load_pickle(f'{corp.corpus_name}_pronoun_freq_male')
+        # relative_freq_male = common.load_pickle(f'{corp.name}_pronoun_freq_male')
         relative_freq_female = common.load_pickle(f'{corp.name}_pronoun_freq_female')
         return relative_freq_female
     except IOError:
@@ -65,8 +65,8 @@ def books_pronoun_freq(corp, to_pickle=False):
     book._word_counts_counter = None
 
     if to_pickle:
-        common.store_pickle(relative_freq_male, f'{corp.corpus_name}_pronoun_freq_male')
-        common.store_pickle(relative_freq_female, f'{corp.corpus_name}_pronoun_freq_female')
+        common.store_pickle(relative_freq_male, f'{corp.name}_pronoun_freq_male')
+        common.store_pickle(relative_freq_female, f'{corp.name}_pronoun_freq_female')
 
     return relative_freq_female
 
@@ -126,9 +126,9 @@ def subject_vs_object_pronoun_freqs(corp, to_pickle=False):
 
     if to_pickle:
         common.store_pickle(relative_freq_male_subject,
-                            f'{corp.corpus_name}_sub_v_ob_pronoun_freq_male')
+                            f'{corp.name}_sub_v_ob_pronoun_freq_male')
         common.store_pickle(relative_freq_female_subject,
-                            f'{corp.corpus_name}_sub_v_ob_pronoun_freq_female')
+                            f'{corp.name}_sub_v_ob_pronoun_freq_female')
 
     result_tuple = (relative_freq_male_subject, relative_freq_female_subject)
 
@@ -186,8 +186,8 @@ def subject_pronouns_gender_comparison(corp, subject_gender, to_pickle=False):
 
     if to_pickle:
         common.store_pickle(relative_freq_female_sub,
-                            f'{corp.corpus_name}_subject_pronoun_freq_female')
-        common.store_pickle(relative_freq_male_sub, f'{corp.corpus_name}_subject_pronoun_freq_male')
+                            f'{corp.name}_subject_pronoun_freq_female')
+        common.store_pickle(relative_freq_male_sub, f'{corp.name}_subject_pronoun_freq_male')
 
     if subject_gender == 'male':
         return relative_freq_male_sub
@@ -540,5 +540,3 @@ def stat_analysis(corpus):
                                                                            sub_v__ob_female_list)
     print("values for subject vs object pronouns between male and female authors: ",
           author_gender_sub_v_ob_correlation)
-
-    # subject_pronouns_gender_comparison(Corpus('gutenberg'),'female')
