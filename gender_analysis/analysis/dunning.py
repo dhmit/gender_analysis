@@ -648,20 +648,3 @@ def freq_plot_to_show(results):
     ax = sns.barplot(male_rel_freq, words, palette=colors, alpha=opacity)
     sns.despine(ax=ax, bottom=True, left=True)
     plt.show()
-
-
-if __name__ == '__main__':
-    '''
-    from gender_analysis.corpus import Corpus
-    from gender_analysis.common import BASE_PATH
-
-    filepath = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-    csv_path = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
-    sample = Corpus(filepath, csv_path=csv_path)
-
-    analysis_results_unsorted = dunning_result_to_dict(male_vs_female_authors_analysis_dunning(
-        sample), part_of_speech_to_include="verbs")
-    analysis_results_sorted = sorted(analysis_results_unsorted.items(), key=lambda x: x[1][
-        'dunning'], reverse=True)
-    freq_plot_to_show(analysis_results_sorted)
-    '''
