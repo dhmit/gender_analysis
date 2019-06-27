@@ -5,16 +5,17 @@ from collections import Counter
 from gender_analysis.common import MissingMetadataError
 
 
-def plot_pubyears(corpus):
+def plot_pubyears(corpus, filename=None):
     """
     Creates a histogram displaying the frequency of books that were published within a 20 year 
     period
     Requires that corpus contains a 'date' metadata field
     :param corpus: Corpus
+    :param filename: str to name plot file
     RETURNS a pyplot histogram
     """
     if 'date' not in corpus.get_corpus_metadata():
-        raise MissingMetadataError('This corpus does not contain metadata on publication date.')
+        raise MissingMetadataError("This corpus does not contain metadata field 'date'.")
 
     pub_years = []
     for doc in corpus.documents:
@@ -42,18 +43,24 @@ def plot_pubyears(corpus):
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(60)
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
-    plt.savefig('date_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
+
+    if filename:
+        plt.savefig(filename.replace(' ', '_')+'.png')
+    else:
+        plt.savefig('date_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
 
 
-def plot_pubcountries(corpus):
+def plot_pubcountries(corpus, filename=None):
     """
     Creates a bar graph displaying the frequency of books that were published in each country
     Requires that corpus contains a 'country_publication' metadata field
     :param corpus: Corpus
+    :param filename: str to name plot file
     RETURNS a pyplot bargraph
     """
     if 'country_publication' not in corpus.get_corpus_metadata():
-        raise MissingMetadataError('This corpus does not contain metadata on publication country.')
+        raise MissingMetadataError("This corpus does not contain metadata field "
+                                   "'country_publication'.")
 
     pub_country = []
     for doc in corpus.documents:
@@ -98,18 +105,23 @@ def plot_pubcountries(corpus):
     plt.xticks(color='k', size=15)
     plt.yticks(color='k', size=15)
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
-    plt.savefig('country_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
+    
+    if filename:
+        plt.savefig(filename.replace(' ', '_')+'.png')
+    else:
+        plt.savefig('country_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
 
 
-def plot_gender_breakdown(corpus):
+def plot_gender_breakdown(corpus, filename=None):
     """
     Creates a pie chart displaying the composition of male and female writers in the data
     Requires that corpus contains a 'author_gender' metadata field
     :param corpus: Corpus
+    :param filename: str to name plot file
     RETURNS a pie chart
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise MissingMetadataError('This corpus does not contain metadata on author gender.')
+        raise MissingMetadataError("This corpus does not contain metadata field 'author_gender'.")
 
     pub_gender = []
     for doc in corpus.documents:
@@ -143,19 +155,24 @@ def plot_gender_breakdown(corpus):
     plt.title('Gender Breakdown for '+corpus_name.title(), size=18, color='k', weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
-    plt.savefig('gender_breakdown_for_'+corpus_name.replace(' ', '_')+'.png')
+
+    if filename:
+        plt.savefig(filename.replace(' ', '_')+'.png')
+    else:
+        plt.savefig('gender_breakdown_for_'+corpus_name.replace(' ', '_')+'.png')
 
 
-def plot_metadata_pie(corpus):
+def plot_metadata_pie(corpus, filename=None):
     """
     Creates pie chart indicating fraction of metadata that is filled in corpus
     Requires that corpus contains 'author_gender' and 'country_publication metadata fields
     :param corpus: Corpus
+    :param filename: str to name plot file
     """
     if 'author_gender' not in corpus.get_corpus_metadata() or 'country_publication' not in \
             corpus.get_corpus_metadata():
-        raise MissingMetadataError('This corpus does not contain metadata on author gender or '
-                                   'publication country.')
+        raise MissingMetadataError("This corpus does not contain metadata fields 'author_gender' "
+                                   "or 'publication_country'.")
 
     if corpus.name:
         name = corpus.name
@@ -185,7 +202,11 @@ def plot_metadata_pie(corpus):
               weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
-    plt.savefig('percentage_acquired_metadata_for_' + name.replace(' ', '_') + '.png')
+
+    if filename:
+        plt.savefig(filename.replace(' ', '_') + '.png')
+    else:
+        plt.savefig('percentage_acquired_metadata_for_' + name.replace(' ', '_') + '.png')
 
 
 def create_corpus_summary_visualizations(corpus):

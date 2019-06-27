@@ -165,7 +165,7 @@ def male_vs_female_authors_analysis_dunning_lesser(corpus):
     :return: dictionary of common shared words and their distinctiveness
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise ValueError('Corpus does not contain author gender metadata.')
+        raise MissingMetadataError('Corpus does not contain author gender metadata.')
 
     m_corpus = corpus.filter_by_gender('male')
     f_corpus = corpus.filter_by_gender('female')
