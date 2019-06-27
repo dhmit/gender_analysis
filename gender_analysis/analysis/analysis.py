@@ -27,7 +27,7 @@ style_name = "white"
 style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
                            'font.family': 'serif'}
 sns.set_color_codes(palette)
-sns.set_style(style_name,style_list)
+sns.set_style(style_name, style_list)
 
 
 def get_count_words(document, words):
