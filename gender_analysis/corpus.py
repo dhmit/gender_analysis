@@ -213,8 +213,8 @@ class Corpus(common.FileLoaderMixin):
         >>> c.count_authors_by_gender('female')
         7
 
-
-        :rtype: int
+        :param gender: str of the gender to search for in the metadata
+        :return: int
         """
         count = 0
         for document in self.documents:
