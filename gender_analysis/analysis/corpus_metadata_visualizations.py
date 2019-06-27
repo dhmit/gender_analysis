@@ -9,17 +9,19 @@ def plt_pubyears(corpus):
     """
     Creates a histogram displaying the frequency of books that were published within a 20 year 
     period
+    Requires that corpus contains a 'date' metadata field
     :param corpus: Corpus
     RETURNS a pyplot histogram
     """
     if 'date' not in corpus.get_corpus_metadata():
-        raise MissingMetadataError()
+        raise MissingMetadataError('This corpus does not contain metadata on publication date.')
 
     pub_years = []
     for doc in corpus.documents:
         if doc.date is None:
             continue
         pub_years.append(doc.date)
+
     if corpus.name:
         corpus_name = corpus.name
     else:
@@ -46,10 +48,19 @@ def plt_pubyears(corpus):
 def plt_pubcountries(corpus):
     """
     Creates a bar graph displaying the frequency of books that were published in each country
+    Requires that corpus contains a 'country_publication' metadata field
     :param corpus: Corpus
     RETURNS a pyplot bargraph
     """
-    pub_country = [doc.country_publication for doc in corpus.documents]
+    if 'country_publication' not in corpus.get_corpus_metadata():
+        raise MissingMetadataError('This corpus does not contain metadata on publication country.')
+
+    pub_country = []
+    for doc in corpus.documents:
+        if doc.country_publication is None:
+            continue
+        pub_country.append(doc.country_publication)
+
     if corpus.name:
         corpus_name = corpus.name
     else:
@@ -93,10 +104,19 @@ def plt_pubcountries(corpus):
 def plt_gender_breakdown(corpus):
     """
     Creates a pie chart displaying the composition of male and female writers in the data
+    Requires that corpus contains a 'author_gender' metadata field
     :param corpus: Corpus
     RETURNS a pie chart
     """
-    pub_gender = [doc.author_gender for doc in corpus.documents]
+    if 'author_gender' not in corpus.get_corpus_metadata():
+        raise MissingMetadataError('This corpus does not contain metadata on author gender.')
+
+    pub_gender = []
+    for doc in corpus.documents:
+        if doc.author_gender is None:
+            continue
+        pub_gender.append(doc.author_gender)
+
     if corpus.name:
         corpus_name = corpus.name
     else:
@@ -129,8 +149,14 @@ def plt_gender_breakdown(corpus):
 def plt_metadata_pie(corpus):
     """
     Creates pie chart indicating fraction of metadata that is filled in corpus
+    Requires that corpus contains 'author_gender' and 'country_publication metadata fields
     :param corpus: Corpus
     """
+    if 'author_gender' not in corpus.get_corpus_metadata() or 'country_publication' not in \
+            corpus.get_corpus_metadata():
+        raise MissingMetadataError('This corpus does not contain metadata on author gender or '
+                                   'publication country.')
+
     if corpus.name:
         name = corpus.name
     else:
@@ -140,9 +166,9 @@ def plt_metadata_pie(corpus):
                        'Country Only': 0, 'Neither': 0})
     num_documents = len(corpus)
     for doc in corpus.documents:
-        if doc.author_gender != 'unknown' and doc.country_publication:
+        if doc.author_gender and doc.author_gender != 'unknown' and doc.country_publication:
             counter['Both Country and Gender'] += 1
-        elif doc.author_gender != 'unknown':
+        elif doc.author_gender and doc.author_gender != 'unknown':
             counter['Author Gender Only'] += 1
         elif doc.country_publication:
             counter['Country Only'] += 1
@@ -164,7 +190,7 @@ def plt_metadata_pie(corpus):
 
 def create_corpus_summary_visualizations(corpus):
     """
-    Runs through all plt functions given a corpus name
+    Runs through all plt functions given a corpus
     :param corpus: Corpus
     """
     plt_gender_breakdown(corpus)
