@@ -29,6 +29,7 @@ def run_adj_analysis(corpus):
 
 def store_raw_results(results, corpus):
     try:
+<<<<<<< HEAD
         common.load_pickle("pronoun_adj_raw_analysis_" + corpus.name)
         x = input("results already stored. overwrite previous analysis? (y/n)")
         if x == 'y':
@@ -37,6 +38,16 @@ def store_raw_results(results, corpus):
             pass
     except IOError:
         common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.name)
+=======
+        common.load_pickle("pronoun_adj_raw_analysis_")
+        x = input("results already stored. overwrite previous analysis? (y/n)")
+        if x == 'y':
+            common.store_pickle(results, "pronoun_adj_raw_analysis_")
+        else:
+            pass
+    except IOError:
+        common.store_pickle(results, "pronoun_adj_raw_analysis_")
+>>>>>>> parent of 1e667f0... Revert "squished out corpus_name in some files"
 
 
 def merge(novel_adj_dict, full_adj_dict):
