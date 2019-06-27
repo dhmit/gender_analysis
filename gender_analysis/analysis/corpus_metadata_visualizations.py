@@ -105,7 +105,7 @@ def plot_pubcountries(corpus, filename=None):
     plt.xticks(color='k', size=15)
     plt.yticks(color='k', size=15)
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
-    
+
     if filename:
         plt.savefig(filename.replace(' ', '_')+'.png')
     else:
