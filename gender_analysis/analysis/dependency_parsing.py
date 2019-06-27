@@ -88,7 +88,8 @@ def parse_novel(novel, parser):
 
     >>> parser = get_parser("assets/stanford-parser.jar","assets/stanford-parser-3.9.1-models.jar")
     >>> novels = Corpus('sample_novels').novels
-    >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
+    >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+    ...                   'corpus_name': 'sample_novels', 'date': '1900',
     ...                   'filename': None, 'text': "He told her"}
     >>> toy_novel = Novel(novel_metadata)
     >>> parse_novel(toy_novel, parser)
