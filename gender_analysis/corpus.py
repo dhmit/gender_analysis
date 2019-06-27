@@ -59,7 +59,7 @@ class Corpus(common.FileLoaderMixin):
         else:
             raise ValueError(f'path_to_files must lead to a a previously pickled corpus or directory of .txt files')
 
-        if not pickle_on_load:
+        if pickle_on_load is not None:
             common.store_pickle(self, pickle_on_load)
 
     def __len__(self):
