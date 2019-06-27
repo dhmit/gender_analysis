@@ -202,21 +202,29 @@ class Corpus(common.FileLoaderMixin):
 
     def count_authors_by_gender(self, gender):
         """
-        This function returns the number of authors with the
-        specified gender (male, female, non-binary, unknown)
+        This function returns the number of authors in the corpus with the specified gender. NOTE: there must be an
+        'author_gender' field in the metadata field of all documents.
 
-        # >>> from gender_analysis.corpus import Corpus
-        # >>> from gender_analysis.common import BASE_PATH
-        # >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        # >>> c = Corpus(path)
-        # >>> c.count_authors_by_gender('female')
-        # 0
+        >>> from gender_analysis.corpus import Corpus
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
+        >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+        >>> c = Corpus(path, csv_path=path_to_csv)
+        >>> c.count_authors_by_gender('female')
+        7
 
-
-        :rtype: int
+        :param gender: str of the gender to search for in the metadata
+        :return: int
         """
-        filtered_corpus = self.filter_by_gender(gender)
-        return len(filtered_corpus)
+        count = 0
+        for document in self.documents:
+            try:
+                if document.author_gender.lower() == gender.lower():
+                    count += 1
+            except AttributeError:
+                raise AttributeError(f'{document.filename} does not have an \'author_gender\' metadata field')
+
+        return count
 
     def filter_by_gender(self, gender):
         """
