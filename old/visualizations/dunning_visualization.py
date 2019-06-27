@@ -1,11 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from gender_analysis.common import load_graph_settings
-from gender_analysis.analysis.dunning import male_vs_female_authors_analysis_dunning, dunning_result_to_dict
-
-load_graph_settings(False)
-
 
 def score_plot_to_show(results):
     results_dict = dict(results)
@@ -44,7 +39,12 @@ def freq_plot_to_show(results):
 
 
 if __name__ == '__main__':
-    '''
+    # from gender_analysis.common import load_graph_settings
+    from gender_analysis.analysis.dunning import male_vs_female_authors_analysis_dunning, \
+        dunning_result_to_dict
+
+    # load_graph_settings(False)
+
     from gender_analysis.corpus import Corpus
     from gender_analysis.common import BASE_PATH
     filepath = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
@@ -55,5 +55,4 @@ if __name__ == '__main__':
         sample), part_of_speech_to_include="verbs")
     analysis_results_sorted = sorted(analysis_results_unsorted.items(), key=lambda x: x[1][
         'dunning'], reverse=True)
-    score_plot_to_show(analysis_results_sorted)
-    '''
+    freq_plot_to_show(analysis_results_sorted)

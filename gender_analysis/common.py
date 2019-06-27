@@ -111,6 +111,7 @@ LEGALESE_END_MARKERS = frozenset(("SERVICE THAT CHARGES FOR DOWNLOAD",))
 # TODO(elsa): Investigate doctest errors in this file, may be a result of
 # my own system, not actual code errors
 
+
 class FileLoaderMixin:
     """ The FileLoaderMixin loads files either locally or
     remotely from Github (if run from an ipython notebook)
@@ -246,6 +247,12 @@ class FileLoaderMixin:
             # When loading the text online, each end of line
             # has \r and \n -> replace with only \n
             return text.replace('\r\n', '\n')
+
+
+class MissingMetadataError(Exception):
+    """Raised when a function that assumes certain metadata is called on a corpus without that
+    metadata"""
+    pass
 
 
 def store_pickle(obj, filename):
@@ -390,6 +397,7 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
     with codecs.open(target_path, 'w', encoding=target_encoding) as target_file:
         target_file.write(text)
 
+
 def load_graph_settings(show_grid_lines=True):
     '''
     This function sets the seaborn graph settings to the defaults for our project.
@@ -405,6 +413,7 @@ def load_graph_settings(show_grid_lines=True):
                   'figure.facecolor':background_color}
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
+
 
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test

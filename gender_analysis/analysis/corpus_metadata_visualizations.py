@@ -2,15 +2,29 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import Counter
 
+from gender_analysis.common import MissingMetadataError
 
-def plt_pubyears(pub_years, corpus_name):
+
+def plt_pubyears(corpus):
     """
     Creates a histogram displaying the frequency of books that were published within a 20 year 
     period
-    :param pub_years: list of all years to be included in the plot
-    :param corpus_name: str
+    :param corpus: Corpus
     RETURNS a pyplot histogram
     """
+    if 'date' not in corpus.get_corpus_metadata():
+        raise MissingMetadataError()
+
+    pub_years = []
+    for doc in corpus.documents:
+        if doc.date is None:
+            continue
+        pub_years.append(doc.date)
+    if corpus.name:
+        corpus_name = corpus.name
+    else:
+        corpus_name = 'corpus'
+
     sns.set_style('ticks')
     sns.color_palette('colorblind')
     ax1 = plt.subplot2grid((1, 1), (0, 0))
@@ -29,13 +43,18 @@ def plt_pubyears(pub_years, corpus_name):
     plt.savefig('date_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
 
 
-def plt_pubcountries(pub_country, corpus_name):
+def plt_pubcountries(corpus):
     """
     Creates a bar graph displaying the frequency of books that were published in each country
-    :param pub_country: list of all countries to be included in the plot
     :param corpus: Corpus
     RETURNS a pyplot bargraph
     """
+    pub_country = [doc.country_publication for doc in corpus.documents]
+    if corpus.name:
+        corpus_name = corpus.name
+    else:
+        corpus_name = 'corpus'
+
     sns.set_style('ticks')
     sns.color_palette('colorblind')
     plt.figure(figsize=(10, 6))
@@ -71,13 +90,18 @@ def plt_pubcountries(pub_country, corpus_name):
     plt.savefig('country_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
 
 
-def plt_gender_breakdown(pub_gender, corpus_name):
+def plt_gender_breakdown(corpus):
     """
     Creates a pie chart displaying the composition of male and female writers in the data
-    :param pub_gender: list of all author genders to be included in the plot
     :param corpus: Corpus
     RETURNS a pie chart
     """
+    pub_gender = [doc.author_gender for doc in corpus.documents]
+    if corpus.name:
+        corpus_name = corpus.name
+    else:
+        corpus_name = 'corpus'
+
     sns.set_color_codes('colorblind')
     gendercount = {}
     for i in pub_gender:
@@ -102,16 +126,13 @@ def plt_gender_breakdown(pub_gender, corpus_name):
     plt.savefig('gender_breakdown_for_'+corpus_name.replace(' ', '_')+'.png')
 
 
-def plt_metadata_pie(corpus, corpus_name=None):
+def plt_metadata_pie(corpus):
     """
     Creates pie chart indicating fraction of metadata that is filled in corpus
     :param corpus: Corpus
-    :param corpus_name: str, plot title and filename use corpus_name if give
     """
-    if corpus.name is not None:
+    if corpus.name:
         name = corpus.name
-    elif corpus_name is not None:
-        name = corpus_name
     else:
         name = 'corpus'
 
@@ -146,26 +167,17 @@ def create_corpus_summary_visualizations(corpus):
     Runs through all plt functions given a corpus name
     :param corpus: Corpus
     """
-    pubyears = [doc.date for doc in corpus.documents]
-    pubgender = [doc.author_gender for doc in corpus.documents]
-    pubcountry = [doc.country_publication for doc in corpus.documents]
-    if corpus.name is not None:
-        corpus_name = corpus.name
-    else:
-        corpus_name = 'corpus'
-
-    plt_gender_breakdown(pubgender, corpus_name)
-    plt_pubyears(pubyears, corpus_name)
-    plt_pubcountries(pubcountry, corpus_name)
+    plt_gender_breakdown(corpus)
+    plt_pubyears(corpus)
+    plt_pubcountries(corpus)
     plt_metadata_pie(corpus)
 
 
 if __name__ == '__main__':
-    '''
     from gender_analysis.corpus import Corpus
     from gender_analysis.common import BASE_PATH
     path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
     csv_path = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
     sample = Corpus(path, csv_path=csv_path)
     create_corpus_summary_visualizations(sample)
-    '''
+
