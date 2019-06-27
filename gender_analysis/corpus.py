@@ -572,19 +572,6 @@ class Corpus(common.FileLoaderMixin):
         raise ValueError("Document not found")
 
 
-def get_metadata_fields(name):
-    """
-    Gives a list of all metadata fields for corpus
-    >>> from gender_analysis import corpus
-    >>> corpus.get_metadata_fields('gutenberg')
-    ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'corpus_name', 'notes']
-
-    :param: name: str
-    :return: list
-    """
-    return common.METADATA_LIST
-
-
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test
     main_test()
