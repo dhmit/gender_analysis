@@ -32,7 +32,7 @@ class Corpus(common.FileLoaderMixin):
         :param path_to_files: Must be either the path to a directory of txt files or an already-pickled corpus
         :param name: Optional name of the corpus, for ease of use and readability
         :param csv_path: Optional path to a csv metadata file
-        :param pickle_on_load: Pickle filename, will not generate a pickle if None
+        :param pickle_on_load: Pickle filename, will generate a pickle if not None
         """
 
         if isinstance(path_to_files, str):
