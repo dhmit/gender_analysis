@@ -1,7 +1,6 @@
 import csv
 import os
 import re
-import time
 import requests
 from pathlib import Path
 from shutil import copyfile
@@ -71,18 +70,15 @@ def generate_corpus_gutenberg():
             filepaths.append(ascii_path)
 
     print(f"Total number of files to process: {len(filepaths)}")
-    corpus_gen_start_time = time.time()
 
     for filepath in filepaths:
         gutenberg_id = int(filepath.parts[-2])
         try:
-            start_book = time.time()
             print("Filepath:", filepath)
             print("ID:", gutenberg_id)
             # check if book is valid novel by our definition
             if (not is_valid_novel_gutenberg(gutenberg_id)):
                 print("Not a novel")
-                print("Time for this book:", time.time() - start_book, "seconds")
                 print('')
                 continue
             novel_metadata = get_gutenberg_metadata_for_single_novel(gutenberg_id)
@@ -105,13 +101,8 @@ def generate_corpus_gutenberg():
             print("")
             continue
 
-
-
-    end_time = time.time()
     print("Done!")
     print("No. Books:", number_books)
-    print("Total Time:", end_time-corpus_gen_start_time, "seconds")
-    print("Average Time per Book", (end_time-corpus_gen_start_time) / number_books)
 
 
 def get_gutenberg_metadata_for_single_novel(gutenberg_id):
@@ -156,7 +147,7 @@ def is_valid_novel_gutenberg(gutenberg_id):
     if novel is in correct publication range
     That novel is not a translation
 
-    >>> from gender_analysis.corpus_gen import is_valid_novel_gutenberg
+    >>> from gender_analysis.gutenberg_loader import is_valid_novel_gutenberg
     >>> is_valid_novel_gutenberg(98) # Dickens, tale of two cities
     A Tale of Two Cities
     True
@@ -201,7 +192,7 @@ def language_invalidates_entry(gutenberg_id):
     """
     Returns False if book with gutenberg id is in English, True otherwise
 
-    >>> from gender_analysis.corpus_gen import language_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import language_invalidates_entry
     >>> language_invalidates_entry(46) # A Christmas Carol
     False
     >>> language_invalidates_entry(27217) # Some Chinese thing
@@ -221,7 +212,7 @@ def rights_invalidate_entry(gutenberg_id):
     """
     Returns False if book with gutenberg id is in public domain in US, True otherwise
 
-    >>> from gender_analysis.corpus_gen import rights_invalidate_entry
+    >>> from gender_analysis.gutenberg_loader import rights_invalidate_entry
     >>> rights_invalidate_entry(5200) # Metamorphosis by Franz Kafka
     True
     >>> rights_invalidate_entry(8066) # The Bible, King James version, Book 66: Revelation
@@ -241,7 +232,7 @@ def subject_invalidates_entry(gutenberg_id):
     """
     Checks if the Gutenberg subject indicates that the book is not a novel
 
-    >>> from gender_analysis.corpus_gen import subject_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import subject_invalidates_entry
     >>> subject_invalidates_entry(2240) # Much Ado About Nothing
     True
     >>> subject_invalidates_entry(33) # The Scarlet Letter
@@ -270,7 +261,7 @@ def date_invalidates_entry(gutenberg_id):
     """
     Checks if book with gutenberg id is in correct date range.  If it can't get the date, simply
     returns False
-    >>> from gender_analysis.corpus_gen import date_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import date_invalidates_entry
     >>> date_invalidates_entry(33) # Hawthorne, Scarlet Letter
     False
     >>> date_invalidates_entry(173) # no publication date
@@ -296,7 +287,7 @@ def title_invalidates_entry(title):
     """
     Determines if the title contains phrases that indicate that the book is invalid
 
-    >>> from gender_analysis.corpus_gen import title_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import title_invalidates_entry
     >>> title_invalidates_entry("Index of the Project Gutenberg Works of Michael Cuthbert")
     True
     >>> title_invalidates_entry("Pride and Prejudice")
@@ -327,10 +318,10 @@ def text_invalidates_entry(text):
     """
     Determine if there is anything obvious in the text that would invalidate it as a valid novel
 
-    >>> from gender_analysis.corpus_gen import text_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import text_invalidates_entry
     >>> text_invalidates_entry("Translator: George Fyler Townsend")
     True
-    >>> from gender_analysis.corpus_gen import get_novel_text_gutenberg
+    >>> from gender_analysis.gutenberg_loader import get_novel_text_gutenberg
     >>> import os
     >>> current_dir = os.path.abspath(os.path.dirname(__file__))
     >>> filepath = Path(current_dir, r"corpora/sample_novels/texts/hawthorne_scarlet.txt")
@@ -390,7 +381,7 @@ def get_novel_text_gutenberg(gutenberg_id):
     """
     Extract text as as string from file, with boilerplate removed
 
-    >>> from gender_analysis.corpus_gen import get_novel_text_gutenberg
+    >>> from gender_analysis.gutenberg_loader import get_novel_text_gutenberg
     >>> text = get_novel_text_gutenberg(32)
     >>> text[:7]
     'HERLAND'
@@ -406,7 +397,7 @@ def get_novel_text_gutenberg_with_boilerplate(gutenberg_id):
     """
     Extract text as as string from file
 
-    >>> from gender_analysis.corpus_gen import get_novel_text_gutenberg
+    >>> from gender_analysis.gutenberg_loader import get_novel_text_gutenberg
     >>> text = get_novel_text_gutenberg_with_boilerplate(32)
     >>> text.split()[:3]
     ['The', 'Project', 'Gutenberg']
@@ -442,7 +433,7 @@ def get_publication_date(author, title, gutenberg_id):
     >>> get_publication_date("Hawthorne, Nathaniel", "The Scarlet Letter", 33)
     1850
 
-    # >>> from gender_analysis import corpus_gen
+    # >>> from gender_analysis import gutenberg_loader
     # >>> get_publication_date("Dick, Phillip K.", "Mr. Spaceship", 32522)
     # 1953
 
@@ -524,7 +515,7 @@ def get_publication_date_from_copyright_certain(novel_text):
 
     >>> novel_text = "This work blah blah blah blah COPYRIGHT, 1894 blah"
     >>> novel_text += "and they all died."
-    >>> from gender_analysis.corpus_gen import get_publication_date_from_copyright_certain
+    >>> from gender_analysis.gutenberg_loader import get_publication_date_from_copyright_certain
     >>> get_publication_date_from_copyright_certain(novel_text)
     1894
 
@@ -547,7 +538,7 @@ def get_publication_date_from_copyright_uncertain(novel_text):
 
     >>> novel_text = "This work blah blah blah blah Brams and Co. 1894 blah"
     >>> novel_text += "and they all died."
-    >>> from gender_analysis.corpus_gen import get_publication_date_from_copyright_uncertain
+    >>> from gender_analysis.gutenberg_loader import get_publication_date_from_copyright_uncertain
     >>> get_publication_date_from_copyright_uncertain(novel_text)
     1894
 
@@ -658,7 +649,7 @@ def format_author(author):
     and a string in the form "Lastname, Firstname, Sfx." into "Firstname Lastname, Sfx."
     If string is not in any of the above forms just returns the string.
 
-    >>> from gender_analysis.corpus_gen import format_author
+    >>> from gender_analysis.gutenberg_loader import format_author
     >>> format_author("Washington, George")
     'George Washington'
     >>> format_author("Hurston, Zora Neale")
@@ -697,7 +688,7 @@ def get_author_gender(authors):
     #TODO: 'both' is ambiguous; Does it mean both female and male?  female and unknown?
     #TODO: male and nonbinary?
 
-    >>> from gender_analysis.corpus_gen import get_author_gender
+    >>> from gender_analysis.gutenberg_loader import get_author_gender
     >>> get_author_gender(["Hawthorne, Nathaniel"])
     'male'
     >>> get_author_gender(["Cuthbert, Michael"])
@@ -751,7 +742,7 @@ def get_author_gender_wikidata(author):
     If it fails returns None
     N.B. Wikidata's categories for transgender male and female are treated as male and female, respectively
 
-    >>> from gender_analysis.corpus_gen import get_author_gender_wikidata
+    >>> from gender_analysis.gutenberg_loader import get_author_gender_wikidata
     >>> get_author_gender_wikidata("Obama, Barack")
     'male'
     >>> get_author_gender_wikidata("Hurston, Zora Neale")
@@ -780,7 +771,7 @@ def get_gender_from_wiki_claims(clm_dict):
     If it fails returns None
     N.B. Wikidata's categories for transgender male and female are treated as male and female, respectively
 
-    >>> from gender_analysis.corpus_gen import get_gender_from_wiki_claims
+    >>> from gender_analysis.gutenberg_loader import get_gender_from_wiki_claims
     >>> site = pywikibot.Site("en", "wikipedia")
     >>> page = pywikibot.Page(site, 'Zeus')
     >>> item = pywikibot.ItemPage.fromPage(page)
@@ -812,7 +803,7 @@ def get_author_gender_guesser(author):
     """
     Tries to get gender of author, 'female', 'male', 'non-binary' from the gender guesser module
 
-    >>> from gender_analysis.corpus_gen import get_author_gender_guesser
+    >>> from gender_analysis.gutenberg_loader import get_author_gender_guesser
     >>> get_author_gender_guesser("Cuthbert, Michael")
     'male'
     >>> get_author_gender_guesser("Li, Michelle")
@@ -859,8 +850,8 @@ def write_metadata(novel_metadata):
     Subject to change as metadata changes
 
     Running this doctest actually generates a file
-    # >>> from gender_analysis import corpus_gen
-    # >>> corpus_gen.write_metadata({'id': 105, 'author': 'Austen, Jane', 'title': 'Persuasion',
+    # >>> from gender_analysis import gutenberg_loader
+    # >>> gutenberg_loader.write_metadata({'id': 105, 'author': 'Austen, Jane', 'title': 'Persuasion',
     # ...                            'corpus_name': 'gutenberg', 'date': '1818',
     # ...                            'country_publication': 'England', 'subject': ['England -- Social life and customs -- 19th century -- Fiction'],
     # ...                            'author_gender': 'female'})
