@@ -26,14 +26,13 @@ class Corpus(common.FileLoaderMixin):
 
     """
 
-    def __init__(self, path_to_files, name=None, csv_path=None, pickle_on_load=False):
+    def __init__(self, path_to_files, name=None, csv_path=None, pickle_on_load=None):
 
         """
-
         :param path_to_files: Must be either the path to a directory of txt files or an already-pickled corpus
         :param name: Optional name of the corpus, for ease of use and readability
         :param csv_path: Optional path to a csv metadata file
-        :param pickle_on_load:
+        :param pickle_on_load: Pickle filename, will not generate a pickle if None
         """
 
         if isinstance(path_to_files, str):
@@ -59,6 +58,9 @@ class Corpus(common.FileLoaderMixin):
             self.documents = self._load_documents()
         else:
             raise ValueError(f'path_to_files must lead to a a previously pickled corpus or directory of .txt files')
+
+        if not pickle_on_load:
+            common.store_pickle(self, pickle_on_load)
 
     def __len__(self):
         """
