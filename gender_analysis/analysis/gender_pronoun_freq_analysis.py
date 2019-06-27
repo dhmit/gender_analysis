@@ -28,8 +28,8 @@ def books_pronoun_freq(corp, to_pickle=False):
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import books_pronoun_freq
     >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
+    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
     >>> books_pronoun_freq(Corpus(filepath, csv_path=csvpath))
     {<Document (aanrud_longfrock)>: 0.7623169107856191, <Document (abbott_flatlandromance)>: 0.14321608040201003, <Document (abbott_indiscreetletter)>: 0.4166666666666667, <Document (adams_fighting)>: 0.1898395721925134, <Document (alcott_josboys)>: 0.42152086422368146, <Document (alcott_littlemen)>: 0.3111248200699157, <Document (alcott_littlewomen)>: 0.6196978175713487, <Document (alden_chautauqua)>: 0.7518623169791935, <Document (austen_emma)>: 0.5662100456621004, <Document (austen_persuasion)>: 0.5305111461382571}
 
@@ -84,8 +84,8 @@ def subject_vs_object_pronoun_freqs(corp, to_pickle=False):
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
+    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
     >>> subject_vs_object_pronoun_freqs(Corpus(filepath, csv_path=csvpath))
     ({<Document (aanrud_longfrock)>: 0.793233082706767, <Document (abbott_flatlandromance)>: 0.6741573033707865, <Document (abbott_indiscreetletter)>: 0.7906976744186047, <Document (adams_fighting)>: 0.7184527584020292, <Document (alcott_josboys)>: 0.6330049261083744, <Document (alcott_littlemen)>: 0.6451612903225807, <Document (alcott_littlewomen)>: 0.6577563540753725, <Document (alden_chautauqua)>: 0.7577030812324931, <Document (austen_emma)>: 0.7086120401337792, <Document (austen_persuasion)>: 0.6739130434782609}, {<Document (aanrud_longfrock)>: 0.5376532399299474, <Document (abbott_flatlandromance)>: 0.17543859649122806, <Document (abbott_indiscreetletter)>: 0.4424242424242424, <Document (adams_fighting)>: 0.43485915492957744, <Document (alcott_josboys)>: 0.3862487360970678, <Document (alcott_littlemen)>: 0.4343501326259947, <Document (alcott_littlewomen)>: 0.4124569980083288, <Document (alden_chautauqua)>: 0.5461432506887053, <Document (austen_emma)>: 0.4836730221345606, <Document (austen_persuasion)>: 0.4872013651877133})
     """
@@ -148,8 +148,8 @@ def subject_pronouns_gender_comparison(corp, subject_gender, to_pickle=False):
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
+    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
     >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'male')
     {<Document (aanrud_longfrock)>: 0.2557575757575758, <Document (abbott_flatlandromance)>: 0.923076923076923, <Document (abbott_indiscreetletter)>: 0.582857142857143, <Document (adams_fighting)>: 0.8210144927536231, <Document (alcott_josboys)>: 0.5736607142857142, <Document (alcott_littlemen)>: 0.6812652068126521, <Document (alcott_littlewomen)>: 0.39719502513892563, <Document (alden_chautauqua)>: 0.2543488481429243, <Document (austen_emma)>: 0.4343926191696566, <Document (austen_persuasion)>: 0.45696623870660963}
     >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'female')
@@ -235,11 +235,11 @@ def freq_by_author_gender(d):
     >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Brontë, Anne', 'title': 'The Tenant of Wildfell Hall',
     ...                   'corpus_name': 'sample_novels', 'date': '1848', 'author_gender':'female',
-    ...                   'filename': 'bronte_wildfell.txt'}
+    ...                   'filename': 'bronte_wildfell.txt', 'filepath': 'testing/corpora/sample_novels/texts/bronte_wildfell.txt'}
     >>> bronte = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Adams, William Taylor', 'title': 'Fighting for the Right',
     ...                   'corpus_name': 'sample_novels', 'date': '1892', 'author_gender':'male',
-    ...                   'filename': 'adams_fighting.txt'}
+    ...                   'filename': 'adams_fighting.txt', 'filepath': 'testing/corpora/sample_novels/texts/adams_fighting.txt'}
     >>> fighting = document.Document(novel_metadata)
     >>> d = {fighting:0.3, bronte:0.6}
     >>> freq_by_author_gender(d)
@@ -287,11 +287,11 @@ def freq_by_date(d, time_frame, bin_size):
     >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_date
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt'}
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': 'testing/corpora/sample_novels/texts/austen_persuasion.txt'}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt'}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': 'testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_date(d, (1770, 1910), 10)
@@ -331,11 +331,13 @@ def freq_by_location(d):
     >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_location
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt'}
+    ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt',
+    ...                   'filepath': 'testing/corpora/sample_novels/texts/austen_persuasion.txt'}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata2 = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
-    ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt'}
+    ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt',
+    ...                   'filepath': 'testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata2)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_location(d)
@@ -387,11 +389,11 @@ def sort_every_year(frequency_dict):
     >>> from gender_analysis import document
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
     ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt'}
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': 'testing/corpora/sample_novels/texts/austen_persuasion.txt'}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ...                   'corpus_name': 'sample_novels', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt'}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': 'testing/corpora/sample_novels/texts/hawthorne_scarlet.txt'}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> sorted_years = sort_every_year(d)
@@ -504,8 +506,8 @@ def overall_mean(d):
     >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import overall_mean, books_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
+    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
     >>> c = Corpus(filepath, csv_path=csvpath)
     >>> freq = books_pronoun_freq(c)
     >>> mean = overall_mean(freq)

@@ -19,7 +19,7 @@ class Corpus(common.FileLoaderMixin):
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
-    >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+    >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
     >>> c = Corpus(path)
     >>> type(c.documents), len(c)
     (<class 'list'>, 100)
@@ -67,7 +67,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> c = Corpus(path)
         >>> len(c)
         100
@@ -84,7 +84,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'test_corpus'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
         >>> c = Corpus(path)
         >>> docs = []
         >>> for doc in c:
@@ -105,7 +105,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> sorted_docs = sorted(sample_corpus.documents[:20])
         >>> sample_corpus.documents = sorted_docs
@@ -140,7 +140,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> sorted_docs = sorted(sample_corpus.documents[:20])
         >>> sample_corpus.documents = sorted_docs
@@ -169,7 +169,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> corpus_copy = sample_corpus.clone()
         >>> len(corpus_copy) == len(sample_corpus)
@@ -207,7 +207,7 @@ class Corpus(common.FileLoaderMixin):
 
         # >>> from gender_analysis.corpus import Corpus
         # >>> from gender_analysis.common import BASE_PATH
-        # >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        # >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         # >>> c = Corpus(path)
         # >>> c.count_authors_by_gender('female')
         # 0
@@ -225,7 +225,7 @@ class Corpus(common.FileLoaderMixin):
 
         # >>> from gender_analysis.corpus import Corpus
         # >>> from gender_analysis.common import BASE_PATH
-        # >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        # >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         # >>> c = Corpus(path)
         # >>> female_corpus = c.filter_by_gender('female')
         # >>> len(female_corpus)
@@ -253,8 +253,8 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_wordcount_counter()['fire']
         2269
@@ -273,7 +273,7 @@ class Corpus(common.FileLoaderMixin):
         this returns the fields which are specific to the corpus it is being called on.
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> c = Corpus(path)
         >>> c.get_corpus_metadata()
         ['filename', 'filepath']
@@ -293,8 +293,8 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, name='sample_novels', csv_path=csvpath)
         >>> c.get_field_vals('name')
         ['sample_novels']
@@ -326,8 +326,8 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> corp = Corpus(path, csv_path=csvpath)
         >>> female_corpus = corp.subcorpus('author_gender','female')
         >>> len(female_corpus)
@@ -401,13 +401,14 @@ class Corpus(common.FileLoaderMixin):
         characteristic_dict. Multiple metadata keys can be searched at one time, provided that the metadata is
         available for the documents in the corpus.
 
+
         :param characteristic_dict: Dictionary of metadata keys and search terms as
         :return:
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> path_to_csv = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=path_to_csv)
         >>> corpus_filter = {'author_gender': 'male'}
         >>> len(c.multi_filter(corpus_filter))
@@ -459,8 +460,8 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_document("author", "Dickens, Charles")
         <Document (dickens_twocities)>
@@ -495,7 +496,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> filepath = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> corpus = Corpus(filepath)
         >>> results = corpus.get_sample_text_passages('he cried', 2)
         >>> 'he cried' in results[0][1]
@@ -545,8 +546,8 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_document_multiple_fields({"author": "Dickens, Charles", "author_gender": "male"})
         <Document (dickens_twocities)>

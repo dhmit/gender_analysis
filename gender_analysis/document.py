@@ -31,9 +31,10 @@ class Document(common.FileLoaderMixin):
     metadata (author, title, publication date) of a document
 
     >>> from gender_analysis import document
-    >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
-    ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': 'corpora/sample_novels/texts/austen_persuasion.txt'}
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
@@ -96,9 +97,10 @@ class Document(common.FileLoaderMixin):
         However, it is performance-wise costly, so it's only loaded when it's actually required.
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
         83285
@@ -117,9 +119,10 @@ class Document(common.FileLoaderMixin):
         :return: str
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> document_string = str(austen)
         >>> document_string
@@ -137,9 +140,10 @@ class Document(common.FileLoaderMixin):
         :return: string
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> repr(austen)
         '<Document (austen_persuasion)>'
@@ -153,9 +157,10 @@ class Document(common.FileLoaderMixin):
         Overload the equality operator to enable comparing and sorting documents.
 
         >>> from gender_analysis.document import Document
-        >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = Document(austen_metadata)
         >>> austen2 = Document(austen_metadata)
         >>> austen == austen2
@@ -187,13 +192,13 @@ class Document(common.FileLoaderMixin):
         Overload less than operator to enable comparing and sorting documents
 
         >>> from gender_analysis import document
-        >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(austen_metadata)
-        >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '1850',
-        ...                   'filename': 'hawthorne_scarlet.txt'}
+        >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
+        ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
         >>> hawthorne = document.Document(hawthorne_metadata)
         >>> hawthorne < austen
         False
@@ -231,11 +236,7 @@ class Document(common.FileLoaderMixin):
 
         :return: str
         """
-        # file_path = Path(self.filepath)
-        if 'test_text' not in self.filename:
-            file_path = Path('corpora', 'sample_novels', 'texts', self.filename)
-        else:
-            file_path =Path('corpora', 'document_test_files', self.filename)
+        file_path = Path(self.filepath)
 
         try:
             text = self.load_file(file_path)
@@ -266,10 +267,12 @@ class Document(common.FileLoaderMixin):
         :return: str
 
         >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'james_highway.txt'}
+        ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
+        >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text(raw_text)
         >>> title_line = raw_text.splitlines()[0]
@@ -300,10 +303,12 @@ class Document(common.FileLoaderMixin):
         :return: str
 
         >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'james_highway.txt'}
+        ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
+        >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
         >>> raw_text = austen.load_file(file_path)
         >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
         >>> title_line = raw_text.splitlines()[0]
@@ -366,8 +371,10 @@ class Document(common.FileLoaderMixin):
         E.g. this version doesn't handle dashes or contractions
 
         >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'test_text_1.txt'}
+        ...                   'filename': 'test_text_1.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_1.txt')}
         >>> austin = document.Document(document_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
@@ -391,9 +398,11 @@ class Document(common.FileLoaderMixin):
         Finds all of the quoted statements in the document text
 
         >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
         >>> test_text = '"This is a quote" and also "This is my quote"'
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'test_text_0.txt'}
+        ...                   'date': '1818', 'filename': 'test_text_0.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_0.txt')}
         >>> document_novel = document.Document(document_metadata)
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
@@ -445,8 +454,10 @@ class Document(common.FileLoaderMixin):
         """
         Returns the number of instances of str word in the text.  N.B.: Not case-sensitive.
         >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'date': '2018', 'filename': 'test_text_2.txt'}
+        ...                   'date': '2018', 'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_count_of_word("sad")
         4
@@ -471,9 +482,10 @@ class Document(common.FileLoaderMixin):
         the separate method.)
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '2018',
-        ...                   'filename': 'test_text_10.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
+        ...                   'filename': 'test_text_10.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_10.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
@@ -494,9 +506,10 @@ class Document(common.FileLoaderMixin):
         Note: words always return lowercase
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '2018',
-        ...                   'filename': 'test_text_11.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
+        ...                   'filename': 'test_text_11.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_11.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
@@ -524,9 +537,10 @@ class Document(common.FileLoaderMixin):
         2x window_size + 1
 
         >>> from gender_analysis.document import Document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '2018',
-        ...                   'filename': 'test_text_12.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
+        ...                   'filename': 'test_text_12.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_12.txt')}
         >>> scarlett = Document(document_metadata)
 
         # search_terms can be either a string...
@@ -564,9 +578,10 @@ class Document(common.FileLoaderMixin):
         :return: double
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '1900',
-        ...                   'filename': 'test_text_2.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
+        ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> frequency = scarlett.get_word_freq('sad')
         >>> frequency
@@ -583,9 +598,10 @@ class Document(common.FileLoaderMixin):
         Note: the same word can have a different part of speech tag. In the example below,
         see "refuse" and "permit"
         >>> from gender_analysis.document import Document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '1900',
-        ...                   'filename': 'test_text_13.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
+        ...                   'filename': 'test_text_13.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_13.txt')}
         >>> document = Document(document_metadata)
         >>> document.get_part_of_speech_tags()[:4]
         [('They', 'PRP'), ('refuse', 'VBP'), ('to', 'TO'), ('permit', 'VB')]

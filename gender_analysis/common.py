@@ -111,6 +111,7 @@ LEGALESE_END_MARKERS = frozenset(("SERVICE THAT CHARGES FOR DOWNLOAD",))
 # TODO(elsa): Investigate doctest errors in this file, may be a result of
 # my own system, not actual code errors
 
+
 class FileLoaderMixin:
     """ The FileLoaderMixin loads files either locally or
     remotely from Github (if run from an ipython notebook)
@@ -129,7 +130,7 @@ class FileLoaderMixin:
         >>> from gender_analysis import common
 
         >>> f = common.FileLoaderMixin()
-        >>> novel_path = Path('corpora', 'sample_novels',
+        >>> novel_path = Path('testing', 'corpora', 'sample_novels',
         ...                   'texts', 'austen_persuasion.txt')
         >>> novel_text = f.load_file(novel_path)
         >>> type(novel_text), len(novel_text)
@@ -138,29 +139,21 @@ class FileLoaderMixin:
         csv files are returned as a list of strings, which can be
         further processed with Python's csv module
 
-        >>> corpus_metadata_path = Path('corpora', 'sample_novels',
+        >>> corpus_metadata_path = Path('testing', 'corpora', 'sample_novels',
         ...                             'sample_novels.csv')
         >>> corpus_metadata = f.load_file(corpus_metadata_path)
         >>> type(corpus_metadata)
         <class 'list'>
 
-        If the file is not available locally (e.g. in an ipython notebook,
-        it gets loaded from Github.
-
-        >>> novel_text_local = f.load_file_locally(novel_path, '.txt')
-        >>> novel_text_online = f.load_file_remotely(novel_path.as_posix(), '.txt')
-        >>> novel_text_local == novel_text_online
-        True
-
         file_path can be a string or Path object
 
         >>> import os
-        >>> novel_path_str = os.sep.join(['corpora', 'sample_novels',
+        >>> novel_path_str = os.sep.join(['testing', 'corpora', 'sample_novels',
         ...                               'texts', 'austen_persuasion.txt'])
         >>> novel_text_str = f.load_file(novel_path_str)
         >>> novel_text == novel_text_str
         True
-        >>> novel_path2 = Path(r"corpora/test_books_30/20-0.txt")
+        >>> novel_path2 = Path(r"testing/corpora/test_books_30/20-0.txt")
         >>> paradise_lost = f.load_file(novel_path2)
         >>> paradise_lost[1:61]
         'The Project Gutenberg EBook of Paradise Lost, by John Milton'
@@ -232,22 +225,6 @@ class FileLoaderMixin:
         file.close()
         return result
 
-    @staticmethod
-    def load_file_remotely(file_path, current_file_type):
-        base_path = ('https://raw.githubusercontent.com/dhmit/'
-                     + 'gender_novels/master/gender_novels/')
-        url = f'{base_path}/{file_path}'
-        response = urllib.request.urlopen(url)
-        encoding = response.headers.get_param('charset')
-
-        if current_file_type == '.csv':
-            return [line.decode(encoding) for line in response.readlines()]
-        elif current_file_type == '.txt':
-            text = response.read().decode(encoding)
-            # When loading the text online, each end of line
-            # has \r and \n -> replace with only \n
-            return text.replace('\r\n', '\n')
-
 
 def store_pickle(obj, filename):
     """
@@ -301,7 +278,7 @@ def get_text_file_encoding(filepath):
     >>> from pathlib import Path
     >>> import os
 
-    >>> path=Path(common.BASE_PATH,'corpora','sample_novels','texts','hawthorne_scarlet.txt')
+    >>> path=Path(common.BASE_PATH,'testing', 'corpora','sample_novels','texts','hawthorne_scarlet.txt')
     >>> common.get_text_file_encoding(path)
     'UTF-8-SIG'
 
@@ -390,6 +367,7 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
         text = source_file.read()
     with codecs.open(target_path, 'w', encoding=target_encoding) as target_file:
         target_file.write(text)
+
 
 def load_graph_settings(show_grid_lines=True):
     '''
