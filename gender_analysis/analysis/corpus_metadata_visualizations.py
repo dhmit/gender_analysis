@@ -5,7 +5,7 @@ from collections import Counter
 from gender_analysis.common import MissingMetadataError
 
 
-def plt_pubyears(corpus):
+def plot_pubyears(corpus):
     """
     Creates a histogram displaying the frequency of books that were published within a 20 year 
     period
@@ -45,7 +45,7 @@ def plt_pubyears(corpus):
     plt.savefig('date_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
 
 
-def plt_pubcountries(corpus):
+def plot_pubcountries(corpus):
     """
     Creates a bar graph displaying the frequency of books that were published in each country
     Requires that corpus contains a 'country_publication' metadata field
@@ -101,7 +101,7 @@ def plt_pubcountries(corpus):
     plt.savefig('country_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
 
 
-def plt_gender_breakdown(corpus):
+def plot_gender_breakdown(corpus):
     """
     Creates a pie chart displaying the composition of male and female writers in the data
     Requires that corpus contains a 'author_gender' metadata field
@@ -146,7 +146,7 @@ def plt_gender_breakdown(corpus):
     plt.savefig('gender_breakdown_for_'+corpus_name.replace(' ', '_')+'.png')
 
 
-def plt_metadata_pie(corpus):
+def plot_metadata_pie(corpus):
     """
     Creates pie chart indicating fraction of metadata that is filled in corpus
     Requires that corpus contains 'author_gender' and 'country_publication metadata fields
@@ -193,10 +193,10 @@ def create_corpus_summary_visualizations(corpus):
     Runs through all plt functions given a corpus
     :param corpus: Corpus
     """
-    plt_gender_breakdown(corpus)
-    plt_pubyears(corpus)
-    plt_pubcountries(corpus)
-    plt_metadata_pie(corpus)
+    plot_gender_breakdown(corpus)
+    plot_pubyears(corpus)
+    plot_pubcountries(corpus)
+    plot_metadata_pie(corpus)
 
 
 if __name__ == '__main__':
