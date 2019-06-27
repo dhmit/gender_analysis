@@ -477,7 +477,7 @@ class Corpus(common.FileLoaderMixin):
         :return: Document
         """
 
-        if metadata_field not in get_metadata_fields(self.name):
+        if metadata_field not in self.get_corpus_metadata():
             raise AttributeError(f"Metadata field {metadata_field} invalid for this corpus")
 
         if metadata_field == "date":
@@ -558,7 +558,7 @@ class Corpus(common.FileLoaderMixin):
         """
 
         for field in metadata_dict.keys():
-            if field not in get_metadata_fields(self.name):
+            if field not in self.get_corpus_metadata():
                 raise AttributeError(f"Metadata field {field} invalid for this corpus")
 
         for document in self.documents:
