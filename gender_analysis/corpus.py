@@ -586,7 +586,7 @@ def get_metadata_fields(name):
     Gives a list of all metadata fields for corpus
     >>> from gender_analysis import corpus
     >>> corpus.get_metadata_fields('gutenberg')
-    ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'corpus_name', 'notes']
+    ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'notes']
 
     :param: name: str
     :return: list
