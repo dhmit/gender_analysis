@@ -12,10 +12,9 @@ DEBUG = False
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 
-METADATA_LIST = ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender',
+METADATA_LIST = ['author', 'date', 'title', 'country_publication', 'author_gender',
                  'subject', 'corpus_name', 'notes']
 
-# books from gutenberg downloaded from Dropbox folder shared by Keith
 INITIAL_BOOK_STORE = r'corpora/test_books_30'
 #TODO: change to actual directory when generating corpus
 
