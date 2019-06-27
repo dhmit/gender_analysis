@@ -4,7 +4,7 @@ from gender_analysis.corpus import Corpus
 from collections import Counter
 
 
-def plt_pubyears(pub_years,corpus_name):
+def plt_pubyears(pub_years,name):
     '''
     Creates a histogram displaying the frequency of books that were published within a 20 year 
     period
@@ -19,16 +19,16 @@ def plt_pubyears(pub_years,corpus_name):
     plt.hist(pub_years,bins,histtype='bar',rwidth=.8,color='c')
     plt.xlabel('Year', size=15,weight='bold',color='k')
     plt.ylabel('Frequency',size=15,weight='bold',color='k')
-    plt.title('Publication Year Concentration for '+corpus_name.title(),size=18,weight='bold',
+    plt.title('Publication Year Concentration for '+name.title(),size=18,weight='bold',
               color='k')
     plt.yticks(size=15,color='k')
     plt.xticks([i for i in range(min(pub_years),max(pub_years)+9,10)],size=15,color='k')
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(60)
     plt.subplots_adjust(left=.1,bottom=.18,right=.95,top=.9)
-    plt.savefig('date_of_pub_for_'+corpus_name+'.png')
+    plt.savefig('date_of_pub_for_'+name+'.png')
 
-def plt_pubcountries(pub_country,corpus_name):
+def plt_pubcountries(pub_country,name):
     '''
     Creates a bar graph displaying the frequency of books that were published in each country
     :param pub_country: list
@@ -60,14 +60,14 @@ def plt_pubcountries(pub_country,corpus_name):
     plt.bar(x,y,color='c')
     plt.xlabel('Countries',size=15,weight='bold',color='k')
     plt.ylabel('Frequency',size=15,weight='bold',color='k')
-    plt.title('Country of Publication for '+corpus_name.title(),size=18,color='k',
+    plt.title('Country of Publication for '+name.title(),size=18,color='k',
               weight='bold')
     plt.xticks(color='k',size=15)
     plt.yticks(color='k',size=15)
     plt.subplots_adjust(left=.1,bottom=.18,right=.95,top=.9)
-    plt.savefig('country_of_pub_for_'+corpus_name+'.png')
+    plt.savefig('country_of_pub_for_'+name+'.png')
 
-def plt_gender_breakdown(pub_gender,corpus_name):
+def plt_gender_breakdown(pub_gender,name):
     '''
     Creates a pie chart displaying the composition of male and female writers in the data
     :param pub_gender: list
@@ -92,17 +92,17 @@ def plt_gender_breakdown(pub_gender,corpus_name):
     colors=['c','b','g']
     plt.figure(figsize=(10,6))
     plt.pie(slices,colors=colors,labels=labelgenders,textprops={'fontsize':15})
-    plt.title('Gender Breakdown for '+corpus_name.title(),size=18,color='k',weight='bold')
+    plt.title('Gender Breakdown for '+name.title(),size=18,color='k',weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1,bottom=.1,right=.9,top=.9)
-    plt.savefig('gender_breakdown_for_'+corpus_name+'.png')
+    plt.savefig('gender_breakdown_for_'+name+'.png')
 
 
-def plt_metadata_pie(corpus, corpus_name):
+def plt_metadata_pie(corpus, name):
     """
     Creates pie chart indicating fraction of metadata that is filled in corpus
     :param corpus: Corpus
-    :param corpus_name: str
+    :param name: str
     """
     counter = Counter({'Both Country and Gender': 0, 'Author Gender Only': 0,
                        'Country Only': 0, 'Neither': 0})
@@ -123,27 +123,27 @@ def plt_metadata_pie(corpus, corpus_name):
     colors = ['c', 'b', 'g', 'w']
     plt.figure(figsize=(10, 6))
     plt.pie(counter.values(), colors=colors, labels=labels, textprops={'fontsize': 13})
-    plt.title('Percentage Acquired Metadata for ' + corpus_name.title(), size=18, color='k',
+    plt.title('Percentage Acquired Metadata for ' + name.title(), size=18, color='k',
               weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
-    plt.savefig('percentage_acquired_metadata_for_' + corpus_name + '.png')
+    plt.savefig('percentage_acquired_metadata_for_' + name + '.png')
 
 
-def create_corpus_summary_visualizations(corpus_name):
+def create_corpus_summary_visualizations(name):
     '''
     Runs through all plt functions given a corpus name
-    :param corpus_name: str
+    :param name: str
     '''
-    c = Corpus(corpus_name)
+    c = Corpus(name)
     pubyears=[novel.date for novel in c.novels]
     pubgender=[novel.author_gender for novel in c.novels]
     pubcountry=[novel.country_publication for novel in c.novels]
-    corpus_name = corpus_name.replace('_',' ')
-    plt_gender_breakdown(pubgender, corpus_name)
-    plt_pubyears(pubyears,corpus_name)
-    plt_pubcountries(pubcountry,corpus_name)
-    plt_metadata_pie(c, corpus_name)
+    name = name.replace('_',' ')
+    plt_gender_breakdown(pubgender, name)
+    plt_pubyears(pubyears,name)
+    plt_pubcountries(pubcountry,name)
+    plt_metadata_pie(c, name)
 
 if __name__=='__main__':
     create_corpus_summary_visualizations('gutenberg')
