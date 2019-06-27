@@ -205,8 +205,8 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
                 'freq_corp1', 'freq_corp2']
 
     output = f'\nDisplaying Part of Speech: {part_of_speech_to_include}\n'
-    for i, name in enumerate([corpus1_display_name, corpus2_display_name]):
-        output += f'\nDunning Log-Likelihood results for {name}\n|'
+    for i, corpus_name in enumerate([corpus1_display_name, corpus2_display_name]):
+        output += f'\nDunning Log-Likelihood results for {corpus_name}\n|'
 
         for heading in headings:
             heading = heading.replace('_corp1', ' ' + corpus1_display_name).replace('_corp2',
