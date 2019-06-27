@@ -12,6 +12,8 @@ from gutenberg.acquire import get_metadata_cache
 from gutenberg.cleanup import strip_headers
 from gutenberg.query import get_metadata
 
+from gender_analysis.common import TEXT_END_MARKERS, TEXT_START_MARKERS, LEGALESE_END_MARKERS, \
+    LEGALESE_START_MARKERS
 from gender_analysis import common
 from gender_analysis.common import AUTHOR_NAME_REGEX, BASE_PATH, METADATA_LIST
 
@@ -850,6 +852,7 @@ def get_subject_gutenberg(gutenberg_id):
 
     return sorted(list(get_metadata('subject', gutenberg_id)))
 
+
 def write_metadata(novel_metadata):
     """
     Writes a row of metadata for a novel into the csv at path
@@ -966,6 +969,40 @@ def download_gutenberg_if_not_locally_available():
         except FileNotFoundError:
             raise FileNotFoundError("Something went wrong while downloading the gutenberg"
                                     "corpus.")
+
+
+def remove_boilerplate_text_with_gutenberg(text):
+    """
+    Removes the boilerplate text from an input string of a document.
+    Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
+    strip_headers() function from the gutenberg module, which can remove even nonstandard
+    headers.
+
+    (see book number 3780 for one example of a nonstandard header — james_highway.txt in our
+    sample corpus; or book number 105, austen_persuasion.txt, which uses the standard Gutenberg
+    header but has had some info about the ebook's production inserted after the standard
+    boilerplate).
+
+    :return: str
+
+    >>> from gender_analysis import document
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
+    ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
+    >>> austen = document.Document(document_metadata)
+    >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
+    >>> raw_text = austen.load_file(file_path)
+    >>> raw_text = remove_boilerplate_text_with_gutenberg(raw_text)
+    >>> title_line = raw_text.splitlines()[0]
+    >>> title_line
+    "THE KING'S HIGHWAY"
+
+    TODO: neither version of remove_boilerplate_text works on Persuasion, and it doesn't look like it's
+    easily fixable
+    """
+
+    return strip_headers(text).strip()
 
 
 if __name__ == '__main__':
