@@ -1,13 +1,12 @@
 import csv
 import random
 from nltk.tokenize import word_tokenize
-from pathlib import Path, PosixPath
+from pathlib import Path
 from collections import Counter
 from os import listdir
 
 from gender_analysis import common
 from gender_analysis.document import Document
-# from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
 
 
 class Corpus(common.FileLoaderMixin):
@@ -481,7 +480,7 @@ class Corpus(common.FileLoaderMixin):
         if metadata_field not in get_metadata_fields(self.name):
             raise AttributeError(f"Metadata field {metadata_field} invalid for this corpus")
 
-        if (metadata_field == "date" or metadata_field == "gutenberg_id"):
+        if metadata_field == "date":
             field_val = int(field_val)
 
         for document in self.documents:

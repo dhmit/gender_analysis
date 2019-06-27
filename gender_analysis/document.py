@@ -22,7 +22,7 @@ class Document(common.FileLoaderMixin):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+    >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
@@ -88,7 +88,7 @@ class Document(common.FileLoaderMixin):
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
@@ -110,7 +110,7 @@ class Document(common.FileLoaderMixin):
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> document_string = str(austen)
@@ -131,7 +131,7 @@ class Document(common.FileLoaderMixin):
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> repr(austen)
@@ -221,7 +221,7 @@ class Document(common.FileLoaderMixin):
 
         Is a private function as it is unnecessary to access it outside the class.
 
-        Currently only supports boilerplate removal for Project gutenberg ebooks.
+        Currently best supports boilerplate removal for Project gutenberg ebooks.
 
         :return: str
         """
