@@ -207,7 +207,6 @@ class FileLoaderMixin:
         # this function gets moved.
         local_base_path = Path(os.path.abspath(os.path.dirname(__file__)))
         file = open(local_base_path.joinpath(file_path), encoding='utf-8')
-        # TODO: look here, change back to utf-8 maybe
 
         if current_file_type == '.csv':
             result = file.readlines()
@@ -224,6 +223,12 @@ class FileLoaderMixin:
 
         file.close()
         return result
+
+
+class MissingMetadataError(Exception):
+    """Raised when a function that assumes certain metadata is called on a corpus without that
+    metadata"""
+    pass
 
 
 def store_pickle(obj, filename):
@@ -384,6 +389,7 @@ def load_graph_settings(show_grid_lines=True):
                   'figure.facecolor':background_color}
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
+
 
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test

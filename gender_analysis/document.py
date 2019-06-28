@@ -573,9 +573,9 @@ class Document(common.FileLoaderMixin):
 
     def get_word_freq(self, word):
         """
-        Returns dictionary with key as word and value as the frequency of appearance in book
-        :param words: str
-        :return: double
+        Returns frequency of appearance of parameter word in document
+        :param word: str to search for in document
+        :return: float representing the portion of words in the text that are the parameter word
 
         >>> from gender_analysis import document
         >>> from pathlib import Path

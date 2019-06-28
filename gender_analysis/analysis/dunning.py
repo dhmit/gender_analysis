@@ -1,11 +1,13 @@
 import math
 from collections import Counter
-
+import matplotlib.pyplot as plt
+import seaborn as sns
 import nltk
-from scipy.stats import chi2
 
 from gender_analysis.common import store_pickle, load_pickle
 from gender_analysis.corpus import Corpus
+from gender_analysis.common import load_graph_settings
+from gender_analysis.common import MissingMetadataError
 
 # TODO: Rewrite all of this using a Dunning class in a non-messy way.
 
@@ -14,12 +16,13 @@ def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
                          count_of_word_in_corpus_1,
                          count_of_word_in_corpus_2):
     """
-    applies dunning log likelihood to compare individual word in two counter objects
+    applies Dunning log likelihood to compare individual word in two counter objects
 
-    :param word: desired word to compare
-    :param m_corpus: c.filter_by_gender('male')
-    :param f_corpus: c. filter_by_gender('female')
-    :return: log likelihoods and p value
+    :param total_words_in_corpus_1: int, total wordcount in corpus 1
+    :param total_words_in_corpus_2: int, total wordcount in corpus 2
+    :param count_of_word_in_corpus_1: int, wordcount of one word in corpus 1
+    :param count_of_word_in_corpus_2: int, wordcount of one word in corpus 2
+    :return: Dunning log likelihood
     >>> total_words_m_corpus = 8648489
     >>> total_words_f_corpus = 8700765
     >>> wordcount_female = 1000
@@ -46,6 +49,10 @@ def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
 def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     """
     applies dunning log likelihood to compare individual word in two counter objects
+    (-) end of spectrum is words for counter_2
+    (+) end of spectrum is words for counter_1
+    the larger the magnitude of the number, the more distinctive that word is in its
+    respective counter object
 
     :param word: desired word to compare
     :param corpus1: Corpus
@@ -158,7 +165,7 @@ def male_vs_female_authors_analysis_dunning_lesser(corpus):
     :return: dictionary of common shared words and their distinctiveness
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise ValueError('Corpus does not contain author metadata.')
+        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
 
     m_corpus = corpus.filter_by_gender('male')
     f_corpus = corpus.filter_by_gender('female')
@@ -337,7 +344,7 @@ def male_vs_female_analysis_dunning(corpus, display_data=False, to_pickle=False)
     :return: dict
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise ValueError('Corpus does not contain author metadata.')
+        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
@@ -433,7 +440,7 @@ def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pi
     :return:dict
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise ValueError('Corpus does not contain author metadata.')
+        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
@@ -507,7 +514,7 @@ def female_characters_author_gender_differences(corpus, to_pickle=False):
     :return:
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise ValueError('Corpus does not contain author metadata.')
+        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
@@ -529,7 +536,7 @@ def male_characters_author_gender_differences(corpus, to_pickle=False):
     :return:
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise ValueError('Corpus does not contain author metadata.')
+        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
@@ -551,7 +558,7 @@ def god_author_gender_differences(corpus, to_pickle=False):
     :return:
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise ValueError('Corpus does not contain author metadata.')
+        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
@@ -570,7 +577,7 @@ def money_author_gender_differences(corpus, to_pickle=False):
     :return:
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise ValueError('Corpus does not contain author metadata.')
+        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
@@ -595,7 +602,7 @@ def america_author_gender_differences(corpus, to_pickle=False):
     :return:
     """
     if 'author_gender' not in corpus.get_corpus_metadata():
-        raise ValueError('Corpus does not contain author metadata.')
+        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
@@ -603,3 +610,41 @@ def america_author_gender_differences(corpus, to_pickle=False):
                                                                     corpus1=female_corpus,
                                                                     corpus2=male_corpus,
                                                                     to_pickle=to_pickle)
+
+
+def score_plot_to_show(results):
+    load_graph_settings(False)
+    results_dict = dict(results)
+    words = []
+    dunning_score = []
+
+    for term, data in results_dict.items():
+        words.append(term)
+        dunning_score.append(data['dunning'])
+
+    opacity = 0.4
+
+    colors = ['r' if entry >= 0 else 'b' for entry in dunning_score]
+    ax = sns.barplot(dunning_score, words, palette=colors, alpha=opacity)
+    sns.despine(ax=ax, bottom=True, left=True)
+    plt.show()
+
+
+def freq_plot_to_show(results):
+    load_graph_settings(False)
+    results_dict = dict(results)
+    words = []
+    female_rel_freq = []
+    male_rel_freq = []
+
+    for term, data in results_dict.items():
+        words.append(term)
+        female_rel_freq.append(data['freq_corp1']/data['freq_total'])
+        male_rel_freq.append(-1*data['freq_corp2']/data['freq_total'])
+
+    opacity = 0.4
+
+    colors = ['b']
+    ax = sns.barplot(male_rel_freq, words, palette=colors, alpha=opacity)
+    sns.despine(ax=ax, bottom=True, left=True)
+    plt.show()
