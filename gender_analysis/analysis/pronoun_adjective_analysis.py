@@ -7,7 +7,7 @@ def run_adj_analysis(corpus):
     Takes in a corpus of novels. Return a dictionary with each novel mapped to 2 dictionaries: adjectives/#occurences
     associated with male pronouns, and adjectives/# occurrences associated with female pronouns
 
-    :param corpus:
+    :param corpus: Corpus
     :return:dictionary where each key is a novel and the value is 2 dictionaries:
     - Adjectives and number of occurences associated with male pronouns
     - Adjectives and number of occurrences associated with female pronouns
@@ -27,15 +27,25 @@ def run_adj_analysis(corpus):
 
 
 def store_raw_results(results, corpus):
+    """
+    :param results: dictionary of results from run_adj_analysis
+    :param corpus: corpus associated with above results, used for naming file
+    :return: None, saves results as pickled file with name 'pronoun_adj_raw_analysis_corpus_name'
+    """
+    if corpus.name:
+        corpus_name = corpus.name
+    else:
+        corpus_name = 'corpus'
+
     try:
-        common.load_pickle("pronoun_adj_raw_analysis_" + corpus.name)
+        common.load_pickle("pronoun_adj_raw_analysis_" + corpus_name)
         x = input("results already stored. overwrite previous analysis? (y/n)")
         if x == 'y':
-            common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.name)
+            common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus_name)
         else:
             pass
     except IOError:
-        common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.name)
+        common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus_name)
 
 def merge(novel_adj_dict, full_adj_dict):
     """
@@ -63,7 +73,7 @@ def merge_raw_results(full_results):
     Merges all of the male adjectives across novels into a single dictionary, and merges all of the female adjectives
     across novels into a single dictionary.
     :param full_results: full corpus results from run_adj_analysis
-    :return: dictionary
+    :return: dictionary in the form {'gender':{'adj': occurrences}}
     """
     merged_results = {'male': {}, 'female': {}}
     for novel in list(full_results.keys()):
@@ -79,7 +89,7 @@ def get_overlapping_adjectives_raw_results(merged_results):
     Looks through the male adjectives and female adjectives across the corpus and extracts adjective
     that overlap across both and their occurrences. FORMAT - {'adjective': [male, female]}
     :param merged_results:
-    :return:
+    :return: dictionary in the form {'adjective':{'gender': num occurrences associated with gender}}
     """
     overlap_results = {}
     male_adj = list(merged_results['male'].keys())
@@ -94,12 +104,12 @@ def get_overlapping_adjectives_raw_results(merged_results):
 
 def results_by_author_gender(full_results):
     """
-       takes in the full dictionary of results, returns a dictionary that maps 'male' (male author) and 'female'
-       (female author) to a dictionary of adjectives and # occurrences across novels written by an author of
-       that gender.
+       takes in the full dictionary of results, returns a dictionary that maps 'male_author' and
+       'female_author' to a dictionary of adjectives and # occurrences across novels written by
+       an author of that gender.
        :param full_results: dictionary from result of run_adj_analysis
-       :return: dictionary with two keys: 'male' (male author) or 'female' (female author). Each key maps
-       a dictionary of adjectives/occurrences.
+       :return: dictionary in form {'gender_author': {'male': {adj:occurrences}, 'female':{
+       adj:occurrences}}}
        """
     data = {'male_author': {'male': {}, 'female': {}}, "female_author": {'male': {}, 'female': {}}}
 
@@ -116,14 +126,15 @@ def results_by_author_gender(full_results):
 
 def results_by_date(full_results, time_frame, bin_size):
     """
-    takes in a dictionary of results returns a dictionary that maps different time periods to a dictionary of
-    adjectives/number of occurrences across novels written in that time_period
+    takes in a dictionary of results, returns a dictionary that maps time periods to a
+    dictionary mapping adjectives to number of occurrences across novels written in that time period
 
     :param full_results: dictionary from result of run_adj_analysis
     :param time_frame: tuple (int start year, int end year) for the range of dates to return
     frequencies
     :param bin_size: int for the number of years represented in each list of frequencies
-    :return: dictionary
+    :return: dictionary in form {date: {'male': {adj:occurrences}, 'female':{adj:occurrences}}},
+    where date is the first year in its bin
     """
     data = {}
     for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
@@ -143,7 +154,7 @@ def results_by_date(full_results, time_frame, bin_size):
 def results_by_location(full_results):
     """
     :param full_results: dictionary from result of run_adj_analysis
-    :return:
+    :return: dictionary in form {'location': {'male': {adj:occurrences}, 'female':{adj:occurrences}}}
     """
     data = {}
 
