@@ -9,7 +9,7 @@ def run_adj_analysis(corpus):
 
     :param corpus:
     :return:dictionary where each key is a novel and the value is 2 dictionaries:
-    - Adjectives and number of occurences associated with male pronouns
+    - Adjectives and number of occurrences associated with male pronouns
     - Adjectives and number of occurrences associated with female pronouns
 
     """
@@ -36,6 +36,7 @@ def store_raw_results(results, corpus):
             pass
     except IOError:
         common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.name)
+
 
 def merge(novel_adj_dict, full_adj_dict):
     """

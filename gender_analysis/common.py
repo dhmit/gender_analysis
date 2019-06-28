@@ -240,7 +240,9 @@ class MissingMetadataError(Exception):
                 metadata_string += ', '
 
         return 'This corpus is missing the metadata field(s): ' + metadata_string + '. ' + \
-               self.message
+               self.message + ' In order to run this function, you must create a new ' \
+                              'metadata csv with (' + metadata_string + ') fields and create a ' \
+                                                                        'new Corpus with this csv.'
 
 
 def store_pickle(obj, filename):
