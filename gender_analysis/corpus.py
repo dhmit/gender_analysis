@@ -6,11 +6,11 @@ from collections import Counter
 from os import listdir
 
 from gender_analysis import common
-from gender_analysis.document import Document
+from gender_analysis.document import Document, FileLoaderMixin
 # from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
 
 
-class Corpus(common.FileLoaderMixin):
+class Corpus(FileLoaderMixin):
 
     """The corpus class is used to load the metadata and full
     texts of all documents in a corpus
