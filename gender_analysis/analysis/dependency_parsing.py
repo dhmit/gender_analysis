@@ -87,10 +87,10 @@ def parse_document(document, parser):
     - List of verbs associated with female pronouns as one space-separated string
 
     >>> parser = get_parser("assets/stanford-parser.jar","assets/stanford-parser-3.9.1-models.jar")
-    >>> novels = Corpus('sample_novels').novels
-    >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
+    >>> documents = Corpus('sample_novels').documents
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
     ...                   'filename': None, 'text': "He told her"}
-    >>> toy_novel = Novel(novel_metadata)
+    >>> toy_novel = Document(document_metadata)
     >>> parse_novel(toy_novel, parser)
     ('Scarlet Letter', 1, 0, 0, 1, [], ['told'], [], [])
 

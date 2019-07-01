@@ -12,7 +12,7 @@ DEBUG = False
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 
-METADATA_LIST = ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender',
+METADATA_LIST = ['author', 'date', 'title', 'country_publication', 'author_gender',
                  'subject', 'notes']
 
 INITIAL_BOOK_STORE = r'corpora/test_books_30'
