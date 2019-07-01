@@ -115,6 +115,13 @@ def load_csv_to_list(file_path):
     """
     Loads a csv file
 
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> corpus_metadata_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'sample_novels.csv')
+    >>> corpus_metadata = load_csv_to_list(corpus_metadata_path)
+    >>> type(corpus_metadata)
+    <class 'list'>
+
     :param file_path: can be a string or Path object
     :return: a list of strings
     """
@@ -137,6 +144,13 @@ def load_csv_to_list(file_path):
 def load_txt_to_string(file_path):
     """
     Loads a txt file
+
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> novel_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')
+    >>> novel_text = load_txt_to_string(novel_path)
+    >>> type(novel_text), len(novel_text)
+    (<class 'str'>, 486253)
 
     :param file_path: can be a string or Path object
     :return: the text as a string type
