@@ -3,12 +3,10 @@ This file is intended for individual analyses of the gender_analysis project
 """
 
 import nltk
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 from more_itertools import windowed
 import collections
-from scipy.stats import chi2
 from statistics import median
 from nltk.corpus import stopwords
 import unittest
@@ -34,7 +32,7 @@ def get_count_words(document, words):
     """
     Takes in document, a Document object, and words, a list of words to be counted.
     Returns a dictionary where the keys are the elements of 'words' list
-    and the values are the numbers of occurences of the elements in the document.
+    and the values are the numbers of occurrences of the elements in the document.
     N.B.: Not case-sensitive.
     >>> from gender_analysis import document
     >>> from gender_analysis import common
@@ -45,7 +43,7 @@ def get_count_words(document, words):
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
 
-    :param:words: a list of words to be counted in text
+    :param: words: a list of words to be counted in text
     :return: a dictionary where the key is the word and the value is the count
     """
     dic_word_counts = {}
@@ -59,8 +57,8 @@ def get_comparative_word_freq(freqs):
     Returns a dictionary of the frequency of words counted relative to each other.
     If frequency passed in is zero, returns zero
 
-    :param freqs: dictionary
-    :return: dictionary
+    :param freqs: dictionary in the form {'word':overall_frequency}
+    :return: dictionary in the form {'word':relative_frequency}
 
     >>> from gender_analysis import document
     >>> from pathlib import Path
@@ -103,8 +101,9 @@ def get_counts_by_pos(freqs):
     >>> get_counts_by_pos(collections.Counter({'is':10,'usually':7,'quietly':42}))
     {'RB': Counter({'quietly': 42, 'usually': 7})}
 
-    :param freqs:
-    :return:
+    :param freqs: Counter object of words mapped to their word count
+    :return: dictionary with key as part of speech, value as Counter object of words (of that
+    part of speech) mapped to their word count
     """
 
     sorted_words = {}
@@ -175,7 +174,7 @@ def run_gender_freq(corpus):
     """
     Runs a program that uses the gender frequency analysis on all documents existing in a given
     corpus, and outputs the data as graphs
-    :param corpus:
+    :param corpus: Corpus
     :return:
     """
     documents = corpus.documents
@@ -186,24 +185,34 @@ def run_gender_freq(corpus):
 
     while num < loops:
         dictionary = {}
-        for document in documents[num * 10: min(c, num * 10 + 9)]:
-            d = {'he': document.get_word_freq('he'), 'she': document.get_word_freq('she')}
+        for doc in documents[num * 10: min(c, num * 10 + 9)]:
+            d = {'he': doc.get_word_freq('he'), 'she': doc.get_word_freq('she')}
             d = get_comparative_word_freq(d)
             lst = [d["he"], d["she"]]
-            book = document.title[0:20] + "\n" + document.author
-            dictionary[book] = lst
+            title = hasattr(doc, 'title')
+            author = hasattr(doc, 'author')
+            if title and author:
+                doc_label = doc.title[0:20] + "\n" + doc.author
+            elif title:
+                doc_label = doc.title[0:20]
+            else:
+                doc_label = doc.filename[0:20]
+            dictionary[doc_label] = lst
         display_gender_freq(dictionary, str(num))
         num += 1
 
 
 def dunning_total(m_corpus, f_corpus):
     """
-    goes through gendered corpora
+    goes through two corpora, e.g. corpus of male authors and corpus of female authors
     runs dunning_individual on all words that are in BOTH corpora
     returns sorted dictionary of words and their dunning scores
     shows top 10 and lowest 10 words
 
-    :return: dictionary of common word with dunning value and p value
+    :param m_corpus: Corpus
+    :param f_corpus: Corpus
+
+    :return: list of tuples (common word, (dunning value, m_corpus_count, f_corpus_count))
 
          >>> from gender_analysis.analysis.analysis import dunning_total
          >>> from gender_analysis.corpus import Corpus
@@ -244,7 +253,8 @@ def dunning_total(m_corpus, f_corpus):
 
 def instance_dist(document, word):
     """
-    Takes in a particular word, returns a list of distances between each instance of that word in the document.
+    Takes in a particular word, returns a list of distances between each instance of that word in
+    the document.
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -254,8 +264,9 @@ def instance_dist(document, word):
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
 
-    :param:document to analyze, gendered word
-    :return: list of distances between instances of gendered word
+    :param: document: Document to analyze
+    :param: word: str
+    :return: list of distances between consecutive instances of word
 
     """
     return words_instance_dist(document, [word])
@@ -263,8 +274,8 @@ def instance_dist(document, word):
 
 def words_instance_dist(document, words):
     """
-        Takes in a document and list of gender pronouns, returns a list of distances between each
-        instance of a pronoun in that document
+        Takes in a document and list of words (e.g. gendered pronouns), returns a list of distances
+        between each instance of one of the words in that document
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
@@ -274,22 +285,23 @@ def words_instance_dist(document, words):
         >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
         [6, 5, 6, 6, 7]
 
-        :param:document
-        :return: list of distances between instances of pronouns
+        :param: document: Document
+        :param: words: list of strings
+        :return: list of distances between instances of any word in words
     """
     text = document.get_tokenized_text()
     output = []
     count = 0
     start = False
 
-    for e in text:
-        e = e.lower()
+    for token in text:
+        token = token.lower()
         if not start:
-            if e in words:
+            if token in words:
                 start = True
         else:
             count += 1
-            if e in words:
+            if token in words:
                 output.append(count)
                 count = 0
     return output
@@ -297,7 +309,8 @@ def words_instance_dist(document, words):
 
 def male_instance_dist(document):
     """
-        Takes in a document, returns a list of distances between each instance of a female pronoun in that document
+        Takes in a document, returns a list of distances between each instance of a female pronoun
+        in that document.
        >>> from gender_analysis import document
        >>> from pathlib import Path
        >>> from gender_analysis import common
@@ -315,7 +328,8 @@ def male_instance_dist(document):
 
 def female_instance_dist(document):
     """
-        Takes in a document, returns a list of distances between each instance of a female pronoun in that document
+        Takes in a document, returns a list of distances between each instance of a female pronoun
+        in that document.
        >>> from gender_analysis import document
        >>> from pathlib import Path
        >>> from gender_analysis import common
@@ -333,8 +347,8 @@ def female_instance_dist(document):
 
 def find_gender_adj(document, female):
     """
-        Takes in a document and boolean indicating gender, returns a dictionary of adjectives that appear within
-        a window of 5 words around each pronoun
+        Takes in a document and boolean indicating gender, returns a dictionary of adjectives that
+        appear within a window of 5 words around each pronoun
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
@@ -344,8 +358,11 @@ def find_gender_adj(document, female):
         >>> find_gender_adj(scarlett, False)
         {'handsome': 3, 'sad': 1}
 
-        :param:document, boolean indicating whether to search for female adjectives (true) or male adj (false)
-        :return: dictionary of adjectives that appear around male pronouns and the number of occurences
+        :param: document: Document
+        :param: female: boolean indicating whether to search for female adjectives (true) or
+        male adj (false)
+        :return: dictionary of adjectives that appear around male pronouns and the number of
+        occurrences
     """
     output = {}
     text = document.get_tokenized_text()
@@ -389,7 +406,8 @@ def find_gender_adj(document, female):
 
 def find_male_adj(document):
     """
-        Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each male pronoun
+        Takes in a document, returns a dictionary of adjectives that appear within a window of 5
+        words around each male pronoun.
        >>> from gender_analysis import document
        >>> from pathlib import Path
        >>> from gender_analysis import common
@@ -400,14 +418,16 @@ def find_male_adj(document):
        {'handsome': 3, 'sad': 1}
 
        :param:document
-       :return: dictionary of adjectives that appear around male pronouns and the number of occurences
+       :return: dictionary of adjectives that appear around male pronouns and the number of
+       occurrences
     """
     return find_gender_adj(document, False)
 
 
 def find_female_adj(document):
     """
-        Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun
+        Takes in a document, returns a dictionary of adjectives that appear within a window of 5
+        words around each female pronoun
        >>> from gender_analysis import document
        >>> from pathlib import Path
        >>> from gender_analysis import common
@@ -418,7 +438,8 @@ def find_female_adj(document):
        {'beautiful': 3, 'sad': 1}
 
        :param:document
-       :return: dictionary of adjectives that appear around female pronouns and the number of occurences
+       :return: dictionary of adjectives that appear around female pronouns and the number of
+       occurrences
 
        """
     return find_gender_adj(document, True)
@@ -535,9 +556,9 @@ def instance_stats(book, medians1, medians2, title):
     :param book:
     :param medians1:
     :param medians2:
-    :param title:
-    :return: file written to visualizations folder depicting the ratio of two values given as a
-    bar graph
+    :param title: str, desired name of file
+    :return: None, file written to visualizations folder depicting the ratio of two values given
+    as a bar graph
     """
     fig, ax = plt.subplots()
     plt.ylim(0, 50)
@@ -599,7 +620,14 @@ def run_dist_inst(corpus):
                 medians_she.append(median(result_she))
             except:
                 medians_she.append(0)
-            books.append(document.title[0:20] + "\n" + document.author)
+            title = hasattr(document, 'title')
+            author = hasattr(document, 'author')
+            if title and author:
+                books.append(document.title[0:20] + "\n" + document.author)
+            elif title:
+                books.append(document.title[0:20])
+            else:
+                books.append(document.filename[0:20])
         d = process_medians(helst=medians_he, shelst=medians_she, authlst=books)
         d = bubble_sort_across_lists(d)
         instance_stats(d["book"], d["he"], d["she"], "inst_dist" + str(num))

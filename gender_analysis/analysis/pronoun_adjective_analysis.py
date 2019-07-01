@@ -15,7 +15,6 @@ def run_adj_analysis(corpus):
     """
     results = {}
     for novel in corpus:
-        print(novel.title, novel.author)
         novel_male_results = find_male_adj(novel)
         novel_female_results = find_female_adj(novel)
         if (novel_male_results != "lower window bound less than 5"
@@ -37,7 +36,6 @@ def store_raw_results(results, corpus):
             pass
     except IOError:
         common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.name)
-
 
 def merge(novel_adj_dict, full_adj_dict):
     """

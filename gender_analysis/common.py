@@ -12,8 +12,8 @@ DEBUG = False
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 
-METADATA_LIST = ['author', 'date', 'title', 'country_publication', 'author_gender',
-                 'subject', 'corpus_name', 'notes']
+METADATA_LIST = ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender',
+                 'subject', 'notes']
 
 INITIAL_BOOK_STORE = r'corpora/test_books_30'
 #TODO: change to actual directory when generating corpus
@@ -206,7 +206,6 @@ class FileLoaderMixin:
         # this function gets moved.
         local_base_path = Path(os.path.abspath(os.path.dirname(__file__)))
         file = open(local_base_path.joinpath(file_path), encoding='utf-8')
-        # TODO: look here, change back to utf-8 maybe
 
         if current_file_type == '.csv':
             result = file.readlines()
@@ -223,6 +222,12 @@ class FileLoaderMixin:
 
         file.close()
         return result
+
+
+class MissingMetadataError(Exception):
+    """Raised when a function that assumes certain metadata is called on a corpus without that
+    metadata"""
+    pass
 
 
 def store_pickle(obj, filename):
@@ -383,81 +388,6 @@ def load_graph_settings(show_grid_lines=True):
                   'figure.facecolor':background_color}
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
-
-
-def remove_boilerplate_text(text):
-    """
-    Removes the boilerplate text from an input string of a document.
-    Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
-    strip_headers() function, somewhat inelegantly copy-pasted from the gutenberg module, which can remove even nonstandard
-    headers.
-
-    (see book number 3780 for one example of a nonstandard header — james_highway.txt in our
-    sample corpus; or book number 105, austen_persuasion.txt, which uses the standard Gutenberg
-    header but has had some info about the ebook's production inserted after the standard
-    boilerplate).
-
-    :return: str
-
-    >>> from gender_analysis import document
-    >>> from pathlib import Path
-    >>> from gender_analysis import common
-    >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-    ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
-    >>> austen = document.Document(document_metadata)
-    >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
-    >>> raw_text = austen.load_file(file_path)
-    >>> raw_text = remove_boilerplate_text(raw_text)
-    >>> title_line = raw_text.splitlines()[0]
-    >>> title_line
-    "THE KING'S HIGHWAY"
-    """
-
-    # new method copy-pasted from Gutenberg library
-    lines = text.splitlines()
-    sep = '\n'
-
-    out = []
-    i = 0
-    footer_found = False
-    ignore_section = False
-
-    for line in lines:
-        reset = False
-
-        if i <= 600:
-            # Check if the header ends here
-            if any(line.startswith(token) for token in TEXT_START_MARKERS):
-                reset = True
-
-            # If it's the end of the header, delete the output produced so far.
-            # May be done several times, if multiple lines occur indicating the
-            # end of the header
-            if reset:
-                out = []
-                continue
-
-        if i >= 100:
-            # Check if the footer begins here
-            if any(line.startswith(token) for token in TEXT_END_MARKERS):
-                footer_found = True
-
-            # If it's the beginning of the footer, stop output
-            if footer_found:
-                break
-
-        if any(line.startswith(token) for token in LEGALESE_START_MARKERS):
-            ignore_section = True
-            continue
-        elif any(line.startswith(token) for token in LEGALESE_END_MARKERS):
-            ignore_section = False
-            continue
-
-        if not ignore_section:
-            out.append(line.rstrip(sep))
-            i += 1
-
-    return sep.join(out).strip()
 
 
 if __name__ == '__main__':
