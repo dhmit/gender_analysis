@@ -1,8 +1,7 @@
 import gzip
 import os
 import pickle
-import urllib.request
-# from gender_analysis import common, document
+
 
 from pathlib import Path, PurePosixPath
 import codecs

@@ -1,6 +1,5 @@
 import re
 import string
-import os
 from collections import Counter
 from pathlib import Path
 from gender_analysis.common import load_csv_to_list, load_txt_to_string
