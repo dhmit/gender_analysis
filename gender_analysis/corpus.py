@@ -287,10 +287,7 @@ class Corpus(common.FileLoaderMixin):
 
         :return: list
         """
-        metadata_fields = set()
-        for document in self.documents:
-            for field in document.members:
-                metadata_fields.add(field)
+        metadata_fields = self.documents[0].members
         return sorted(list(metadata_fields))
 
     def get_field_vals(self, field):
