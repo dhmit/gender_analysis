@@ -28,7 +28,7 @@ class Document(common.FileLoaderMixin):
     >>> type(austen.text)
     <class 'str'>
     >>> len(austen.text)
-    466879
+    486253
     """
 
     def __init__(self, metadata_dict):
@@ -92,7 +92,7 @@ class Document(common.FileLoaderMixin):
         ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
-        83285
+        86291
 
         :return: int
         """
@@ -233,11 +233,6 @@ class Document(common.FileLoaderMixin):
             err = "Could not find the document text file "
             err += "at the expected location ({file_path})."
             raise FileNotFoundError(err)
-
-        # This function will remove the boilerplate text from the document's text. It has been
-        # placed into a separate function in the case that other document text cleaning functions
-        # want to be added at a later date.
-        text = common.remove_boilerplate_text(text)
 
         return text
 

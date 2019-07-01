@@ -67,7 +67,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> corpus1 = Corpus(filepath1)
     >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
-    -411748.9475344888
+    -425133.12886726425
     """
 
     counter1 = corpus1.get_wordcount_counter()

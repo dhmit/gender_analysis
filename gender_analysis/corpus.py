@@ -264,7 +264,7 @@ class Corpus(common.FileLoaderMixin):
         >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_wordcount_counter()['fire']
-        2269
+        2274
 
         """
         corpus_counter = Counter()
