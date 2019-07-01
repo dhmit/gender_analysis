@@ -4,13 +4,14 @@ from nltk.tokenize import word_tokenize
 from pathlib import Path, PosixPath
 from collections import Counter
 from os import listdir
+from gender_analysis.common import load_csv_to_dict, load_txt_to_string
 
 from gender_analysis import common
-from gender_analysis.document import Document, FileLoaderMixin
+from gender_analysis.document import Document
 # from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
 
 
-class Corpus(FileLoaderMixin):
+class Corpus:
 
     """The corpus class is used to load the metadata and full
     texts of all documents in a corpus
@@ -184,7 +185,7 @@ class Corpus(FileLoaderMixin):
         documents = []
 
         try:
-            csv_file = self.load_file(self.csv_path)
+            csv_file = load_csv_to_dict(self.csv_path)
         except FileNotFoundError:
             err = "Could not find the metadata csv file for the "
             err += f"'{self.name}' corpus in the expected location "

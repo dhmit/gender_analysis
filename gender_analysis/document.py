@@ -3,6 +3,7 @@ import string
 import os
 from collections import Counter
 from pathlib import Path
+from gender_analysis.common import load_csv_to_dict, load_txt_to_string
 
 from more_itertools import windowed
 
@@ -13,7 +14,7 @@ nltk.download('punkt', quiet=True)
 nltk.download('averaged_perceptron_tagger', quiet=True)
 gutenberg_imported = True
 
-from gender_analysis import common
+# from gender_analysis import common
 from ast import literal_eval
 
 
@@ -26,86 +27,86 @@ except ImportError:
 from gender_analysis.common import TEXT_END_MARKERS, TEXT_START_MARKERS, LEGALESE_END_MARKERS, \
     LEGALESE_START_MARKERS
 
-class FileLoaderMixin:
-    """ The FileLoaderMixin loads files either locally or
-    remotely from Github (if run from an ipython notebook)
+# class FileLoaderMixin:
+#     """ The FileLoaderMixin loads files either locally or
+#     remotely from Github (if run from an ipython notebook)
+#
+#     Currently supported filetypes are: .csv, .txt
+#     """
+#
+#     def load_file(self, file_path):
+#         """
+#         Loads csv and txt files
+#         file_path can be string or Path object.
+#
+#         When loading a txt file, load_file returns the text as a string
+#
+#         >>> from pathlib import Path
+#         >>> from gender_analysis import common
+#         >>> from gender_analysis import document
+#
+#         >>> f = document.FileLoaderMixin()
+#         >>> novel_path = Path('testing', 'corpora', 'sample_novels',
+#         ...                   'texts', 'austen_persuasion.txt')
+#         >>> novel_text = f.load_file(novel_path)
+#         >>> type(novel_text), len(novel_text)
+#         (<class 'str'>, 486253)
+#
+#         csv files are returned as a list of strings, which can be
+#         further processed with Python's csv module
+#
+#         >>> corpus_metadata_path = Path('testing', 'corpora', 'sample_novels',
+#         ...                             'sample_novels.csv')
+#         >>> corpus_metadata = f.load_file(corpus_metadata_path)
+#         >>> type(corpus_metadata)
+#         <class 'list'>
+#
+#         file_path can be a string or Path object
+#
+#         >>> import os
+#         >>> novel_path_str = os.sep.join(['testing', 'corpora', 'sample_novels',
+#         ...                               'texts', 'austen_persuasion.txt'])
+#         >>> novel_text_str = f.load_file(novel_path_str)
+#         >>> novel_text == novel_text_str
+#         True
+#         >>> novel_path2 = Path(r"testing/corpora/test_books_30/20-0.txt")
+#         >>> paradise_lost = f.load_file(novel_path2)
+#         >>> paradise_lost[1:61]
+#         'The Project Gutenberg EBook of Paradise Lost, by John Milton'
+#
+#         Returns a str (txt file) or list of strs (csv file)
+#         """
+#         # if the file_path is a string, turn to Path object.
+#         if isinstance(file_path, str):
+#             file_path = Path(file_path)
+#
+#         # make sure that we only try to load supported file types
+#         supported_file_types = {'.csv', '.txt'}
+#         current_file_type = file_path.parts[-1][file_path.parts[-1].rfind('.'):]
+#         if current_file_type not in supported_file_types:
+#             err = "The FileLoaderMixin currently supports "
+#             err += "{supported_file_types} but not {current_file_type}."
+#             raise ValueError(err)
+#
+#         local_base_path = Path(os.path.abspath(os.path.dirname(__file__)))
+#         file = open(local_base_path.joinpath(file_path), encoding='utf-8')
+#
+#         if current_file_type == '.csv':
+#             result = file.readlines()
+#         elif current_file_type == '.txt':
+#             try:
+#                 result = file.read()
+#             except UnicodeDecodeError as err:
+#                 print(f'File loading error with {file_path}.')
+#                 raise err
+#         else:
+#             raise Exception(
+#                 'Cannot load if current_file_type is not .csv or .txt')
+#
+#         file.close()
+#         return result
 
-    Currently supported filetypes are: .csv, .txt
-    """
-
-    def load_file(self, file_path):
-        """
-        Loads csv and txt files
-        file_path can be string or Path object.
-
-        When loading a txt file, load_file returns the text as a string
-
-        >>> from pathlib import Path
-        >>> from gender_analysis import common
-        >>> from gender_analysis import document
-
-        >>> f = document.FileLoaderMixin()
-        >>> novel_path = Path('testing', 'corpora', 'sample_novels',
-        ...                   'texts', 'austen_persuasion.txt')
-        >>> novel_text = f.load_file(novel_path)
-        >>> type(novel_text), len(novel_text)
-        (<class 'str'>, 486253)
-
-        csv files are returned as a list of strings, which can be
-        further processed with Python's csv module
-
-        >>> corpus_metadata_path = Path('testing', 'corpora', 'sample_novels',
-        ...                             'sample_novels.csv')
-        >>> corpus_metadata = f.load_file(corpus_metadata_path)
-        >>> type(corpus_metadata)
-        <class 'list'>
-
-        file_path can be a string or Path object
-
-        >>> import os
-        >>> novel_path_str = os.sep.join(['testing', 'corpora', 'sample_novels',
-        ...                               'texts', 'austen_persuasion.txt'])
-        >>> novel_text_str = f.load_file(novel_path_str)
-        >>> novel_text == novel_text_str
-        True
-        >>> novel_path2 = Path(r"testing/corpora/test_books_30/20-0.txt")
-        >>> paradise_lost = f.load_file(novel_path2)
-        >>> paradise_lost[1:61]
-        'The Project Gutenberg EBook of Paradise Lost, by John Milton'
-
-        Returns a str (txt file) or list of strs (csv file)
-        """
-        # if the file_path is a string, turn to Path object.
-        if isinstance(file_path, str):
-            file_path = Path(file_path)
-
-        # make sure that we only try to load supported file types
-        supported_file_types = {'.csv', '.txt'}
-        current_file_type = file_path.parts[-1][file_path.parts[-1].rfind('.'):]
-        if current_file_type not in supported_file_types:
-            err = "The FileLoaderMixin currently supports "
-            err += "{supported_file_types} but not {current_file_type}."
-            raise ValueError(err)
-
-        local_base_path = Path(os.path.abspath(os.path.dirname(__file__)))
-        file = open(local_base_path.joinpath(file_path), encoding='utf-8')
-
-        if current_file_type == '.csv':
-            result = file.readlines()
-        elif current_file_type == '.txt':
-            try:
-                result = file.read()
-            except UnicodeDecodeError as err:
-                print(f'File loading error with {file_path}.')
-                raise err
-        else:
-            raise Exception(
-                'Cannot load if current_file_type is not .csv or .txt')
-
-        file.close()
-        return result
-
-class Document(FileLoaderMixin):
+class Document:
     """ The Document class loads and holds the full text and
     metadata (author, title, publication date) of a document
 
@@ -318,7 +319,7 @@ class Document(FileLoaderMixin):
         file_path = Path(self.filepath)
 
         try:
-            text = self.load_file(file_path)
+            text = load_txt_to_string(file_path)
         except FileNotFoundError:
             err = "Could not find the document text file "
             err += "at the expected location ({file_path})."
@@ -352,7 +353,7 @@ class Document(FileLoaderMixin):
         ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
         >>> austen = document.Document(document_metadata)
         >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
-        >>> raw_text = austen.load_file(file_path)
+        >>> raw_text = austen.load_txt_to_string(file_path)
         >>> raw_text = austen._remove_boilerplate_text(raw_text)
         >>> title_line = raw_text.splitlines()[0]
         >>> title_line
@@ -388,7 +389,7 @@ class Document(FileLoaderMixin):
         ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
         >>> austen = document.Document(document_metadata)
         >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
-        >>> raw_text = austen.load_file(file_path)
+        >>> raw_text = austen.load_txt_to_string(file_path)
         >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
         >>> title_line = raw_text.splitlines()[0]
         >>> title_line
