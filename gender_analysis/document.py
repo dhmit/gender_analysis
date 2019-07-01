@@ -352,8 +352,8 @@ class Document:
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
-        >>> raw_text = austen.load_txt_to_string(file_path)
+        >>> file_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', austen.filename)
+        >>> raw_text = load_txt_to_string(file_path)
         >>> raw_text = austen._remove_boilerplate_text(raw_text)
         >>> title_line = raw_text.splitlines()[0]
         >>> title_line
@@ -388,8 +388,8 @@ class Document:
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
         >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
-        >>> raw_text = austen.load_txt_to_string(file_path)
+        >>> file_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', austen.filename)
+        >>> raw_text = load_txt_to_string(file_path)
         >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
         >>> title_line = raw_text.splitlines()[0]
         >>> title_line
