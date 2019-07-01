@@ -1,30 +1,13 @@
+import codecs
 import gzip
 import os
-import pickle
-import urllib.request
-
 from pathlib import Path
-import codecs
-
+import pickle
 import seaborn as sns
 
 DEBUG = False
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
-
-METADATA_LIST = ['author', 'date', 'title', 'country_publication', 'author_gender',
-                 'subject', 'notes']
-
-INITIAL_BOOK_STORE = r'corpora/test_books_30'
-#TODO: change to actual directory when generating corpus
-
-# plus some extras
-AUTHOR_NAME_REGEX = r"(?P<last_name>(\w+ )*\w*)\, (?P<first_name>(\w+\.* )*(\w\.*)*)(?P<suffix>\, \w+\.)*(\((?P<real_name>(\w+ )*\w*)\))*"
-outputDir = 'converted'
-
-# TODO(elsa): Investigate doctest errors in this file, may be a result of
-# my own system, not actual code errors
-
 
 class FileLoaderMixin:
     """ The FileLoaderMixin loads files either locally or

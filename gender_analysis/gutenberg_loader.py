@@ -3,7 +3,6 @@ import os
 import re
 import requests
 from pathlib import Path
-from shutil import copyfile
 
 import gender_guesser.detector as gender_guesser
 import pywikibot
@@ -12,21 +11,65 @@ from gutenberg.cleanup import strip_headers
 from gutenberg.query import get_metadata
 
 from gender_analysis import common
-from gender_analysis.common import AUTHOR_NAME_REGEX, BASE_PATH, METADATA_LIST
 
+# Gutenberg loader-only constants
+_METADATA_LIST = [
+    'gutenberg_id',
+    'author',
+    'date',
+    'title',
+    'country_publication',
+    'author_gender',
+    'subject',
+    'notes'
+]
 
-SUBJECTS_TO_IGNORE = ["nonfiction", "dictionaries", "bibliography", "poetry", "short stories", "biography", "encyclopedias",
-             "atlases", "maps", "words and phrase lists", "almanacs", "handbooks, manuals, etc.", "periodicals",
-             "textbooks", "terms and phrases", "essays", "united states. constitution", "bible", "directories",
-             "songbooks", "hymns", "correspondence", "drama", "reviews", "translations into english", 'religion']
-TRUNCATORS = ["\r", "\n", r"; Or, ", r"; or, "]
-COUNTRY_ID_TO_NAME = {"Q30":  "United States", "Q145": "United Kingdom", "Q21": "United Kingdom", "Q16": "Canada",
-                      "Q408": "Australia", "Q2886622": "Narnia"}
+_AUTHOR_NAME_REGEX = r"(?P<last_name>(\w+ )*\w*)\, (?P<first_name>(\w+\.* )*(\w\.*)*)(?P<suffix>\, \w+\.)*(\((?P<real_name>(\w+ )*\w*)\))*"
+
+_SUBJECTS_TO_IGNORE = [
+    'nonfiction',
+    'dictionaries',
+    'bibliography',
+    'poetry',
+    'short stories',
+    'biography',
+    'encyclopedias',
+    'atlases',
+    'maps',
+    'words and phrase lists',
+    'almanacs',
+    'handbooks, manuals, etc.',
+    'periodicals',
+    'textbooks',
+    'terms and phrases',
+    'essays',
+    'united states. constitution',
+    'bible',
+    'directories',
+    'songbooks',
+    'hymns',
+    'correspondence',
+    'drama',
+    'reviews',
+    'translations into english',
+    'religion',
+]
+
+_TRUNCATORS = ['\r', '\n', r'; Or, ', r'; or, ']
+
+_COUNTRY_ID_TO_NAME = {
+    'Q30':  'United States',
+    'Q145': 'United Kingdom',
+    'Q21': 'United Kingdom',
+    'Q16': 'Canada',
+    'Q408': 'Australia',
+    'Q2886622': 'Narnia',
+}
 
 # This directory contains 11 sample books.
-GUTENBERG_RSYNC_PATH = Path(BASE_PATH, 'corpora', 'gutenberg_mirror_sample')
+_GUTENBERG_RSYNC_PATH = Path(common.BASE_PATH, 'corpora', 'gutenberg_mirror_sample')
 
-TEXT_START_MARKERS = frozenset((
+_TEXT_START_MARKERS = frozenset((
     "*END*THE SMALL PRINT",
     "*** START OF THE PROJECT GUTENBERG",
     "*** START OF THIS PROJECT GUTENBERG",
@@ -81,7 +124,8 @@ TEXT_START_MARKERS = frozenset((
     'Mary Meehan, and the Project Gutenberg Online Distributed Proofreading',
     '                this Project Gutenberg edition.',
 ))
-TEXT_END_MARKERS = frozenset((
+
+_TEXT_END_MARKERS = frozenset((
     "*** END OF THE PROJECT GUTENBERG",
     "*** END OF THIS PROJECT GUTENBERG",
     "***END OF THE PROJECT GUTENBERG",
@@ -109,8 +153,10 @@ TEXT_END_MARKERS = frozenset((
     " End of the Project Gutenberg",
     " *** END OF THIS PROJECT GUTENBERG",
 ))
-LEGALESE_START_MARKERS = frozenset(("<<THIS ELECTRONIC VERSION OF",))
-LEGALESE_END_MARKERS = frozenset(("SERVICE THAT CHARGES FOR DOWNLOAD",))
+
+_LEGALESE_START_MARKERS = frozenset(("<<THIS ELECTRONIC VERSION OF",))
+
+_LEGALESE_END_MARKERS = frozenset(("SERVICE THAT CHARGES FOR DOWNLOAD",))
 
 
 def generate_corpus_gutenberg():
@@ -120,14 +166,14 @@ def generate_corpus_gutenberg():
     """
 
     # Check if gutenberg corpus and text directories exists. Create if necessary.
-    for path in [Path(BASE_PATH, 'corpora', 'gutenberg'), Path(BASE_PATH, 'corpora', 'gutenberg',
+    for path in [Path(common.BASE_PATH, 'corpora', 'gutenberg'), Path(common.BASE_PATH, 'corpora', 'gutenberg',
                                                                'texts')]:
         if not os.path.isdir(path):
             os.mkdir(path)
 
     # write csv header
-    with open(Path(BASE_PATH, 'corpora', 'gutenberg', 'gutenberg.csv'), 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=METADATA_LIST)
+    with open(Path(common.BASE_PATH, 'corpora', 'gutenberg', 'gutenberg.csv'), 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=_METADATA_LIST)
         writer.writeheader()
         print("Wrote metadata header")
     # check if cache is populated, if it isn't, populates it
@@ -172,7 +218,7 @@ def generate_corpus_gutenberg():
             with open(filepath, encoding='utf-8') as infile:
                 text_raw = infile.read()
             text_clean = strip_headers(text_raw).strip()
-            with open(Path(BASE_PATH, 'corpora', 'gutenberg', 'texts', f'{gutenberg_id}.txt'),
+            with open(Path(common.BASE_PATH, 'corpora', 'gutenberg', 'texts', f'{gutenberg_id}.txt'),
                       mode='w', encoding='utf-8') as outfile:
                 outfile.write(text_clean)
             number_books += 1
@@ -330,7 +376,7 @@ def subject_invalidates_entry(gutenberg_id):
 
     subjects = get_subject_gutenberg(gutenberg_id)
     for subject in subjects:
-        for word in SUBJECTS_TO_IGNORE:
+        for word in _SUBJECTS_TO_IGNORE:
             if (subject.lower()).find(word) != -1:
                 return True
 
@@ -456,7 +502,7 @@ def get_title_gutenberg(gutenberg_id):
     """
 
     title = list(get_metadata('title', gutenberg_id))[0]
-    for sep in TRUNCATORS:
+    for sep in _TRUNCATORS:
         title = title.split(sep,1)[0]
     return title
 
@@ -704,8 +750,8 @@ def get_country_publication_wikidata(author, title):
         return None
 
     # try to match country_id to major English-speaking countries
-    if country_id in COUNTRY_ID_TO_NAME:
-        return COUNTRY_ID_TO_NAME[country_id]
+    if country_id in _COUNTRY_ID_TO_NAME:
+        return _COUNTRY_ID_TO_NAME[country_id]
 
     # if not try look up wikidata page of country with that id to try and get short name
     try:
@@ -751,7 +797,7 @@ def format_author(author):
 
     author_formatted = ''
     try:
-        match = re.match(AUTHOR_NAME_REGEX, author)
+        match = re.match(_AUTHOR_NAME_REGEX, author)
         first_name = match.groupdict()['first_name']
         if (match.groupdict()['real_name'] != None):
             first_name = match.groupdict()['real_name']
@@ -947,7 +993,7 @@ def write_metadata(novel_metadata):
     corpus = novel_metadata['corpus_name']
     path = Path(current_dir, 'corpora', corpus, f'{corpus}.csv')
     with open(path, 'a', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=METADATA_LIST)
+        writer = csv.DictWriter(csvfile, fieldnames=_METADATA_LIST)
         writer.writerow(novel_metadata)
 
 
@@ -971,7 +1017,7 @@ def generate_gutenberg_rsync_path(gutenberg_id):
 
     id_str = str(gutenberg_id)
 
-    novel_path = Path(GUTENBERG_RSYNC_PATH)
+    novel_path = Path(_GUTENBERG_RSYNC_PATH)
 
     if gutenberg_id < 10:
         return novel_path.joinpath(Path('0', id_str))
@@ -1125,7 +1171,7 @@ def _remove_boilerplate_text_without_gutenberg(text):
 
         if i <= 600:
             # Check if the header ends here
-            if any(line.startswith(token) for token in TEXT_START_MARKERS):
+            if any(line.startswith(token) for token in _TEXT_START_MARKERS):
                 reset = True
 
             # If it's the end of the header, delete the output produced so far.
@@ -1137,17 +1183,17 @@ def _remove_boilerplate_text_without_gutenberg(text):
 
         if i >= 100:
             # Check if the footer begins here
-            if any(line.startswith(token) for token in TEXT_END_MARKERS):
+            if any(line.startswith(token) for token in _TEXT_END_MARKERS):
                 footer_found = True
 
             # If it's the beginning of the footer, stop output
             if footer_found:
                 break
 
-        if any(line.startswith(token) for token in LEGALESE_START_MARKERS):
+        if any(line.startswith(token) for token in _LEGALESE_START_MARKERS):
             ignore_section = True
             continue
-        elif any(line.startswith(token) for token in LEGALESE_END_MARKERS):
+        elif any(line.startswith(token) for token in _LEGALESE_END_MARKERS):
             ignore_section = False
             continue
 
