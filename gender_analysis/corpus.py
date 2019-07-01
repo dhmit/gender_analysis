@@ -4,7 +4,7 @@ from nltk.tokenize import word_tokenize
 from pathlib import Path, PosixPath
 from collections import Counter
 from os import listdir
-from gender_analysis.common import load_csv_to_dict, load_txt_to_string
+from gender_analysis.common import load_csv_to_list, load_txt_to_string
 
 from gender_analysis import common
 from gender_analysis.document import Document
@@ -185,13 +185,13 @@ class Corpus:
         documents = []
 
         try:
-            csv_file = load_csv_to_dict(self.csv_path)
+            csv_list = load_csv_to_list(self.csv_path)
         except FileNotFoundError:
             err = "Could not find the metadata csv file for the "
             err += f"'{self.name}' corpus in the expected location "
             err += f"({self.csv_path})."
             raise FileNotFoundError(err)
-        csv_reader = csv.DictReader(csv_file)
+        csv_reader = csv.DictReader(csv_list)
 
         for document_metadata in csv_reader:
             document_metadata['name'] = self.name

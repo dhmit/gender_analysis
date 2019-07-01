@@ -4,7 +4,7 @@ import pickle
 import urllib.request
 # from gender_analysis import common, document
 
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import codecs
 
 import seaborn as sns
@@ -112,25 +112,28 @@ LEGALESE_END_MARKERS = frozenset(("SERVICE THAT CHARGES FOR DOWNLOAD",))
 # TODO(elsa): Investigate doctest errors in this file, may be a result of
 # my own system, not actual code errors
 
-def load_csv_to_dict(file_path):
+def load_csv_to_list(file_path):
     """
     Loads a csv file
 
     :param file_path: can be a string or Path object
     :return: a list of strings
     """
+    file_type = PurePosixPath(file_path).suffix
+
     if isinstance(file_path, str):
         file_path = Path(file_path)
-
-    file_type = file_path.parts[-1][file_path.parts[-1].rfind('.'):]
-    file = open(file_path, encoding='utf-8')
 
     if file_type != '.csv':
         raise Exception(
             'Cannot load if current file type is not .csv'
         )
     else:
-        return file.readlines()
+        file = open(file_path, encoding='utf-8')
+        result = file.readlines()
+
+    file.close()
+    return result
 
 def load_txt_to_string(file_path):
     """
@@ -139,11 +142,10 @@ def load_txt_to_string(file_path):
     :param file_path: can be a string or Path object
     :return: the text as a string type
     """
+    file_type = PurePosixPath(file_path)
+
     if isinstance(file_path, str):
         file_path = Path(file_path)
-
-    file_type = file_path.parts[-1][file_path.parts[-1].rfind('.'):]
-    file = open(file_path, encoding='utf-8')
 
     if file_type != '.txt':
         raise Exception(
@@ -151,11 +153,14 @@ def load_txt_to_string(file_path):
         )
     else:
         try:
+            file = open(file_path, encoding='utf-8')
             result = file.read()
         except UnicodeDecodeError as err:
-            print(f'File loading error with {file_path}.')
+            print (f'Unicode file loading error {file_path}.')
             raise err
-        return result
+
+    file.close()
+    return result
 
 
 def store_pickle(obj, filename):
