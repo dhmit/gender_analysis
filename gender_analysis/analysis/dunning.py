@@ -262,20 +262,21 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to
     :param to_pickle: boolean
     :return: dict
     """
+    corpus_name = corpus.name if corpus.name else 'corpus'
 
-    pickle_filename = f'dunning_{word1}_vs_{word2}_associated_words_{corpus.name}'
+    pickle_filename = f'dunning_{word1}_vs_{word2}_associated_words_{corpus_name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
         try:
-            pickle_filename = f'dunning_{word2}_vs_{word1}_associated_words_{corpus.name}'
+            pickle_filename = f'dunning_{word2}_vs_{word1}_associated_words_{corpus_name}'
             results = load_pickle(pickle_filename)
         except:
             word1_counter = Counter()
             word2_counter = Counter()
-            for novel in corpus.novels:
-                word1_counter.update(novel.words_associated(word1))
-                word2_counter.update(novel.words_associated(word2))
+            for doc in corpus.documents:
+                word1_counter.update(doc.words_associated(word1))
+                word2_counter.update(doc.words_associated(word2))
             if to_pickle:
                 results = dunning_total(word1_counter, word2_counter,
                                         filename_to_pickle=pickle_filename)
@@ -302,9 +303,11 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
     :param to_pickle: boolean determining if results should be pickled
     :return: dict
     """
+    corpus1_name = corpus1.name if corpus1.name else 'corpus1'
+    corpus2_name = corpus2.name if corpus2.name else 'corpus2'
 
     pickle_filename = (f'dunning_{word}_associated_words_{corpus1_name}_vs_{corpus2_name}_in_'
-                       f'{corpus1.name}')
+                       f'{corpus1_name}')
     if word_window:
         pickle_filename += f'_word_window_{word_window}'
     try:
@@ -313,16 +316,16 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
         print("Precalculated result not available. Running analysis now...")
         corpus1_counter = Counter()
         corpus2_counter = Counter()
-        for novel in corpus1.novels:
+        for doc in corpus1.documents:
             if word_window:
-                novel.get_word_windows(search_terms, window_size=word_window)
+                doc.get_word_windows(word, window_size=word_window)
             else:
-                corpus1_counter.update(novel.words_associated(word))
-        for novel in corpus2.novels:
+                corpus1_counter.update(doc.words_associated(word))
+        for doc in corpus2.documents:
             if word_window:
-                novel.get_word_windows(search_terms, window_size=word_window)
+                doc.get_word_windows(word, window_size=word_window)
             else:
-                corpus2_counter.update(novel.words_associated(word))
+                corpus2_counter.update(doc.words_associated(word))
         if to_pickle:
             results = dunning_total(corpus1_counter, corpus2_counter,
                                     filename_to_pickle=pickle_filename)
