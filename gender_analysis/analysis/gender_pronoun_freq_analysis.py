@@ -31,8 +31,7 @@ def books_pronoun_freq(corp, to_pickle=False):
     >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
     >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
     >>> books_pronoun_freq(Corpus(filepath, csv_path=csvpath))
-    {<Document (aanrud_longfrock)>: 0.7623169107856191, <Document (abbott_flatlandromance)>: 0.14321608040201003, <Document (abbott_indiscreetletter)>: 0.4166666666666667, <Document (adams_fighting)>: 0.1898395721925134, <Document (alcott_josboys)>: 0.42152086422368146, <Document (alcott_littlemen)>: 0.3111248200699157, <Document (alcott_littlewomen)>: 0.6196978175713487, <Document (alden_chautauqua)>: 0.7518623169791935, <Document (austen_emma)>: 0.5662100456621004, <Document (austen_persuasion)>: 0.5305111461382571}
-
+    {<Document (aanrud_longfrock)>: 0.7614617940199335, <Document (abbott_flatlandromance)>: 0.14463840399002492, <Document (abbott_indiscreetletter)>: 0.4160401002506266, <Document (adams_fighting)>: 0.18998330550918197, <Document (alcott_josboys)>: 0.4214648602878916, <Document (alcott_littlemen)>: 0.31113851212494864, <Document (alcott_littlewomen)>: 0.6196017006041621, <Document (alden_chautauqua)>: 0.7515400410677618, <Document (austen_emma)>: 0.566123858869973, <Document (austen_persuasion)>: 0.5303780378037803}
     """
     try:
         relative_freq_female = common.load_pickle(f'{corp.name}_pronoun_freq_female')
@@ -86,7 +85,7 @@ def subject_vs_object_pronoun_freqs(corp, to_pickle=False):
     >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
     >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
     >>> subject_vs_object_pronoun_freqs(Corpus(filepath, csv_path=csvpath))
-    ({<Document (aanrud_longfrock)>: 0.793233082706767, <Document (abbott_flatlandromance)>: 0.6741573033707865, <Document (abbott_indiscreetletter)>: 0.7906976744186047, <Document (adams_fighting)>: 0.7184527584020292, <Document (alcott_josboys)>: 0.6330049261083744, <Document (alcott_littlemen)>: 0.6451612903225807, <Document (alcott_littlewomen)>: 0.6577563540753725, <Document (alden_chautauqua)>: 0.7577030812324931, <Document (austen_emma)>: 0.7086120401337792, <Document (austen_persuasion)>: 0.6739130434782609}, {<Document (aanrud_longfrock)>: 0.5376532399299474, <Document (abbott_flatlandromance)>: 0.17543859649122806, <Document (abbott_indiscreetletter)>: 0.4424242424242424, <Document (adams_fighting)>: 0.43485915492957744, <Document (alcott_josboys)>: 0.3862487360970678, <Document (alcott_littlemen)>: 0.4343501326259947, <Document (alcott_littlewomen)>: 0.4124569980083288, <Document (alden_chautauqua)>: 0.5461432506887053, <Document (austen_emma)>: 0.4836730221345606, <Document (austen_persuasion)>: 0.4872013651877133})
+    ({<Document (aanrud_longfrock)>: 0.7947761194029851, <Document (abbott_flatlandromance)>: 0.6777777777777777, <Document (abbott_indiscreetletter)>: 0.7938931297709924, <Document (adams_fighting)>: 0.7188093730208993, <Document (alcott_josboys)>: 0.6334563345633456, <Document (alcott_littlemen)>: 0.6454880294659301, <Document (alcott_littlewomen)>: 0.6580560420315237, <Document (alden_chautauqua)>: 0.7583798882681564, <Document (austen_emma)>: 0.7088554720133667, <Document (austen_persuasion)>: 0.6743697478991596}, {<Document (aanrud_longfrock)>: 0.5380577427821522, <Document (abbott_flatlandromance)>: 0.18965517241379312, <Document (abbott_indiscreetletter)>: 0.4457831325301205, <Document (adams_fighting)>: 0.4358523725834798, <Document (alcott_josboys)>: 0.38655886811520973, <Document (alcott_littlemen)>: 0.43472498343273697, <Document (alcott_littlewomen)>: 0.41256335988414194, <Document (alden_chautauqua)>: 0.5462994836488813, <Document (austen_emma)>: 0.48378615249780893, <Document (austen_persuasion)>: 0.48742004264392325})
     """
 
     try:
@@ -150,9 +149,9 @@ def subject_pronouns_gender_comparison(corp, subject_gender, to_pickle=False):
     >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
     >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
     >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'male')
-    {<Document (aanrud_longfrock)>: 0.2557575757575758, <Document (abbott_flatlandromance)>: 0.923076923076923, <Document (abbott_indiscreetletter)>: 0.582857142857143, <Document (adams_fighting)>: 0.8210144927536231, <Document (alcott_josboys)>: 0.5736607142857142, <Document (alcott_littlemen)>: 0.6812652068126521, <Document (alcott_littlewomen)>: 0.39719502513892563, <Document (alden_chautauqua)>: 0.2543488481429243, <Document (austen_emma)>: 0.4343926191696566, <Document (austen_persuasion)>: 0.45696623870660963}
+    {<Document (aanrud_longfrock)>: 0.25724637681159424, <Document (abbott_flatlandromance)>: 0.9172932330827067, <Document (abbott_indiscreetletter)>: 0.5842696629213483, <Document (adams_fighting)>: 0.8206796818510484, <Document (alcott_josboys)>: 0.573816155988858, <Document (alcott_littlemen)>: 0.6812439261418853, <Document (alcott_littlewomen)>: 0.3974087784241142, <Document (alden_chautauqua)>: 0.2549295774647887, <Document (austen_emma)>: 0.4345710627400768, <Document (austen_persuasion)>: 0.45726495726495725}
     >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'female')
-    {<Document (aanrud_longfrock)>: 0.7442424242424243, <Document (abbott_flatlandromance)>: 0.07692307692307691, <Document (abbott_indiscreetletter)>: 0.4171428571428572, <Document (adams_fighting)>: 0.17898550724637682, <Document (alcott_josboys)>: 0.4263392857142857, <Document (alcott_littlemen)>: 0.31873479318734793, <Document (alcott_littlewomen)>: 0.6028049748610743, <Document (alden_chautauqua)>: 0.7456511518570758, <Document (austen_emma)>: 0.5656073808303435, <Document (austen_persuasion)>: 0.5430337612933904}
+    {<Document (aanrud_longfrock)>: 0.7427536231884058, <Document (abbott_flatlandromance)>: 0.08270676691729323, <Document (abbott_indiscreetletter)>: 0.4157303370786517, <Document (adams_fighting)>: 0.17932031814895155, <Document (alcott_josboys)>: 0.4261838440111421, <Document (alcott_littlemen)>: 0.31875607385811466, <Document (alcott_littlewomen)>: 0.6025912215758857, <Document (alden_chautauqua)>: 0.7450704225352113, <Document (austen_emma)>: 0.5654289372599232, <Document (austen_persuasion)>: 0.5427350427350427}
     """
 
     if not(subject_gender == 'male' or subject_gender == 'female'):
@@ -503,7 +502,7 @@ def overall_mean(d):
     >>> freq = books_pronoun_freq(c)
     >>> mean = overall_mean(freq)
     >>> str(mean)[:7]
-    '0.47129'
+    '0.47123'
     """
     l = dict_to_list(d)
     mean = np.mean(l)
@@ -531,5 +530,3 @@ def stat_analysis(corpus):
                                                                            sub_v__ob_female_list)
     print("values for subject vs object pronouns between male and female authors: ",
           author_gender_sub_v_ob_correlation)
-
-    # subject_pronouns_gender_comparison(Corpus('gutenberg'),'female')
