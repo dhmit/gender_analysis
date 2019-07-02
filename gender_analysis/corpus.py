@@ -1,14 +1,13 @@
 import csv
 import random
 from nltk.tokenize import word_tokenize
-from pathlib import Path, PosixPath
+from pathlib import Path
 from collections import Counter
 from os import listdir
 from gender_analysis.common import load_csv_to_list, load_txt_to_string
 
 from gender_analysis import common
 from gender_analysis.document import Document
-# from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
 
 
 class Corpus:
@@ -266,7 +265,7 @@ class Corpus:
         >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_wordcount_counter()['fire']
-        2269
+        2274
 
         """
         corpus_counter = Counter()
@@ -289,10 +288,7 @@ class Corpus:
 
         :return: list
         """
-        metadata_fields = set()
-        for document in self.documents:
-            for field in document.members:
-                metadata_fields.add(field)
+        metadata_fields = self.documents[0].members
         return sorted(list(metadata_fields))
 
     def get_field_vals(self, field):
@@ -487,10 +483,10 @@ class Corpus:
         :return: Document
         """
 
-        if metadata_field not in get_metadata_fields(self.name):
+        if metadata_field not in self.get_corpus_metadata():
             raise AttributeError(f"Metadata field {metadata_field} invalid for this corpus")
 
-        if (metadata_field == "date" or metadata_field == "gutenberg_id"):
+        if metadata_field == "date":
             field_val = int(field_val)
 
         for document in self.documents:
@@ -568,7 +564,7 @@ class Corpus:
         """
 
         for field in metadata_dict.keys():
-            if field not in get_metadata_fields(self.name):
+            if field not in self.get_corpus_metadata():
                 raise AttributeError(f"Metadata field {field} invalid for this corpus")
 
         for document in self.documents:
@@ -580,19 +576,6 @@ class Corpus:
                 return document
 
         raise ValueError("Document not found")
-
-
-def get_metadata_fields(name):
-    """
-    Gives a list of all metadata fields for corpus
-    >>> from gender_analysis import corpus
-    >>> corpus.get_metadata_fields('gutenberg')
-    ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'notes']
-
-    :param: name: str
-    :return: list
-    """
-    return common.METADATA_LIST
 
 
 if __name__ == '__main__':

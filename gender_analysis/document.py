@@ -2,40 +2,33 @@ import re
 import string
 from collections import Counter
 from pathlib import Path
-from gender_analysis.common import load_csv_to_list, load_txt_to_string
 
 from more_itertools import windowed
-
 import nltk
+from ast import literal_eval
 
 # nltk as part of speech tagger, requires these two packages
 nltk.download('punkt', quiet=True)
 nltk.download('averaged_perceptron_tagger', quiet=True)
-gutenberg_imported = True
 
-try:
-    from gutenberg.cleanup import strip_headers
-except ImportError:
-    # print('Cannot import gutenberg')
-    gutenberg_imported = False
+from gender_analysis.common import load_csv_to_list, load_txt_to_string
+from gender_analysis import common
 
-from gender_analysis.common import TEXT_END_MARKERS, TEXT_START_MARKERS, LEGALESE_END_MARKERS, \
-    LEGALESE_START_MARKERS
 
-class Document:
+class Document(common.FileLoaderMixin):
     """ The Document class loads and holds the full text and
     metadata (author, title, publication date) of a document
 
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+    >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
     >>> len(austen.text)
-    466879
+    486253
     """
 
     def __init__(self, metadata_dict):
@@ -95,11 +88,11 @@ class Document:
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
-        83285
+        86291
 
         :return: int
         """
@@ -117,7 +110,7 @@ class Document:
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> document_string = str(austen)
@@ -138,7 +131,7 @@ class Document:
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> repr(austen)
@@ -228,7 +221,7 @@ class Document:
 
         Is a private function as it is unnecessary to access it outside the class.
 
-        Currently only supports boilerplate removal for Project gutenberg ebooks.
+        Currently best supports boilerplate removal for Project gutenberg ebooks.
 
         :return: str
         """
@@ -241,122 +234,8 @@ class Document:
             err += "at the expected location ({file_path})."
             raise FileNotFoundError(err)
 
-        # This function will remove the boilerplate text from the document's text. It has been
-        # placed into a separate function in the case that other document text cleaning functions
-        # want to be added at a later date.
-        text = self._remove_boilerplate_text(text)
-
         return text
 
-    def _remove_boilerplate_text(self, text):
-        """
-        Removes the boilerplate text from an input string of a document.
-        Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
-        strip_headers() function from the gutenberg module, which can remove even nonstandard
-        headers.
-
-        (see book number 3780 for one example of a nonstandard header — james_highway.txt in our
-        sample corpus; or book number 105, austen_persuasion.txt, which uses the standard Gutenberg
-        header but has had some info about the ebook's production inserted after the standard
-        boilerplate).
-
-        :return: str
-
-        >>> from gender_analysis import document
-        >>> from pathlib import Path
-        >>> from gender_analysis import common
-        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
-        >>> austen = document.Document(document_metadata)
-        >>> file_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', austen.filename)
-        >>> raw_text = load_txt_to_string(file_path)
-        >>> raw_text = austen._remove_boilerplate_text(raw_text)
-        >>> title_line = raw_text.splitlines()[0]
-        >>> title_line
-        "THE KING'S HIGHWAY"
-
-        TODO: neither version of remove_boilerplate_text works on Persuasion, and it doesn't look like it's
-        easily fixable
-        """
-
-        if gutenberg_imported:
-            return strip_headers(text).strip()
-        else:
-            return self._remove_boilerplate_text_without_gutenberg(text)
-
-    def _remove_boilerplate_text_without_gutenberg(self, text):
-        """
-        Removes the boilerplate text from an input string of a document.
-        Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
-        strip_headers() function, somewhat inelegantly copy-pasted from the gutenberg module, which can remove even nonstandard
-        headers.
-
-        (see book number 3780 for one example of a nonstandard header — james_highway.txt in our
-        sample corpus; or book number 105, austen_persuasion.txt, which uses the standard Gutenberg
-        header but has had some info about the ebook's production inserted after the standard
-        boilerplate).
-
-        :return: str
-
-        >>> from gender_analysis import document
-        >>> from pathlib import Path
-        >>> from gender_analysis import common
-        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
-        >>> austen = document.Document(document_metadata)
-        >>> file_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', austen.filename)
-        >>> raw_text = load_txt_to_string(file_path)
-        >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
-        >>> title_line = raw_text.splitlines()[0]
-        >>> title_line
-        "THE KING'S HIGHWAY"
-        """
-
-        # new method copy-pasted from Gutenberg library
-        lines = text.splitlines()
-        sep = '\n'
-
-        out = []
-        i = 0
-        footer_found = False
-        ignore_section = False
-
-        for line in lines:
-            reset = False
-
-            if i <= 600:
-                # Check if the header ends here
-                if any(line.startswith(token) for token in TEXT_START_MARKERS):
-                    reset = True
-
-                # If it's the end of the header, delete the output produced so far.
-                # May be done several times, if multiple lines occur indicating the
-                # end of the header
-                if reset:
-                    out = []
-                    continue
-
-            if i >= 100:
-                # Check if the footer begins here
-                if any(line.startswith(token) for token in TEXT_END_MARKERS):
-                    footer_found = True
-
-                # If it's the beginning of the footer, stop output
-                if footer_found:
-                    break
-
-            if any(line.startswith(token) for token in LEGALESE_START_MARKERS):
-                ignore_section = True
-                continue
-            elif any(line.startswith(token) for token in LEGALESE_END_MARKERS):
-                ignore_section = False
-                continue
-
-            if not ignore_section:
-                out.append(line.rstrip(sep))
-                i += 1
-
-        return sep.join(out).strip()
 
     def get_tokenized_text(self):
         """

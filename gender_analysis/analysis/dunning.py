@@ -67,7 +67,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> corpus1 = Corpus(filepath1)
     >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
-    -411748.9475344888
+    -425133.12886726425
     """
 
     counter1 = corpus1.get_wordcount_counter()
@@ -212,8 +212,8 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
                 'freq_corp1', 'freq_corp2']
 
     output = f'\nDisplaying Part of Speech: {part_of_speech_to_include}\n'
-    for i, corpus_name in enumerate([corpus1_display_name, corpus2_display_name]):
-        output += f'\nDunning Log-Likelihood results for {corpus_name}\n|'
+    for i, name in enumerate([corpus1_display_name, corpus2_display_name]):
+        output += f'\nDunning Log-Likelihood results for {name}\n|'
 
         for heading in headings:
             heading = heading.replace('_corp1', ' ' + corpus1_display_name).replace('_corp2',
