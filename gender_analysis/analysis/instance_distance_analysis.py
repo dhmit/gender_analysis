@@ -151,7 +151,8 @@ def results_by_location(results, metric):
       order = [male distance, female distance, difference]
     :param results dictionary
     :param metric ('median', 'mean', 'min', 'max')
-    :return: dictionary """
+    :return: dictionary
+    """
     data = {}
     metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
     try:
@@ -249,8 +250,8 @@ def box_plots(inst_data, my_pal, title, x="N/A"):
     """
     Takes in a frequency dictionaries and exports its values as a bar-and-whisker graph
     :param inst_data
-    :param my_pal: palette to be used
-    :param title: title of exported graph
+    :param my_pal: str, palette to be used
+    :param title: str, filename of exported graph
     :param x: name of x-vars
     :return:
     """
