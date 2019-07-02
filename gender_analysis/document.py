@@ -4,18 +4,18 @@ from collections import Counter
 from pathlib import Path
 
 from more_itertools import windowed
-
 import nltk
+from ast import literal_eval
 
 # nltk as part of speech tagger, requires these two packages
 nltk.download('punkt', quiet=True)
 nltk.download('averaged_perceptron_tagger', quiet=True)
 
+from gender_analysis.common import load_csv_to_list, load_txt_to_string
 from gender_analysis import common
-from ast import literal_eval
 
 
-class Document(common.FileLoaderMixin):
+class Document:
     """ The Document class loads and holds the full text and
     metadata (author, title, publication date) of a document
 
@@ -228,13 +228,14 @@ class Document(common.FileLoaderMixin):
         file_path = Path(self.filepath)
 
         try:
-            text = self.load_file(file_path)
+            text = load_txt_to_string(file_path)
         except FileNotFoundError:
             err = "Could not find the document text file "
-            err += "at the expected location ({file_path})."
+            err += f"at the expected location ({file_path})."
             raise FileNotFoundError(err)
 
         return text
+
 
     def get_tokenized_text(self):
         """
@@ -487,9 +488,3 @@ class Document(common.FileLoaderMixin):
         text = nltk.word_tokenize(self.text)
         pos_tags = nltk.pos_tag(text)
         return pos_tags
-
-
-if __name__ == '__main__':
-    from dh_testers.testRunner import main_test
-
-    main_test()
