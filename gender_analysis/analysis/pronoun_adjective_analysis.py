@@ -32,10 +32,7 @@ def store_raw_results(results, corpus):
     :param corpus: corpus associated with above results, used for naming file
     :return: None, saves results as pickled file with name 'pronoun_adj_raw_analysis_corpus_name'
     """
-    if corpus.name:
-        corpus_name = corpus.name
-    else:
-        corpus_name = 'corpus'
+    corpus_name = corpus.name if corpus.name else 'corpus'
 
     try:
         common.load_pickle("pronoun_adj_raw_analysis_" + corpus_name)
