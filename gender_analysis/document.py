@@ -15,7 +15,7 @@ from gender_analysis.common import load_csv_to_list, load_txt_to_string
 from gender_analysis import common
 
 
-class Document(common.FileLoaderMixin):
+class Document():
     """ The Document class loads and holds the full text and
     metadata (author, title, publication date) of a document
 
@@ -488,9 +488,3 @@ class Document(common.FileLoaderMixin):
         text = nltk.word_tokenize(self.text)
         pos_tags = nltk.pos_tag(text)
         return pos_tags
-
-
-if __name__ == '__main__':
-    from dh_testers.testRunner import main_test
-
-    main_test()
