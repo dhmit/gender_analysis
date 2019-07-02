@@ -44,7 +44,7 @@ class Corpus(common.FileLoaderMixin):
         self.csv_path = csv_path
         self.path_to_files = path_to_files
         self.documents = []
-        self._metadata_fields = []
+        self.metadata_fields = []
 
         if self.path_to_files.suffix == '.pgz':
             pickle_data = common.load_pickle(self.path_to_files)
@@ -52,7 +52,7 @@ class Corpus(common.FileLoaderMixin):
             self.metadata_fields = pickle_data.metadata
         elif self.path_to_files.suffix == '' and not self.csv_path:
             files = listdir(self.path_to_files)
-            self._metadata_fields = ['filename', 'filepath']
+            self.metadata_fields = ['filename', 'filepath']
             for file in files:
                 if file.endswith('.txt'):
                     metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
@@ -61,10 +61,6 @@ class Corpus(common.FileLoaderMixin):
             self.documents = self._load_documents()
         else:
             raise ValueError(f'path_to_files must lead to a a previously pickled corpus or directory of .txt files')
-
-    @property
-    def metadata_fields(self):
-        return self._metadata_fields
 
     def __len__(self):
         """
@@ -206,7 +202,7 @@ class Corpus(common.FileLoaderMixin):
             documents.append(this_document)
             metadata.update(list(document_metadata))
 
-        self._metadata_fields = list(metadata)
+        self.metadata_fields = list(metadata)
         return sorted(documents)
 
     def count_authors_by_gender(self, gender):
