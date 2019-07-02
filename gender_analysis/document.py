@@ -15,7 +15,7 @@ from gender_analysis.common import load_csv_to_list, load_txt_to_string
 from gender_analysis import common
 
 
-class Document():
+class Document:
     """ The Document class loads and holds the full text and
     metadata (author, title, publication date) of a document
 
