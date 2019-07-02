@@ -3,7 +3,7 @@ import os
 import pickle
 
 
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 import codecs
 
 import seaborn as sns
@@ -125,10 +125,10 @@ def load_csv_to_list(file_path):
     :param file_path: can be a string or Path object
     :return: a list of strings
     """
-    file_type = PurePosixPath(file_path).suffix
-
     if isinstance(file_path, str):
         file_path = Path(file_path)
+
+    file_type = file_path.suffix
 
     if file_type != '.csv':
         raise Exception(
@@ -155,9 +155,10 @@ def load_txt_to_string(file_path):
     :param file_path: can be a string or Path object
     :return: the text as a string type
     """
-    file_type = PurePosixPath(file_path).suffix
     if isinstance(file_path, str):
         file_path = Path(file_path)
+
+    file_type =file_path.suffix
 
     if file_type != '.txt':
         raise Exception(
