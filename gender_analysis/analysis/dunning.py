@@ -7,7 +7,7 @@ import nltk
 from gender_analysis.common import store_pickle, load_pickle
 from gender_analysis.corpus import Corpus
 from gender_analysis.common import load_graph_settings
-from gender_analysis.common import MissingMetadataError
+# from gender_analysis.common import MissingMetadataError
 
 # TODO: Rewrite all of this using a Dunning class in a non-messy way.
 
