@@ -320,12 +320,20 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
             if word_window:
                 doc.get_word_windows(word, window_size=word_window)
             else:
-                corpus1_counter.update(doc.words_associated(word))
+                if isinstance(word, str):
+                    corpus1_counter.update(doc.words_associated(word))
+                else:  # word is a list of actual words
+                    for token in word:
+                        corpus1_counter.update(doc.words_associated(token))
         for doc in corpus2.documents:
             if word_window:
                 doc.get_word_windows(word, window_size=word_window)
             else:
-                corpus2_counter.update(doc.words_associated(word))
+                if isinstance(word, str):
+                    corpus2_counter.update(doc.words_associated(word))
+                else:  # word is a list of actual words
+                    for token in word:
+                        corpus2_counter.update(doc.words_associated(token))
         if to_pickle:
             results = dunning_total(corpus1_counter, corpus2_counter,
                                     filename_to_pickle=pickle_filename)
