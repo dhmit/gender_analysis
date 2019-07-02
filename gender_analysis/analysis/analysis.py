@@ -360,8 +360,8 @@ def find_gender_adj(document, female):
 
         :param: document: Document
         :param: female: boolean indicating whether to search for female adjectives (true) or
-        male adj (false)
-        :return: dictionary of adjectives that appear around male pronouns and the number of
+        male adjectives (false)
+        :return: dictionary of adjectives that appear around male pronouns mapped to the number of
         occurrences
     """
     output = {}
