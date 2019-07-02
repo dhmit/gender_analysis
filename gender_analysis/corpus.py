@@ -44,12 +44,15 @@ class Corpus(common.FileLoaderMixin):
         self.csv_path = csv_path
         self.path_to_files = path_to_files
         self.documents = []
+        self.metadata_fields = []
 
         if self.path_to_files.suffix == '.pgz':
             pickle_data = common.load_pickle(self.path_to_files)
             self.documents = pickle_data.documents
+            self.metadata_fields = pickle_data.metadata
         elif self.path_to_files.suffix == '' and not self.csv_path:
             files = listdir(self.path_to_files)
+            self.metadata_fields = ['filename', 'filepath']
             for file in files:
                 if file.endswith('.txt'):
                     metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
@@ -181,6 +184,7 @@ class Corpus(common.FileLoaderMixin):
 
     def _load_documents(self):
         documents = []
+        metadata = set()
 
         try:
             csv_file = self.load_file(self.csv_path)
@@ -196,7 +200,9 @@ class Corpus(common.FileLoaderMixin):
             document_metadata['filepath'] = self.path_to_files / document_metadata['filename']
             this_document = Document(document_metadata)
             documents.append(this_document)
+            metadata.update(list(document_metadata))
 
+        self.metadata_fields = list(metadata)
         return sorted(documents)
 
     def count_authors_by_gender(self, gender):
@@ -273,23 +279,6 @@ class Corpus(common.FileLoaderMixin):
             corpus_counter += document_counter
         return corpus_counter
 
-    def get_corpus_metadata(self):
-        """
-        This function returns a sorted list of all metadata fields
-        in the corpus as strings. This is different from the get_metadata_fields;
-        this returns the fields which are specific to the corpus it is being called on.
-        >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        >>> c = Corpus(path)
-        >>> c.get_corpus_metadata()
-        ['filename', 'filepath']
-
-        :return: list
-        """
-        metadata_fields = self.documents[0].members
-        return sorted(list(metadata_fields))
-
     def get_field_vals(self, field):
         """
         This function returns a sorted list of all values for a
@@ -306,9 +295,8 @@ class Corpus(common.FileLoaderMixin):
         :param field: str
         :return: list
         """
-        metadata_fields = self.get_corpus_metadata()
 
-        if field not in metadata_fields:
+        if field not in self.metadata_fields:
             raise ValueError(
                 f'\'{field}\' is not a valid metadata field for this corpus'
             )
@@ -367,12 +355,10 @@ class Corpus(common.FileLoaderMixin):
         :param field_value: str
         :return: Corpus
         """
-
-        supported_metadata_fields = self.get_corpus_metadata()
         
-        if metadata_field not in supported_metadata_fields:
+        if metadata_field not in self.metadata_fields:
             raise ValueError(
-                f'Metadata field must be {", ".join(supported_metadata_fields)} '
+                f'Metadata field must be {", ".join(self.metadata_fields)} '
                 + f'but not {metadata_field}.')
 
         corpus_copy = self.clone()
@@ -422,15 +408,14 @@ class Corpus(common.FileLoaderMixin):
         >>> len(c.multi_filter(corpus_filter))
         1
         """
-        supported_metadata_fields = self.get_corpus_metadata()
 
         corpus_copy = self.clone()
         corpus_copy.documents = []
 
         for metadata_field in characteristic_dict:
-            if metadata_field not in supported_metadata_fields:
+            if metadata_field not in self.metadata_fields:
                 raise ValueError(
-                    f'Metadata field must be {", ".join(supported_metadata_fields)} '
+                    f'Metadata field must be {", ".join(self.metadata_fields)} '
                     + f'but not {metadata_field}.')
 
         for this_document in self.documents:
@@ -482,7 +467,7 @@ class Corpus(common.FileLoaderMixin):
         :return: Document
         """
 
-        if metadata_field not in self.get_corpus_metadata():
+        if metadata_field not in self.metadata_fields:
             raise AttributeError(f"Metadata field {metadata_field} invalid for this corpus")
 
         if metadata_field == "date":
@@ -563,7 +548,7 @@ class Corpus(common.FileLoaderMixin):
         """
 
         for field in metadata_dict.keys():
-            if field not in self.get_corpus_metadata():
+            if field not in self.metadata_fields:
                 raise AttributeError(f"Metadata field {field} invalid for this corpus")
 
         for document in self.documents:

@@ -231,7 +231,7 @@ class Document(common.FileLoaderMixin):
             text = self.load_file(file_path)
         except FileNotFoundError:
             err = "Could not find the document text file "
-            err += "at the expected location ({file_path})."
+            err += f"at the expected location ({file_path})."
             raise FileNotFoundError(err)
 
         return text
