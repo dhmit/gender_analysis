@@ -172,8 +172,10 @@ def male_vs_female_authors_analysis_dunning_lesser(corpus):
     wordcounter_male = m_corpus.get_wordcount_counter()
     wordcounter_female = f_corpus.get_wordcount_counter()
     results = dunning_total(wordcounter_male, wordcounter_female)
-    print("women's top 10: ", results[0:10])
-    print("men's top 10: ", list(reversed(results[-10:])))
+    list_results = list(results.keys())
+    list_results.sort(key=lambda x: results[x]['dunning'])
+    print("women's top 10: ", list_results[0:10])
+    print("men's top 10: ", list(reversed(list_results[-10:])))
     return results
 
     
@@ -474,8 +476,7 @@ def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pi
 def he_vs_she_associations_analysis_dunning(corpus, to_pickle=False):
     """
     Uses Dunning analysis to compare words associated with 'he' vs words associated with 'she' in
-    the Corpus passed in as the parameter.  The name parameter is if you want to name the file
-    something other than Gutenberg (e.g. Gutenberg_female_authors)
+    the Corpus passed in as the parameter.
     :param corpus: Corpus
     :param to_pickle: boolean
     """
@@ -486,9 +487,9 @@ def he_vs_she_associations_analysis_dunning(corpus, to_pickle=False):
     except IOError:
         he_counter = Counter()
         she_counter = Counter()
-        for novel in corpus.novels:
-            he_counter.update(novel.words_associated("he"))
-            she_counter.update(novel.words_associated("she"))
+        for doc in corpus.documents:
+            he_counter.update(doc.words_associated("he"))
+            she_counter.update(doc.words_associated("she"))
         if to_pickle:
             results = dunning_total(she_counter, he_counter, filename_to_pickle=pickle_filename)
         else:
