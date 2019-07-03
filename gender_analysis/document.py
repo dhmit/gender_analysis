@@ -4,41 +4,31 @@ from collections import Counter
 from pathlib import Path
 
 from more_itertools import windowed
-
 import nltk
+from ast import literal_eval
 
 # nltk as part of speech tagger, requires these two packages
 nltk.download('punkt', quiet=True)
 nltk.download('averaged_perceptron_tagger', quiet=True)
-gutenberg_imported = True
 
+from gender_analysis.common import load_csv_to_list, load_txt_to_string
 from gender_analysis import common
-from ast import literal_eval
 
 
-try:
-    from gutenberg.cleanup import strip_headers
-except ImportError:
-    # print('Cannot import gutenberg')
-    gutenberg_imported = False
-
-from gender_analysis.common import TEXT_END_MARKERS, TEXT_START_MARKERS, LEGALESE_END_MARKERS, \
-    LEGALESE_START_MARKERS
-
-
-class Document(common.FileLoaderMixin):
+class Document:
     """ The Document class loads and holds the full text and
     metadata (author, title, publication date) of a document
 
     >>> from gender_analysis import document
-    >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
-    ...                   'corpus_name': 'sample_novels', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': 'corpora/sample_novels/texts/austen_persuasion.txt'}
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
     >>> len(austen.text)
-    466879
+    486253
     """
 
     def __init__(self, metadata_dict):
@@ -96,12 +86,13 @@ class Document(common.FileLoaderMixin):
         However, it is performance-wise costly, so it's only loaded when it's actually required.
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
-        83285
+        86291
 
         :return: int
         """
@@ -117,9 +108,10 @@ class Document(common.FileLoaderMixin):
         :return: str
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> document_string = str(austen)
         >>> document_string
@@ -137,9 +129,10 @@ class Document(common.FileLoaderMixin):
         :return: string
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'gutenberg_id': '105', 'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> repr(austen)
         '<Document (austen_persuasion)>'
@@ -153,9 +146,10 @@ class Document(common.FileLoaderMixin):
         Overload the equality operator to enable comparing and sorting documents.
 
         >>> from gender_analysis.document import Document
-        >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = Document(austen_metadata)
         >>> austen2 = Document(austen_metadata)
         >>> austen == austen2
@@ -187,13 +181,13 @@ class Document(common.FileLoaderMixin):
         Overload less than operator to enable comparing and sorting documents
 
         >>> from gender_analysis import document
-        >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'corpus_name': 'sample_novels', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(austen_metadata)
-        >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'sample_novels', 'date': '1850',
-        ...                   'filename': 'hawthorne_scarlet.txt'}
+        >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
+        ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
         >>> hawthorne = document.Document(hawthorne_metadata)
         >>> hawthorne < austen
         False
@@ -227,135 +221,21 @@ class Document(common.FileLoaderMixin):
 
         Is a private function as it is unnecessary to access it outside the class.
 
-        Currently only supports boilerplate removal for Project gutenberg ebooks.
+        Currently best supports boilerplate removal for Project gutenberg ebooks.
 
         :return: str
         """
-        # file_path = Path(self.filepath)
-        if 'test_text' not in self.filename:
-            file_path = Path('corpora', 'sample_novels', 'texts', self.filename)
-        else:
-            file_path =Path('corpora', 'document_test_files', self.filename)
+        file_path = Path(self.filepath)
 
         try:
-            text = self.load_file(file_path)
+            text = load_txt_to_string(file_path)
         except FileNotFoundError:
             err = "Could not find the document text file "
-            err += "at the expected location ({file_path})."
+            err += f"at the expected location ({file_path})."
             raise FileNotFoundError(err)
-
-        # This function will remove the boilerplate text from the document's text. It has been
-        # placed into a separate function in the case that other document text cleaning functions
-        # want to be added at a later date.
-        text = self._remove_boilerplate_text(text)
 
         return text
 
-    def _remove_boilerplate_text(self, text):
-        """
-        Removes the boilerplate text from an input string of a document.
-        Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
-        strip_headers() function from the gutenberg module, which can remove even nonstandard
-        headers.
-
-        (see book number 3780 for one example of a nonstandard header — james_highway.txt in our
-        sample corpus; or book number 105, austen_persuasion.txt, which uses the standard Gutenberg
-        header but has had some info about the ebook's production inserted after the standard
-        boilerplate).
-
-        :return: str
-
-        >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'james_highway.txt'}
-        >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
-        >>> raw_text = austen.load_file(file_path)
-        >>> raw_text = austen._remove_boilerplate_text(raw_text)
-        >>> title_line = raw_text.splitlines()[0]
-        >>> title_line
-        "THE KING'S HIGHWAY"
-
-        TODO: neither version of remove_boilerplate_text works on Persuasion, and it doesn't look like it's
-        easily fixable
-        """
-
-        if gutenberg_imported:
-            return strip_headers(text).strip()
-        else:
-            return self._remove_boilerplate_text_without_gutenberg(text)
-
-    def _remove_boilerplate_text_without_gutenberg(self, text):
-        """
-        Removes the boilerplate text from an input string of a document.
-        Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
-        strip_headers() function, somewhat inelegantly copy-pasted from the gutenberg module, which can remove even nonstandard
-        headers.
-
-        (see book number 3780 for one example of a nonstandard header — james_highway.txt in our
-        sample corpus; or book number 105, austen_persuasion.txt, which uses the standard Gutenberg
-        header but has had some info about the ebook's production inserted after the standard
-        boilerplate).
-
-        :return: str
-
-        >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'james_highway.txt'}
-        >>> austen = document.Document(document_metadata)
-        >>> file_path = Path('corpora', 'sample_novels', 'texts', austen.filename)
-        >>> raw_text = austen.load_file(file_path)
-        >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
-        >>> title_line = raw_text.splitlines()[0]
-        >>> title_line
-        "THE KING'S HIGHWAY"
-        """
-
-        # new method copy-pasted from Gutenberg library
-        lines = text.splitlines()
-        sep = '\n'
-
-        out = []
-        i = 0
-        footer_found = False
-        ignore_section = False
-
-        for line in lines:
-            reset = False
-
-            if i <= 600:
-                # Check if the header ends here
-                if any(line.startswith(token) for token in TEXT_START_MARKERS):
-                    reset = True
-
-                # If it's the end of the header, delete the output produced so far.
-                # May be done several times, if multiple lines occur indicating the
-                # end of the header
-                if reset:
-                    out = []
-                    continue
-
-            if i >= 100:
-                # Check if the footer begins here
-                if any(line.startswith(token) for token in TEXT_END_MARKERS):
-                    footer_found = True
-
-                # If it's the beginning of the footer, stop output
-                if footer_found:
-                    break
-
-            if any(line.startswith(token) for token in LEGALESE_START_MARKERS):
-                ignore_section = True
-                continue
-            elif any(line.startswith(token) for token in LEGALESE_END_MARKERS):
-                ignore_section = False
-                continue
-
-            if not ignore_section:
-                out.append(line.rstrip(sep))
-                i += 1
-
-        return sep.join(out).strip()
 
     def get_tokenized_text(self):
         """
@@ -366,8 +246,10 @@ class Document(common.FileLoaderMixin):
         E.g. this version doesn't handle dashes or contractions
 
         >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'test_text_1.txt'}
+        ...                   'filename': 'test_text_1.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_1.txt')}
         >>> austin = document.Document(document_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
@@ -391,9 +273,11 @@ class Document(common.FileLoaderMixin):
         Finds all of the quoted statements in the document text
 
         >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
         >>> test_text = '"This is a quote" and also "This is my quote"'
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'test_text_0.txt'}
+        ...                   'date': '1818', 'filename': 'test_text_0.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_0.txt')}
         >>> document_novel = document.Document(document_metadata)
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
@@ -445,8 +329,10 @@ class Document(common.FileLoaderMixin):
         """
         Returns the number of instances of str word in the text.  N.B.: Not case-sensitive.
         >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'date': '2018', 'filename': 'test_text_2.txt'}
+        ...                   'date': '2018', 'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_count_of_word("sad")
         4
@@ -471,9 +357,10 @@ class Document(common.FileLoaderMixin):
         the separate method.)
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '2018',
-        ...                   'filename': 'test_text_10.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
+        ...                   'filename': 'test_text_10.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_10.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
@@ -494,9 +381,10 @@ class Document(common.FileLoaderMixin):
         Note: words always return lowercase
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '2018',
-        ...                   'filename': 'test_text_11.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
+        ...                   'filename': 'test_text_11.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_11.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
@@ -524,9 +412,10 @@ class Document(common.FileLoaderMixin):
         2x window_size + 1
 
         >>> from gender_analysis.document import Document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '2018',
-        ...                   'filename': 'test_text_12.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
+        ...                   'filename': 'test_text_12.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_12.txt')}
         >>> scarlett = Document(document_metadata)
 
         # search_terms can be either a string...
@@ -559,14 +448,15 @@ class Document(common.FileLoaderMixin):
 
     def get_word_freq(self, word):
         """
-        Returns dictionary with key as word and value as the frequency of appearance in book
-        :param words: str
-        :return: double
+        Returns frequency of appearance of parameter word in document
+        :param word: str to search for in document
+        :return: float representing the portion of words in the text that are the parameter word
 
         >>> from gender_analysis import document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '1900',
-        ...                   'filename': 'test_text_2.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
+        ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> frequency = scarlett.get_word_freq('sad')
         >>> frequency
@@ -583,9 +473,10 @@ class Document(common.FileLoaderMixin):
         Note: the same word can have a different part of speech tag. In the example below,
         see "refuse" and "permit"
         >>> from gender_analysis.document import Document
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'corpus_name': 'document_test_files', 'date': '1900',
-        ...                   'filename': 'test_text_13.txt'}
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
+        ...                   'filename': 'test_text_13.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_13.txt')}
         >>> document = Document(document_metadata)
         >>> document.get_part_of_speech_tags()[:4]
         [('They', 'PRP'), ('refuse', 'VBP'), ('to', 'TO'), ('permit', 'VB')]
@@ -597,9 +488,3 @@ class Document(common.FileLoaderMixin):
         text = nltk.word_tokenize(self.text)
         pos_tags = nltk.pos_tag(text)
         return pos_tags
-
-
-if __name__ == '__main__':
-    from dh_testers.testRunner import main_test
-
-    main_test()

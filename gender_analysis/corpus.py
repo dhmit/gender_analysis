@@ -1,18 +1,18 @@
 import csv
 import random
 from nltk.tokenize import word_tokenize
-from pathlib import Path, PosixPath
+from pathlib import Path
 from collections import Counter
 from os import listdir
 import gender_guesser.detector as gender
+from gender_analysis.common import load_csv_to_list, load_txt_to_string
 
 from gender_analysis import common
 from gender_analysis.common import MissingMetadataError
 from gender_analysis.document import Document
-# from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
 
 
-class Corpus(common.FileLoaderMixin):
+class Corpus:
 
     """The corpus class is used to load the metadata and full
     texts of all documents in a corpus
@@ -21,7 +21,7 @@ class Corpus(common.FileLoaderMixin):
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
-    >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+    >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
     >>> c = Corpus(path)
     >>> type(c.documents), len(c)
     (<class 'list'>, 100)
@@ -47,12 +47,15 @@ class Corpus(common.FileLoaderMixin):
         self.csv_path = csv_path
         self.path_to_files = path_to_files
         self.documents = []
+        self.metadata_fields = []
 
         if self.path_to_files.suffix == '.pgz':
             pickle_data = common.load_pickle(self.path_to_files)
             self.documents = pickle_data.documents
+            self.metadata_fields = pickle_data.metadata
         elif self.path_to_files.suffix == '' and not self.csv_path:
             files = listdir(self.path_to_files)
+            self.metadata_fields = ['filename', 'filepath']
             for file in files:
                 if file.endswith('.txt'):
                     metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
@@ -88,7 +91,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> c = Corpus(path)
         >>> len(c)
         100
@@ -105,7 +108,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'test_corpus'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
         >>> c = Corpus(path)
         >>> docs = []
         >>> for doc in c:
@@ -126,7 +129,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> sorted_docs = sorted(sample_corpus.documents[:20])
         >>> sample_corpus.documents = sorted_docs
@@ -161,7 +164,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> sorted_docs = sorted(sample_corpus.documents[:20])
         >>> sample_corpus.documents = sorted_docs
@@ -190,7 +193,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> corpus_copy = sample_corpus.clone()
         >>> len(corpus_copy) == len(sample_corpus)
@@ -198,49 +201,57 @@ class Corpus(common.FileLoaderMixin):
 
         :return: Corpus
         """
-        corpus_copy = Corpus('')
-        corpus_copy.name = self.name
-        corpus_copy.path_to_files = self.path_to_files
-        corpus_copy.documents = self.documents[:]
-        return corpus_copy
+        from copy import copy
+        return copy(self)
 
     def _load_documents(self):
         documents = []
+        metadata = set()
 
         try:
-            csv_file = self.load_file(self.csv_path)
+            csv_list = load_csv_to_list(self.csv_path)
         except FileNotFoundError:
             err = "Could not find the metadata csv file for the "
             err += f"'{self.name}' corpus in the expected location "
             err += f"({self.csv_path})."
             raise FileNotFoundError(err)
-        csv_reader = csv.DictReader(csv_file)
+        csv_reader = csv.DictReader(csv_list)
 
         for document_metadata in csv_reader:
             document_metadata['name'] = self.name
             document_metadata['filepath'] = self.path_to_files / document_metadata['filename']
             this_document = Document(document_metadata)
             documents.append(this_document)
+            metadata.update(list(document_metadata))
 
+        self.metadata_fields = list(metadata)
         return sorted(documents)
 
     def count_authors_by_gender(self, gender):
         """
-        This function returns the number of authors with the
-        specified gender (male, female, non-binary, unknown)
+        This function returns the number of authors in the corpus with the specified gender. NOTE: there must be an
+        'author_gender' field in the metadata field of all documents.
 
-        # >>> from gender_analysis.corpus import Corpus
-        # >>> from gender_analysis.common import BASE_PATH
-        # >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        # >>> c = Corpus(path)
-        # >>> c.count_authors_by_gender('female')
-        # 0
+        >>> from gender_analysis.corpus import Corpus
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
+        >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+        >>> c = Corpus(path, csv_path=path_to_csv)
+        >>> c.count_authors_by_gender('female')
+        7
 
-
-        :rtype: int
+        :param gender: str of the gender to search for in the metadata
+        :return: int
         """
-        filtered_corpus = self.filter_by_gender(gender)
-        return len(filtered_corpus)
+        count = 0
+        for document in self.documents:
+            try:
+                if document.author_gender.lower() == gender.lower():
+                    count += 1
+            except AttributeError:
+                raise AttributeError(f'{document.filename} does not have an \'author_gender\' metadata field')
+
+        return count
 
     def filter_by_gender(self, gender):
         """
@@ -249,7 +260,7 @@ class Corpus(common.FileLoaderMixin):
 
         # >>> from gender_analysis.corpus import Corpus
         # >>> from gender_analysis.common import BASE_PATH
-        # >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        # >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         # >>> c = Corpus(path)
         # >>> female_corpus = c.filter_by_gender('female')
         # >>> len(female_corpus)
@@ -277,11 +288,11 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_wordcount_counter()['fire']
-        2269
+        2274
 
         """
         corpus_counter = Counter()
@@ -290,35 +301,15 @@ class Corpus(common.FileLoaderMixin):
             corpus_counter += document_counter
         return corpus_counter
 
-    def get_corpus_metadata(self):
-        """
-        This function returns a sorted list of all metadata fields
-        in the corpus as strings. This is different from the get_metadata_fields;
-        this returns the fields which are specific to the corpus it is being called on.
-        >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> c = Corpus(path)
-        >>> c.get_corpus_metadata()
-        ['filename', 'filepath']
-
-        :return: list
-        """
-        metadata_fields = set()
-        for document in self.documents:
-            for field in document.members:
-                metadata_fields.add(field)
-        return sorted(list(metadata_fields))
-
-    def get_field_vals(self,field):
+    def get_field_vals(self, field):
         """
         This function returns a sorted list of all values for a
         particular metadata field as strings.
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, name='sample_novels', csv_path=csvpath)
         >>> c.get_field_vals('name')
         ['sample_novels']
@@ -326,9 +317,8 @@ class Corpus(common.FileLoaderMixin):
         :param field: str
         :return: list
         """
-        metadata_fields = self.get_corpus_metadata()
 
-        if field not in metadata_fields:
+        if field not in self.metadata_fields:
             raise ValueError(
                 f'\'{field}\' is not a valid metadata field for this corpus'
             )
@@ -350,8 +340,8 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> corp = Corpus(path, csv_path=csvpath)
         >>> female_corpus = corp.subcorpus('author_gender','female')
         >>> len(female_corpus)
@@ -387,12 +377,10 @@ class Corpus(common.FileLoaderMixin):
         :param field_value: str
         :return: Corpus
         """
-
-        supported_metadata_fields = ('author', 'author_gender', 'name',
-                                     'country_publication', 'date')
-        if metadata_field not in supported_metadata_fields:
+        
+        if metadata_field not in self.metadata_fields:
             raise ValueError(
-                f'Metadata field must be {", ".join(supported_metadata_fields)} '
+                f'Metadata field must be {", ".join(self.metadata_fields)} '
                 + f'but not {metadata_field}.')
 
         corpus_copy = self.clone()
@@ -421,55 +409,35 @@ class Corpus(common.FileLoaderMixin):
 
     def multi_filter(self, characteristic_dict):
         """
-        This method takes a dictionary of metadata fields and corresponding values
-        and returns a Corpus object which is the subcorpus of the input corpus which
-        satisfies all the specified constraints.
+        Returns a copy of the corpus, but with only the documents that fulfill the metadata parameters passed in by
+        characteristic_dict. Multiple metadata keys can be searched at one time, provided that the metadata is
+        available for the documents in the corpus.
 
-        #>>> from gender_analysis.corpus import Corpus
-        #>>> from gender_analysis.common import BASE_PATH
-        #>>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        #>>> c = Corpus(path)
-        #>>> characteristics = {'author':'female',
-                                'country_publication':'England'}
-        #>>> subcorpus_multi_filtered = c.multi_filter(characteristics)
-        #>>> female_subcorpus = c.filter_by_gender('female')
-        #>>> subcorpus_repeated_method = female_subcorpus.Subcorpus('country_publication','England')
-        #>>> subcorpus_multi_filtered == subcorpus_repeated_method
-        True
 
-        :param characteristic_dict: dict
-        :return: Corpus
-        """
-
-        new_corp = self.clone()
-        metadata_fields = self.get_corpus_metadata()
-
-        for field in characteristic_dict:
-            if field not in metadata_fields:
-                raise ValueError(f'\'{field}\' is not a valid metadata field for this corpus')
-            new_corp = new_corp.subcorpus(field, characteristic_dict[field])
-
-        return new_corp
-
-        #TODO: add date range support
-        #TODO: apply all filters at once instead of recursing Subcorpus method
-
-    def multi_filter_integrated(self,characteristic_dict):
-        """
-        This needs documentation and tests but it's 5:59! To be added after moratorium.
-        :param characteristic_dict:
+        :param characteristic_dict: Dictionary of metadata keys and search terms as
         :return:
+
+        >>> from gender_analysis.corpus import Corpus
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> c = Corpus(path, csv_path=path_to_csv)
+        >>> corpus_filter = {'author_gender': 'male'}
+        >>> len(c.multi_filter(corpus_filter))
+        59
+
+        >>> corpus_filter['filename'] = 'aanrud_longfrock.txt'
+        >>> len(c.multi_filter(corpus_filter))
+        1
         """
-        supported_metadata_fields = ('author', 'author_gender', 'name',
-                                     'country_publication', 'date')
 
         corpus_copy = self.clone()
         corpus_copy.documents = []
 
         for metadata_field in characteristic_dict:
-            if metadata_field not in supported_metadata_fields:
+            if metadata_field not in self.metadata_fields:
                 raise ValueError(
-                    f'Metadata field must be {", ".join(supported_metadata_fields)} '
+                    f'Metadata field must be {", ".join(self.metadata_fields)} '
                     + f'but not {metadata_field}.')
 
         for this_document in self.documents:
@@ -479,7 +447,7 @@ class Corpus(common.FileLoaderMixin):
                     if this_document.date != int(characteristic_dict['date']):
                         add_document = False
                 else:
-                    if getattr(this_document, metadata_field) != field_value:
+                    if getattr(this_document, metadata_field) != characteristic_dict[metadata_field]:
                         add_document = False
             if add_document:
                 corpus_copy.documents.append(this_document)
@@ -503,8 +471,8 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_document("author", "Dickens, Charles")
         <Document (dickens_twocities)>
@@ -521,10 +489,10 @@ class Corpus(common.FileLoaderMixin):
         :return: Document
         """
 
-        if metadata_field not in get_metadata_fields(self.name):
+        if metadata_field not in self.metadata_fields:
             raise AttributeError(f"Metadata field {metadata_field} invalid for this corpus")
 
-        if (metadata_field == "date" or metadata_field == "gutenberg_id"):
+        if metadata_field == "date":
             field_val = int(field_val)
 
         for document in self.documents:
@@ -539,7 +507,7 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> filepath = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
+        >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> corpus = Corpus(filepath)
         >>> results = corpus.get_sample_text_passages('he cried', 2)
         >>> 'he cried' in results[0][1]
@@ -589,8 +557,8 @@ class Corpus(common.FileLoaderMixin):
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_document_multiple_fields({"author": "Dickens, Charles", "author_gender": "male"})
         <Document (dickens_twocities)>
@@ -602,7 +570,7 @@ class Corpus(common.FileLoaderMixin):
         """
 
         for field in metadata_dict.keys():
-            if field not in get_metadata_fields(self.name):
+            if field not in self.metadata_fields:
                 raise AttributeError(f"Metadata field {field} invalid for this corpus")
 
         for document in self.documents:
@@ -614,19 +582,6 @@ class Corpus(common.FileLoaderMixin):
                 return document
 
         raise ValueError("Document not found")
-
-
-def get_metadata_fields(name):
-    """
-    Gives a list of all metadata fields for corpus
-    >>> from gender_analysis import corpus
-    >>> corpus.get_metadata_fields('gutenberg')
-    ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender', 'subject', 'corpus_name', 'notes']
-
-    :param: name: str
-    :return: list
-    """
-    return common.METADATA_LIST
 
 
 if __name__ == '__main__':
