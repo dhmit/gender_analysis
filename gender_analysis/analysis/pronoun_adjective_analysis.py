@@ -37,6 +37,7 @@ def store_raw_results(results, corpus):
     except IOError:
         common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.name)
 
+
 def merge(novel_adj_dict, full_adj_dict):
     """
     Merges adjective occurrence results from a single novel with results for each novel.
@@ -67,7 +68,6 @@ def merge_raw_results(full_results):
     """
     merged_results = {'male': {}, 'female': {}}
     for novel in list(full_results.keys()):
-        print(novel.title, novel.author)
         for gender in list(full_results[novel].keys()):
             merged_results[gender] = merge(full_results[novel][gender], merged_results[gender])
 
@@ -104,7 +104,11 @@ def results_by_author_gender(full_results):
     data = {'male_author': {'male': {}, 'female': {}}, "female_author": {'male': {}, 'female': {}}}
 
     for novel in list(full_results.keys()):
-        author_gender = getattr(novel, 'author_gender', None)
+        try:
+            author_gender = getattr(novel, 'author_gender')
+        except AttributeError:
+            raise AttributeError('Supplied metadata does not have an \'author_gender\' field')
+
         if author_gender == "male":
             data['male_author']['male'] = merge(full_results[novel]['male'], data['male_author']['male'])
             data['male_author']['female'] = merge(full_results[novel]['female'], data['male_author']['female'])
@@ -130,7 +134,7 @@ def results_by_date(full_results, time_frame, bin_size):
         data[bin_start_year] = {'male': {}, 'female': {}}
 
     for k in full_results.keys():
-        date = getattr(k, 'date', None)
+        date = getattr(k, 'date')
         if date is None:
             continue
         bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
