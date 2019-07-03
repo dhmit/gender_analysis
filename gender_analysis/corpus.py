@@ -60,32 +60,31 @@ class Corpus:
                 if file.endswith('.txt'):
                     metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
                     self.documents.append(Document(metadata_dict))
-            if guess_author_gender:
-                raise MissingMetadataError(['author'], 'Cannot guess author gender if no author '
-                                                       'metadata is provided.')
         elif self.csv_path and self.path_to_files.suffix == '':
             self.documents = self._load_documents()
-
-            if guess_author_gender:
-                if 'author' not in self.get_corpus_metadata():
-                    raise MissingMetadataError(['author'], 'Cannot guess author gender if no '
-                                                           'author metadata is provided.')
-                detector = gender.Detector()
-                for doc in self.documents:
-                    if doc.author is None:
-                        continue
-                    if hasattr(doc, 'country_publication'):
-                        guess = detector.get_gender(doc.author, doc.country_publication)
-                    else:
-                        guess = detector.get_gender(doc.author)
-                    if guess == 'unknown' or guess == 'andy':
-                        doc.author_gender = 'unknown'
-                    elif guess == 'male' or guess == 'mostly_male':
-                        doc.author_gender = 'male'
-                    else:  # guess == 'female' or guess == 'mostly_female'
-                        doc.author_gender = 'female'
         else:
             raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
+
+        if guess_author_gender:
+            detector = gender.Detector()
+            for doc in self.documents:
+                if not hasattr(doc, 'author'):
+                    raise MissingMetadataError(['author'], 'Cannot guess author gender if no '
+                                                           'author metadata is provided.')
+                if doc.author is None:
+                    continue
+                    
+                if hasattr(doc, 'country_publication'):
+                    guess = detector.get_gender(doc.author.split(' ', 1)[0], doc.country_publication)
+                else:
+                    guess = detector.get_gender(doc.author.split(' ', 1)[0])
+
+                if guess == 'female' or guess == 'mostly_female':
+                    doc.author_gender = 'female'
+                elif guess == 'male' or guess == 'mostly_male':
+                    doc.author_gender = 'male'
+                else:  # guess == 'unknown' or guess == 'andy'
+                    doc.author_gender = 'unknown'
 
     def __len__(self):
         """
