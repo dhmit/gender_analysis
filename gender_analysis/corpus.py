@@ -66,14 +66,16 @@ class Corpus:
             raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
 
         if guess_author_gender:
+            if 'author' not in self.metadata_fields:
+                raise MissingMetadataError(['author'], 'Cannot guess author gender if no author '
+                                                       'metadata is provided.')
+            self.metadata_fields.append('author_gender')
+            
             detector = gender.Detector()
             for doc in self.documents:
-                if not hasattr(doc, 'author'):
-                    raise MissingMetadataError(['author'], 'Cannot guess author gender if no '
-                                                           'author metadata is provided.')
                 if doc.author is None:
                     continue
-                    
+
                 if hasattr(doc, 'country_publication'):
                     guess = detector.get_gender(doc.author.split(' ', 1)[0], doc.country_publication)
                 else:
