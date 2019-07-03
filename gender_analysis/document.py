@@ -41,7 +41,7 @@ class Document:
         if 'filename' not in metadata_dict:
             raise ValueError(str(metadata_dict)+f'metadata_dict must have an entry for filename')
 
-        self.members = metadata_dict.keys()
+        self.members = list(metadata_dict.keys())
 
         for key in metadata_dict:
             if hasattr(self, str(key)):

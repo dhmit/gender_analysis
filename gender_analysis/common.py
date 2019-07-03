@@ -42,6 +42,7 @@ def load_csv_to_list(file_path):
     file.close()
     return result
 
+
 def load_txt_to_string(file_path):
     """
     Loads a txt file
@@ -59,7 +60,7 @@ def load_txt_to_string(file_path):
     if isinstance(file_path, str):
         file_path = Path(file_path)
 
-    file_type =file_path.suffix
+    file_type = file_path.suffix
 
     if file_type != '.txt':
         raise Exception(
@@ -93,7 +94,12 @@ def store_pickle(obj, filename):
     :param filename: str | Path
     :return: Path
     """
-    filename = BASE_PATH / 'pickle_data' / (str(filename) + '.pgz')
+    try:
+        os.mkdir('pickle_data')
+    except FileExistsError:
+        pass
+
+    filename = Path('pickle_data', (str(filename) + '.pgz'))
     with gzip.GzipFile(filename, 'w') as fileout:
         pickle.dump(obj, fileout)
     return filename
@@ -113,9 +119,8 @@ def load_pickle(filename):
     :param filename: str | Path
     :return: object
     """
-    raise IOError
 
-    filename = BASE_PATH / 'pickle_data' / (str(filename) + '.pgz')
+    filename = Path('pickle_data', (str(filename) + '.pgz'))
     with gzip.GzipFile(filename, 'r') as filein:
         obj = pickle.load(filein)
     return obj

@@ -47,7 +47,7 @@ class Corpus:
         self.metadata_fields = []
 
         if self.path_to_files.suffix == '.pgz':
-            pickle_data = common.load_pickle(self.path_to_files)
+            pickle_data = common.load_pickle(self.path_to_files.stem)
             self.documents = pickle_data.documents
             self.metadata_fields = pickle_data.metadata
         elif self.path_to_files.suffix == '' and not self.csv_path:
