@@ -60,13 +60,16 @@ class Corpus:
                 if file.endswith('.txt'):
                     metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
                     self.documents.append(Document(metadata_dict))
+            if guess_author_gender:
+                raise MissingMetadataError(['author'], 'Cannot guess author gender if no author '
+                                                       'metadata is provided.')
         elif self.csv_path and self.path_to_files.suffix == '':
             self.documents = self._load_documents()
 
             if guess_author_gender:
                 if 'author' not in self.get_corpus_metadata():
-                    raise MissingMetadataError('author', 'Cannot guess author gender if no author '
-                                               'metadata is provided.')
+                    raise MissingMetadataError(['author'], 'Cannot guess author gender if no '
+                                                           'author metadata is provided.')
                 detector = gender.Detector()
                 for doc in self.documents:
                     if doc.author is None:
