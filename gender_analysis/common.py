@@ -111,6 +111,7 @@ LEGALESE_END_MARKERS = frozenset(("SERVICE THAT CHARGES FOR DOWNLOAD",))
 # TODO(elsa): Investigate doctest errors in this file, may be a result of
 # my own system, not actual code errors
 
+
 class FileLoaderMixin:
     """ The FileLoaderMixin loads files either locally or
     remotely from Github (if run from an ipython notebook)
@@ -247,6 +248,26 @@ class FileLoaderMixin:
             # When loading the text online, each end of line
             # has \r and \n -> replace with only \n
             return text.replace('\r\n', '\n')
+
+
+class MissingMetadataError(Exception):
+    """Raised when a function that assumes certain metadata is called on a corpus without that
+    metadata"""
+    def __init__(self, metadata_fields, message=None):
+        self.metadata_fields = metadata_fields
+        self.message = message if message else ''
+
+    def __str__(self):
+        metadata_string = ''
+        for i in range(len(self.metadata_fields)):
+            metadata_string += self.metadata_fields[i]
+            if i != len(self.metadata_fields) - 1:
+                metadata_string += ', '
+
+        return 'This corpus is missing the metadata field(s): ' + metadata_string + '. ' + \
+               self.message + ' In order to run this function, you must create a new ' \
+                              'metadata csv with (' + metadata_string + ') fields and create a ' \
+                                                                        'new Corpus with this csv.'
 
 
 def store_pickle(obj, filename):

@@ -4,8 +4,10 @@ from nltk.tokenize import word_tokenize
 from pathlib import Path, PosixPath
 from collections import Counter
 from os import listdir
+import gender_guesser.detector as gender
 
 from gender_analysis import common
+from gender_analysis.common import MissingMetadataError
 from gender_analysis.document import Document
 # from gender_analysis.gutenburg_loader import download_gutenberg_if_not_locally_available
 
@@ -26,7 +28,7 @@ class Corpus(common.FileLoaderMixin):
 
     """
 
-    def __init__(self, path_to_files, name=None, csv_path=None, pickle_on_load=False):
+    def __init__(self, path_to_files, name=None, csv_path=None, guess_author_gender=False):
 
         """
 
@@ -57,8 +59,27 @@ class Corpus(common.FileLoaderMixin):
                     self.documents.append(Document(metadata_dict))
         elif self.csv_path and self.path_to_files.suffix == '':
             self.documents = self._load_documents()
+
+            if guess_author_gender:
+                if 'author' not in self.get_corpus_metadata():
+                    raise MissingMetadataError('author', 'Cannot guess author gender if no author '
+                                               'metadata is provided.')
+                detector = gender.Detector()
+                for doc in self.documents:
+                    if doc.author is None:
+                        continue
+                    if hasattr(doc, 'country_publication'):
+                        guess = detector.get_gender(doc.author, doc.country_publication)
+                    else:
+                        guess = detector.get_gender(doc.author)
+                    if guess == 'unknown' or guess == 'andy':
+                        doc.author_gender = 'unknown'
+                    elif guess == 'male' or guess == 'mostly_male':
+                        doc.author_gender = 'male'
+                    else:  # guess == 'female' or guess == 'mostly_female'
+                        doc.author_gender = 'female'
         else:
-            raise ValueError(f'path_to_files must lead to a a previously pickled corpus or directory of .txt files')
+            raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
 
     def __len__(self):
         """
