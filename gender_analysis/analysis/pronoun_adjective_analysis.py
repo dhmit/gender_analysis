@@ -15,7 +15,6 @@ def run_adj_analysis(corpus):
     """
     results = {}
     for novel in corpus:
-        print(novel.title, novel.author)
         novel_male_results = find_male_adj(novel)
         novel_female_results = find_female_adj(novel)
         if (novel_male_results != "lower window bound less than 5"
@@ -29,15 +28,14 @@ def run_adj_analysis(corpus):
 
 def store_raw_results(results, corpus):
     try:
-        common.load_pickle("pronoun_adj_raw_analysis_" + corpus.corpus_name)
+        common.load_pickle("pronoun_adj_raw_analysis_" + corpus.name)
         x = input("results already stored. overwrite previous analysis? (y/n)")
         if x == 'y':
-            common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.corpus_name)
+            common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.name)
         else:
             pass
     except IOError:
-        common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.corpus_name)
-
+        common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus.name)
 
 def merge(novel_adj_dict, full_adj_dict):
     """
