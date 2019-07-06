@@ -32,7 +32,7 @@ class Corpus:
         :param path_to_files: Must be either the path to a directory of txt files or an already-pickled corpus
         :param name: Optional name of the corpus, for ease of use and readability
         :param csv_path: Optional path to a csv metadata file
-        :param pickle_on_load: Pickle filename, will generate a pickle if not None
+        :param pickle_on_load: Pickle filepath
         """
 
         if isinstance(path_to_files, str):
@@ -47,7 +47,7 @@ class Corpus:
         self.metadata_fields = []
 
         if self.path_to_files.suffix == '.pgz':
-            pickle_data = common.load_pickle(self.path_to_files.stem)
+            pickle_data = common.load_pickle(self.path_to_files)
             self.documents = pickle_data.documents
             self.metadata_fields = pickle_data.metadata_fields
         elif self.path_to_files.suffix == '' and not self.csv_path:

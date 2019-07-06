@@ -78,7 +78,7 @@ def load_txt_to_string(file_path):
     return result
 
 
-def store_pickle(obj, filename):
+def store_pickle(obj, filepath):
     """
     Store a compressed "pickle" of the object in the "pickle_data" directory
     and return the full path to it.
@@ -91,21 +91,23 @@ def store_pickle(obj, filename):
         gender_analysis.common.store_pickle(my_object, 'example_pickle')
 
     :param obj: Any Python object to be pickled
-    :param filename: str | Path
+    :param filepath: str | Path
     :return: Path
     """
-    try:
-        os.mkdir('pickle_data')
-    except FileExistsError:
-        pass
+    if isinstance(str, filepath):
+        filepath = Path(filepath)
+    if not isinstance(Path, filepath):
+        raise ValueError(f'filepath must be a str or path object, not type {type(filepath)}')
 
-    filename = Path('pickle_data', (str(filename) + '.pgz'))
-    with gzip.GzipFile(filename, 'w') as fileout:
+    if filepath.stem == '':
+        filepath = Path(str(filepath) + '.pgz')
+
+    with gzip.GzipFile(filepath, 'w') as fileout:
         pickle.dump(obj, fileout)
-    return filename
+    return filepath
 
 
-def load_pickle(filename):
+def load_pickle(filepath):
     """
     Load the pickle stored at filename where filename does not contain a
     directory or suffix.
@@ -116,12 +118,21 @@ def load_pickle(filename):
         my_object
         {'a': 4, 'b': 5, 'c': [1, 2, 3]}
 
-    :param filename: str | Path
+    :param filepath: str | Path
     :return: object
     """
+    if filepath is None:
+        raise IOError('No path supplied')
 
-    filename = Path('pickle_data', (str(filename) + '.pgz'))
-    with gzip.GzipFile(filename, 'r') as filein:
+    if isinstance(str, filepath):
+        filepath = Path(filepath)
+    if not isinstance(Path, filepath):
+        raise ValueError(f'filepath must be an str or Path object, not type {type(filepath)}')
+
+    if filepath.stem == '':
+        filepath = Path(str(filepath) + '.pgz')
+
+    with gzip.GzipFile(filepath, 'r') as filein:
         obj = pickle.load(filein)
     return obj
 
