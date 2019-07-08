@@ -5,6 +5,7 @@ from pathlib import Path
 from collections import Counter
 from os import listdir
 from gender_analysis.common import load_csv_to_list, load_txt_to_string
+import gender_guesser.detector as gender
 
 from gender_analysis import common
 from gender_analysis.document import Document

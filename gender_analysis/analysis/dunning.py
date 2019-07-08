@@ -625,6 +625,12 @@ def america_author_gender_differences(corpus, to_pickle=False):
 
 
 def score_plot_to_show(results):
+    """
+    displays bar plot of dunning scores for all words in results
+    :param results: dict of results from dunning_total or similar, i.e. in the form {'word': {
+    'dunning': float}}
+    :return: None, displays bar plot of dunning scores for all words in results
+    """
     load_graph_settings(False)
     results_dict = dict(results)
     words = []
@@ -643,6 +649,12 @@ def score_plot_to_show(results):
 
 
 def freq_plot_to_show(results):
+    """
+    displays bar plot of relative frequency in corpus 2 of all words in results
+    :param results: dict of results from dunning_total or similar, i.e. in the form {'word': {
+    'freq_corp1': int, 'freq_corp2': int, 'freq_total': int}}
+    :return: None, displays bar plot of relative frequency of all words in results
+    """
     load_graph_settings(False)
     results_dict = dict(results)
     words = []
