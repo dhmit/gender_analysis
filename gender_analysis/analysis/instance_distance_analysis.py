@@ -13,7 +13,7 @@ sns.set()
 
 def run_distance_analysis(corpus):
     """
-    Takes in a corpus of novels. Return a dictionary with each novel mapped to an array of 3 lists:
+    Takes in a corpus of documents. Return a dictionary with each document mapped to an array of 3 lists:
      - median, mean, min, and max distances between male pronoun instances
      - median, mean, min, and max distances between female pronoun instances
      - for each of the above stats, the difference between male and female values. (male stat -
@@ -23,7 +23,7 @@ def run_distance_analysis(corpus):
     dict order: [male, female]
 
     :param corpus:
-    :return:dictionary where the key is a novel and the value is the results of distance analysis
+    :return:dictionary where the key is a document and the value is the results of distance analysis
     """
     results = {}
 
@@ -177,9 +177,9 @@ def get_highest_distances(results, num):
     Takes results from instance_distance_analysis.run_distance_analysis and a number of top
     results to return.
     Returns 3 lists.
-        - Novels with the largest median male instance distance
-        - Novels with the largest median female instance distance
-        - Novels with the largest difference between median male & median female instance distances
+        - Documents with the largest median male instance distance
+        - Documents with the largest median female instance distance
+        - Documents with the largest difference between median male & median female instance distances
     each list contains tuples, where each tuple has a document and the median male/female/difference
     instance distance
     :param results: dictionary of results from run_distance_analysis
