@@ -13,7 +13,7 @@ sns.set()
 
 def run_distance_analysis(corpus):
     """
-    Takes in a corpus of novels. Return a dictionary with each novel mapped to an array of 3 lists:
+    Takes in a corpus of documents. Return a dictionary with each document mapped to an array of 3 lists:
      - median, mean, min, and max distances between male pronoun instances
      - median, mean, min, and max distances between female pronoun instances
      - for each of the above stats, the difference between male and female values. (male stat -
@@ -23,7 +23,7 @@ def run_distance_analysis(corpus):
     dict order: [male, female]
 
     :param corpus:
-    :return:dictionary where the key is a novel and the value is the results of distance analysis
+    :return:dictionary where the key is a document and the value is the results of distance analysis
     """
     results = {}
 
@@ -91,14 +91,14 @@ def results_by_author_gender(results, metric):
         stat = metric_indexes[metric]
     except KeyError:
         raise ValueError("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
-    for novel in list(results.keys()):
-        author_gender = getattr(novel, 'author_gender', None)
+    for document in list(results.keys()):
+        author_gender = getattr(document, 'author_gender', None)
         if author_gender == "male":
-            data['male'].append([results[novel]['male'][metric], results[novel]['female'][metric],
-                                 results[novel]['difference'][metric]])
+            data['male'].append([results[document]['male'][metric], results[document]['female'][metric],
+                                 results[document]['difference'][metric]])
         elif author_gender == 'female':
-            data['female'].append([results[novel]['male'][metric], results[novel]['female'][metric],
-                                   results[novel]['difference'][metric]])
+            data['female'].append([results[document]['male'][metric], results[document]['female'][metric],
+                                   results[document]['difference'][metric]])
     return data
 
 
@@ -178,10 +178,10 @@ def get_highest_distances(results, num):
     Takes results from instance_distance_analysis.run_distance_analysis and a number of top
     results to return.
     Returns 3 lists.
-        - Novels with the largest median male instance distance
-        - Novels with the largest median female instance distance
-        - Novels with the largest difference between median male & median female instance distances
-    each list contains tuples, where each tuple has a novel and the median male/female/difference
+        - Documents with the largest median male instance distance
+        - Documents with the largest median female instance distance
+        - Documents with the largest difference between median male & median female instance distances
+    each list contains tuples, where each tuple has a document and the median male/female/difference
     instance distance
     :param results: dictionary of results from run_distance_analysis
     :param num: number of top distances to get
@@ -192,10 +192,10 @@ def get_highest_distances(results, num):
     female_medians = []
     difference_medians = []
 
-    for novel in list(results.keys()):
-        male_medians.append((results[novel]['male']['median'], novel))
-        female_medians.append((results[novel]['female']['median'], novel))
-        difference_medians.append((results[novel]['difference']['median'], novel))
+    for document in list(results.keys()):
+        male_medians.append((results[document]['male']['median'], document))
+        female_medians.append((results[document]['female']['median'], document))
+        difference_medians.append((results[document]['difference']['median'], document))
 
     male_top = sorted(male_medians, reverse=True)[0:num]
     female_top = sorted(female_medians, reverse=True)[0:num]
