@@ -1,15 +1,15 @@
 import csv
 import random
-from nltk.tokenize import word_tokenize
+from os import listdir
 from pathlib import Path
 from collections import Counter
-from os import listdir
-import gender_guesser.detector as gender
-from gender_analysis.common import load_csv_to_list, load_txt_to_string
+
+from nltk import tokenize as nltk_tokenize
 import gender_guesser.detector as gender
 
 from gender_analysis import common
 from gender_analysis.common import MissingMetadataError
+from gender_analysis.common import load_csv_to_list
 from gender_analysis.document import Document
 
 
@@ -523,7 +523,7 @@ class Corpus:
         """
         count = 0
         output = []
-        phrase = word_tokenize(expression)
+        phrase = nltk_tokenize.word_tokenize(expression)
         random.seed(expression)
         random_documents = self.documents.copy()
         random.shuffle(random_documents)

@@ -2,12 +2,9 @@ import codecs
 import gzip
 import os
 import pickle
-
 from pathlib import Path
-import pickle
-import seaborn as sns
 
-DEBUG = False
+import seaborn as sns
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 
@@ -71,12 +68,11 @@ def load_txt_to_string(file_path):
             file = open(file_path, encoding='utf-8')
             result = file.read()
         except UnicodeDecodeError as err:
-            print (f'Unicode file loading error {file_path}.')
+            print(f'Unicode file loading error {file_path}.')
             raise err
 
     file.close()
     return result
-
 
 
 def store_pickle(obj, filepath):
@@ -275,5 +271,3 @@ class MissingMetadataError(Exception):
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test
     main_test(import_plus_relative=True)  # this allows for relative calls in the import.
-
-    

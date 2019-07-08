@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import Counter
 
-# from gender_analysis.common import MissingMetadataError
+from gender_analysis.common import MissingMetadataError
 
 
 def plot_pubyears(corpus, filename=None):

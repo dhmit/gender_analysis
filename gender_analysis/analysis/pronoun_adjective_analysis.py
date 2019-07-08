@@ -32,7 +32,7 @@ def store_raw_results(results, pickle_filepath='pronoun_adj_raw_analysis.pgz'):
     :param pickle_filepath: filepath to save the output
     :return: None, saves results as pickled file with name 'pronoun_adj_raw_analysis'
     """
-  try:
+    try:
         common.load_pickle(pickle_filepath)
         x = input("results already stored. overwrite previous analysis? (y/n)")
         if x == 'y':

@@ -2,23 +2,24 @@
 This file is intended for individual analyses of the gender_analysis project
 """
 
+
+
+from collections import Counter
+from operator import itemgetter
+from statistics import median
+
+import unittest
 import nltk
+from nltk.corpus import stopwords
 import numpy as np
 import matplotlib.pyplot as plt
 from more_itertools import windowed
-import collections
-from statistics import median
-from nltk.corpus import stopwords
-import unittest
-from operator import itemgetter
-from gender_analysis.corpus import Corpus
 import seaborn as sns
 
-from gender_analysis.analysis.dunning import dunn_individual_word, dunn_individual_word_by_corpus
+from gender_analysis.corpus import Corpus
+from gender_analysis.analysis.dunning import dunn_individual_word
 
 nltk.download('stopwords', quiet=True)
-
-stop_words = set(stopwords.words('english'))
 
 palette = "colorblind"
 style_name = "white"
@@ -96,9 +97,9 @@ def get_counts_by_pos(freqs):
     and the value is a counter object of words of that part of speech and their frequencies.
     It also filters out words like "is", "the". We used `nltk`'s stop words function for filtering.
 
-    >>> get_counts_by_pos(collections.Counter({'baked':1,'chair':3,'swimming':4}))
+    >>> get_counts_by_pos(Counter({'baked':1,'chair':3,'swimming':4}))
     {'VBN': Counter({'baked': 1}), 'NN': Counter({'chair': 3}), 'VBG': Counter({'swimming': 4})}
-    >>> get_counts_by_pos(collections.Counter({'is':10,'usually':7,'quietly':42}))
+    >>> get_counts_by_pos(Counter({'is':10,'usually':7,'quietly':42}))
     {'RB': Counter({'quietly': 42, 'usually': 7})}
 
     :param freqs: Counter object of words mapped to their word count
@@ -110,12 +111,13 @@ def get_counts_by_pos(freqs):
     # for each word in the counter
     for word in freqs.keys():
         # filter out if in nltk's list of stop words, e.g. is, the
+        stop_words = set(stopwords.words('english'))
         if word not in stop_words:
             # get its part of speech tag from nltk's pos_tag function
             tag = nltk.pos_tag([word])[0][1]
             # add that word to the counter object in the relevant dict entry
             if tag not in sorted_words.keys():
-                sorted_words[tag] = collections.Counter({word:freqs[word]})
+                sorted_words[tag] = Counter({word:freqs[word]})
             else:
                 sorted_words[tag].update({word: freqs[word]})
     return sorted_words

@@ -1,13 +1,18 @@
 import math
 from collections import Counter
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 import nltk
 
-from gender_analysis.common import store_pickle, load_pickle
 from gender_analysis.corpus import Corpus
-from gender_analysis.common import load_graph_settings
-# from gender_analysis.common import MissingMetadataError
+from gender_analysis.common import (
+    load_graph_settings,
+    MissingMetadataError,
+    store_pickle,
+    load_pickle
+)
+
 
 # TODO: Rewrite all of this using a Dunning class in a non-messy way.
 

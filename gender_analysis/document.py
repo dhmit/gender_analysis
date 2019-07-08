@@ -5,14 +5,13 @@ from pathlib import Path
 
 from more_itertools import windowed
 import nltk
-from ast import literal_eval
+
+from gender_analysis import common
+
 
 # nltk as part of speech tagger, requires these two packages
 nltk.download('punkt', quiet=True)
 nltk.download('averaged_perceptron_tagger', quiet=True)
-
-from gender_analysis.common import load_csv_to_list, load_txt_to_string
-from gender_analysis import common
 
 
 class Document:
@@ -228,7 +227,7 @@ class Document:
         file_path = Path(self.filepath)
 
         try:
-            text = load_txt_to_string(file_path)
+            text = common.load_txt_to_string(file_path)
         except FileNotFoundError:
             err = "Could not find the document text file "
             err += f"at the expected location ({file_path})."
