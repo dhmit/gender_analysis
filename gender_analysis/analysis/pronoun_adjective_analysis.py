@@ -44,6 +44,7 @@ def store_raw_results(results, corpus):
     except IOError:
         common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus_name)
 
+
 def merge(novel_adj_dict, full_adj_dict):
     """
     Merges adjective occurrence results from a single novel with results for each novel.

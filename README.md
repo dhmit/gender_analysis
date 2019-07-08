@@ -12,18 +12,32 @@ The results of that research is available at [The Gender Novels Project](http://
 ## Usage
 To use our tools or contribute to the project, please view our guide to contributing, `CONTRIBUTING.md`. It includes information on how to install the tools we used as well as style guidelines for adding code. We are open to contributions and would love to see other people’s ideas, thoughts, and additions to this project, so feel free to leave comments or make a pull request!
 
-## Navigating Gender / Novels
+## Navigating Gender Analysis
 
 For anybody who wants to use our code, here’s a little outline of where everything is.
-In the [`gender_novels/gender_novels`](https://github.com/dhmit/gender_novels/tree/master/gender_novels) folder, there are six folders: 
+In the [`gender_analysis/gender_analysis/analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_analysis/analysis) folder, there are the following 
+modules: 
 
-1. [`analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis) — programming files focused on textual analysis and research write-ups, including data visualizations and conclusions
-2. [`corpora`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/corpora) — metadata information on each book (including author, title, publication year, etc.), including sample data sets and instructions for generating a [Gutenberg mirror](https://github.com/dhmit/gender_novels/tree/master/gender_novels/corpora/gutenberg_mirror_sample)
-3. [`pickle_data`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/pickle_data) — pickled data for various analyses to avoid running time-consuming computation
-4. [`testing`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/testing) — files for code tests
-5. [`tutorials`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/tutorials) — tutorials used by the lab to learn about various technical subjects needed to complete this project
+1. [`analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/analysis.py) — 
+code for various analyses within a single document, including word count/frequency, distances 
+between occurrences of words, and adjectives associated with gendered pronouns.
+1. [`corpus_metadata_visualizations`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/corpus_metadata_visualizations.py) — 
+code for graphing information about corpus metadata.
+1. [`dunning`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/dunning.py) — 
+code for comparing the significance of certain words between two corpora.
+1. [`gender_pronoun_freq_analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/gender_pronoun_freq_analysis.py) — 
+code for analyzing frequency of gendered pronouns across a corpus.
+1. [`instance_distance_analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/instance_distance_analysis.py) — 
+code for analyzing distances between occurrences of certain words across a corpus.
+1. [`pronoun_adjective_analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/pronoun_adjective_analysis.py) — 
+code for analyzing adjectives associated with gendered pronouns across a corpus.
+1. [`statistical`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/statistical.py) — 
+code for analyzing results for statistical significance.
 
-For a user who’ll need some readily available methods for analyzing documents, the files you’ll most likely want are [`corpus.py`](https://github.com/dhmit/gender_novels/blob/master/gender_novels/corpus.py) and [`novel.py`](https://github.com/dhmit/gender_novels/blob/master/gender_novels/novel.py). These include methods used for loading and analyzing texts from the corpora. If you’d like to generate your own corpus rather than use the one provided in the repo, you’ll want to use [`corpus_gen.py`](https://github.com/dhmit/gender_novels/blob/master/gender_novels/corpus_gen.py). If you’d only like a specific part of our corpus, the method `get_subcorpus()` may be useful.  
+
+[`corpus.py`](https://github.com/dhmit/gender_novels/blob/master/gender_novels/corpus.py) and 
+[`document.py`](https://github.com/dhmit/gender_novels/blob/master/gender_novels/novel.py) 
+include code for loading texts and metadata such that they can be analyzed.   
 
 *This document was prepared by the MIT Digital Humanities Lab.*
 
