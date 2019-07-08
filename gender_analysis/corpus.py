@@ -27,14 +27,13 @@ class Corpus:
 
     """
 
-    def __init__(self, path_to_files, name=None, csv_path=None, guess_author_gender=False):
-
+    def __init__(self, path_to_files, name=None, csv_path=None,
+                       pickle_on_load=None, guess_author_gender=False):
         """
-
         :param path_to_files: Must be either the path to a directory of txt files or an already-pickled corpus
         :param name: Optional name of the corpus, for ease of use and readability
         :param csv_path: Optional path to a csv metadata file
-        :param pickle_on_load:
+        :param pickle_on_load: Filepath to save a pickled copy of the corpus
         """
 
         if isinstance(path_to_files, str):
@@ -51,7 +50,7 @@ class Corpus:
         if self.path_to_files.suffix == '.pgz':
             pickle_data = common.load_pickle(self.path_to_files)
             self.documents = pickle_data.documents
-            self.metadata_fields = pickle_data.metadata
+            self.metadata_fields = pickle_data.metadata_fields
         elif self.path_to_files.suffix == '' and not self.csv_path:
             files = listdir(self.path_to_files)
             self.metadata_fields = ['filename', 'filepath']
@@ -86,6 +85,9 @@ class Corpus:
                     doc.author_gender = 'male'
                 else:  # guess == 'unknown' or guess == 'andy'
                     doc.author_gender = 'unknown'
+
+        if pickle_on_load is not None:
+            common.store_pickle(self, pickle_on_load)
 
     def __len__(self):
         """

@@ -26,24 +26,21 @@ def run_adj_analysis(corpus):
     return results
 
 
-def store_raw_results(results, corpus):
+def store_raw_results(results, pickle_filepath='pronoun_adj_raw_analysis.pgz'):
     """
     :param results: dictionary of results from run_adj_analysis
-    :param corpus: corpus associated with above results, used for naming file
-    :return: None, saves results as pickled file with name 'pronoun_adj_raw_analysis_corpus_name'
+    :param pickle_filepath: filepath to save the output
+    :return: None, saves results as pickled file with name 'pronoun_adj_raw_analysis'
     """
-    corpus_name = corpus.name if corpus.name else 'corpus'
-
-    try:
-        common.load_pickle("pronoun_adj_raw_analysis_" + corpus_name)
+  try:
+        common.load_pickle(pickle_filepath)
         x = input("results already stored. overwrite previous analysis? (y/n)")
         if x == 'y':
-            common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus_name)
+            common.store_pickle(results, pickle_filepath)
         else:
             pass
     except IOError:
-        common.store_pickle(results, "pronoun_adj_raw_analysis_" + corpus_name)
-
+        common.store_pickle(results, pickle_filepath)
 
 
 def merge(novel_adj_dict, full_adj_dict):

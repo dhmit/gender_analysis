@@ -47,16 +47,16 @@ def run_distance_analysis(corpus):
     return results
 
 
-def store_raw_results(results, corpus):
+def store_raw_results(results, pickle_filepath='instance_distance_raw_analysis.pgz'):
     try:
-        common.load_pickle("instance_distance_raw_analysis_" + corpus.name)
+        common.load_pickle(pickle_filepath)
         x = input("results already stored. overwrite previous analysis? (y/n)")
         if x == 'y':
-            common.store_pickle(results, "instance_distance_raw_analysis_" + corpus.name)
+            common.store_pickle(results, pickle_filepath)
         else:
             pass
     except IOError:
-        common.store_pickle(results, "instance_distance_raw_analysis_" + corpus.name)
+        common.store_pickle(results, pickle_filepath)
 
 
 def get_stats(distance_results):

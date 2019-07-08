@@ -86,7 +86,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     return dunn_individual_word(a, b, c, d)
 
 
-def dunning_total(counter1, counter2, filename_to_pickle=None):
+def dunning_total(counter1, counter2, pickle_filepath=None):
     """
     runs dunning_individual on words shared by both counter objects
     (-) end of spectrum is words for counter_2
@@ -153,8 +153,8 @@ def dunning_total(counter1, counter2, filename_to_pickle=None):
                 'freq_corp2': counter2_wordcount / total_words_counter2
             }
 
-    if filename_to_pickle:
-        store_pickle(dunning_result, filename_to_pickle)
+    if pickle_filepath:
+        store_pickle(dunning_result, pickle_filepath)
 
     return dunning_result
 
@@ -253,7 +253,7 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
     print(output)
 
 
-def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to_pickle=False):
+def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to_pickle=False, pickle_filename='dunning_vs_associated_words.pgz'):
     """
     Uses Dunning analysis to compare words associated with word1 vs words associated with word2 in
     the Corpus passed in as the parameter.
@@ -265,7 +265,6 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to
     """
     corpus_name = corpus.name if corpus.name else 'corpus'
 
-    pickle_filename = f'dunning_{word1}_vs_{word2}_associated_words_{corpus_name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
@@ -293,7 +292,8 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to
 
 def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corpus2,
                                                              word_window=None,
-                                                             to_pickle=False):
+                                                             to_pickle=False,
+                                                             pickle_filename='dunning_associated_words.pgz'):
     """
     Uses Dunning analysis to compare words associated with word between corpuses.
 
@@ -307,8 +307,6 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
     corpus1_name = corpus1.name if corpus1.name else 'corpus1'
     corpus2_name = corpus2.name if corpus2.name else 'corpus2'
 
-    pickle_filename = (f'dunning_{word}_associated_words_{corpus1_name}_vs_{corpus2_name}_in_'
-                       f'{corpus1_name}')
     if word_window:
         pickle_filename += f'_word_window_{word_window}'
     try:
@@ -337,7 +335,7 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
                         corpus2_counter.update(doc.words_associated(token))
         if to_pickle:
             results = dunning_total(corpus1_counter, corpus2_counter,
-                                    filename_to_pickle=pickle_filename)
+                                    pickle_filepath=pickle_filename)
         else:
             results = dunning_total(corpus1_counter, corpus2_counter)
 
@@ -350,7 +348,7 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
     return results
 
 
-def male_vs_female_analysis_dunning(corpus, display_data=False, to_pickle=False):
+def male_vs_female_analysis_dunning(corpus, display_data=False, to_pickle=False, pickle_filename='dunning_male_vs_female_chars.pgz'):
     """
     tests word distinctiveness of shared words between male and female corpora using dunning
     Prints out the most distinctive terms overall as well as grouped by verbs, adjectives etc.
@@ -363,7 +361,6 @@ def male_vs_female_analysis_dunning(corpus, display_data=False, to_pickle=False)
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
-    pickle_filename = f'dunning_male_vs_female_chars_{corpus.name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
@@ -445,7 +442,7 @@ def dunning_result_to_dict(dunning_result, number_of_terms_to_display=10,
 # Male Authors versus Female Authors
 ################################################
 
-def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pickle=False):
+def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pickle=False, pickle_filename='dunning_male_vs_female_authors.pgz'):
     """
     tests word distinctiveness of shared words between male and female authors using dunning
     If called with display_results=True, prints out the most distinctive terms overall as well as
@@ -460,7 +457,6 @@ def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pi
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
-    pickle_filename = f'dunning_male_vs_female_authors_{corpus.name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
@@ -487,7 +483,7 @@ def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pi
 # Male Characters versus Female Characters (words following 'he' versus words following 'she')
 ##############################################################################################
 
-def he_vs_she_associations_analysis_dunning(corpus, to_pickle=False):
+def he_vs_she_associations_analysis_dunning(corpus, to_pickle=False, pickle_filename='dunning_he_vs_she_associated_words.pgz'):
     """
     Uses Dunning analysis to compare words associated with 'he' vs words associated with 'she' in
     the Corpus passed in as the parameter.
@@ -495,7 +491,6 @@ def he_vs_she_associations_analysis_dunning(corpus, to_pickle=False):
     :param to_pickle: boolean
     """
 
-    pickle_filename = f'dunning_he_vs_she_associated_words_{corpus.name}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
