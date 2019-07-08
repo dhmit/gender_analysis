@@ -94,9 +94,9 @@ def store_pickle(obj, filepath):
     :param filepath: str | Path
     :return: Path
     """
-    if isinstance(str, filepath):
+    if isinstance(filepath, str):
         filepath = Path(filepath)
-    if not isinstance(Path, filepath):
+    if not isinstance(filepath, Path):
         raise ValueError(f'filepath must be a str or path object, not type {type(filepath)}')
 
     if filepath.stem == '':
@@ -124,9 +124,9 @@ def load_pickle(filepath):
     if filepath is None:
         raise IOError('No path supplied')
 
-    if isinstance(str, filepath):
+    if isinstance(filepath, str):
         filepath = Path(filepath)
-    if not isinstance(Path, filepath):
+    if not isinstance(filepath, Path):
         raise ValueError(f'filepath must be an str or Path object, not type {type(filepath)}')
 
     if filepath.stem == '':
