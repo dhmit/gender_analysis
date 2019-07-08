@@ -91,14 +91,14 @@ def results_by_author_gender(results, metric):
         stat = metric_indexes[metric]
     except KeyError:
         raise ValueError("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
-    for novel in list(results.keys()):
-        author_gender = getattr(novel, 'author_gender', None)
+    for document in list(results.keys()):
+        author_gender = getattr(document, 'author_gender', None)
         if author_gender == "male":
-            data['male'].append([results[novel]['male'][metric], results[novel]['female'][metric],
-                                 results[novel]['difference'][metric]])
+            data['male'].append([results[document]['male'][metric], results[document]['female'][metric],
+                                 results[document]['difference'][metric]])
         elif author_gender == 'female':
-            data['female'].append([results[novel]['male'][metric], results[novel]['female'][metric],
-                                   results[novel]['difference'][metric]])
+            data['female'].append([results[document]['male'][metric], results[document]['female'][metric],
+                                   results[document]['difference'][metric]])
     return data
 
 
@@ -180,7 +180,7 @@ def get_highest_distances(results, num):
         - Novels with the largest median male instance distance
         - Novels with the largest median female instance distance
         - Novels with the largest difference between median male & median female instance distances
-    each list contains tuples, where each tuple has a novel and the median male/female/difference
+    each list contains tuples, where each tuple has a document and the median male/female/difference
     instance distance
     :param results: dictionary of results from run_distance_analysis
     :param num: number of top distances to get
@@ -191,10 +191,10 @@ def get_highest_distances(results, num):
     female_medians = []
     difference_medians = []
 
-    for novel in list(results.keys()):
-        male_medians.append((results[novel]['male']['median'], novel))
-        female_medians.append((results[novel]['female']['median'], novel))
-        difference_medians.append((results[novel]['difference']['median'], novel))
+    for document in list(results.keys()):
+        male_medians.append((results[document]['male']['median'], document))
+        female_medians.append((results[document]['female']['median'], document))
+        difference_medians.append((results[document]['difference']['median'], document))
 
     male_top = sorted(male_medians, reverse=True)[0:num]
     female_top = sorted(female_medians, reverse=True)[0:num]
