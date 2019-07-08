@@ -4,10 +4,12 @@ from nltk.tokenize import word_tokenize
 from pathlib import Path
 from collections import Counter
 from os import listdir
+import gender_guesser.detector as gender
 from gender_analysis.common import load_csv_to_list, load_txt_to_string
 import gender_guesser.detector as gender
 
 from gender_analysis import common
+from gender_analysis.common import MissingMetadataError
 from gender_analysis.document import Document
 
 
@@ -149,7 +151,6 @@ class Corpus:
 
         :return: bool
         """
-
         if not isinstance(other, Corpus):
             raise NotImplementedError("Only a Corpus can be compared to another Corpus.")
 
