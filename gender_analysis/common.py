@@ -77,6 +77,26 @@ def load_txt_to_string(file_path):
     return result
 
 
+class MissingMetadataError(Exception):
+    """Raised when a function that assumes certain metadata is called on a corpus without that
+    metadata"""
+    def __init__(self, metadata_fields, message=None):
+        self.metadata_fields = metadata_fields
+        self.message = message if message else ''
+
+    def __str__(self):
+        metadata_string = ''
+        for i in range(len(self.metadata_fields)):
+            metadata_string += self.metadata_fields[i]
+            if i != len(self.metadata_fields) - 1:
+                metadata_string += ', '
+
+        return 'This corpus is missing the metadata field(s): ' + metadata_string + '. ' + \
+               self.message + ' In order to run this function, you must create a new ' \
+                              'metadata csv with (' + metadata_string + ') fields and create a ' \
+                                                                        'new Corpus with this csv.'
+
+
 def store_pickle(obj, filename):
     """
     Store a compressed "pickle" of the object in the "pickle_data" directory

@@ -164,8 +164,9 @@ def male_vs_female_authors_analysis_dunning_lesser(corpus):
     tests word distinctiveness of shared words between male and female corpora using dunning
     :return: dictionary of common shared words and their distinctiveness
     """
+
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
+        raise MissingMetadataError(['author_gender'])
 
     m_corpus = corpus.filter_by_gender('male')
     f_corpus = corpus.filter_by_gender('female')
@@ -356,8 +357,9 @@ def male_vs_female_analysis_dunning(corpus, display_data=False, to_pickle=False)
 
     :return: dict
     """
+
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
+        raise MissingMetadataError(['author_gender'])
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
@@ -452,8 +454,9 @@ def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pi
 
     :return:dict
     """
+
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
+        raise MissingMetadataError(['author_gender'])
 
     # By default, try to load precomputed results. Only calculate if no stored results are
     # available.
@@ -525,8 +528,9 @@ def female_characters_author_gender_differences(corpus, to_pickle=False):
     :param to_pickle
     :return:
     """
+
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
+        raise MissingMetadataError(['author_gender'])
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
@@ -548,7 +552,7 @@ def male_characters_author_gender_differences(corpus, to_pickle=False):
     :return:
     """
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
+        raise MissingMetadataError(['author_gender'])
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
@@ -570,7 +574,7 @@ def god_author_gender_differences(corpus, to_pickle=False):
     :return:
     """
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
+        raise MissingMetadataError(['author_gender'])
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
@@ -589,7 +593,7 @@ def money_author_gender_differences(corpus, to_pickle=False):
     :return:
     """
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
+        raise MissingMetadataError(['author_gender'])
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
@@ -614,7 +618,7 @@ def america_author_gender_differences(corpus, to_pickle=False):
     :return:
     """
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError("Corpus does not contain metadata field 'author_gender'.")
+        raise MissingMetadataError(['author_gender'])
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
