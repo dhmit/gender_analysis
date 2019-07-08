@@ -41,7 +41,7 @@ class Document:
         if 'filename' not in metadata_dict:
             raise ValueError(str(metadata_dict)+f'metadata_dict must have an entry for filename')
 
-        self.members = metadata_dict.keys()
+        self.members = list(metadata_dict.keys())
 
         for key in metadata_dict:
             if hasattr(self, str(key)):
@@ -441,7 +441,7 @@ class Document:
         for text_window in windowed(self.get_tokenized_text(), 2 * window_size + 1):
             if text_window[window_size] in search_terms:
                 for surrounding_word in text_window:
-                    if not surrounding_word in search_terms:
+                    if surrounding_word not in search_terms:
                         counter[surrounding_word] += 1
 
         return counter

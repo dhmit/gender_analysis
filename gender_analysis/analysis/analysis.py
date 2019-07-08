@@ -179,7 +179,7 @@ def run_gender_freq(corpus):
     """
     documents = corpus.documents
     c = len(documents)
-    loops = c//10 + 1
+    loops = c//10 if c % 10 == 0 else c//10 + 1
 
     num = 0
 
@@ -360,8 +360,8 @@ def find_gender_adj(document, female):
 
         :param: document: Document
         :param: female: boolean indicating whether to search for female adjectives (true) or
-        male adj (false)
-        :return: dictionary of adjectives that appear around male pronouns and the number of
+        male adjectives (false)
+        :return: dictionary of adjectives that appear around male pronouns mapped to the number of
         occurrences
     """
     output = {}
@@ -560,6 +560,7 @@ def instance_stats(book, medians1, medians2, title):
     :return: None, file written to visualizations folder depicting the ratio of two values given
     as a bar graph
     """
+    print(book, medians1, medians2)
     fig, ax = plt.subplots()
     plt.ylim(0, 50)
 
@@ -601,7 +602,8 @@ def run_dist_inst(corpus):
     """
     documents = corpus.documents
     c = len(documents)
-    loops = c//10 + 1
+    # loops = c//10 + 1
+    loops = c//10 if c % 10 == 0 else c//10+1
 
     num = 0
 
