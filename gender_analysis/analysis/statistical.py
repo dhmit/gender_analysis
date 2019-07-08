@@ -2,9 +2,6 @@ import math
 import numpy as np
 from scipy import stats
 
-from gender_analysis.analysis import gender_pronoun_freq_analysis
-from gender_analysis.corpus import Corpus
-
 
 def get_p_and_ttest_value(list_a,list_b):
 

@@ -1,19 +1,18 @@
 from statistics import median, mean
 
 import matplotlib.pyplot as plt
-from gender_analysis.analysis.analysis import male_instance_dist, female_instance_dist, \
-    words_instance_dist
-from gender_analysis import common
 import pandas as pnds
 from scipy import stats
-
 import seaborn as sns
 sns.set()
+
+from gender_analysis import common
+from gender_analysis.analysis.analysis import male_instance_dist, female_instance_dist
 
 
 def run_distance_analysis(corpus):
     """
-    Takes in a corpus of novels. Return a dictionary with each novel mapped to an array of 3 lists:
+    Takes in a corpus of documents. Return a dictionary with each document mapped to an array of 3 lists:
      - median, mean, min, and max distances between male pronoun instances
      - median, mean, min, and max distances between female pronoun instances
      - for each of the above stats, the difference between male and female values. (male stat -
@@ -23,7 +22,7 @@ def run_distance_analysis(corpus):
     dict order: [male, female]
 
     :param corpus:
-    :return:dictionary where the key is a novel and the value is the results of distance analysis
+    :return:dictionary where the key is a document and the value is the results of distance analysis
     """
     results = {}
 
@@ -47,16 +46,16 @@ def run_distance_analysis(corpus):
     return results
 
 
-def store_raw_results(results, corpus):
+def store_raw_results(results, pickle_filepath='instance_distance_raw_analysis.pgz'):
     try:
-        common.load_pickle("instance_distance_raw_analysis_" + corpus.name)
+        common.load_pickle(pickle_filepath)
         x = input("results already stored. overwrite previous analysis? (y/n)")
         if x == 'y':
-            common.store_pickle(results, "instance_distance_raw_analysis_" + corpus.name)
+            common.store_pickle(results, pickle_filepath)
         else:
             pass
     except IOError:
-        common.store_pickle(results, "instance_distance_raw_analysis_" + corpus.name)
+        common.store_pickle(results, pickle_filepath)
 
 
 def get_stats(distance_results):
@@ -91,14 +90,14 @@ def results_by_author_gender(results, metric):
         stat = metric_indexes[metric]
     except KeyError:
         raise ValueError("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
-    for novel in list(results.keys()):
-        author_gender = getattr(novel, 'author_gender', None)
+    for document in list(results.keys()):
+        author_gender = getattr(document, 'author_gender', None)
         if author_gender == "male":
-            data['male'].append([results[novel]['male'][metric], results[novel]['female'][metric],
-                                 results[novel]['difference'][metric]])
+            data['male'].append([results[document]['male'][metric], results[document]['female'][metric],
+                                 results[document]['difference'][metric]])
         elif author_gender == 'female':
-            data['female'].append([results[novel]['male'][metric], results[novel]['female'][metric],
-                                   results[novel]['difference'][metric]])
+            data['female'].append([results[document]['male'][metric], results[document]['female'][metric],
+                                   results[document]['difference'][metric]])
     return data
 
 
@@ -151,7 +150,8 @@ def results_by_location(results, metric):
       order = [male distance, female distance, difference]
     :param results dictionary
     :param metric ('median', 'mean', 'min', 'max')
-    :return: dictionary """
+    :return: dictionary
+    """
     data = {}
     metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
     try:
@@ -177,10 +177,10 @@ def get_highest_distances(results, num):
     Takes results from instance_distance_analysis.run_distance_analysis and a number of top
     results to return.
     Returns 3 lists.
-        - Novels with the largest median male instance distance
-        - Novels with the largest median female instance distance
-        - Novels with the largest difference between median male & median female instance distances
-    each list contains tuples, where each tuple has a novel and the median male/female/difference
+        - Documents with the largest median male instance distance
+        - Documents with the largest median female instance distance
+        - Documents with the largest difference between median male & median female instance distances
+    each list contains tuples, where each tuple has a document and the median male/female/difference
     instance distance
     :param results: dictionary of results from run_distance_analysis
     :param num: number of top distances to get
@@ -191,10 +191,10 @@ def get_highest_distances(results, num):
     female_medians = []
     difference_medians = []
 
-    for novel in list(results.keys()):
-        male_medians.append((results[novel]['male']['median'], novel))
-        female_medians.append((results[novel]['female']['median'], novel))
-        difference_medians.append((results[novel]['difference']['median'], novel))
+    for document in list(results.keys()):
+        male_medians.append((results[document]['male']['median'], document))
+        female_medians.append((results[document]['female']['median'], document))
+        difference_medians.append((results[document]['difference']['median'], document))
 
     male_top = sorted(male_medians, reverse=True)[0:num]
     female_top = sorted(female_medians, reverse=True)[0:num]
@@ -249,8 +249,8 @@ def box_plots(inst_data, my_pal, title, x="N/A"):
     """
     Takes in a frequency dictionaries and exports its values as a bar-and-whisker graph
     :param inst_data
-    :param my_pal: palette to be used
-    :param title: title of exported graph
+    :param my_pal: str, palette to be used
+    :param title: str, filename of exported graph
     :param x: name of x-vars
     :return:
     """

@@ -2,12 +2,9 @@ import codecs
 import gzip
 import os
 import pickle
-
 from pathlib import Path
-import pickle
-import seaborn as sns
 
-DEBUG = False
+import seaborn as sns
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 
@@ -42,6 +39,7 @@ def load_csv_to_list(file_path):
     file.close()
     return result
 
+
 def load_txt_to_string(file_path):
     """
     Loads a txt file
@@ -59,7 +57,7 @@ def load_txt_to_string(file_path):
     if isinstance(file_path, str):
         file_path = Path(file_path)
 
-    file_type =file_path.suffix
+    file_type = file_path.suffix
 
     if file_type != '.txt':
         raise Exception(
@@ -70,19 +68,17 @@ def load_txt_to_string(file_path):
             file = open(file_path, encoding='utf-8')
             result = file.read()
         except UnicodeDecodeError as err:
-            print (f'Unicode file loading error {file_path}.')
+            print(f'Unicode file loading error {file_path}.')
             raise err
 
     file.close()
     return result
 
 
-def store_pickle(obj, filename):
+def store_pickle(obj, filepath):
     """
     Store a compressed "pickle" of the object in the "pickle_data" directory
     and return the full path to it.
-
-    The filename should not contain a directory or suffix.
 
     Example in lieu of Doctest to avoid writing out a file.
 
@@ -90,18 +86,25 @@ def store_pickle(obj, filename):
         gender_analysis.common.store_pickle(my_object, 'example_pickle')
 
     :param obj: Any Python object to be pickled
-    :param filename: str | Path
+    :param filepath: str | Path
     :return: Path
     """
-    filename = BASE_PATH / 'pickle_data' / (str(filename) + '.pgz')
-    with gzip.GzipFile(filename, 'w') as fileout:
+    if isinstance(filepath, str):
+        filepath = Path(filepath)
+    if not isinstance(filepath, Path):
+        raise ValueError(f'filepath must be a str or path object, not type {type(filepath)}')
+
+    if filepath.stem == '':
+        filepath = Path(str(filepath) + '.pgz')
+
+    with gzip.GzipFile(filepath, 'w') as fileout:
         pickle.dump(obj, fileout)
-    return filename
+    return filepath
 
 
-def load_pickle(filename):
+def load_pickle(filepath):
     """
-    Load the pickle stored at filename where filename does not contain a
+    Load the pickle stored at filepath where filename does not contain a
     directory or suffix.
 
     Example in lieu of Doctest to avoid writing out a file.
@@ -110,13 +113,21 @@ def load_pickle(filename):
         my_object
         {'a': 4, 'b': 5, 'c': [1, 2, 3]}
 
-    :param filename: str | Path
+    :param filepath: str | Path
     :return: object
     """
-    raise IOError
+    if filepath is None:
+        raise IOError('No path supplied')
 
-    filename = BASE_PATH / 'pickle_data' / (str(filename) + '.pgz')
-    with gzip.GzipFile(filename, 'r') as filein:
+    if isinstance(filepath, str):
+        filepath = Path(filepath)
+    if not isinstance(filepath, Path):
+        raise ValueError(f'filepath must be an str or Path object, not type {type(filepath)}')
+
+    if filepath.stem == '':
+        filepath = Path(str(filepath) + '.pgz')
+
+    with gzip.GzipFile(filepath, 'r') as filein:
         obj = pickle.load(filein)
     return obj
 
@@ -235,6 +246,27 @@ def load_graph_settings(show_grid_lines=True):
                   'figure.facecolor':background_color}
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
+
+    
+class MissingMetadataError(Exception):
+    """Raised when a function that assumes certain metadata is called on a corpus without that
+    metadata"""
+    def __init__(self, metadata_fields, message=None):
+        self.metadata_fields = metadata_fields
+        self.message = message if message else ''
+
+    def __str__(self):
+        metadata_string = ''
+        for i in range(len(self.metadata_fields)):
+            metadata_string += self.metadata_fields[i]
+            if i != len(self.metadata_fields) - 1:
+                metadata_string += ', '
+
+        return 'This corpus is missing the metadata field(s): ' + metadata_string + '. ' + \
+               self.message + ' In order to run this function, you must create a new ' \
+                              'metadata csv with (' + metadata_string + ') fields and create a ' \
+                                                                        'new Corpus with this csv.'
+
 
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test
