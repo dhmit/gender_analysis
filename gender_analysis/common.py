@@ -1,228 +1,80 @@
+import codecs
 import gzip
 import os
 import pickle
-import urllib.request
 
 from pathlib import Path
-import codecs
-
+import pickle
 import seaborn as sns
 
 DEBUG = False
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 
-METADATA_LIST = ['gutenberg_id', 'author', 'date', 'title', 'country_publication', 'author_gender',
-                 'subject', 'notes']
 
-# books from gutenberg downloaded from Dropbox folder shared by Keith
-INITIAL_BOOK_STORE = r'corpora/test_books_30'
-#TODO: change to actual directory when generating corpus
-
-# plus some extras
-AUTHOR_NAME_REGEX = r"(?P<last_name>(\w+ )*\w*)\, (?P<first_name>(\w+\.* )*(\w\.*)*)(?P<suffix>\, \w+\.)*(\((?P<real_name>(\w+ )*\w*)\))*"
-outputDir = 'converted'
-TEXT_START_MARKERS = frozenset((
-    "*END*THE SMALL PRINT",
-    "*** START OF THE PROJECT GUTENBERG",
-    "*** START OF THIS PROJECT GUTENBERG",
-    "This etext was prepared by",
-    "E-text prepared by",
-    "Produced by",
-    "Distributed Proofreading Team",
-    "Proofreading Team at http://www.pgdp.net",
-    "http://gallica.bnf.fr)",
-    "      http://archive.org/details/",
-    "http://www.pgdp.net",
-    "by The Internet Archive)",
-    "by The Internet Archive/Canadian Libraries",
-    "by The Internet Archive/American Libraries",
-    "public domain material from the Internet Archive",
-    "Internet Archive)",
-    "Internet Archive/Canadian Libraries",
-    "Internet Archive/American Libraries",
-    "material from the Google Print project",
-    "*END THE SMALL PRINT",
-    "***START OF THE PROJECT GUTENBERG",
-    "This etext was produced by",
-    "*** START OF THE COPYRIGHTED",
-    "The Project Gutenberg",
-    "http://gutenberg.spiegel.de/ erreichbar.",
-    "Project Runeberg publishes",
-    "Beginning of this Project Gutenberg",
-    "Project Gutenberg Online Distributed",
-    "Gutenberg Online Distributed",
-    "the Project Gutenberg Online Distributed",
-    "Project Gutenberg TEI",
-    "This eBook was prepared by",
-    "http://gutenberg2000.de erreichbar.",
-    "This Etext was prepared by",
-    "This Project Gutenberg Etext was prepared by",
-    "Gutenberg Distributed Proofreaders",
-    "Project Gutenberg Distributed Proofreaders",
-    "the Project Gutenberg Online Distributed Proofreading Team",
-    "**The Project Gutenberg",
-    "*SMALL PRINT!",
-    "More information about this book is at the top of this file.",
-    "tells you about restrictions in how the file may be used.",
-    "l'authorization à les utilizer pour preparer ce texte.",
-    "of the etext through OCR.",
-    "*****These eBooks Were Prepared By Thousands of Volunteers!*****",
-    "We need your donations more than ever!",
-    " *** START OF THIS PROJECT GUTENBERG",
-    "****     SMALL PRINT!",
-    '["Small Print" V.',
-    '      (http://www.ibiblio.org/gutenberg/',
-    'and the Project Gutenberg Online Distributed Proofreading Team',
-    'Mary Meehan, and the Project Gutenberg Online Distributed Proofreading',
-    '                this Project Gutenberg edition.',
-))
-TEXT_END_MARKERS = frozenset((
-    "*** END OF THE PROJECT GUTENBERG",
-    "*** END OF THIS PROJECT GUTENBERG",
-    "***END OF THE PROJECT GUTENBERG",
-    "End of the Project Gutenberg",
-    "End of The Project Gutenberg",
-    "Ende dieses Project Gutenberg",
-    "by Project Gutenberg",
-    "End of Project Gutenberg",
-    "End of this Project Gutenberg",
-    "Ende dieses Projekt Gutenberg",
-    "        ***END OF THE PROJECT GUTENBERG",
-    "*** END OF THE COPYRIGHTED",
-    "End of this is COPYRIGHTED",
-    "Ende dieses Etextes ",
-    "Ende dieses Project Gutenber",
-    "Ende diese Project Gutenberg",
-    "**This is a COPYRIGHTED Project Gutenberg Etext, Details Above**",
-    "Fin de Project Gutenberg",
-    "The Project Gutenberg Etext of ",
-    "Ce document fut presente en lecture",
-    "Ce document fut présenté en lecture",
-    "More information about this book is at the top of this file.",
-    "We need your donations more than ever!",
-    "END OF PROJECT GUTENBERG",
-    " End of the Project Gutenberg",
-    " *** END OF THIS PROJECT GUTENBERG",
-))
-LEGALESE_START_MARKERS = frozenset(("<<THIS ELECTRONIC VERSION OF",))
-LEGALESE_END_MARKERS = frozenset(("SERVICE THAT CHARGES FOR DOWNLOAD",))
-
-# TODO(elsa): Investigate doctest errors in this file, may be a result of
-# my own system, not actual code errors
-
-
-class FileLoaderMixin:
-    """ The FileLoaderMixin loads files either locally or
-    remotely from Github (if run from an ipython notebook)
-
-    Currently supported filetypes are: .csv, .txt
+def load_csv_to_list(file_path):
     """
+    Loads a csv file
 
-    def load_file(self, file_path):
-        """
-        Loads csv and txt files either locally or remotely from Github.
-        file_path can be string or Path object.
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> corpus_metadata_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'sample_novels.csv')
+    >>> corpus_metadata = load_csv_to_list(corpus_metadata_path)
+    >>> type(corpus_metadata)
+    <class 'list'>
 
-        When loading a txt file, load_file returns the text as a string
+    :param file_path: can be a string or Path object
+    :return: a list of strings
+    """
+    if isinstance(file_path, str):
+        file_path = Path(file_path)
 
-        >>> from pathlib import Path
-        >>> from gender_analysis import common
+    file_type = file_path.suffix
 
-        >>> f = common.FileLoaderMixin()
-        >>> novel_path = Path('testing', 'corpora', 'sample_novels',
-        ...                   'texts', 'austen_persuasion.txt')
-        >>> novel_text = f.load_file(novel_path)
-        >>> type(novel_text), len(novel_text)
-        (<class 'str'>, 486253)
+    if file_type != '.csv':
+        raise Exception(
+            'Cannot load if current file type is not .csv'
+        )
+    else:
+        file = open(file_path, encoding='utf-8')
+        result = file.readlines()
 
-        csv files are returned as a list of strings, which can be
-        further processed with Python's csv module
+    file.close()
+    return result
 
-        >>> corpus_metadata_path = Path('testing', 'corpora', 'sample_novels',
-        ...                             'sample_novels.csv')
-        >>> corpus_metadata = f.load_file(corpus_metadata_path)
-        >>> type(corpus_metadata)
-        <class 'list'>
+def load_txt_to_string(file_path):
+    """
+    Loads a txt file
 
-        file_path can be a string or Path object
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> novel_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')
+    >>> novel_text = load_txt_to_string(novel_path)
+    >>> type(novel_text), len(novel_text)
+    (<class 'str'>, 486253)
 
-        >>> import os
-        >>> novel_path_str = os.sep.join(['testing', 'corpora', 'sample_novels',
-        ...                               'texts', 'austen_persuasion.txt'])
-        >>> novel_text_str = f.load_file(novel_path_str)
-        >>> novel_text == novel_text_str
-        True
-        >>> novel_path2 = Path(r"testing/corpora/test_books_30/20-0.txt")
-        >>> paradise_lost = f.load_file(novel_path2)
-        >>> paradise_lost[1:61]
-        'The Project Gutenberg EBook of Paradise Lost, by John Milton'
+    :param file_path: can be a string or Path object
+    :return: the text as a string type
+    """
+    if isinstance(file_path, str):
+        file_path = Path(file_path)
 
-        Returns a str (txt file) or list of strs (csv file)
-        """
-        # if the file_path is a string, turn to Path object.
-        if isinstance(file_path, str):
-            file_path = Path(file_path)
+    file_type =file_path.suffix
 
-        # make sure that we only try to load supported file types
-        supported_file_types = {'.csv', '.txt'}
-        current_file_type = file_path.parts[-1][file_path.parts[-1].rfind('.'):]
-        if current_file_type not in supported_file_types:
-            err = "The FileLoaderMixin currently supports "
-            err += "{supported_file_types} but not {current_file_type}."
-            raise ValueError(err)
-
-        # check if we are working locally and in the correct directory
-        # __file__ is only available if executed from a file but
-        # not from an ipython shell or notebook
-        # in those cases, the file has to be loaded remotely from github.
+    if file_type != '.txt':
+        raise Exception(
+            'Cannot load if current file type is not .txt'
+        )
+    else:
         try:
-            local_path = os.path.abspath(os.path.dirname(__file__))
-            is_local = True
-            if not local_path.endswith('gender_analysis'):
-                is_local = False
-                warning = "WARNING: The FileLoaderMixin should be placed "
-                warning += "in the main path of the gender_analysis project."
-                warning += f"It's currently in {local_path}. Until the Mixin "
-                warning += "is in the correct path, files are loaded "
-                warning += "from Github."
-                print(warning)
-        except NameError:
-            is_local = False
+            file = open(file_path, encoding='utf-8')
+            result = file.read()
+        except UnicodeDecodeError as err:
+            print (f'Unicode file loading error {file_path}.')
+            raise err
 
-        if is_local:
-            if DEBUG:
-                print(f'loading {file_path} locally.')
-            return self.load_file_locally(file_path, current_file_type)
-        else:
-            if DEBUG:
-                print(f'loading {file_path} remotely')
-            return self.load_file_remotely(file_path, current_file_type)
-
-    @staticmethod
-    def load_file_locally(file_path, current_file_type):
-        # I need a way of getting the local path to the base of the repo.
-        # This file is currently in the base of the
-        # repo so it returns the correct path. But it will change once
-        # this function gets moved.
-        local_base_path = Path(os.path.abspath(os.path.dirname(__file__)))
-        file = open(local_base_path.joinpath(file_path), encoding='utf-8')
-
-        if current_file_type == '.csv':
-            result = file.readlines()
-        elif current_file_type == '.txt':
-            try:
-                result = file.read()
-            except UnicodeDecodeError as err:
-                print(f'File loading error with {file_path}.')
-                raise err
-
-        else:
-            raise Exception(
-                'Cannot load if current_file_type is not .csv or .txt')
-
-        file.close()
-        return result
+    file.close()
+    return result
 
 
 class MissingMetadataError(Exception):
@@ -403,7 +255,6 @@ def load_graph_settings(show_grid_lines=True):
                   'figure.facecolor':background_color}
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
-
 
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test

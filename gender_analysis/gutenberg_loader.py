@@ -1,10 +1,8 @@
 import csv
 import os
 import re
-import time
 import requests
 from pathlib import Path
-from shutil import copyfile
 
 import gender_guesser.detector as gender_guesser
 import pywikibot
@@ -13,19 +11,152 @@ from gutenberg.cleanup import strip_headers
 from gutenberg.query import get_metadata
 
 from gender_analysis import common
-from gender_analysis.common import AUTHOR_NAME_REGEX, BASE_PATH, METADATA_LIST
 
+# Gutenberg loader-only constants
+_METADATA_LIST = [
+    'gutenberg_id',
+    'author',
+    'date',
+    'title',
+    'country_publication',
+    'author_gender',
+    'subject',
+    'notes'
+]
 
-SUBJECTS_TO_IGNORE = ["nonfiction", "dictionaries", "bibliography", "poetry", "short stories", "biography", "encyclopedias",
-             "atlases", "maps", "words and phrase lists", "almanacs", "handbooks, manuals, etc.", "periodicals",
-             "textbooks", "terms and phrases", "essays", "united states. constitution", "bible", "directories",
-             "songbooks", "hymns", "correspondence", "drama", "reviews", "translations into english", 'religion']
-TRUNCATORS = ["\r", "\n", r"; Or, ", r"; or, "]
-COUNTRY_ID_TO_NAME = {"Q30":  "United States", "Q145": "United Kingdom", "Q21": "United Kingdom", "Q16": "Canada",
-                      "Q408": "Australia", "Q2886622": "Narnia"}
+_AUTHOR_NAME_REGEX = r"(?P<last_name>(\w+ )*\w*)\, (?P<first_name>(\w+\.* )*(\w\.*)*)(?P<suffix>\, \w+\.)*(\((?P<real_name>(\w+ )*\w*)\))*"
+
+_SUBJECTS_TO_IGNORE = [
+    'nonfiction',
+    'dictionaries',
+    'bibliography',
+    'poetry',
+    'short stories',
+    'biography',
+    'encyclopedias',
+    'atlases',
+    'maps',
+    'words and phrase lists',
+    'almanacs',
+    'handbooks, manuals, etc.',
+    'periodicals',
+    'textbooks',
+    'terms and phrases',
+    'essays',
+    'united states. constitution',
+    'bible',
+    'directories',
+    'songbooks',
+    'hymns',
+    'correspondence',
+    'drama',
+    'reviews',
+    'translations into english',
+    'religion',
+]
+
+_TRUNCATORS = ['\r', '\n', r'; Or, ', r'; or, ']
+
+_COUNTRY_ID_TO_NAME = {
+    'Q30':  'United States',
+    'Q145': 'United Kingdom',
+    'Q21': 'United Kingdom',
+    'Q16': 'Canada',
+    'Q408': 'Australia',
+    'Q2886622': 'Narnia',
+}
 
 # This directory contains 11 sample books.
-GUTENBERG_RSYNC_PATH = Path(BASE_PATH, 'corpora', 'gutenberg_mirror_sample')
+_GUTENBERG_RSYNC_PATH = Path(common.BASE_PATH, 'corpora', 'gutenberg_mirror_sample')
+
+_TEXT_START_MARKERS = frozenset((
+    "*END*THE SMALL PRINT",
+    "*** START OF THE PROJECT GUTENBERG",
+    "*** START OF THIS PROJECT GUTENBERG",
+    "This etext was prepared by",
+    "E-text prepared by",
+    "Produced by",
+    "Distributed Proofreading Team",
+    "Proofreading Team at http://www.pgdp.net",
+    "http://gallica.bnf.fr)",
+    "      http://archive.org/details/",
+    "http://www.pgdp.net",
+    "by The Internet Archive)",
+    "by The Internet Archive/Canadian Libraries",
+    "by The Internet Archive/American Libraries",
+    "public domain material from the Internet Archive",
+    "Internet Archive)",
+    "Internet Archive/Canadian Libraries",
+    "Internet Archive/American Libraries",
+    "material from the Google Print project",
+    "*END THE SMALL PRINT",
+    "***START OF THE PROJECT GUTENBERG",
+    "This etext was produced by",
+    "*** START OF THE COPYRIGHTED",
+    "The Project Gutenberg",
+    "http://gutenberg.spiegel.de/ erreichbar.",
+    "Project Runeberg publishes",
+    "Beginning of this Project Gutenberg",
+    "Project Gutenberg Online Distributed",
+    "Gutenberg Online Distributed",
+    "the Project Gutenberg Online Distributed",
+    "Project Gutenberg TEI",
+    "This eBook was prepared by",
+    "http://gutenberg2000.de erreichbar.",
+    "This Etext was prepared by",
+    "This Project Gutenberg Etext was prepared by",
+    "Gutenberg Distributed Proofreaders",
+    "Project Gutenberg Distributed Proofreaders",
+    "the Project Gutenberg Online Distributed Proofreading Team",
+    "**The Project Gutenberg",
+    "*SMALL PRINT!",
+    "More information about this book is at the top of this file.",
+    "tells you about restrictions in how the file may be used.",
+    "l'authorization à les utilizer pour preparer ce texte.",
+    "of the etext through OCR.",
+    "*****These eBooks Were Prepared By Thousands of Volunteers!*****",
+    "We need your donations more than ever!",
+    " *** START OF THIS PROJECT GUTENBERG",
+    "****     SMALL PRINT!",
+    '["Small Print" V.',
+    '      (http://www.ibiblio.org/gutenberg/',
+    'and the Project Gutenberg Online Distributed Proofreading Team',
+    'Mary Meehan, and the Project Gutenberg Online Distributed Proofreading',
+    '                this Project Gutenberg edition.',
+))
+
+_TEXT_END_MARKERS = frozenset((
+    "*** END OF THE PROJECT GUTENBERG",
+    "*** END OF THIS PROJECT GUTENBERG",
+    "***END OF THE PROJECT GUTENBERG",
+    "End of the Project Gutenberg",
+    "End of The Project Gutenberg",
+    "Ende dieses Project Gutenberg",
+    "by Project Gutenberg",
+    "End of Project Gutenberg",
+    "End of this Project Gutenberg",
+    "Ende dieses Projekt Gutenberg",
+    "        ***END OF THE PROJECT GUTENBERG",
+    "*** END OF THE COPYRIGHTED",
+    "End of this is COPYRIGHTED",
+    "Ende dieses Etextes ",
+    "Ende dieses Project Gutenber",
+    "Ende diese Project Gutenberg",
+    "**This is a COPYRIGHTED Project Gutenberg Etext, Details Above**",
+    "Fin de Project Gutenberg",
+    "The Project Gutenberg Etext of ",
+    "Ce document fut presente en lecture",
+    "Ce document fut présenté en lecture",
+    "More information about this book is at the top of this file.",
+    "We need your donations more than ever!",
+    "END OF PROJECT GUTENBERG",
+    " End of the Project Gutenberg",
+    " *** END OF THIS PROJECT GUTENBERG",
+))
+
+_LEGALESE_START_MARKERS = frozenset(("<<THIS ELECTRONIC VERSION OF",))
+
+_LEGALESE_END_MARKERS = frozenset(("SERVICE THAT CHARGES FOR DOWNLOAD",))
 
 
 def generate_corpus_gutenberg():
@@ -35,14 +166,14 @@ def generate_corpus_gutenberg():
     """
 
     # Check if gutenberg corpus and text directories exists. Create if necessary.
-    for path in [Path(BASE_PATH, 'corpora', 'gutenberg'), Path(BASE_PATH, 'corpora', 'gutenberg',
+    for path in [Path(common.BASE_PATH, 'corpora', 'gutenberg'), Path(common.BASE_PATH, 'corpora', 'gutenberg',
                                                                'texts')]:
         if not os.path.isdir(path):
             os.mkdir(path)
 
     # write csv header
-    with open(Path(BASE_PATH, 'corpora', 'gutenberg', 'gutenberg.csv'), 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=METADATA_LIST)
+    with open(Path(common.BASE_PATH, 'corpora', 'gutenberg', 'gutenberg.csv'), 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=_METADATA_LIST)
         writer.writeheader()
         print("Wrote metadata header")
     # check if cache is populated, if it isn't, populates it
@@ -69,18 +200,15 @@ def generate_corpus_gutenberg():
             filepaths.append(ascii_path)
 
     print(f"Total number of files to process: {len(filepaths)}")
-    corpus_gen_start_time = time.time()
 
     for filepath in filepaths:
         gutenberg_id = int(filepath.parts[-2])
         try:
-            start_book = time.time()
             print("Filepath:", filepath)
             print("ID:", gutenberg_id)
             # check if book is valid novel by our definition
             if (not is_valid_novel_gutenberg(gutenberg_id)):
                 print("Not a novel")
-                print("Time for this book:", time.time() - start_book, "seconds")
                 print('')
                 continue
             novel_metadata = get_gutenberg_metadata_for_single_novel(gutenberg_id)
@@ -90,7 +218,7 @@ def generate_corpus_gutenberg():
             with open(filepath, encoding='utf-8') as infile:
                 text_raw = infile.read()
             text_clean = strip_headers(text_raw).strip()
-            with open(Path(BASE_PATH, 'corpora', 'gutenberg', 'texts', f'{gutenberg_id}.txt'),
+            with open(Path(common.BASE_PATH, 'corpora', 'gutenberg', 'texts', f'{gutenberg_id}.txt'),
                       mode='w', encoding='utf-8') as outfile:
                 outfile.write(text_clean)
             number_books += 1
@@ -103,13 +231,8 @@ def generate_corpus_gutenberg():
             print("")
             continue
 
-
-
-    end_time = time.time()
     print("Done!")
     print("No. Books:", number_books)
-    print("Total Time:", end_time-corpus_gen_start_time, "seconds")
-    print("Average Time per Book", (end_time-corpus_gen_start_time) / number_books)
 
 
 def get_gutenberg_metadata_for_single_novel(gutenberg_id):
@@ -154,7 +277,7 @@ def is_valid_novel_gutenberg(gutenberg_id):
     if novel is in correct publication range
     That novel is not a translation
 
-    >>> from gender_analysis.corpus_gen import is_valid_novel_gutenberg
+    >>> from gender_analysis.gutenberg_loader import is_valid_novel_gutenberg
     >>> is_valid_novel_gutenberg(98) # Dickens, tale of two cities
     A Tale of Two Cities
     True
@@ -199,7 +322,7 @@ def language_invalidates_entry(gutenberg_id):
     """
     Returns False if book with gutenberg id is in English, True otherwise
 
-    >>> from gender_analysis.corpus_gen import language_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import language_invalidates_entry
     >>> language_invalidates_entry(46) # A Christmas Carol
     False
     >>> language_invalidates_entry(27217) # Some Chinese thing
@@ -219,7 +342,7 @@ def rights_invalidate_entry(gutenberg_id):
     """
     Returns False if book with gutenberg id is in public domain in US, True otherwise
 
-    >>> from gender_analysis.corpus_gen import rights_invalidate_entry
+    >>> from gender_analysis.gutenberg_loader import rights_invalidate_entry
     >>> rights_invalidate_entry(5200) # Metamorphosis by Franz Kafka
     True
     >>> rights_invalidate_entry(8066) # The Bible, King James version, Book 66: Revelation
@@ -239,7 +362,7 @@ def subject_invalidates_entry(gutenberg_id):
     """
     Checks if the Gutenberg subject indicates that the book is not a novel
 
-    >>> from gender_analysis.corpus_gen import subject_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import subject_invalidates_entry
     >>> subject_invalidates_entry(2240) # Much Ado About Nothing
     True
     >>> subject_invalidates_entry(33) # The Scarlet Letter
@@ -253,7 +376,7 @@ def subject_invalidates_entry(gutenberg_id):
 
     subjects = get_subject_gutenberg(gutenberg_id)
     for subject in subjects:
-        for word in SUBJECTS_TO_IGNORE:
+        for word in _SUBJECTS_TO_IGNORE:
             if (subject.lower()).find(word) != -1:
                 return True
 
@@ -268,7 +391,7 @@ def date_invalidates_entry(gutenberg_id):
     """
     Checks if book with gutenberg id is in correct date range.  If it can't get the date, simply
     returns False
-    >>> from gender_analysis.corpus_gen import date_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import date_invalidates_entry
     >>> date_invalidates_entry(33) # Hawthorne, Scarlet Letter
     False
     >>> date_invalidates_entry(173) # no publication date
@@ -294,7 +417,7 @@ def title_invalidates_entry(title):
     """
     Determines if the title contains phrases that indicate that the book is invalid
 
-    >>> from gender_analysis.corpus_gen import title_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import title_invalidates_entry
     >>> title_invalidates_entry("Index of the Project Gutenberg Works of Michael Cuthbert")
     True
     >>> title_invalidates_entry("Pride and Prejudice")
@@ -325,10 +448,10 @@ def text_invalidates_entry(text):
     """
     Determine if there is anything obvious in the text that would invalidate it as a valid novel
 
-    >>> from gender_analysis.corpus_gen import text_invalidates_entry
+    >>> from gender_analysis.gutenberg_loader import text_invalidates_entry
     >>> text_invalidates_entry("Translator: George Fyler Townsend")
     True
-    >>> from gender_analysis.corpus_gen import get_novel_text_gutenberg
+    >>> from gender_analysis.gutenberg_loader import get_novel_text_gutenberg
     >>> import os
     >>> current_dir = os.path.abspath(os.path.dirname(__file__))
     >>> filepath = Path(current_dir, r"corpora/sample_novels/texts/hawthorne_scarlet.txt")
@@ -379,7 +502,7 @@ def get_title_gutenberg(gutenberg_id):
     """
 
     title = list(get_metadata('title', gutenberg_id))[0]
-    for sep in TRUNCATORS:
+    for sep in _TRUNCATORS:
         title = title.split(sep,1)[0]
     return title
 
@@ -388,7 +511,7 @@ def get_novel_text_gutenberg(gutenberg_id):
     """
     Extract text as as string from file, with boilerplate removed
 
-    >>> from gender_analysis.corpus_gen import get_novel_text_gutenberg
+    >>> from gender_analysis.gutenberg_loader import get_novel_text_gutenberg
     >>> text = get_novel_text_gutenberg(32)
     >>> text[:7]
     'HERLAND'
@@ -404,7 +527,7 @@ def get_novel_text_gutenberg_with_boilerplate(gutenberg_id):
     """
     Extract text as as string from file
 
-    >>> from gender_analysis.corpus_gen import get_novel_text_gutenberg
+    >>> from gender_analysis.gutenberg_loader import get_novel_text_gutenberg
     >>> text = get_novel_text_gutenberg_with_boilerplate(32)
     >>> text.split()[:3]
     ['The', 'Project', 'Gutenberg']
@@ -440,7 +563,7 @@ def get_publication_date(author, title, gutenberg_id):
     >>> get_publication_date("Hawthorne, Nathaniel", "The Scarlet Letter", 33)
     1850
 
-    # >>> from gender_analysis import corpus_gen
+    # >>> from gender_analysis import gutenberg_loader
     # >>> get_publication_date("Dick, Phillip K.", "Mr. Spaceship", 32522)
     # 1953
 
@@ -522,7 +645,7 @@ def get_publication_date_from_copyright_certain(novel_text):
 
     >>> novel_text = "This work blah blah blah blah COPYRIGHT, 1894 blah"
     >>> novel_text += "and they all died."
-    >>> from gender_analysis.corpus_gen import get_publication_date_from_copyright_certain
+    >>> from gender_analysis.gutenberg_loader import get_publication_date_from_copyright_certain
     >>> get_publication_date_from_copyright_certain(novel_text)
     1894
 
@@ -545,7 +668,7 @@ def get_publication_date_from_copyright_uncertain(novel_text):
 
     >>> novel_text = "This work blah blah blah blah Brams and Co. 1894 blah"
     >>> novel_text += "and they all died."
-    >>> from gender_analysis.corpus_gen import get_publication_date_from_copyright_uncertain
+    >>> from gender_analysis.gutenberg_loader import get_publication_date_from_copyright_uncertain
     >>> get_publication_date_from_copyright_uncertain(novel_text)
     1894
 
@@ -627,8 +750,8 @@ def get_country_publication_wikidata(author, title):
         return None
 
     # try to match country_id to major English-speaking countries
-    if country_id in COUNTRY_ID_TO_NAME:
-        return COUNTRY_ID_TO_NAME[country_id]
+    if country_id in _COUNTRY_ID_TO_NAME:
+        return _COUNTRY_ID_TO_NAME[country_id]
 
     # if not try look up wikidata page of country with that id to try and get short name
     try:
@@ -656,7 +779,7 @@ def format_author(author):
     and a string in the form "Lastname, Firstname, Sfx." into "Firstname Lastname, Sfx."
     If string is not in any of the above forms just returns the string.
 
-    >>> from gender_analysis.corpus_gen import format_author
+    >>> from gender_analysis.gutenberg_loader import format_author
     >>> format_author("Washington, George")
     'George Washington'
     >>> format_author("Hurston, Zora Neale")
@@ -674,7 +797,7 @@ def format_author(author):
 
     author_formatted = ''
     try:
-        match = re.match(AUTHOR_NAME_REGEX, author)
+        match = re.match(_AUTHOR_NAME_REGEX, author)
         first_name = match.groupdict()['first_name']
         if (match.groupdict()['real_name'] != None):
             first_name = match.groupdict()['real_name']
@@ -695,7 +818,7 @@ def get_author_gender(authors):
     #TODO: 'both' is ambiguous; Does it mean both female and male?  female and unknown?
     #TODO: male and nonbinary?
 
-    >>> from gender_analysis.corpus_gen import get_author_gender
+    >>> from gender_analysis.gutenberg_loader import get_author_gender
     >>> get_author_gender(["Hawthorne, Nathaniel"])
     'male'
     >>> get_author_gender(["Cuthbert, Michael"])
@@ -749,7 +872,7 @@ def get_author_gender_wikidata(author):
     If it fails returns None
     N.B. Wikidata's categories for transgender male and female are treated as male and female, respectively
 
-    >>> from gender_analysis.corpus_gen import get_author_gender_wikidata
+    >>> from gender_analysis.gutenberg_loader import get_author_gender_wikidata
     >>> get_author_gender_wikidata("Obama, Barack")
     'male'
     >>> get_author_gender_wikidata("Hurston, Zora Neale")
@@ -778,7 +901,7 @@ def get_gender_from_wiki_claims(clm_dict):
     If it fails returns None
     N.B. Wikidata's categories for transgender male and female are treated as male and female, respectively
 
-    >>> from gender_analysis.corpus_gen import get_gender_from_wiki_claims
+    >>> from gender_analysis.gutenberg_loader import get_gender_from_wiki_claims
     >>> site = pywikibot.Site("en", "wikipedia")
     >>> page = pywikibot.Page(site, 'Zeus')
     >>> item = pywikibot.ItemPage.fromPage(page)
@@ -810,7 +933,7 @@ def get_author_gender_guesser(author):
     """
     Tries to get gender of author, 'female', 'male', 'non-binary' from the gender guesser module
 
-    >>> from gender_analysis.corpus_gen import get_author_gender_guesser
+    >>> from gender_analysis.gutenberg_loader import get_author_gender_guesser
     >>> get_author_gender_guesser("Cuthbert, Michael")
     'male'
     >>> get_author_gender_guesser("Li, Michelle")
@@ -850,14 +973,15 @@ def get_subject_gutenberg(gutenberg_id):
 
     return sorted(list(get_metadata('subject', gutenberg_id)))
 
+
 def write_metadata(novel_metadata):
     """
     Writes a row of metadata for a novel into the csv at path
     Subject to change as metadata changes
 
     Running this doctest actually generates a file
-    # >>> from gender_analysis import corpus_gen
-    # >>> corpus_gen.write_metadata({'id': 105, 'author': 'Austen, Jane', 'title': 'Persuasion',
+    # >>> from gender_analysis import gutenberg_loader
+    # >>> gutenberg_loader.write_metadata({'id': 105, 'author': 'Austen, Jane', 'title': 'Persuasion',
     # ...                            'corpus_name': 'gutenberg', 'date': '1818',
     # ...                            'country_publication': 'England', 'subject': ['England -- Social life and customs -- 19th century -- Fiction'],
     # ...                            'author_gender': 'female'})
@@ -869,7 +993,7 @@ def write_metadata(novel_metadata):
     corpus = novel_metadata['corpus_name']
     path = Path(current_dir, 'corpora', corpus, f'{corpus}.csv')
     with open(path, 'a', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=METADATA_LIST)
+        writer = csv.DictWriter(csvfile, fieldnames=_METADATA_LIST)
         writer.writerow(novel_metadata)
 
 
@@ -893,7 +1017,7 @@ def generate_gutenberg_rsync_path(gutenberg_id):
 
     id_str = str(gutenberg_id)
 
-    novel_path = Path(GUTENBERG_RSYNC_PATH)
+    novel_path = Path(_GUTENBERG_RSYNC_PATH)
 
     if gutenberg_id < 10:
         return novel_path.joinpath(Path('0', id_str))
@@ -966,6 +1090,118 @@ def download_gutenberg_if_not_locally_available():
         except FileNotFoundError:
             raise FileNotFoundError("Something went wrong while downloading the gutenberg"
                                     "corpus.")
+
+
+def remove_boilerplate_text_with_gutenberg(text):
+    """
+    Removes the boilerplate text from an input string of a document.
+    Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
+    strip_headers() function from the gutenberg module, which can remove even nonstandard
+    headers.
+
+    (see book number 3780 for one example of a nonstandard header — james_highway.txt in our
+    sample corpus; or book number 105, austen_persuasion.txt, which uses the standard Gutenberg
+    header but has had some info about the ebook's production inserted after the standard
+    boilerplate).
+
+    :return: str
+
+    >>> from gender_analysis import document
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
+    ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
+    >>> austen = document.Document(document_metadata)
+    >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
+    >>> raw_text = austen.load_file(file_path)
+    >>> raw_text = remove_boilerplate_text_with_gutenberg(raw_text)
+    >>> title_line = raw_text.splitlines()[0]
+    >>> title_line
+    "THE KING'S HIGHWAY"
+
+    TODO: neither version of remove_boilerplate_text works on Persuasion, and it doesn't look like it's
+    easily fixable
+    """
+
+    try:
+        return strip_headers(text).strip()
+    except NameError:
+        return _remove_boilerplate_text_without_gutenberg(text)
+
+
+def _remove_boilerplate_text_without_gutenberg(text):
+    """
+    Removes the boilerplate text from an input string of a document.
+    Currently only supports boilerplate removal for Project Gutenberg ebooks. Uses the
+    strip_headers() function, somewhat inelegantly copy-pasted from the gutenberg module, which can remove even nonstandard
+    headers.
+
+    (see book number 3780 for one example of a nonstandard header — james_highway.txt in our
+    sample corpus; or book number 105, austen_persuasion.txt, which uses the standard Gutenberg
+    header but has had some info about the ebook's production inserted after the standard
+    boilerplate).
+
+    :return: str
+
+    >>> from gender_analysis import document
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
+    ...                   'date': '1818', 'filename': 'james_highway.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'james_highway.txt')}
+    >>> austen = document.Document(document_metadata)
+    >>> file_path = Path('testing', 'corpora', 'sample_novels', 'texts', austen.filename)
+    >>> raw_text = austen.load_file(file_path)
+    >>> raw_text = austen._remove_boilerplate_text_without_gutenberg(raw_text)
+    >>> title_line = raw_text.splitlines()[0]
+    >>> title_line
+    "THE KING'S HIGHWAY"
+    """
+
+    # new method copy-pasted from Gutenberg library
+    lines = text.splitlines()
+    sep = '\n'
+
+    out = []
+    i = 0
+    footer_found = False
+    ignore_section = False
+
+    for line in lines:
+        reset = False
+
+        if i <= 600:
+            # Check if the header ends here
+            if any(line.startswith(token) for token in _TEXT_START_MARKERS):
+                reset = True
+
+            # If it's the end of the header, delete the output produced so far.
+            # May be done several times, if multiple lines occur indicating the
+            # end of the header
+            if reset:
+                out = []
+                continue
+
+        if i >= 100:
+            # Check if the footer begins here
+            if any(line.startswith(token) for token in _TEXT_END_MARKERS):
+                footer_found = True
+
+            # If it's the beginning of the footer, stop output
+            if footer_found:
+                break
+
+        if any(line.startswith(token) for token in _LEGALESE_START_MARKERS):
+            ignore_section = True
+            continue
+        elif any(line.startswith(token) for token in _LEGALESE_END_MARKERS):
+            ignore_section = False
+            continue
+
+        if not ignore_section:
+            out.append(line.rstrip(sep))
+            i += 1
+
+    return sep.join(out).strip()
 
 
 if __name__ == '__main__':

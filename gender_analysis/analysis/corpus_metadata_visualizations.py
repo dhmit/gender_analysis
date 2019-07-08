@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import Counter
 
-from gender_analysis.common import MissingMetadataError
+# from gender_analysis.common import MissingMetadataError
 
 
 def plot_pubyears(corpus, filename=None):
@@ -14,9 +14,10 @@ def plot_pubyears(corpus, filename=None):
     :param filename: str to name plot file
     RETURNS a pyplot histogram
     """
-    if 'date' not in corpus.get_corpus_metadata():
-        raise MissingMetadataError(['date'])
 
+    if 'date' not in corpus.metadata_fields:
+        raise MissingMetadataError(['date'])
+      
     pub_years = []
     for doc in corpus.documents:
         if doc.date is None:
@@ -58,7 +59,7 @@ def plot_pubcountries(corpus, filename=None):
     :param filename: str to name plot file
     RETURNS a pyplot bargraph
     """
-    if 'country_publication' not in corpus.get_corpus_metadata():
+    if 'country_publication' not in corpus.metadata_fields:
         raise MissingMetadataError(['country_publication'])
 
     pub_country = []
@@ -119,7 +120,7 @@ def plot_gender_breakdown(corpus, filename=None):
     :param filename: str to name plot file
     RETURNS a pie chart
     """
-    if 'author_gender' not in corpus.get_corpus_metadata():
+    if 'author_gender' not in corpus.metadata_fields:
         raise MissingMetadataError(['author_gender'])
 
     pub_gender = []
@@ -168,8 +169,9 @@ def plot_metadata_pie(corpus, filename=None):
     :param corpus: Corpus
     :param filename: str to name plot file
     """
-    if 'author_gender' not in corpus.get_corpus_metadata() or 'country_publication' not in \
-            corpus.get_corpus_metadata():
+
+    if ('author_gender' not in corpus.metadata_fields
+        or 'country_publication' not in corpus.metadata_fields):
         raise MissingMetadataError(['author_gender', 'country_publication'])
 
     if corpus.name:
