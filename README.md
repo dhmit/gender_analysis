@@ -15,28 +15,28 @@ To use our tools or contribute to the project, please view our guide to contribu
 ## Navigating Gender Analysis
 
 For anybody who wants to use our code, here’s a little outline of where everything is.
-In the [`gender_analysis/gender_analysis/analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_analysis/analysis) folder, there are the following 
+In the [`gender_analysis/gender_analysis/analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_analysis/analysis) folder, there are the following 
 modules: 
 
-1. [`analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/analysis.py) — 
+1. [`analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_novels/analysis/analysis.py) — 
 code for various analyses within a single document, including word count/frequency, distances 
 between occurrences of words, and adjectives associated with gendered pronouns.
-1. [`corpus_metadata_visualizations`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/corpus_metadata_visualizations.py) — 
+1. [`corpus_metadata_visualizations`](https://github.com/dhmit/gender_analysis/tree/master/gender_novels/analysis/corpus_metadata_visualizations.py) — 
 code for graphing information about corpus metadata.
-1. [`dunning`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/dunning.py) — 
+1. [`dunning`](https://github.com/dhmit/gender_novels/tree/master/gender_analysis/analysis/dunning.py) — 
 code for comparing the significance of certain words between two corpora.
-1. [`gender_pronoun_freq_analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/gender_pronoun_freq_analysis.py) — 
+1. [`gender_pronoun_freq_analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_novels/analysis/gender_pronoun_freq_analysis.py) — 
 code for analyzing frequency of gendered pronouns across a corpus.
-1. [`instance_distance_analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/instance_distance_analysis.py) — 
+1. [`instance_distance_analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_novels/analysis/instance_distance_analysis.py) — 
 code for analyzing distances between occurrences of certain words across a corpus.
-1. [`pronoun_adjective_analysis`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/pronoun_adjective_analysis.py) — 
+1. [`pronoun_adjective_analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_novels/analysis/pronoun_adjective_analysis.py) — 
 code for analyzing adjectives associated with gendered pronouns across a corpus.
-1. [`statistical`](https://github.com/dhmit/gender_novels/tree/master/gender_novels/analysis/statistical.py) — 
+1. [`statistical`](https://github.com/dhmit/gender_analysis/tree/master/gender_novels/analysis/statistical.py) — 
 code for analyzing results for statistical significance.
 
 
-[`corpus.py`](https://github.com/dhmit/gender_novels/blob/master/gender_novels/corpus.py) and 
-[`document.py`](https://github.com/dhmit/gender_novels/blob/master/gender_novels/novel.py) 
+[`corpus.py`](https://github.com/dhmit/gender_analysis/blob/master/gender_novels/corpus.py) and 
+[`document.py`](https://github.com/dhmit/gender_analysis/blob/master/gender_novels/novel.py) 
 include code for loading texts and metadata such that they can be analyzed.   
 
 *This document was prepared by the MIT Digital Humanities Lab.*
