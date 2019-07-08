@@ -83,8 +83,6 @@ def store_pickle(obj, filepath):
     Store a compressed "pickle" of the object in the "pickle_data" directory
     and return the full path to it.
 
-    The filename should not contain a directory or suffix.
-
     Example in lieu of Doctest to avoid writing out a file.
 
         my_object = {'a': 4, 'b': 5, 'c': [1, 2, 3]}
@@ -109,7 +107,7 @@ def store_pickle(obj, filepath):
 
 def load_pickle(filepath):
     """
-    Load the pickle stored at filename where filename does not contain a
+    Load the pickle stored at filepath where filename does not contain a
     directory or suffix.
 
     Example in lieu of Doctest to avoid writing out a file.
@@ -252,6 +250,29 @@ def load_graph_settings(show_grid_lines=True):
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
 
+    
+class MissingMetadataError(Exception):
+    """Raised when a function that assumes certain metadata is called on a corpus without that
+    metadata"""
+    def __init__(self, metadata_fields, message=None):
+        self.metadata_fields = metadata_fields
+        self.message = message if message else ''
+
+    def __str__(self):
+        metadata_string = ''
+        for i in range(len(self.metadata_fields)):
+            metadata_string += self.metadata_fields[i]
+            if i != len(self.metadata_fields) - 1:
+                metadata_string += ', '
+
+        return 'This corpus is missing the metadata field(s): ' + metadata_string + '. ' + \
+               self.message + ' In order to run this function, you must create a new ' \
+                              'metadata csv with (' + metadata_string + ') fields and create a ' \
+                                                                        'new Corpus with this csv.'
+
+
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test
     main_test(import_plus_relative=True)  # this allows for relative calls in the import.
+
+    

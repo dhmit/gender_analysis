@@ -14,9 +14,10 @@ def plot_pubyears(corpus, filename=None):
     :param filename: str to name plot file
     RETURNS a pyplot histogram
     """
-    if 'date' not in corpus.metadata_fields:
-        raise MissingMetadataError("This corpus does not contain metadata field 'date'.")
 
+    if 'date' not in corpus.metadata_fields:
+        raise MissingMetadataError(['date'])
+      
     pub_years = []
     for doc in corpus.documents:
         if doc.date is None:
@@ -59,8 +60,7 @@ def plot_pubcountries(corpus, filename=None):
     RETURNS a pyplot bargraph
     """
     if 'country_publication' not in corpus.metadata_fields:
-        raise MissingMetadataError("This corpus does not contain metadata field "
-                                   "'country_publication'.")
+        raise MissingMetadataError(['country_publication'])
 
     pub_country = []
     for doc in corpus.documents:
@@ -121,7 +121,7 @@ def plot_gender_breakdown(corpus, filename=None):
     RETURNS a pie chart
     """
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError("This corpus does not contain metadata field 'author_gender'.")
+        raise MissingMetadataError(['author_gender'])
 
     pub_gender = []
     for doc in corpus.documents:
@@ -169,10 +169,10 @@ def plot_metadata_pie(corpus, filename=None):
     :param corpus: Corpus
     :param filename: str to name plot file
     """
-    if 'author_gender' not in corpus.metadata_fields or 'country_publication' not in \
-            corpus.metadata_fields:
-        raise MissingMetadataError("This corpus does not contain metadata fields 'author_gender' "
-                                   "or 'publication_country'.")
+
+    if ('author_gender' not in corpus.metadata_fields
+        or 'country_publication' not in corpus.metadata_fields):
+        raise MissingMetadataError(['author_gender', 'country_publication'])
 
     if corpus.name:
         name = corpus.name
