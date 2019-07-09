@@ -1,5 +1,110 @@
-from gender_analysis.analysis.analysis import find_male_adj, find_female_adj
+from statistics import median
+import nltk
+from more_itertools import windowed
+
+from gender_analysis.analysis.instance_distance_analysis import male_instance_dist, \
+    female_instance_dist
 from gender_analysis import common
+
+
+def find_gender_adj(document, female):
+    """
+        Takes in a document and boolean indicating gender, returns a dictionary of adjectives that
+        appear within a window of 5 words around each pronoun
+        >>> from gender_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+        ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_7.txt')}
+        >>> scarlett = document.Document(document_metadata)
+        >>> find_gender_adj(scarlett, False)
+        {'handsome': 3, 'sad': 1}
+
+        :param: document: Document
+        :param: female: boolean indicating whether to search for female adjectives (true) or
+        male adjectives (false)
+        :return: dictionary of adjectives that appear around male pronouns mapped to the number of
+        occurrences
+    """
+    output = {}
+    text = document.get_tokenized_text()
+
+    if female:
+        distances = female_instance_dist(document)
+        pronouns1 = ["her", "hers", "she", "herself"]
+        pronouns2 = ["his", "him", "he", "himself"]
+    else:
+        distances = male_instance_dist(document)
+        pronouns1 = ["his", "him", "he", "himself"]
+        pronouns2 = ["her", "hers", "she", "herself"]
+    if len(distances) == 0:
+        return {}
+    elif len(distances) <= 3:
+        lower_window_bound = 5
+    else:
+        lower_window_bound = median(sorted(distances)[:int(len(distances) / 2)])
+
+    if not lower_window_bound >= 5:
+        return "lower window bound less than 5"
+    for l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11 in windowed(text, 11):
+        l6 = l6.lower()
+        if not l6 in pronouns1:
+            continue
+        words = [l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11]
+        if bool(set(words) & set(pronouns2)):
+            continue
+        for index, word in enumerate(words):
+            words[index] = word.lower()
+        tags = nltk.pos_tag(words)
+        for tag_index, tag in enumerate(tags):
+            if tags[tag_index][1] == "JJ" or tags[tag_index][1] == "JJR" or tags[tag_index][1] == "JJS":
+                word = words[tag_index]
+                if word in output.keys():
+                    output[word] += 1
+                else:
+                    output[word] = 1
+    return output
+
+
+def find_male_adj(document):
+    """
+        Takes in a document, returns a dictionary of adjectives that appear within a window of 5
+        words around each male pronoun.
+       >>> from gender_analysis import document
+       >>> from pathlib import Path
+       >>> from gender_analysis import common
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+       ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_8.txt')}
+       >>> scarlett = document.Document(document_metadata)
+       >>> find_male_adj(scarlett)
+       {'handsome': 3, 'sad': 1}
+
+       :param:document
+       :return: dictionary of adjectives that appear around male pronouns and the number of
+       occurrences
+    """
+    return find_gender_adj(document, False)
+
+
+def find_female_adj(document):
+    """
+        Takes in a document, returns a dictionary of adjectives that appear within a window of 5
+        words around each female pronoun
+       >>> from gender_analysis import document
+       >>> from pathlib import Path
+       >>> from gender_analysis import common
+       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+       ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_9.txt')}
+       >>> scarlett = document.Document(document_metadata)
+       >>> find_female_adj(scarlett)
+       {'beautiful': 3, 'sad': 1}
+
+       :param:document
+       :return: dictionary of adjectives that appear around female pronouns and the number of
+       occurrences
+
+       """
+    return find_gender_adj(document, True)
 
 
 def run_adj_analysis(corpus):

@@ -1,5 +1,6 @@
 import math
 from collections import Counter
+from operator import itemgetter
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -160,6 +161,55 @@ def dunning_total(counter1, counter2, pickle_filepath=None):
 
     if pickle_filepath:
         store_pickle(dunning_result, pickle_filepath)
+
+    return dunning_result
+
+
+def dunning_total_by_corpus(m_corpus, f_corpus):
+    """
+    goes through two corpora, e.g. corpus of male authors and corpus of female authors
+    runs dunning_individual on all words that are in BOTH corpora
+    returns sorted dictionary of words and their dunning scores
+    shows top 10 and lowest 10 words
+
+    :param m_corpus: Corpus
+    :param f_corpus: Corpus
+
+    :return: list of tuples (common word, (dunning value, m_corpus_count, f_corpus_count))
+
+         >>> from gender_analysis.analysis.analysis import dunning_total
+         >>> from gender_analysis.corpus import Corpus
+         >>> from gender_analysis.common import BASE_PATH
+         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+         >>> csv_path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+         >>> c = Corpus(path, csv_path=csv_path)
+         >>> m_corpus = c.filter_by_gender('male')
+         >>> f_corpus = c.filter_by_gender('female')
+         >>> result = dunning_total(m_corpus, f_corpus)
+         >>> print(result[0])
+         ('she', (-12320.96452787667, 29100, 45548))
+         """
+    wordcounter_male = m_corpus.get_wordcount_counter()
+    wordcounter_female = f_corpus.get_wordcount_counter()
+
+    totalmale_words = 0
+    totalfemale_words = 0
+
+    for male_word in wordcounter_male:
+        totalmale_words += wordcounter_male[male_word]
+    for female_word in wordcounter_female:
+        totalfemale_words += wordcounter_female[female_word]
+
+    dunning_result = {}
+    for word in wordcounter_male:
+        wordcount_male = wordcounter_male[word]
+        if word in wordcounter_female:
+            wordcount_female = wordcounter_female[word]
+
+            dunning_word = dunn_individual_word(totalmale_words, totalfemale_words,
+                                                wordcount_male, wordcount_female)
+            dunning_result[word] = (dunning_word, wordcount_male, wordcount_female)
+    dunning_result = sorted(dunning_result.items(), key=itemgetter(1))
 
     return dunning_result
 
