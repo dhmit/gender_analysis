@@ -2,11 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+import nltk
+from nltk.corpus import stopwords
+from collections import Counter
 
 from gender_analysis import common
 from gender_analysis.analysis import statistical
-from gender_analysis.analysis.analysis import get_comparative_word_freq
 
+nltk.download('stopwords', quiet=True)
 
 palette = "colorblind"
 style_name = "white"
@@ -14,6 +17,181 @@ style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
               'font.family': 'serif'}
 sns.set_color_codes(palette)
 sns.set_style(style_name, style_list)
+
+
+def get_count_words(document, words):
+    """
+    Takes in document, a Document object, and words, a list of words to be counted.
+    Returns a dictionary where the keys are the elements of 'words' list
+    and the values are the numbers of occurrences of the elements in the document.
+    N.B.: Not case-sensitive.
+    >>> from gender_analysis import document
+    >>> from gender_analysis import common
+    >>> from pathlib import Path
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
+    ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
+    >>> scarlett = document.Document(document_metadata)
+    >>> get_count_words(scarlett, ["sad", "and"])
+    {'sad': 4, 'and': 4}
+
+    :param: words: a list of words to be counted in text
+    :return: a dictionary where the key is the word and the value is the count
+    """
+    dic_word_counts = {}
+    for word in words:
+        dic_word_counts[word] = document.get_count_of_word(word)
+    return dic_word_counts
+
+
+def get_comparative_word_freq(freqs):
+    """
+    Returns a dictionary of the frequency of words counted relative to each other.
+    If frequency passed in is zero, returns zero
+
+    :param freqs: dictionary in the form {'word':overall_frequency}
+    :return: dictionary in the form {'word':relative_frequency}
+
+    >>> from gender_analysis import document
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    >>> scarlet = document.Document(document_metadata)
+    >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
+    >>> d
+    {'he': 0.007099649057997783, 'she': 0.005702807536017732}
+    >>> x = get_comparative_word_freq(d)
+    >>> x
+    {'he': 0.5545536519386836, 'she': 0.44544634806131655}
+    >>> d2 = {'he': 0, 'she': 0}
+    >>> d2
+    {'he': 0, 'she': 0}
+    """
+
+    total_freq = sum(freqs.values())
+    comp_freqs = {}
+
+    for k, v in freqs.items():
+        try:
+            freq = v / total_freq
+        except ZeroDivisionError:
+            freq = 0
+        comp_freqs[k] = freq
+
+    return comp_freqs
+
+
+def get_counts_by_pos(freqs):
+    """
+    This functions returns a dictionary where each key is a part of speech tag (e.g. 'NN' for nouns)
+    and the value is a counter object of words of that part of speech and their frequencies.
+    It also filters out words like "is", "the". We used `nltk`'s stop words function for filtering.
+
+    >>> get_counts_by_pos(Counter({'baked':1,'chair':3,'swimming':4}))
+    {'VBN': Counter({'baked': 1}), 'NN': Counter({'chair': 3}), 'VBG': Counter({'swimming': 4})}
+    >>> get_counts_by_pos(Counter({'is':10,'usually':7,'quietly':42}))
+    {'RB': Counter({'quietly': 42, 'usually': 7})}
+
+    :param freqs: Counter object of words mapped to their word count
+    :return: dictionary with key as part of speech, value as Counter object of words (of that
+    part of speech) mapped to their word count
+    """
+
+    sorted_words = {}
+    # for each word in the counter
+    for word in freqs.keys():
+        # filter out if in nltk's list of stop words, e.g. is, the
+        stop_words = set(stopwords.words('english'))
+        if word not in stop_words:
+            # get its part of speech tag from nltk's pos_tag function
+            tag = nltk.pos_tag([word])[0][1]
+            # add that word to the counter object in the relevant dict entry
+            if tag not in sorted_words.keys():
+                sorted_words[tag] = Counter({word:freqs[word]})
+            else:
+                sorted_words[tag].update({word: freqs[word]})
+    return sorted_words
+
+
+def display_gender_freq(d, title):
+    """
+    Takes in a dictionary sorted by author and gender frequencies, and a title.
+    Outputs the resulting graph to 'visualizations/title.pdf' AND 'visualizations/title.png'
+
+    Will scale to allow inputs of larger dictionaries with non-binary values
+
+    :param d: dictionary in the format {"Author/Document": [he_freq, she_freq]}
+    :param title: title of graph
+    :return:
+    """
+    he_val = []
+    she_val = []
+    authors = []
+
+    for entry in d:
+        authors.append(entry)
+        he_val.append(d[entry][0])
+        she_val.append(d[entry][1])
+
+    fig, ax = plt.subplots()
+    plt.ylim(0, 1)
+
+    index = np.arange(len(d.keys()))
+    bar_width = 0.35
+    opacity = 0.4
+
+    he_val = tuple(he_val)
+    she_val = tuple(she_val)
+    authors = tuple(authors)
+
+    rects1 = ax.bar(index, he_val, bar_width, alpha=opacity, color='b', label='He')
+    rects2 = ax.bar(index + bar_width, she_val, bar_width, alpha=opacity, color='r', label='She')
+
+    ax.set_xlabel('Authors')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Gendered Pronouns by Author')
+    ax.set_xticks(index + bar_width / 2)
+    plt.xticks(fontsize=8, rotation=90)
+    ax.set_xticklabels(authors)
+    ax.legend()
+
+    fig.tight_layout()
+    filepng = "visualizations/he_she_freq" + title + ".png"
+    filepdf = "visualizations/he_she_freq" + title + ".pdf"
+    plt.savefig(filepng, bbox_inches='tight')
+    plt.savefig(filepdf, bbox_inches='tight')
+
+
+def run_gender_freq(corpus):
+    """
+    Runs a program that uses the gender frequency analysis on all documents existing in a given
+    corpus, and outputs the data as graphs
+    :param corpus: Corpus
+    :return:
+    """
+    documents = corpus.documents
+    c = len(documents)
+    loops = c//10 if c % 10 == 0 else c//10 + 1
+
+    num = 0
+
+    while num < loops:
+        dictionary = {}
+        for doc in documents[num * 10: min(c, num * 10 + 9)]:
+            d = {'he': doc.get_word_freq('he'), 'she': doc.get_word_freq('she')}
+            d = get_comparative_word_freq(d)
+            lst = [d["he"], d["she"]]
+            title = hasattr(doc, 'title')
+            author = hasattr(doc, 'author')
+            if title and author:
+                doc_label = doc.title[0:20] + "\n" + doc.author
+            elif title:
+                doc_label = doc.title[0:20]
+            else:
+                doc_label = doc.filename[0:20]
+            dictionary[doc_label] = lst
+        display_gender_freq(dictionary, str(num))
+        num += 1
 
 
 def books_pronoun_freq(corp, pickle_filepath=None):
@@ -26,7 +204,7 @@ def books_pronoun_freq(corp, pickle_filepath=None):
     :return: dictionary with data organized by groups
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import books_pronoun_freq
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import books_pronoun_freq
     >>> from gender_analysis.common import BASE_PATH
     >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
     >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
@@ -280,7 +458,7 @@ def freq_by_date(d, time_frame, bin_size):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_date
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_date
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
@@ -324,7 +502,7 @@ def freq_by_location(d):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_location
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_location
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt',
     ...                   'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
@@ -497,7 +675,7 @@ def overall_mean(d):
     Returns the average of all the values in a dictionary
     :param d: dictionary with numbers as values
     :return: float: average of all the values
-    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import overall_mean, books_pronoun_freq
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import overall_mean, books_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
     >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
