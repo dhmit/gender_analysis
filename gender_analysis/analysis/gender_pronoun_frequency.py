@@ -204,7 +204,7 @@ def books_pronoun_freq(corp, pickle_filepath=None):
     :return: dictionary with data organized by groups
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import books_pronoun_freq
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import books_pronoun_freq
     >>> from gender_analysis.common import BASE_PATH
     >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
     >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
@@ -458,7 +458,7 @@ def freq_by_date(d, time_frame, bin_size):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_date
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_date
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
@@ -502,7 +502,7 @@ def freq_by_location(d):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import freq_by_location
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_location
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt',
     ...                   'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
@@ -675,7 +675,7 @@ def overall_mean(d):
     Returns the average of all the values in a dictionary
     :param d: dictionary with numbers as values
     :return: float: average of all the values
-    >>> from gender_analysis.analysis.gender_pronoun_freq_analysis import overall_mean, books_pronoun_freq
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import overall_mean, books_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
     >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
