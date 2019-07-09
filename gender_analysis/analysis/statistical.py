@@ -2,9 +2,6 @@ import math
 import numpy as np
 from scipy import stats
 
-from gender_analysis.analysis import gender_pronoun_freq_analysis
-from gender_analysis.corpus import Corpus
-
 
 def get_p_and_ttest_value(list_a,list_b):
 
@@ -96,7 +93,7 @@ def pearson_correlation(array1, array2, pvalue_target=0.05):
 
 
 if __name__ == "__main__":
-    '''
+    """
     Finds the minimum p-value to deem the relationship between metadata variables and analysis 
     results significant
     
@@ -108,8 +105,9 @@ if __name__ == "__main__":
     Dependent variables:
         distance between 'he' and 'she'
         the frequency of gendered pronouns used as subjects or objects
-    '''
+    """
 
+    '''
     corp = Corpus('test_corpus')
     # corp = Corpus('gutenberg')
     # corp = Corpus('sample_novels')
@@ -164,3 +162,4 @@ if __name__ == "__main__":
         pvalue = (index+1)*0.05
         print("p-value target = " + str(round(pvalue, 2)) + ": " + str(pearson_correlation(np.array(
         novel_year_list), np.array(subject_female_pronoun_list), pvalue)))
+    '''

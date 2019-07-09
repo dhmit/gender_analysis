@@ -31,16 +31,17 @@ import csv
 #     return parser
 
 
-def pickle(document, parser):
+def pickle(document, parser, pickle_filepath='dep_tree.pgz'):
     """
     This function returns a pickled tree
     :param document: Document we are interested in
     :param parser: Stanford parser object
+    :param pickle_filepath: filepath to store pickled dependency tree
     :return: tree in pickle format
     """
 
     try:
-        tree = load_pickle(f'dep_tree_{str(document)}')
+        tree = load_pickle(pickle_filepath)
     except (IOError, FileNotFoundError):
         sentences = sent_tokenize(document.text.lower().replace("\n", " "))
         he_she_sentences = []
@@ -66,7 +67,7 @@ def pickle(document, parser):
                 tree_list[i].append(triple)
             i += 1
         tree = tree_list
-        store_pickle(tree, f'dep_tree_{str(document)}')
+        store_pickle(tree, pickle_filepath)
     return tree
 
 

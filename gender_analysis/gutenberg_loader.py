@@ -580,8 +580,7 @@ def get_publication_date(author, title, gutenberg_id):
         return date
     else:
         date = get_publication_date_wikidata(author, title)
-#    if (date == None):
-#        date = get_publication_date_from_copyright_uncertain(novel_text)
+
     return date
 
 

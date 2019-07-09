@@ -16,7 +16,7 @@ sns.set_color_codes(palette)
 sns.set_style(style_name, style_list)
 
 
-def books_pronoun_freq(corp, to_pickle=False):
+def books_pronoun_freq(corp, pickle_filepath=None):
     """
     Counts male and female pronouns for every book and finds their relative frequencies per book
     Outputs dictionary mapping novel object to the relative frequency
@@ -34,7 +34,7 @@ def books_pronoun_freq(corp, to_pickle=False):
     {<Document (aanrud_longfrock)>: 0.7614617940199335, <Document (abbott_flatlandromance)>: 0.14463840399002492, <Document (abbott_indiscreetletter)>: 0.4160401002506266, <Document (adams_fighting)>: 0.18998330550918197, <Document (alcott_josboys)>: 0.4214648602878916, <Document (alcott_littlemen)>: 0.31113851212494864, <Document (alcott_littlewomen)>: 0.6196017006041621, <Document (alden_chautauqua)>: 0.7515400410677618, <Document (austen_emma)>: 0.566123858869973, <Document (austen_persuasion)>: 0.5303780378037803}
     """
     try:
-        relative_freq_female = common.load_pickle(f'{corp.name}_pronoun_freq_female')
+        relative_freq_female = common.load_pickle(pickle_filepath)
         return relative_freq_female
     except IOError:
         pass
@@ -62,14 +62,14 @@ def books_pronoun_freq(corp, to_pickle=False):
     book.text = ''
     book._word_counts_counter = None
 
-    if to_pickle:
-        common.store_pickle(relative_freq_male, f'{corp.name}_pronoun_freq_male')
-        common.store_pickle(relative_freq_female, f'{corp.name}_pronoun_freq_female')
+    if pickle_filepath:
+        common.store_pickle(relative_freq_male, pickle_filepath)
+        common.store_pickle(relative_freq_female, pickle_filepath)
 
     return relative_freq_female
 
 
-def subject_vs_object_pronoun_freqs(corp, to_pickle=False):
+def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_filepath_female=None):
     """
     Takes in a Corpus of novels
     Returns a tuple of two dictionaries, one male and female
@@ -89,10 +89,8 @@ def subject_vs_object_pronoun_freqs(corp, to_pickle=False):
     """
 
     try:
-        relative_freq_male_sub_v_ob = common.load_pickle(
-            f'{corp.name}_sub_v_ob_pronoun_freq_male')
-        relative_freq_female_sub_v_ob = common.load_pickle(
-            f'{corp.name}_sub_v_ob_pronoun_freq_female')
+        relative_freq_male_sub_v_ob = common.load_pickle(pickle_filepath_male)
+        relative_freq_female_sub_v_ob = common.load_pickle(pickle_filepath_female)
         return relative_freq_male_sub_v_ob, relative_freq_female_sub_v_ob
     except IOError:
         pass
@@ -122,18 +120,18 @@ def subject_vs_object_pronoun_freqs(corp, to_pickle=False):
     book.text = ''
     book._word_counts_counter = None
 
-    if to_pickle:
+    if pickle_filepath_male and pickle_filepath_female:
         common.store_pickle(relative_freq_male_subject,
-                            f'{corp.name}_sub_v_ob_pronoun_freq_male')
+                            pickle_filepath_male)
         common.store_pickle(relative_freq_female_subject,
-                            f'{corp.name}_sub_v_ob_pronoun_freq_female')
+                            pickle_filepath_female)
 
     result_tuple = (relative_freq_male_subject, relative_freq_female_subject)
 
     return result_tuple
 
 
-def subject_pronouns_gender_comparison(corp, subject_gender, to_pickle=False):
+def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_male=None, pickle_filepath_female=None):
     """
     Takes in a Corpus of novels and a gender.
     The gender determines whether the male frequency or female frequency will
@@ -158,10 +156,8 @@ def subject_pronouns_gender_comparison(corp, subject_gender, to_pickle=False):
         raise ValueError('subject_gender must be \'male\' or \'female\'')
 
     try:
-        relative_freq_male_subject = common.load_pickle(
-            f'{corp.name}_subject_pronoun_freq_male')
-        relative_freq_female_subject = common.load_pickle(
-            f'{corp.name}_subject_pronoun_freq_female')
+        relative_freq_male_subject = common.load_pickle(pickle_filepath_male)
+        relative_freq_female_subject = common.load_pickle(pickle_filepath_female)
         if subject_gender == 'male':
             return relative_freq_male_subject
         else:
@@ -182,10 +178,10 @@ def subject_pronouns_gender_comparison(corp, subject_gender, to_pickle=False):
     book.text = ''
     book._word_counts_counter = None
 
-    if to_pickle:
+    if pickle_filepath_male and pickle_filepath_female:
         common.store_pickle(relative_freq_female_sub,
-                            f'{corp.name}_subject_pronoun_freq_female')
-        common.store_pickle(relative_freq_male_sub, f'{corp.name}_subject_pronoun_freq_male')
+                            pickle_filepath_female)
+        common.store_pickle(relative_freq_male_sub, pickle_filepath_male)
 
     if subject_gender == 'male':
         return relative_freq_male_sub
