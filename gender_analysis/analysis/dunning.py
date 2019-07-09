@@ -177,7 +177,7 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
 
     :return: list of tuples (common word, (dunning value, m_corpus_count, f_corpus_count))
 
-         >>> from gender_analysis.analysis.analysis import dunning_total
+         >>> from gender_analysis.analysis.dunning import dunning_total_by_corpus
          >>> from gender_analysis.corpus import Corpus
          >>> from gender_analysis.common import BASE_PATH
          >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
@@ -185,7 +185,7 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
          >>> c = Corpus(path, csv_path=csv_path)
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')
-         >>> result = dunning_total(m_corpus, f_corpus)
+         >>> result = dunning_total_by_corpus(m_corpus, f_corpus)
          >>> print(result[0])
          ('she', (-12320.96452787667, 29100, 45548))
          """
