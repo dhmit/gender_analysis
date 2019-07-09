@@ -258,7 +258,7 @@ class Corpus:
                 if document.author_gender.lower() == gender.lower():
                     count += 1
             except AttributeError:
-                raise AttributeError(f'{document.filename} does not have an \'author_gender\' metadata field')
+                raise MissingMetadataError(f'{document.filename} does not have an \'author_gender\' metadata field')
 
         return count
 
@@ -328,7 +328,7 @@ class Corpus:
         """
 
         if field not in self.metadata_fields:
-            raise ValueError(
+            raise MissingMetadataError(
                 f'\'{field}\' is not a valid metadata field for this corpus'
             )
 
@@ -388,7 +388,7 @@ class Corpus:
         """
         
         if metadata_field not in self.metadata_fields:
-            raise ValueError(
+            raise MissingMetadataError(
                 f'Metadata field must be {", ".join(self.metadata_fields)} '
                 + f'but not {metadata_field}.')
 
@@ -440,7 +440,7 @@ class Corpus:
 
         for metadata_field in characteristic_dict:
             if metadata_field not in self.metadata_fields:
-                raise ValueError(
+                raise MissingMetadataError(
                     f'Metadata field must be {", ".join(self.metadata_fields)} '
                     + f'but not {metadata_field}.')
 
@@ -494,7 +494,7 @@ class Corpus:
         """
 
         if metadata_field not in self.metadata_fields:
-            raise AttributeError(f"Metadata field {metadata_field} invalid for this corpus")
+            raise MissingMetadataError(f"Metadata field {metadata_field} invalid for this corpus")
 
         if metadata_field == "date":
             field_val = int(field_val)

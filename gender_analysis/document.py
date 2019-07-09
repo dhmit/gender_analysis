@@ -167,7 +167,7 @@ class Document:
 
         for attribute in attributes_required_to_be_equal:
             if not hasattr(other, attribute):
-                raise AttributeError(f'Comparison document lacks attribute {attribute}.')
+                raise common.MissingMetadataError(f'Comparison document lacks attribute {attribute}.')
             if getattr(self, attribute) != getattr(other, attribute):
                 return False
 
