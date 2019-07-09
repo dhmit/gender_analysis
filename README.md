@@ -16,11 +16,10 @@ To use our tools or contribute to the project, please view our guide to contribu
 
 For anybody who wants to use our code, here’s a little outline of where everything is.
 
-In the [`gender_analysis/gender_analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_analysis) folder, there are three folders: 
+In the [`gender_analysis/gender_analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_analysis) folder, there are two folders: 
 
-1. [`analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_analysis/analysis) — programming files focused on textual analysis and research write-ups, including data visualizations and conclusions
-2. [`pickle_data`](https://github.com/dhmit/gender_analysis/tree/master/gender_analysis/pickle_data) — pickled data for various analyses to avoid running time-consuming computation
-3. [`testing`](https://github.com/dhmit/gender_analysis/tree/master/gender_analysis/testing) — files for code tests
+1. [`analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_analysis/analysis) — functions for textual analysis and data visualization
+2. [`testing`](https://github.com/dhmit/gender_analysis/tree/master/gender_analysis/testing) — files for code tests
 
 In the [`gender_analysis/gender_analysis/analysis`](https://github.com/dhmit/gender_analysis/tree/master/gender_analysis/analysis) folder, there are the following 
 modules: 
