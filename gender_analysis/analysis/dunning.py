@@ -15,9 +15,6 @@ from gender_analysis.common import (
 )
 
 
-# TODO: Rewrite all of this using a Dunning class in a non-messy way.
-
-
 def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
                          count_of_word_in_corpus_1,
                          count_of_word_in_corpus_2):
@@ -64,7 +61,6 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     :param corpus1: Corpus
     :param corpus2: Corpus
     :return: log likelihoods and p value
-    # TODO: fix doctest for new corpus input
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
     >>> from gender_analysis.common import BASE_PATH
