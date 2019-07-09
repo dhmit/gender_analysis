@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
    gender_analysis.analysis
-   gender_analysis.testing
 
 Submodules
 ----------
@@ -35,23 +34,6 @@ gender\_analysis.document module
    :members:
    :undoc-members:
    :show-inheritance:
-
-gender\_analysis.gutenberg\_loader module
------------------------------------------
-
-.. automodule:: gender_analysis.gutenberg_loader
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-gender\_analysis.user\-config module
-------------------------------------
-
-.. automodule:: gender_analysis.user-config
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 
 Module contents
 ---------------
