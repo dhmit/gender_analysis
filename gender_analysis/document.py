@@ -484,6 +484,8 @@ class Document:
 
         :rtype: list
         """
+        # figure out if they've got the dependencies downloaded here
+        # and download them with some kind of interactive doo dah if not
         text = nltk.word_tokenize(self.text)
         pos_tags = nltk.pos_tag(text)
         return pos_tags
