@@ -406,11 +406,6 @@ class Corpus:
                 except AttributeError:
                     continue
 
-        # if not corpus_copy:
-        #     # displays for possible errors in field.value
-        #     err = f'This corpus is empty. You may have mistyped something.'
-        #     raise AttributeError(err)
-
         return corpus_copy
 
     def multi_filter(self, characteristic_dict):
@@ -539,15 +534,6 @@ class Corpus:
                         output.append((document.filename, passage))
                         count += 1
 
-        '''
-        random.shuffle(output)
-        print_count = 0
-        for entry in output:
-            if print_count == no_passages:
-                break
-            print_count += 1
-            print(entry)
-        '''
         if len(output) <= no_passages:
             return output
         return output[:no_passages]
