@@ -1,5 +1,4 @@
 __all__ = [
-    'analysis',
     'dunning',
     'gender_pronoun_freq_analysis',
     'instance_distance_analysis',
