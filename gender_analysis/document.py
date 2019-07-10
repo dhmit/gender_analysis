@@ -64,11 +64,6 @@ class Document:
         self._word_counts_counter = None
         self._word_count = None
 
-        # TODO: Does this really need to be here?
-        if 'author_gender' in metadata_dict and self.author_gender not in {'female', 'male', 'non-binary', 'unknown', 'both'}:
-            raise ValueError('Author gender has to be "female", "male" "non-binary," or "unknown" ',
-                             f'but not {self.author_gender}. Full metadata: {metadata_dict}')
-
         if not metadata_dict['filename'].endswith('.txt'):
             raise ValueError(
                 f'The document filename ', str(metadata_dict['filename']), 'does not end in .txt . Full metadata: '

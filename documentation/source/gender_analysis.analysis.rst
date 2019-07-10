@@ -52,14 +52,6 @@ gender\_analysis.analysis.instance\_distance\_analysis module
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.analysis.possible\_documentation module
---------------------------------------------------------
-
-.. automodule:: gender_analysis.analysis.possible_documentation
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 gender\_analysis.analysis.pronoun\_adjective\_analysis module
 -------------------------------------------------------------
 
