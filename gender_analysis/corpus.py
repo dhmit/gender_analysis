@@ -130,6 +130,7 @@ class Corpus:
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
         >>> c = Corpus(path)
+        Warning: Some files were not loaded because they are not .txt files. If you would like to analyze the text in these files, convert these files to .txt and re-initiate the corpus.
         >>> docs = []
         >>> for doc in c:
         ...    docs.append(doc)
