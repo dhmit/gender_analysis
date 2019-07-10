@@ -8,8 +8,9 @@ from gender_analysis.common import MissingMetadataError
 def plot_pubyears(corpus, filename=None):
     """
     Creates a histogram displaying the frequency of books that were published within a 20 year 
-    period
-    Requires that corpus contains a 'date' metadata field
+    period.
+    Requires that corpus contains a 'date' metadata field.
+
     :param corpus: Corpus
     :param filename: str to name plot file
     RETURNS a pyplot histogram
@@ -53,8 +54,9 @@ def plot_pubyears(corpus, filename=None):
 
 def plot_pubcountries(corpus, filename=None):
     """
-    Creates a bar graph displaying the frequency of books that were published in each country
-    Requires that corpus contains a 'country_publication' metadata field
+    Creates a bar graph displaying the frequency of books that were published in each country.
+    Requires that corpus contains a 'country_publication' metadata field.
+
     :param corpus: Corpus
     :param filename: str to name plot file
     RETURNS a pyplot bargraph
@@ -114,8 +116,9 @@ def plot_pubcountries(corpus, filename=None):
 
 def plot_gender_breakdown(corpus, filename=None):
     """
-    Creates a pie chart displaying the composition of male and female writers in the data
-    Requires that corpus contains a 'author_gender' metadata field
+    Creates a pie chart displaying the composition of male and female writers in the data.
+    Requires that corpus contains a 'author_gender' metadata field.
+
     :param corpus: Corpus
     :param filename: str to name plot file
     RETURNS a pie chart
@@ -164,8 +167,9 @@ def plot_gender_breakdown(corpus, filename=None):
 
 def plot_metadata_pie(corpus, filename=None):
     """
-    Creates pie chart indicating fraction of metadata that is filled in corpus
-    Requires that corpus contains 'author_gender' and 'country_publication metadata fields
+    Creates a pie chart indicating the fraction of metadata that is filled in the corpus.
+    Requires that corpus contains 'author_gender' and 'country_publication metadata fields.
+
     :param corpus: Corpus
     :param filename: str to name plot file
     """
@@ -211,7 +215,10 @@ def plot_metadata_pie(corpus, filename=None):
 
 def create_corpus_summary_visualizations(corpus):
     """
-    Runs through all plt functions given a corpus
+    Creates graphs and summarizes gender breakdowns, publishing years, countries of origin, and
+    overall metadata completion of a given corpus.
+
+
     :param corpus: Corpus
     """
     plot_gender_breakdown(corpus)
