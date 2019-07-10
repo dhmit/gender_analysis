@@ -68,44 +68,44 @@ def find_gender_adj(document, female):
 
 def find_male_adj(document):
     """
-        Takes in a document, returns a dictionary of adjectives that appear within a window of 5
-        words around each male pronoun.
+    Takes in a document, returns a dictionary of adjectives that appear within a window of 5
+    words around each male pronoun.
 
-       >>> from gender_analysis import document
-       >>> from pathlib import Path
-       >>> from gender_analysis import common
-       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-       ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_8.txt')}
-       >>> scarlett = document.Document(document_metadata)
-       >>> find_male_adj(scarlett)
-       {'handsome': 3, 'sad': 1}
+   >>> from gender_analysis import document
+   >>> from pathlib import Path
+   >>> from gender_analysis import common
+   >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+   ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_8.txt')}
+   >>> scarlett = document.Document(document_metadata)
+   >>> find_male_adj(scarlett)
+   {'handsome': 3, 'sad': 1}
 
-       :param:document
-       :return: dictionary of adjectives that appear around male pronouns and the number of
-       occurrences
+   :param:document
+   :return: dictionary of adjectives that appear around male pronouns and the number of
+   occurrences
     """
     return find_gender_adj(document, False)
 
 
 def find_female_adj(document):
     """
-        Takes in a document, returns a dictionary of adjectives that appear within a window of 5
-        words around each female pronoun.
+    Takes in a document, returns a dictionary of adjectives that appear within a window of 5
+    words around each female pronoun.
 
-       >>> from gender_analysis import document
-       >>> from pathlib import Path
-       >>> from gender_analysis import common
-       >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-       ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_9.txt')}
-       >>> scarlett = document.Document(document_metadata)
-       >>> find_female_adj(scarlett)
-       {'beautiful': 3, 'sad': 1}
+    >>> from gender_analysis import document
+   >>> from pathlib import Path
+   >>> from gender_analysis import common
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+    ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_9.txt')}
+    >>> scarlett = document.Document(document_metadata)
+    >>> find_female_adj(scarlett)
+    {'beautiful': 3, 'sad': 1}
 
-       :param:document
-       :return: dictionary of adjectives that appear around female pronouns and the number of
-       occurrences
+    :param:document
+    :return: dictionary of adjectives that appear around female pronouns and the number of
+    occurrences
 
-       """
+    """
     return find_gender_adj(document, True)
 
 
@@ -162,10 +162,10 @@ def merge(novel_adj_dict, full_adj_dict):
     :param full_adj_dict: dictionary of adjectives/#occurrences for multiple novels
     :return: full_results dictionary with novel_results merged in
 
-        >>> novel_adj_dict = {'hello': 5, 'hi': 7, 'hola': 9, 'bonjour': 2}
-        >>> full_adj_dict = {'hello': 15, 'bienvenue': 3, 'hi': 23}
-        >>> merge(novel_adj_dict, full_adj_dict)
-        {'hello': 20, 'bienvenue': 3, 'hi': 30, 'hola': 9, 'bonjour': 2}
+    >>> novel_adj_dict = {'hello': 5, 'hi': 7, 'hola': 9, 'bonjour': 2}
+    >>> full_adj_dict = {'hello': 15, 'bienvenue': 3, 'hi': 23}
+    >>> merge(novel_adj_dict, full_adj_dict)
+    {'hello': 20, 'bienvenue': 3, 'hi': 30, 'hola': 9, 'bonjour': 2}
     """
     for adj in list(novel_adj_dict.keys()):
         adj_count = novel_adj_dict[adj]
