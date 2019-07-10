@@ -7,6 +7,8 @@ from pathlib import Path
 import seaborn as sns
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
+MASC_WORDS = set(('he', 'his', 'him', 'himself'))
+FEM_WORDS = set(('she', 'her', 'hers', 'herself'))
 
 
 def load_csv_to_list(file_path):

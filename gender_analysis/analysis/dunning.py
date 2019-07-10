@@ -11,7 +11,8 @@ from gender_analysis.common import (
     load_graph_settings,
     MissingMetadataError,
     store_pickle,
-    load_pickle
+    load_pickle,
+    MASC_WORDS
 )
 
 
@@ -211,27 +212,6 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
     return dunning_result
 
 
-def male_vs_female_authors_analysis_dunning_lesser(corpus):
-    """
-    tests word distinctiveness of shared words between male and female corpora using dunning
-    :return: dictionary of common shared words and their distinctiveness
-    """
-
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    m_corpus = corpus.filter_by_gender('male')
-    f_corpus = corpus.filter_by_gender('female')
-    wordcounter_male = m_corpus.get_wordcount_counter()
-    wordcounter_female = f_corpus.get_wordcount_counter()
-    results = dunning_total(wordcounter_male, wordcounter_female)
-    list_results = list(results.keys())
-    list_results.sort(key=lambda x: results[x]['dunning'])
-    print("women's top 10: ", list_results[0:10])
-    print("men's top 10: ", list(reversed(list_results[-10:])))
-    return results
-
-    
 def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
                              corpus1_display_name=None, corpus2_display_name=None,
                              part_of_speech_to_include=None):
@@ -400,9 +380,11 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
     return results
 
 
-def male_vs_female_analysis_dunning(corpus, display_data=False, to_pickle=False, pickle_filename='dunning_male_vs_female_chars.pgz'):
+def dunning_male_chars_by_author_gender(corpus, display_data=False, to_pickle=False,
+                                        pickle_filename='dunning_male_vs_female_chars.pgz'):
     """
-    tests word distinctiveness of shared words between male and female corpora using dunning
+    between male-author and female-author subcorpora, tests distinctiveness of words associated
+    with male characters
     Prints out the most distinctive terms overall as well as grouped by verbs, adjectives etc.
 
     :return: dict
@@ -425,10 +407,12 @@ def male_vs_female_analysis_dunning(corpus, display_data=False, to_pickle=False,
         wordcounter_female = Counter()
 
         for novel in m_corpus:
-            wordcounter_male += novel.words_associated('he')
+            for word in MASC_WORDS:
+                wordcounter_male += novel.words_associated(word)
 
         for novel in f_corpus:
-            wordcounter_female += novel.words_associated('he')
+            for word in MASC_WORDS:
+                wordcounter_female += novel.words_associated(word)
 
         if to_pickle:
             results = dunning_total(wordcounter_male, wordcounter_female,
@@ -494,9 +478,10 @@ def dunning_result_to_dict(dunning_result, number_of_terms_to_display=10,
 # Male Authors versus Female Authors
 ################################################
 
-def male_vs_female_authors_analysis_dunning(corpus, display_results=False, to_pickle=False, pickle_filename='dunning_male_vs_female_authors.pgz'):
+def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=False,
+                                   pickle_filename='dunning_male_vs_female_authors.pgz'):
     """
-    tests word distinctiveness of shared words between male and female authors using dunning
+    tests distinctiveness of shared words between male and female authors using dunning
     If called with display_results=True, prints out the most distinctive terms overall as well as
     grouped by verbs, adjectives etc.
     Returns a dict of all terms in the corpus mapped to the dunning data for each term
