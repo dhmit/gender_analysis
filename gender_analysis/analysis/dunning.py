@@ -211,27 +211,6 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
     return dunning_result
 
 
-def male_vs_female_authors_analysis_dunning_lesser(corpus):
-    """
-    tests word distinctiveness of shared words between male and female corpora using dunning
-    :return: dictionary of common shared words and their distinctiveness
-    """
-
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    m_corpus = corpus.filter_by_gender('male')
-    f_corpus = corpus.filter_by_gender('female')
-    wordcounter_male = m_corpus.get_wordcount_counter()
-    wordcounter_female = f_corpus.get_wordcount_counter()
-    results = dunning_total(wordcounter_male, wordcounter_female)
-    list_results = list(results.keys())
-    list_results.sort(key=lambda x: results[x]['dunning'])
-    print("women's top 10: ", list_results[0:10])
-    print("men's top 10: ", list(reversed(list_results[-10:])))
-    return results
-
-    
 def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
                              corpus1_display_name=None, corpus2_display_name=None,
                              part_of_speech_to_include=None):
