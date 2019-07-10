@@ -180,10 +180,11 @@ def results_by_author_gender(results, metric):
     """
     data = {'male': [], "female": []}
     metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
-    try:
-        stat = metric_indexes[metric]
-    except KeyError:
-        raise ValueError("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+    if metric not in metric_indexes:
+        raise ValueError(f"{metric} is not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+
+    stat = metric_indexes[metric]
+
     for document in list(results.keys()):
         author_gender = getattr(document, 'author_gender', None)
         if author_gender == "male":
@@ -213,10 +214,10 @@ def results_by_date(results, metric, time_frame, bin_size):
     """
 
     metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
-    try:
-        stat = metric_indexes[metric]
-    except KeyError:
-        print("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+    if metric not in metric_indexes:
+        raise ValueError(f"{metric} is not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+
+    stat = metric_indexes[metric]
 
     data = {}
     for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
@@ -248,10 +249,10 @@ def results_by_location(results, metric):
     """
     data = {}
     metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
-    try:
-        stat = metric_indexes[metric]
-    except:
-        print("Not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+    if metric not in metric_indexes:
+        raise ValueError(f"{metric} is not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+
+    stat = metric_indexes[metric]
 
     for k in results.keys():
         location = getattr(k, 'country_publication', None)

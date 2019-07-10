@@ -269,7 +269,7 @@ class Corpus:
                 if document.author_gender.lower() == gender.lower():
                     count += 1
             except AttributeError:
-                raise AttributeError(f'{document.filename} does not have an \'author_gender\' metadata field')
+                raise MissingMetadataError(['author_gender'])
 
         return count
 
@@ -339,9 +339,7 @@ class Corpus:
         """
 
         if field not in self.metadata_fields:
-            raise ValueError(
-                f'\'{field}\' is not a valid metadata field for this corpus'
-            )
+            raise MissingMetadataError([field])
 
         values = set()
         for document in self.documents:
@@ -399,9 +397,7 @@ class Corpus:
         """
         
         if metadata_field not in self.metadata_fields:
-            raise ValueError(
-                f'Metadata field must be {", ".join(self.metadata_fields)} '
-                + f'but not {metadata_field}.')
+            raise MissingMetadataError([metadata_field])
 
         corpus_copy = self.clone()
         corpus_copy.documents = []
@@ -451,9 +447,7 @@ class Corpus:
 
         for metadata_field in characteristic_dict:
             if metadata_field not in self.metadata_fields:
-                raise ValueError(
-                    f'Metadata field must be {", ".join(self.metadata_fields)} '
-                    + f'but not {metadata_field}.')
+                raise MissingMetadataError([metadata_field])
 
         for this_document in self.documents:
             add_document = True
@@ -485,7 +479,7 @@ class Corpus:
         function.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
+        >>> from gender_analysis.common import BASE_PATH, MissingMetadataError
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
@@ -495,9 +489,12 @@ class Corpus:
         <Document (bronte_professor)>
         >>> try:
         ...     c.get_document("meme_quality", "over 9000")
-        ... except AttributeError as exception:
+        ... except MissingMetadataError as exception:
         ...     print(exception)
-        Metadata field meme_quality invalid for this corpus
+        This Corpus is missing the following metadata field:
+            meme_quality
+        In order to run this function, you must create a new metadata csv
+        with this field and run Corpus.update_metadata().
 
         :param metadata_field: str
         :param field_val: str/int
@@ -505,7 +502,7 @@ class Corpus:
         """
 
         if metadata_field not in self.metadata_fields:
-            raise AttributeError(f"Metadata field {metadata_field} invalid for this corpus")
+            raise MissingMetadataError([metadata_field])
 
         if metadata_field == "date":
             field_val = int(field_val)
@@ -577,7 +574,7 @@ class Corpus:
 
         for field in metadata_dict.keys():
             if field not in self.metadata_fields:
-                raise AttributeError(f"Metadata field {field} invalid for this corpus")
+                raise MissingMetadataError([field])
 
         for document in self.documents:
             match = True
