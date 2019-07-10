@@ -64,10 +64,6 @@ class Document:
         self._word_counts_counter = None
         self._word_count = None
 
-        if 'author_gender' in metadata_dict and self.author_gender not in {'female', 'male', 'non-binary', 'unknown', 'both'}:
-            raise ValueError('Author gender has to be "female", "male" "non-binary," or "unknown" ',
-                             f'but not {self.author_gender}. Full metadata: {metadata_dict}')
-
         if not metadata_dict['filename'].endswith('.txt'):
             raise ValueError(
                 f'The document filename ', str(metadata_dict['filename']), 'does not end in .txt . Full metadata: '
@@ -234,7 +230,6 @@ class Document:
             raise FileNotFoundError(err)
 
         return text
-
 
     def get_tokenized_text(self):
         """
@@ -484,6 +479,50 @@ class Document:
 
         :rtype: list
         """
+        # figure out if they've got the dependencies downloaded here
+        # and download them with some kind of interactive doo dah if not
         text = nltk.word_tokenize(self.text)
         pos_tags = nltk.pos_tag(text)
         return pos_tags
+
+    def update_metadata(self, new_metadata):
+        """
+        Updates the metadata of the document without requiring a complete reloading of the text and other properties.
+        'filename' cannot be updated with this method.
+
+        :param new_metadata: dict of new metadata to apply to the document
+        :return:
+
+        >>> from gender_analysis.document import Document
+        >>> from gender_analysis.common import BASE_PATH
+        >>> from pathlib import Path
+        >>> metadata = {'filename': 'aanrud_longfrock.txt',
+        ...             'filepath': Path(BASE_PATH, 'testing', 'corpora', 'test_corpus', 'aanrud_longfrock.txt'),
+        ...             'date': '2098'}
+        >>> d = Document(metadata)
+        >>> new_metadata = {'date': 1903}
+        >>> d.update_metadata(new_metadata)
+        >>> d.date
+        1903
+
+        >>> new_attribute = {'cookies': 'chocolate chip'}
+        >>> d.update_metadata(new_attribute)
+        >>> d.cookies
+        'chocolate chip'
+        """
+
+        if not isinstance(new_metadata, dict):
+            raise ValueError(f'new_metadata must be a dictionary of metadata keys, not type {type(new_metadata)}')
+        if 'filename' in new_metadata and new_metadata['filename'] != self.filename:
+            raise KeyError(f'You cannot update the filename of a document; consider removing {str(self)} from the '
+                           f'Corpus object and adding the document again with the updated filename')
+
+        for key in new_metadata:
+            if key == 'date':
+                try:
+                    new_metadata[key] = int(new_metadata[key])
+                except ValueError:
+                    raise ValueError(f"the metadata field 'date' must be a number for document {self.filename}, not "
+                                     f"'{new_metadata['date']}'")
+            setattr(self, key, new_metadata[key])
+

@@ -53,6 +53,7 @@ class Corpus:
             pickle_data = common.load_pickle(self.path_to_files)
             self.documents = pickle_data.documents
             self.metadata_fields = pickle_data.metadata_fields
+
         elif self.path_to_files.suffix == '' and not self.csv_path:
             files = listdir(self.path_to_files)
             self.metadata_fields = ['filename', 'filepath']
@@ -60,8 +61,10 @@ class Corpus:
                 if file.endswith('.txt'):
                     metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
                     self.documents.append(Document(metadata_dict))
+
         elif self.csv_path and self.path_to_files.suffix == '':
             self.documents = self._load_documents()
+
         else:
             raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
 
@@ -405,11 +408,6 @@ class Corpus:
                 except AttributeError:
                     continue
 
-        # if not corpus_copy:
-        #     # displays for possible errors in field.value
-        #     err = f'This corpus is empty. You may have mistyped something.'
-        #     raise AttributeError(err)
-
         return corpus_copy
 
     def multi_filter(self, characteristic_dict):
@@ -537,15 +535,6 @@ class Corpus:
                         output.append((document.filename, passage))
                         count += 1
 
-        '''
-        random.shuffle(output)
-        print_count = 0
-        for entry in output:
-            if print_count == no_passages:
-                break
-            print_count += 1
-            print(entry)
-        '''
         if len(output) <= no_passages:
             return output
         return output[:no_passages]
@@ -585,6 +574,42 @@ class Corpus:
                 return document
 
         raise ValueError("Document not found")
+
+    def update_metadata(self, new_metadata_path):
+        """
+        Takes a filepath to a csv with new metadata and updates the metadata in the documents accordingly.
+        The new file does not need to contain every metadata field in the documents - only the fields that you wish to update.
+
+        :param new_metadata_path: Path to new metadata csv file
+        :return: None
+        """
+        metadata = set()
+        metadata.update(self.metadata_fields)
+
+        if isinstance(new_metadata_path, str):
+            new_metadata_path = Path(new_metadata_path)
+        if not isinstance(new_metadata_path, Path):
+            raise ValueError(f'new_metadata_path must be str or Path object, not type {type(new_metadata_path)}')
+
+        try:
+            csv_list = load_csv_to_list(new_metadata_path)
+        except FileNotFoundError:
+            err = "Could not find the metadata csv file for the "
+            err += f"corpus in the expected location ({self.csv_path})."
+            raise FileNotFoundError(err)
+        csv_reader = csv.DictReader(csv_list)
+
+        for document_metadata in csv_reader:
+            document_metadata = dict(document_metadata)
+            metadata.update(list(document_metadata))
+            try:
+                document = self.get_document('filename', document_metadata['filename'])
+            except ValueError:
+                raise ValueError(f"Document {document_metadata['filename']} not found in corpus")
+
+            document.update_metadata(document_metadata)
+
+        self.metadata_fields = list(metadata)
 
 
 if __name__ == '__main__':

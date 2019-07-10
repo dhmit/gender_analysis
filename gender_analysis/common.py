@@ -178,7 +178,7 @@ def get_text_file_encoding(filepath):
 def convert_text_file_to_new_encoding(source_path, target_path, target_encoding):
     """
     Converts a text file in source_path to the specified encoding in target_encoding
-    Note: Currentyl only supports encodings utf-8, ascii and iso-8859-1
+    Note: Currently only supports encodings utf-8, ascii and iso-8859-1
 
     :param source_path: str or Path
     :param target_path: str or Path
