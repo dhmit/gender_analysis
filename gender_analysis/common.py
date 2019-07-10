@@ -263,11 +263,16 @@ class MissingMetadataError(Exception):
             if i != len(self.metadata_fields) - 1:
                 metadata_string += ', '
 
-        return ('This corpus is missing the metadata field(s): ' + metadata_string + '.\n'
-                + self.message
-                + ' In order to run this function, you must create a new metadata csv '
-                + 'with these fields and update the Corpus with this csv.')
+        is_plural = len(self.metadata_fields) > 1
 
+        return (
+            'This Corpus is missing the following metadata field' + ('s' if is_plural else '') + ':\n'
+            + '\t' + metadata_string + '\n'
+            + self.message + ('\n' if self.message else '')
+            + 'In order to run this function, you must create a new metadata csv\n'
+            + 'with ' + ('these ' if is_plural else 'this ') + 'field' + ('s ' if is_plural else ' ')
+            + 'and run Corpus.update_metadata().'
+        )
 
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test

@@ -480,8 +480,10 @@ class Corpus:
         ...     c.get_document("meme_quality", "over 9000")
         ... except MissingMetadataError as exception:
         ...     print(exception)
-        This corpus is missing the metadata field(s): meme_quality.  In order to run this function, you must create a new metadata csv with (meme_quality) fields and updatethe Corpus with this csv.
-
+        This Corpus is missing the following metadata field:
+            meme_quality
+        In order to run this function, you must create a new metadata csv
+        with this field and run Corpus.update_metadata().
 
         :param metadata_field: str
         :param field_val: str/int
