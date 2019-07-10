@@ -57,10 +57,20 @@ class Corpus:
         elif self.path_to_files.suffix == '' and not self.csv_path:
             files = listdir(self.path_to_files)
             self.metadata_fields = ['filename', 'filepath']
+            ignored = False
             for file in files:
                 if file.endswith('.txt'):
                     metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
                     self.documents.append(Document(metadata_dict))
+                elif not ignored:
+                    ignored = True
+
+            if len(self.documents) == 0:  # path led to directory with no .txt files
+                raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
+            elif ignored:
+                print('Warning: Some files were not loaded because they are not .txt files. If '
+                      'you would like to analyze the text in these files, convert these files to '
+                      '.txt and re-initiate the corpus.')
 
         elif self.csv_path and self.path_to_files.suffix == '':
             self.documents = self._load_documents()
@@ -120,6 +130,7 @@ class Corpus:
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
         >>> c = Corpus(path)
+        Warning: Some files were not loaded because they are not .txt files. If you would like to analyze the text in these files, convert these files to .txt and re-initiate the corpus.
         >>> docs = []
         >>> for doc in c:
         ...    docs.append(doc)

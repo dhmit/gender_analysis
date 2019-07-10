@@ -15,9 +15,6 @@ from gender_analysis.common import (
 )
 
 
-# TODO: Rewrite all of this using a Dunning class in a non-messy way.
-
-
 def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
                          count_of_word_in_corpus_1,
                          count_of_word_in_corpus_2):
@@ -64,13 +61,13 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     :param corpus1: Corpus
     :param corpus2: Corpus
     :return: log likelihoods and p value
-    # TODO: fix doctest for new corpus input
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
     >>> from gender_analysis.common import BASE_PATH
     >>> filepath1 = BASE_PATH / 'testing' / 'corpora' / 'document_test_files'
     >>> filepath2 = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
     >>> corpus1 = Corpus(filepath1)
+    Warning: Some files were not loaded because they are not .txt files. If you would like to analyze the text in these files, convert these files to .txt and re-initiate the corpus.
     >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
     -425133.12886726425
