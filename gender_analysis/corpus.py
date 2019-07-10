@@ -276,7 +276,7 @@ class Corpus:
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
-        >>> c = Corpus(path)
+        >>> c = Corpus(path, csv_path=path_to_csv)
         >>> female_corpus = c.filter_by_gender('female')
         >>> len(female_corpus)
         39
