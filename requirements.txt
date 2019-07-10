@@ -1,7 +1,5 @@
 dh_testers
 gender-guesser==0.4.0
-ipython==6.5
-jupyter
 matplotlib
 numpy
 pylint
@@ -13,4 +11,3 @@ pandas
 scipy
 more-itertools
 seaborn
-markdown2
