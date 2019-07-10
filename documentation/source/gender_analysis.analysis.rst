@@ -4,30 +4,6 @@ gender\_analysis.analysis package
 Submodules
 ----------
 
-gender\_analysis.analysis.analysis module
------------------------------------------
-
-.. automodule:: gender_analysis.analysis.analysis
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-gender\_analysis.analysis.corpus\_metadata\_visualizations module
------------------------------------------------------------------
-
-.. automodule:: gender_analysis.analysis.corpus_metadata_visualizations
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-gender\_analysis.analysis.dependency\_parsing module
-----------------------------------------------------
-
-.. automodule:: gender_analysis.analysis.dependency_parsing
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 gender\_analysis.analysis.dunning module
 ----------------------------------------
 
@@ -36,26 +12,34 @@ gender\_analysis.analysis.dunning module
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.analysis.gender\_pronoun\_freq\_analysis module
-----------------------------------------------------------------
+gender\_analysis.analysis.gender\_pronoun\_frequency module
+-----------------------------------------------------------
 
-.. automodule:: gender_analysis.analysis.gender_pronoun_freq_analysis
+.. automodule:: gender_analysis.analysis.gender_pronoun_frequency
    :members:
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.analysis.instance\_distance\_analysis module
--------------------------------------------------------------
+gender\_analysis.analysis.instance\_distance module
+---------------------------------------------------
 
-.. automodule:: gender_analysis.analysis.instance_distance_analysis
+.. automodule:: gender_analysis.analysis.instance_distance
    :members:
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.analysis.pronoun\_adjective\_analysis module
--------------------------------------------------------------
+gender\_analysis.analysis.metadata\_visualizations module
+---------------------------------------------------------
 
-.. automodule:: gender_analysis.analysis.pronoun_adjective_analysis
+.. automodule:: gender_analysis.analysis.metadata_visualizations
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+gender\_analysis.analysis.pronoun\_adjective module
+---------------------------------------------------
+
+.. automodule:: gender_analysis.analysis.pronoun_adjective
    :members:
    :undoc-members:
    :show-inheritance:
