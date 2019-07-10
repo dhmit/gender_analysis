@@ -468,7 +468,7 @@ class Corpus:
         function.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
+        >>> from gender_analysis.common import BASE_PATH, MissingMetadataError
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
@@ -478,9 +478,10 @@ class Corpus:
         <Document (bronte_professor)>
         >>> try:
         ...     c.get_document("meme_quality", "over 9000")
-        ... except AttributeError as exception:
+        ... except MissingMetadataError as exception:
         ...     print(exception)
-        Metadata field meme_quality invalid for this corpus
+        This corpus is missing the metadata field(s): meme_quality.  In order to run this function, you must create a new metadata csv with (meme_quality) fields and updatethe Corpus with this csv.
+
 
         :param metadata_field: str
         :param field_val: str/int
