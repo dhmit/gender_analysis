@@ -264,8 +264,8 @@ class MissingMetadataError(Exception):
 
         return 'This corpus is missing the metadata field(s): ' + metadata_string + '. ' + \
                self.message + ' In order to run this function, you must create a new ' \
-                              'metadata csv with (' + metadata_string + ') fields and create a ' \
-                                                                        'new Corpus with this csv.'
+                              'metadata csv with (' + metadata_string + ') fields and update' \
+                                                                        'the Corpus with this csv.'
 
 
 if __name__ == '__main__':
