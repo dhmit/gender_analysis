@@ -7,6 +7,8 @@ from pathlib import Path
 import seaborn as sns
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
+MASC_WORDS = set(('he', 'his', 'him', 'himself'))
+FEM_WORDS = set(('she', 'her', 'hers', 'herself'))
 
 
 def load_csv_to_list(file_path):
@@ -258,16 +260,22 @@ class MissingMetadataError(Exception):
 
     def __str__(self):
         metadata_string = ''
-        for i in range(len(self.metadata_fields)):
-            metadata_string += self.metadata_fields[i]
+
+        for i, field in enumerate(self.metadata_fields):
+            metadata_string += field
             if i != len(self.metadata_fields) - 1:
                 metadata_string += ', '
 
-        return 'This corpus is missing the metadata field(s): ' + metadata_string + '. ' + \
-               self.message + ' In order to run this function, you must create a new ' \
-                              'metadata csv with (' + metadata_string + ') fields and create a ' \
-                                                                        'new Corpus with this csv.'
+        is_plural = len(self.metadata_fields) > 1
 
+        return (
+            'This Corpus is missing the following metadata field' + ('s' if is_plural else '') + ':\n'
+            + '    ' + metadata_string + '\n'
+            + self.message + ('\n' if self.message else '')
+            + 'In order to run this function, you must create a new metadata csv\n'
+            + 'with ' + ('these ' if is_plural else 'this ') + 'field' + ('s ' if is_plural else ' ')
+            + 'and run Corpus.update_metadata().'
+        )
 
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test
