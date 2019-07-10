@@ -267,7 +267,7 @@ class MissingMetadataError(Exception):
 
         return (
             'This Corpus is missing the following metadata field' + ('s' if is_plural else '') + ':\n'
-            + '\t' + metadata_string + '\n'
+            + '    ' + metadata_string + '\n'
             + self.message + ('\n' if self.message else '')
             + 'In order to run this function, you must create a new metadata csv\n'
             + 'with ' + ('these ' if is_plural else 'this ') + 'field' + ('s ' if is_plural else ' ')
