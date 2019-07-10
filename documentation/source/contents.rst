@@ -11,9 +11,6 @@ Welcome to Gender Analysis Toolkit's documentation!
    :caption: Contents:
 
 
-About our project
-==================
-here is some stuff
 
 Indices and tables
 ==================
