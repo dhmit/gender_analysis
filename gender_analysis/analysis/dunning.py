@@ -308,8 +308,18 @@ def compare_word_association_in_corpus_dunning(word1, word2, corpus, to_pickle=F
             word1_counter = Counter()
             word2_counter = Counter()
             for doc in corpus.documents:
-                word1_counter.update(doc.words_associated(word1))
-                word2_counter.update(doc.words_associated(word2))
+                if isinstance(word1, str):
+                    word1_counter.update(doc.words_associated(word1))
+                else:  # word1 is a list of strings
+                    for word in word1:
+                        word1_counter.update(doc.words_associated(word))
+
+                if isinstance(word2, str):
+                    word2_counter.update(doc.words_associated(word2))
+                else:  # word2 is a list of strings
+                    for word in word2:
+                        word2_counter.update(doc.words_associated(word))
+
             if to_pickle:
                 results = dunning_total(word1_counter, word2_counter,
                                         filename_to_pickle=pickle_filename)
@@ -528,27 +538,11 @@ def he_vs_she_associations_dunning(corpus, to_pickle=False, pickle_filename='dun
     :param corpus: Corpus
     :param to_pickle: boolean
     """
-
-    try:
-        results = load_pickle(pickle_filename)
-    except IOError:
-        he_counter = Counter()
-        she_counter = Counter()
-        for doc in corpus.documents:
-            for word in MASC_WORDS:
-                he_counter.update(doc.words_associated(word))
-            for word in FEM_WORDS:
-                she_counter.update(doc.words_associated(word))
-        if to_pickle:
-            results = dunning_total(she_counter, he_counter, filename_to_pickle=pickle_filename)
-        else:
-            results = dunning_total(she_counter, he_counter)
-
-    for group in [None, 'verbs', 'adjectives', 'pronouns', 'adverbs']:
-        dunning_result_displayer(results, number_of_terms_to_display=20,
-                                 corpus1_display_name='she...',
-                                 corpus2_display_name='he..',
-                                 part_of_speech_to_include=group)
+    if to_pickle:
+        return compare_word_association_in_corpus_dunning(MASC_WORDS, FEM_WORDS, corpus,
+                                                          to_pickle=True,
+                                                          pickle_filename=pickle_filename)
+    return compare_word_association_in_corpus_dunning(MASC_WORDS, FEM_WORDS, corpus)
 
 
 # Female characters as written by Male Authors versus Female Authors
@@ -593,73 +587,6 @@ def male_characters_author_gender_differences(corpus, to_pickle=False):
     female_corpus = corpus.filter_by_gender('female')
     return compare_word_association_between_corpus_dunning(word=MASC_WORDS,
                                                            corpus1=female_corpus, corpus2=male_corpus,
-                                                           to_pickle=to_pickle)
-
-
-# God as written by Male Authors versus Female Authors
-####################################################################
-
-def god_author_gender_differences(corpus, to_pickle=False):
-    """
-    Compares how male authors versus female authors refer to God by looking at the words
-    that follow 'God'
-
-    :param corpus: Corpus
-    :param to_pickle
-    :return:
-    """
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    male_corpus = corpus.filter_by_gender('male')
-    female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_dunning(word='God',
-                                                           corpus1=female_corpus, corpus2=male_corpus,
-                                                           to_pickle=to_pickle)
-
-
-def money_author_gender_differences(corpus, to_pickle=False):
-    """
-    Compares how male authors versus female authors refer to money by looking at the words
-   before and after money'
-
-    :param corpus: Corpus
-    :param to_pickle
-    :return:
-    """
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    male_corpus = corpus.filter_by_gender('male')
-    female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_dunning(word=['money', 'dollars',
-                                                                       'pounds',
-                                                                   'euros', 'dollar', 'pound',
-                                                                   'euro', 'wealth', 'income'],
-                                                           corpus1=female_corpus, corpus2=male_corpus,
-                                                           to_pickle=to_pickle)
-
-
-# America as written by Male Authors versus Female Authors
-####################################################################
-
-def america_author_gender_differences(corpus, to_pickle=False):
-    """
-    Compares how American male authors versus female authors refer to America by looking at the words
-    that follow 'America'
-
-    :param corpus: Corpus
-    :param to_pickle
-    :return:
-    """
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    male_corpus = corpus.filter_by_gender('male')
-    female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_dunning(word='America',
-                                                           corpus1=female_corpus,
-                                                           corpus2=male_corpus,
                                                            to_pickle=to_pickle)
 
 
