@@ -481,10 +481,10 @@ class Document:
         :return:
 
         >>> from gender_analysis.document import Document
-        >>> from gender_analysis.common import BASE_PATH
+        >>> from gender_analysis.common import TEST_DATA_PATH
         >>> from pathlib import Path
         >>> metadata = {'filename': 'aanrud_longfrock.txt',
-        ...             'filepath': Path(BASE_PATH, 'testing', 'corpora', 'test_corpus', 'aanrud_longfrock.txt'),
+        ...             'filepath': Path(TEST_DATA_PATH, 'test_corpus', 'aanrud_longfrock.txt'),
         ...             'date': '2098'}
         >>> d = Document(metadata)
         >>> new_metadata = {'date': 1903}

@@ -206,7 +206,7 @@ def books_pronoun_freq(corp, pickle_filepath=None):
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.gender_pronoun_frequency import books_pronoun_freq
-    >>> from gender_analysis.common import BASE_PATH
+    >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> books_pronoun_freq(Corpus(filepath, csv_path=csvpath))
@@ -261,7 +261,7 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
     :return: tuple of two dictionaries (male, female)
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import BASE_PATH
+    >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> subject_vs_object_pronoun_freqs(Corpus(filepath, csv_path=csvpath))
@@ -325,7 +325,7 @@ def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_mal
     :return: dictionary
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import BASE_PATH
+    >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'male')
@@ -681,7 +681,7 @@ def overall_mean(d):
     :return: float: average of all the values
     >>> from gender_analysis.analysis.gender_pronoun_frequency import overall_mean, books_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import BASE_PATH
+    >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> c = Corpus(filepath, csv_path=csvpath)

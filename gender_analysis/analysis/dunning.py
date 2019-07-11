@@ -68,7 +68,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
-    >>> from gender_analysis.common import BASE_PATH
+    >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath1 = TEST_DATA_PATH / 'document_test_files'
     >>> filepath2 = TEST_DATA_PATH / 'sample_novels' / 'texts'
     >>> corpus1 = Corpus(filepath1)
@@ -182,7 +182,7 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
 
          >>> from gender_analysis.analysis.dunning import dunning_total_by_corpus
          >>> from gender_analysis.corpus import Corpus
-         >>> from gender_analysis.common import BASE_PATH
+         >>> from gender_analysis.common import TEST_DATA_PATH
          >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
          >>> csv_path = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
          >>> c = Corpus(path, csv_path=csv_path)
