@@ -219,8 +219,8 @@ def dunning_total(m_corpus, f_corpus):
          >>> from gender_analysis.analysis.analysis import dunning_total
          >>> from gender_analysis.corpus import Corpus
          >>> from gender_analysis.common import BASE_PATH
-         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-         >>> csv_path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+         >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+         >>> csv_path = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
          >>> c = Corpus(path, csv_path=csv_path)
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')

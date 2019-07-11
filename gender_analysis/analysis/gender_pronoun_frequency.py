@@ -207,8 +207,8 @@ def books_pronoun_freq(corp, pickle_filepath=None):
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.gender_pronoun_frequency import books_pronoun_freq
     >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> filepath = TEST_DATA_PATH / 'test_corpus'
+    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> books_pronoun_freq(Corpus(filepath, csv_path=csvpath))
     {<Document (aanrud_longfrock)>: 0.7614617940199335, <Document (abbott_flatlandromance)>: 0.14463840399002492, <Document (abbott_indiscreetletter)>: 0.4160401002506266, <Document (adams_fighting)>: 0.18998330550918197, <Document (alcott_josboys)>: 0.4214648602878916, <Document (alcott_littlemen)>: 0.31113851212494864, <Document (alcott_littlewomen)>: 0.6196017006041621, <Document (alden_chautauqua)>: 0.7515400410677618, <Document (austen_emma)>: 0.566123858869973, <Document (austen_persuasion)>: 0.5303780378037803}
 
@@ -262,8 +262,8 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> filepath = TEST_DATA_PATH / 'test_corpus'
+    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> subject_vs_object_pronoun_freqs(Corpus(filepath, csv_path=csvpath))
     ({<Document (aanrud_longfrock)>: 0.7947761194029851, <Document (abbott_flatlandromance)>: 0.6777777777777777, <Document (abbott_indiscreetletter)>: 0.7938931297709924, <Document (adams_fighting)>: 0.7188093730208993, <Document (alcott_josboys)>: 0.6334563345633456, <Document (alcott_littlemen)>: 0.6454880294659301, <Document (alcott_littlewomen)>: 0.6580560420315237, <Document (alden_chautauqua)>: 0.7583798882681564, <Document (austen_emma)>: 0.7088554720133667, <Document (austen_persuasion)>: 0.6743697478991596}, {<Document (aanrud_longfrock)>: 0.5380577427821522, <Document (abbott_flatlandromance)>: 0.18965517241379312, <Document (abbott_indiscreetletter)>: 0.4457831325301205, <Document (adams_fighting)>: 0.4358523725834798, <Document (alcott_josboys)>: 0.38655886811520973, <Document (alcott_littlemen)>: 0.43472498343273697, <Document (alcott_littlewomen)>: 0.41256335988414194, <Document (alden_chautauqua)>: 0.5462994836488813, <Document (austen_emma)>: 0.48378615249780893, <Document (austen_persuasion)>: 0.48742004264392325})
 
@@ -326,8 +326,8 @@ def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_mal
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> filepath = TEST_DATA_PATH / 'test_corpus'
+    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'male')
     {<Document (aanrud_longfrock)>: 0.25724637681159424, <Document (abbott_flatlandromance)>: 0.9172932330827067, <Document (abbott_indiscreetletter)>: 0.5842696629213483, <Document (adams_fighting)>: 0.8206796818510484, <Document (alcott_josboys)>: 0.573816155988858, <Document (alcott_littlemen)>: 0.6812439261418853, <Document (alcott_littlewomen)>: 0.3974087784241142, <Document (alden_chautauqua)>: 0.2549295774647887, <Document (austen_emma)>: 0.4345710627400768, <Document (austen_persuasion)>: 0.45726495726495725}
     >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'female')
@@ -682,8 +682,8 @@ def overall_mean(d):
     >>> from gender_analysis.analysis.gender_pronoun_frequency import overall_mean, books_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> filepath = TEST_DATA_PATH / 'test_corpus'
+    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> c = Corpus(filepath, csv_path=csvpath)
     >>> freq = books_pronoun_freq(c)
     >>> mean = overall_mean(freq)
