@@ -16,7 +16,8 @@ from gender_analysis.common import (
 )
 
 
-def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
+def dunn_individual_word(total_words_in_corpus_1,
+                         total_words_in_corpus_2,
                          count_of_word_in_corpus_1,
                          count_of_word_in_corpus_2):
     """
@@ -289,7 +290,9 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
     print(output)
 
 
-def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to_pickle=False, pickle_filename='dunning_vs_associated_words.pgz'):
+def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus,
+                                                        to_pickle=False,
+                                                        pickle_filename='dunning_vs_associated_words.pgz'):
     """
     Uses Dunning analysis to compare words associated with word1 vs words associated with word2 in
     the Corpus passed in as the parameter.
@@ -527,7 +530,9 @@ def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=Fals
 # Male Characters versus Female Characters (words following 'he' versus words following 'she')
 ##############################################################################################
 
-def he_vs_she_associations_analysis_dunning(corpus, to_pickle=False, pickle_filename='dunning_he_vs_she_associated_words.pgz'):
+def he_vs_she_associations_analysis_dunning(corpus,
+                                            to_pickle=False,
+                                            pickle_filename='dunning_he_vs_she_associated_words.pgz'):
     """
     Uses Dunning analysis to compare words associated with 'he' vs words associated with 'she' in
     the Corpus passed in as the parameter.
@@ -598,7 +603,8 @@ def male_characters_author_gender_differences(corpus, to_pickle=False):
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
     return compare_word_association_between_corpus_analysis_dunning(word='he',
-                                                                    corpus1=female_corpus, corpus2=male_corpus,
+                                                                    corpus1=female_corpus,
+                                                                    corpus2=male_corpus,
                                                                     to_pickle=to_pickle)
 
 
