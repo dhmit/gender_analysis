@@ -29,7 +29,7 @@ def get_count_words(document, words):
     >>> from gender_analysis import common
     >>> from pathlib import Path
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
-    ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
+    ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
@@ -55,7 +55,7 @@ def get_comparative_word_freq(freqs):
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(document_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
@@ -413,10 +413,10 @@ def freq_by_author_gender(d):
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> novel_metadata = {'author': 'Brontë, Anne', 'title': 'The Tenant of Wildfell Hall', 'date': '1848', 'author_gender':'female',
-    ...                   'filename': 'bronte_wildfell.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'bronte_wildfell.txt')}
+    ...                   'filename': 'bronte_wildfell.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'bronte_wildfell.txt')}
     >>> bronte = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Adams, William Taylor', 'title': 'Fighting for the Right', 'date': '1892', 'author_gender':'male',
-    ...                   'filename': 'adams_fighting.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'adams_fighting.txt')}
+    ...                   'filename': 'adams_fighting.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'adams_fighting.txt')}
     >>> fighting = document.Document(novel_metadata)
     >>> d = {fighting:0.3, bronte:0.6}
     >>> freq_by_author_gender(d)
@@ -463,10 +463,10 @@ def freq_by_date(d, time_frame, bin_size):
     >>> from gender_analysis import common
     >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_date
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_date(d, (1770, 1910), 10)
@@ -509,11 +509,11 @@ def freq_by_location(d):
     >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_location
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt',
-    ...                   'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                   'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata2 = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
     ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt',
-    ...                   'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    ...                   'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(novel_metadata2)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_location(d)
@@ -566,10 +566,10 @@ def sort_every_year(frequency_dict):
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> sorted_years = sort_every_year(d)

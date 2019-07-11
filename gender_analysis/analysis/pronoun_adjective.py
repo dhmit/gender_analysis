@@ -19,7 +19,7 @@ def find_gender_adj(document, female):
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-    ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_7.txt')}
+    ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_7.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> find_gender_adj(scarlett, False)
     {'handsome': 3, 'sad': 1}
@@ -77,7 +77,7 @@ def find_male_adj(document):
    >>> from pathlib import Path
    >>> from gender_analysis import common
    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-   ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_8.txt')}
+   ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_8.txt')}
    >>> scarlett = document.Document(document_metadata)
    >>> find_male_adj(scarlett)
    {'handsome': 3, 'sad': 1}
@@ -98,7 +98,7 @@ def find_female_adj(document):
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-    ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_9.txt')}
+    ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_9.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> find_female_adj(scarlett)
     {'beautiful': 3, 'sad': 1}
