@@ -210,6 +210,8 @@ class Corpus:
         """
         Return a copy of the Corpus object
 
+        :return: Corpus object
+
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
@@ -218,7 +220,6 @@ class Corpus:
         >>> len(corpus_copy) == len(sample_corpus)
         True
 
-        :return: Corpus
         """
         from copy import deepcopy
         return deepcopy(self)
