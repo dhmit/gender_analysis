@@ -1,34 +1,56 @@
+from pathlib import Path
+import csv
+import os
 import urllib
+
 from nltk.parse.stanford import StanfordDependencyParser
 from nltk.tokenize import sent_tokenize, word_tokenize
+
+from gender_analysis import common
 from gender_analysis.corpus import Corpus
 from gender_analysis.document import Document
-from gender_analysis.common import store_pickle, load_pickle
-import os.path
-import csv
 
-# TODO: Investigate to see if these functions are used
 
-# def get_parser(path_to_jar, path_to_models_jar):
-#     """
-#     The jar files are too big to commit directly, so download them
-#     :param path_to_jar: local path to stanford-parser.jar
-#     :param path_to_models_jar: local path to stanford-parser-3.9.1-models.jar
-#     >>> parser = get_parser("assets/stanford-parser.jar","assets/stanford-parser-3.9.1-models.jar")
-#     >>> parser == None
-#     False
-#     """
-#
-#
-#     url_to_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser.jar"
-#     url_to_models_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser-3.9.1-models.jar"
-#     if not os.path.isfile(path_to_jar):
-#         urllib.request.urlretrieve(url_to_jar, path_to_jar)
-#     if not os.path.isfile(path_to_models_jar):
-#         urllib.request.urlretrieve(url_to_models_jar, path_to_models_jar)
-#
-#     parser = StanfordDependencyParser(path_to_jar, path_to_models_jar)
-#     return parser
+def get_parser_download_if_not_present():
+    """
+    The jar files are too big to commit directly, so download them
+    :param path_to_jar: local path to stanford-parser.jar
+    :param path_to_models_jar: local path to stanford-parser-3.9.1-models.jar
+    >>> parser = get_parser("assets/stanford-parser.jar","assets/stanford-parser-3.9.1-models.jar")
+    >>> parser == None
+    False
+    """
+
+    parser_dir = common.BASE_PATH / 'stanford_parser'
+    if not os.path.exists(parser_dir):
+        os.mkdir(parser_dir)
+
+    parser_filename = 'stanford-parser.jar'
+    models_filename = 'stanford-parser-3.9.1-models.jar'
+    path_to_jar = parser_dir / parser_filename
+    path_to_models_jar = parser_dir / models_filename
+
+    if (not os.path.isfile(path_to_jar) or
+        not os.path.isfile(path_to_models_jar)):
+
+        user_key = input(f'This function requires us to download the Stanford Dependency Parser.\n'
+                         + 'This is a SO-AND-SO mb download, which will take SO-AND-SO minutes on a SO-AND_SO connection\n'
+                         + 'Press y then enter to download and install this package, or n then enter to cancel and exit.\n')
+
+        while user_key.strip() not in ['y', 'n']:
+            user_key = input(f'Press y then enter to download and install this package, or n then enter to cancel and exit.\n')
+
+        if user_key == 'n':
+            print('Exiting.')
+            exit()
+        elif user_key == 'y':
+            url_to_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser.jar"
+            url_to_models_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser-3.9.1-models.jar"
+            urllib.request.urlretrieve(url_to_jar, path_to_jar)
+            urllib.request.urlretrieve(url_to_models_jar, path_to_models_jar)
+
+    parser = StanfordDependencyParser(path_to_jar, path_to_models_jar)
+    return parser
 
 
 def pickle(document, parser, pickle_filepath='dep_tree.pgz'):
@@ -41,7 +63,7 @@ def pickle(document, parser, pickle_filepath='dep_tree.pgz'):
     """
 
     try:
-        tree = load_pickle(pickle_filepath)
+        tree = common.load_pickle(pickle_filepath)
     except (IOError, FileNotFoundError):
         sentences = sent_tokenize(document.text.lower().replace("\n", " "))
         he_she_sentences = []
@@ -67,7 +89,7 @@ def pickle(document, parser, pickle_filepath='dep_tree.pgz'):
                 tree_list[i].append(triple)
             i += 1
         tree = tree_list
-        store_pickle(tree, pickle_filepath)
+        common.store_pickle(tree, pickle_filepath)
     return tree
 
 
@@ -96,8 +118,9 @@ def parse_document(document, parser):
     ('Scarlet Letter', 1, 0, 0, 1, [], ['told'], [], [])
 
     """
-
+    parser = get_parser_download_if_not_present()
     tree = pickle(document, parser)
+
     male_subj_count = male_obj_count = female_subj_count = female_obj_count = 0
     female_adjectives = []
     male_adjectives = []
