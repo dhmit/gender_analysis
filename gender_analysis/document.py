@@ -276,7 +276,6 @@ class Document:
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
 
-        :return: list of complete quotation strings
         """
         text_list = self.text.split()
         quotes = []
@@ -357,12 +356,15 @@ class Document:
 
     def words_associated(self, word):
         """
-        Returns a counter of the words found after a given word
+        Returns a Counter of the words found after a given word.
 
         In the case of double/repeated words, the counter would include the word itself and the next
-        new word
+        new word.
 
-        Note: words always return lowercase
+        Note: words always return lowercase.
+
+        :param word: Single word to search for in the document's text
+        :return: a Python Counter() object with {associated_word: occurrences}
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
@@ -373,8 +375,6 @@ class Document:
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
 
-        :param word:
-        :return: a Counter() object with {word:occurrences}
         """
         word = word.lower()
         word_count = Counter()
@@ -393,7 +393,7 @@ class Document:
         """
         Finds all instances of `word` and returns a counter of the words around it.
         window_size is the number of words before and after to return, so the total window is
-        2x window_size + 1.
+        2*window_size + 1.
 
         This is not case sensitive.
 
@@ -409,10 +409,12 @@ class Document:
         >>> scarlett = Document(document_metadata)
 
         search_terms can be either a string...
+
         >>> scarlett.get_word_windows("his", window_size=2)
         Counter({'he': 1, 'lit': 1, 'cigarette': 1, 'and': 1, 'then': 1, 'began': 1, 'speech': 1, 'which': 1})
 
-        ... or a list of strings
+        ... or a list of strings.
+
         >>> scarlett.get_word_windows(['purse', 'tears'])
         Counter({'her': 2, 'of': 1, 'and': 1, 'handed': 1, 'proposal': 1, 'drowned': 1, 'the': 1})
 
@@ -487,7 +489,9 @@ class Document:
         'filename' cannot be updated with this method.
 
         :param new_metadata: dict of new metadata to apply to the document
-        :return:
+        :return: None
+
+        This can be used to correct mistakes in the metadata:
 
         >>> from gender_analysis.document import Document
         >>> from gender_analysis.common import TEST_DATA_PATH
@@ -496,10 +500,12 @@ class Document:
         ...             'filepath': Path(TEST_DATA_PATH, 'test_corpus', 'aanrud_longfrock.txt'),
         ...             'date': '2098'}
         >>> d = Document(metadata)
-        >>> new_metadata = {'date': 1903}
+        >>> new_metadata = {'date': '1903'}
         >>> d.update_metadata(new_metadata)
         >>> d.date
         1903
+
+        Or it can be used to add completely new attributes:
 
         >>> new_attribute = {'cookies': 'chocolate chip'}
         >>> d.update_metadata(new_attribute)
