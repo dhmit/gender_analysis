@@ -20,6 +20,11 @@ class Corpus:
 
     Once loaded, each corpus contains a list of Document objects
 
+    :param path_to_files: Must be either the path to a directory of txt files or an already-pickled corpus
+    :param name: Optional name of the corpus, for ease of use and readability
+    :param csv_path: Optional path to a csv metadata file
+    :param pickle_on_load: Filepath to save a pickled copy of the corpus
+
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import BASE_PATH
     >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
@@ -31,12 +36,6 @@ class Corpus:
 
     def __init__(self, path_to_files, name=None, csv_path=None,
                        pickle_on_load=None, guess_author_gender=False):
-        """
-        :param path_to_files: Must be either the path to a directory of txt files or an already-pickled corpus
-        :param name: Optional name of the corpus, for ease of use and readability
-        :param csv_path: Optional path to a csv metadata file
-        :param pickle_on_load: Filepath to save a pickled copy of the corpus
-        """
 
         if isinstance(path_to_files, str):
             path_to_files = Path(path_to_files)
