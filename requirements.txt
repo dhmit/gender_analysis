@@ -5,7 +5,6 @@ numpy
 pylint
 wordcloud
 nltk
-pywikibot
 chardet
 pandas
 scipy
