@@ -330,7 +330,7 @@ def compare_word_association_between_corpus_dunning(word, corpus1, corpus2,
     """
     Uses Dunning analysis to compare words associated with word between corpuses.
 
-    :param word: str
+    :param word: str or list of strings
     :param corpus1: Corpus
     :param corpus2: Corpus
     :param word_window
