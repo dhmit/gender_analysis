@@ -286,7 +286,7 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
     print(output)
 
 
-def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to_pickle=False, pickle_filename='dunning_vs_associated_words.pgz'):
+def compare_word_association_in_corpus_dunning(word1, word2, corpus, to_pickle=False, pickle_filename='dunning_vs_associated_words.pgz'):
     """
     Uses Dunning analysis to compare words associated with word1 vs words associated with word2 in
     the Corpus passed in as the parameter.
