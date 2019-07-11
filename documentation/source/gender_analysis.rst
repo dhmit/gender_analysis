@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
    gender_analysis.analysis
-   gender_analysis.testing
 
 Submodules
 ----------
