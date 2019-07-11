@@ -15,8 +15,9 @@ nltk.download('averaged_perceptron_tagger', quiet=True)
 
 
 class Document:
-    """ The Document class loads and holds the full text and
-    metadata (author, title, publication date) of a document
+    """
+    The Document class loads and holds the full text and
+    metadata (author, title, publication date, etc.) of a document
 
     >>> from gender_analysis import document
     >>> from pathlib import Path
@@ -138,7 +139,8 @@ class Document:
 
     def __eq__(self, other):
         """
-        Overload the equality operator to enable comparing and sorting documents.
+        Overload the equality operator to enable comparing and sorting documents. Returns True if the document filenames
+        and text are the same.
 
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
@@ -173,7 +175,9 @@ class Document:
 
     def __lt__(self, other):
         """
-        Overload less than operator to enable comparing and sorting documents
+        Overload less than operator to enable comparing and sorting documents.
+
+        Sorts first by author, title, and then date. If these are not available, it sorts by filenames.
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
@@ -209,14 +213,8 @@ class Document:
         return hash(repr(self))
 
     def _load_document_text(self):
-        """Loads the text of a document and uses the remove_boilerplate_text() and
-        remove_table_of_contents() functions on the text of the document to remove the boilerplate
-        text and table of contents from the document. After these actions, the document's text should be
-        only the actual text of the document.
-
-        Is a private function as it is unnecessary to access it outside the class.
-
-        Currently best supports boilerplate removal for Project gutenberg ebooks.
+        """
+        Loads the text of the document at the filepath specified in initialization.
 
         :return: str
         """
@@ -235,9 +233,7 @@ class Document:
         """
         Tokenizes the text and returns it as a list of tokens
 
-        This is a very simple way of tokenizing the text. We will replace it soon with a
-        better implementation that uses either regex or nltk
-        E.g. this version doesn't handle dashes or contractions
+        Note: This does not currently properly handle dashes or contractions.
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
@@ -269,28 +265,11 @@ class Document:
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> test_text = '"This is a quote" and also "This is my quote"'
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                   'date': '1818', 'filename': 'test_text_0.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_0.txt')}
         >>> document_novel = document.Document(document_metadata)
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
-
-        # TODO: Make this test pass
-        # >>> test_document.text = 'Test case: "Miss A.E.--," [...] "a quote."'
-        # >>> test_document.find_quoted_text()
-        # ['"Miss A.E.-- a quote."']
-
-        # TODO: Make this test pass
-        # One approach would be to find the shortest possible closed quote.
-        #
-        # >>> test_document.text = 'Test case: "Open quote. [...] "Closed quote."'
-        # >>> test_document.find_quoted_text()
-        # ['"Closed quote."']
-
-        TODO(Redlon & Murray): Add and statements so that a broken up quote is treated as a
-        TODO(Redlon & Murray): single quote
-        TODO: Look for more complicated test cases in our existing documents.
 
         :return: list of complete quotation strings
         """
@@ -321,7 +300,10 @@ class Document:
 
     def get_count_of_word(self, word):
         """
-        Returns the number of instances of str word in the text.  N.B.: Not case-sensitive.
+        Returns the number of instances of a word in the text. Not case-sensitive.
+
+        If this is your first time running this method, it may take a moment to perform a count in the document.
+
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
@@ -346,9 +328,8 @@ class Document:
     def get_wordcount_counter(self):
         """
         Returns a counter object of all of the words in the text.
-        (The counter can also be accessed as self.word_counts. However, it only gets initialized
-        when a user either runs Document.get_count_of_word or Document.get_wordcount_counter, hence
-        the separate method.)
+
+        If this is your first time running this method, it may take a moment to perform a count in the document.
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
@@ -369,9 +350,11 @@ class Document:
 
     def words_associated(self, word):
         """
-        Returns a counter of the words found after given word
+        Returns a counter of the words found after a given word
+
         In the case of double/repeated words, the counter would include the word itself and the next
         new word
+
         Note: words always return lowercase
 
         >>> from gender_analysis import document
@@ -403,7 +386,9 @@ class Document:
         """
         Finds all instances of `word` and returns a counter of the words around it.
         window_size is the number of words before and after to return, so the total window is
-        2x window_size + 1
+        2x window_size + 1.
+
+        This is not case sensitive.
 
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
@@ -442,7 +427,8 @@ class Document:
 
     def get_word_freq(self, word):
         """
-        Returns frequency of appearance of parameter word in document
+        Returns the frequency of appearance of a word in the document
+
         :param word: str to search for in document
         :return: float representing the portion of words in the text that are the parameter word
 
@@ -464,8 +450,9 @@ class Document:
         """
         Returns the part of speech tags as a list of tuples. The first part of each tuple is the
         term, the second one the part of speech tag.
-        Note: the same word can have a different part of speech tag. In the example below,
-        see "refuse" and "permit"
+        Note: the same word can have a different part of speech tags. In the example below,
+        see "refuse" and "permit".
+
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common

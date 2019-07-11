@@ -27,12 +27,14 @@ def dunn_individual_word(total_words_in_corpus_1, total_words_in_corpus_2,
     :param count_of_word_in_corpus_1: int, wordcount of one word in corpus 1
     :param count_of_word_in_corpus_2: int, wordcount of one word in corpus 2
     :return: Dunning log likelihood
+
     >>> total_words_m_corpus = 8648489
     >>> total_words_f_corpus = 8700765
     >>> wordcount_female = 1000
     >>> wordcount_male = 50
     >>> dunn_individual_word(total_words_m_corpus,total_words_f_corpus,wordcount_male,wordcount_female)
     -1047.8610274053995
+
     """
     a = count_of_word_in_corpus_1
     b = count_of_word_in_corpus_2
@@ -62,6 +64,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     :param corpus1: Corpus
     :param corpus2: Corpus
     :return: log likelihoods and p value
+
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
     >>> from gender_analysis.common import BASE_PATH
@@ -72,6 +75,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
     -425133.12886726425
+
     """
 
     counter1 = corpus1.get_wordcount_counter()
@@ -289,11 +293,13 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to
     """
     Uses Dunning analysis to compare words associated with word1 vs words associated with word2 in
     the Corpus passed in as the parameter.
+
     :param word1: str
     :param word2: str
     :param corpus: Corpus
     :param to_pickle: boolean
     :return: dict
+
     """
     corpus_name = corpus.name if corpus.name else 'corpus'
 
@@ -332,9 +338,10 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
     :param word: str
     :param corpus1: Corpus
     :param corpus2: Corpus
-    :param word_window
+    :param word_window:
     :param to_pickle: boolean determining if results should be pickled
     :return: dict
+
     """
     corpus1_name = corpus1.name if corpus1.name else 'corpus1'
     corpus2_name = corpus2.name if corpus2.name else 'corpus2'
@@ -557,8 +564,9 @@ def female_characters_author_gender_differences(corpus, to_pickle=False):
     that follow 'she'
 
     :param corpus: Corpus
-    :param to_pickle
+    :param to_pickle:
     :return:
+
     """
 
     if 'author_gender' not in corpus.metadata_fields:
@@ -580,8 +588,9 @@ def male_characters_author_gender_differences(corpus, to_pickle=False):
     that follow 'he'
 
     :param corpus: Corpus
-    :param to_pickle
+    :param to_pickle:
     :return:
+
     """
     if 'author_gender' not in corpus.metadata_fields:
         raise MissingMetadataError(['author_gender'])
@@ -602,8 +611,9 @@ def god_author_gender_differences(corpus, to_pickle=False):
     that follow 'God'
 
     :param corpus: Corpus
-    :param to_pickle
+    :param to_pickle:
     :return:
+
     """
     if 'author_gender' not in corpus.metadata_fields:
         raise MissingMetadataError(['author_gender'])
@@ -618,11 +628,12 @@ def god_author_gender_differences(corpus, to_pickle=False):
 def money_author_gender_differences(corpus, to_pickle=False):
     """
     Compares how male authors versus female authors refer to money by looking at the words
-   before and after money'
+    before and after money
 
     :param corpus: Corpus
-    :param to_pickle
+    :param to_pickle:
     :return:
+
     """
     if 'author_gender' not in corpus.metadata_fields:
         raise MissingMetadataError(['author_gender'])
@@ -646,8 +657,9 @@ def america_author_gender_differences(corpus, to_pickle=False):
     that follow 'America'
 
     :param corpus: Corpus
-    :param to_pickle
-    :return:
+    :param to_pickle:
+    :return: Word Association
+
     """
     if 'author_gender' not in corpus.metadata_fields:
         raise MissingMetadataError(['author_gender'])

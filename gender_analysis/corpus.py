@@ -209,7 +209,7 @@ class Corpus:
 
     def clone(self):
         """
-        Return a copy of this Corpus
+        Return a copy of this Corpus object
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -225,6 +225,11 @@ class Corpus:
         return copy(self)
 
     def _load_documents(self):
+        """
+        Loads documents into the corpus with metadata from a csv file given at initialization.
+
+        :return: List of sorted Document objects
+        """
         documents = []
         metadata = set()
 
@@ -275,27 +280,28 @@ class Corpus:
 
     def filter_by_gender(self, gender):
         """
-        Return a new Corpus object that contains only authors whose gender
+        Return a new Corpus object that contains documents only with authors whose gender
         matches the given parameter.
 
-        # >>> from gender_analysis.corpus import Corpus
-        # >>> from gender_analysis.common import BASE_PATH
-        # >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        # >>> c = Corpus(path)
-        # >>> female_corpus = c.filter_by_gender('female')
-        # >>> len(female_corpus)
-        # 39
-        # >>> female_corpus.documents[0].title
-        # 'The Indiscreet Letter'
-        #
-        # >>> male_corpus = c.filter_by_gender('male')
-        # >>> len(male_corpus)
-        # 59
-        #
-        # >>> male_corpus.documents[0].title
-        # 'Lisbeth Longfrock'
+        >>> from gender_analysis.corpus import Corpus
+        >>> from gender_analysis.common import BASE_PATH
+        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> c = Corpus(path, csv_path=path_to_csv)
+        >>> female_corpus = c.filter_by_gender('female')
+        >>> len(female_corpus)
+        39
+        >>> female_corpus.documents[0].title
+        'The Indiscreet Letter'
 
-        :param gender: gender name
+        >>> male_corpus = c.filter_by_gender('male')
+        >>> len(male_corpus)
+        59
+
+        >>> male_corpus.documents[0].title
+        'Lisbeth Longfrock'
+
+        :param gender: gender identifier (i.e. 'male', 'female', 'unknown', etc.)
         :return: Corpus
         """
 
@@ -303,8 +309,7 @@ class Corpus:
 
     def get_wordcount_counter(self):
         """
-        This function returns a Counter telling how many times a word appears in an entire
-        corpus
+        This function returns a Counter object that stores how many times each word appears in the corpus.
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -323,16 +328,15 @@ class Corpus:
 
     def get_field_vals(self, field):
         """
-        This function returns a sorted list of all values for a
-        particular metadata field as strings.
+        This function returns a sorted list of the values present in the corpus for a given metadata field
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, name='sample_novels', csv_path=csvpath)
-        >>> c.get_field_vals('name')
-        ['sample_novels']
+        >>> c.get_field_vals('author_gender')
+        ['both', 'female', 'male']
 
         :param field: str
         :return: list
@@ -349,12 +353,7 @@ class Corpus:
 
     def subcorpus(self, metadata_field, field_value):
         """
-        This method takes a metadata field and value of that field and returns
-        a new Corpus object which includes the subset of documents in the original
-        Corpus that have the specified value for the specified field.
-
-        Supported metadata fields are 'author', 'author_gender', 'name',
-        'country_publication', 'date'
+        Returns a new Corpus object that contains only documents with a given field_value for metadata_field
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -471,12 +470,11 @@ class Corpus:
     def get_document(self, metadata_field, field_val):
         """
         Returns a specific Document object from self.documents that has metadata matching field_val for
-        metadata_field.  Otherwise raises a ValueError.
-        N.B. This function will only return the first document in the self.documents (which is sorted as
-        defined by the Document.__lt__ function).  It should only be used if you're certain there is
-        only one match in the Corpus or if you're not picky about which Document you get.  If you want
-        more selectivity use get_document_multiple_fields, or if you want multiple documents use the subcorpus
-        function.
+        metadata_field.
+
+        This function will only return the first document in self.documents. It should only be used if you're certain
+        there is only one match in the Corpus or if you're not picky about which Document you get.  If you want more
+        selectivity use get_document_multiple_fields, or if you want multiple documents, use the Corpus.subcorpus funtion.
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH, MissingMetadataError
@@ -551,12 +549,11 @@ class Corpus:
 
     def get_document_multiple_fields(self, metadata_dict):
         """
-        Returns a specific Document object from self.documents that has metadata that matches a partial
-        dict of metadata.  Otherwise raises a ValueError.
-        N.B. This method will only return the first document in the self.documents (which is sorted as
-        defined by the Document.__lt__ function).  It should only be used if you're certain there is
-        only one match in the Corpus or if you're not picky about which Document you get.  If you want
-        multiple documents use the subcorpus function.
+        Returns a specific Document object from self.documents that has metadata that matches a given metadata dict.
+
+        This method will only return the first document in self.documents.  It should only be used if you're certain
+        there is only one match in the Corpus or if you're not picky about which Document you get.  If you want
+        multiple documents, use the Corpus.subcorpus function.
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH

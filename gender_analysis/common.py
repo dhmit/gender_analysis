@@ -13,7 +13,7 @@ FEM_WORDS = set(('she', 'her', 'hers', 'herself'))
 
 def load_csv_to_list(file_path):
     """
-    Loads a csv file
+    Loads a csv file from the given filepath and returns its contents as a list of strings.
 
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -44,7 +44,7 @@ def load_csv_to_list(file_path):
 
 def load_txt_to_string(file_path):
     """
-    Loads a txt file
+    Loads a txt file and returns a str representation of it.
 
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -85,9 +85,9 @@ def store_pickle(obj, filepath):
     Example in lieu of Doctest to avoid writing out a file.
 
         my_object = {'a': 4, 'b': 5, 'c': [1, 2, 3]}
-        gender_analysis.common.store_pickle(my_object, 'example_pickle')
+        gender_analysis.common.store_pickle(my_object, 'path_to_pickle/example_pickle.pgz')
 
-    :param obj: Any Python object to be pickled
+    :param obj: Any Python object that can be pickled
     :param filepath: str | Path
     :return: Path
     """
@@ -106,12 +106,11 @@ def store_pickle(obj, filepath):
 
 def load_pickle(filepath):
     """
-    Load the pickle stored at filepath where filename does not contain a
-    directory or suffix.
+    Loads the pickle stored at a given filepath, and returns the Python object that was stored.
 
     Example in lieu of Doctest to avoid writing out a file.
 
-        my_object = gender_analysis.common.load_pickle('example_pickle')
+        my_object = gender_analysis.common.load_pickle('path_to_pickle/example_pickle.pgz')
         my_object
         {'a': 4, 'b': 5, 'c': [1, 2, 3]}
 
@@ -136,7 +135,7 @@ def load_pickle(filepath):
 
 def get_text_file_encoding(filepath):
     """
-    For text file at filepath returns the text encoding as a string (e.g. 'utf-8')
+    Returns the text encoding as a string for a txt file at the given filepath.
 
     >>> from gender_analysis import common
     >>> from pathlib import Path
@@ -162,7 +161,7 @@ def get_text_file_encoding(filepath):
     >>> file_path = Path(common.BASE_PATH, 'example_file.txt')
     >>> os.remove(file_path)
 
-    :param filepath: fstr
+    :param filepath: str or Path object
     :return: str
     """
     from chardet.universaldetector import UniversalDetector
@@ -234,11 +233,11 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
 
 
 def load_graph_settings(show_grid_lines=True):
-    '''
-    This function sets the seaborn graph settings to the defaults for our project.
+    """
+    This function sets the seaborn graph settings to the defaults for the project.
     Defaults to displaying gridlines. To remove gridlines, call with False.
     :return:
-    '''
+    """
     show_grid_lines_string = str(show_grid_lines)
     palette = "colorblind"
     style_name = "white"
@@ -251,8 +250,10 @@ def load_graph_settings(show_grid_lines=True):
 
     
 class MissingMetadataError(Exception):
-    """Raised when a function that assumes certain metadata is called on a corpus without that
-    metadata"""
+    """
+    Raised when a function that assumes certain metadata is called on a corpus without that
+    metadata
+    """
     def __init__(self, metadata_fields, message=None):
         self.metadata_fields = metadata_fields
         self.message = message if message else ''
