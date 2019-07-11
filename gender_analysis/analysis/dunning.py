@@ -12,7 +12,8 @@ from gender_analysis.common import (
     MissingMetadataError,
     store_pickle,
     load_pickle,
-    MASC_WORDS
+    MASC_WORDS,
+    FEM_WORDS
 )
 
 
@@ -322,10 +323,10 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus, to
     return results
 
 
-def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corpus2,
-                                                             word_window=None,
-                                                             to_pickle=False,
-                                                             pickle_filename='dunning_associated_words.pgz'):
+def compare_word_association_between_corpus_dunning(word, corpus1, corpus2,
+                                                    word_window=None,
+                                                    to_pickle=False,
+                                                    pickle_filename='dunning_associated_words.pgz'):
     """
     Uses Dunning analysis to compare words associated with word between corpuses.
 
@@ -554,7 +555,7 @@ def he_vs_she_associations_analysis_dunning(corpus, to_pickle=False, pickle_file
 def female_characters_author_gender_differences(corpus, to_pickle=False):
     """
     Compares how male authors versus female authors write female characters by looking at the words
-    that follow 'she'
+    that follow female pronouns
 
     :param corpus: Corpus
     :param to_pickle
@@ -566,9 +567,9 @@ def female_characters_author_gender_differences(corpus, to_pickle=False):
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_analysis_dunning(word='she',
-                                                                    corpus1=female_corpus, corpus2=male_corpus,
-                                                                    to_pickle=to_pickle)
+    return compare_word_association_between_corpus_dunning(word=FEM_WORDS,
+                                                           corpus1=female_corpus, corpus2=male_corpus,
+                                                           to_pickle=to_pickle)
 
 
 # Male characters as written by Male Authors versus Female Authors
@@ -577,7 +578,7 @@ def female_characters_author_gender_differences(corpus, to_pickle=False):
 def male_characters_author_gender_differences(corpus, to_pickle=False):
     """
     Compares how male authors versus female authors write male characters by looking at the words
-    that follow 'he'
+    that follow male pronouns
 
     :param corpus: Corpus
     :param to_pickle
@@ -588,9 +589,9 @@ def male_characters_author_gender_differences(corpus, to_pickle=False):
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_analysis_dunning(word='he',
-                                                                    corpus1=female_corpus, corpus2=male_corpus,
-                                                                    to_pickle=to_pickle)
+    return compare_word_association_between_corpus_dunning(word=MASC_WORDS,
+                                                           corpus1=female_corpus, corpus2=male_corpus,
+                                                           to_pickle=to_pickle)
 
 
 # God as written by Male Authors versus Female Authors
@@ -610,9 +611,9 @@ def god_author_gender_differences(corpus, to_pickle=False):
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_analysis_dunning(word='God',
-                                                                  corpus1=female_corpus, corpus2=male_corpus,
-                                                                    to_pickle=to_pickle)
+    return compare_word_association_between_corpus_dunning(word='God',
+                                                           corpus1=female_corpus, corpus2=male_corpus,
+                                                           to_pickle=to_pickle)
 
 
 def money_author_gender_differences(corpus, to_pickle=False):
@@ -629,12 +630,12 @@ def money_author_gender_differences(corpus, to_pickle=False):
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_analysis_dunning(word=['money', 'dollars',
+    return compare_word_association_between_corpus_dunning(word=['money', 'dollars',
                                                                        'pounds',
                                                                    'euros', 'dollar', 'pound',
                                                                    'euro', 'wealth', 'income'],
-                                                             corpus1=female_corpus, corpus2=male_corpus,
-                                                                    to_pickle=to_pickle)
+                                                           corpus1=female_corpus, corpus2=male_corpus,
+                                                           to_pickle=to_pickle)
 
 
 # America as written by Male Authors versus Female Authors
@@ -654,10 +655,10 @@ def america_author_gender_differences(corpus, to_pickle=False):
 
     male_corpus = corpus.filter_by_gender('male')
     female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_analysis_dunning(word='America',
-                                                                    corpus1=female_corpus,
-                                                                    corpus2=male_corpus,
-                                                                    to_pickle=to_pickle)
+    return compare_word_association_between_corpus_dunning(word='America',
+                                                           corpus1=female_corpus,
+                                                           corpus2=male_corpus,
+                                                           to_pickle=to_pickle)
 
 
 def score_plot_to_show(results):
