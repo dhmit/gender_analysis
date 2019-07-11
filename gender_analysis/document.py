@@ -75,13 +75,14 @@ class Document:
 
         self.text = self._load_document_text()
 
-
     @property
     def word_count(self):
         """
-        Lazy-loading for Document.word_count attribute. Returns the number of words in the document.
+        Lazy-loading for **Document.word_count** attribute. Returns the number of words in the document.
         The word_count attribute is useful for the get_word_freq function.
         However, it is performance-wise costly, so it's only loaded when it's actually required.
+
+        :return: Number of words in the document's text as an int
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
@@ -92,7 +93,6 @@ class Document:
         >>> austen.word_count
         86291
 
-        :return: int
         """
 
         if self._word_count is None:
