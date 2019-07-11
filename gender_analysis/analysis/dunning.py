@@ -521,7 +521,7 @@ def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=Fals
 # Male Characters versus Female Characters (words following 'he' versus words following 'she')
 ##############################################################################################
 
-def he_vs_she_associations_analysis_dunning(corpus, to_pickle=False, pickle_filename='dunning_he_vs_she_associated_words.pgz'):
+def he_vs_she_associations_dunning(corpus, to_pickle=False, pickle_filename='dunning_he_vs_she_associated_words.pgz'):
     """
     Uses Dunning analysis to compare words associated with 'he' vs words associated with 'she' in
     the Corpus passed in as the parameter.
