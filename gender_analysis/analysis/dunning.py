@@ -535,8 +535,10 @@ def he_vs_she_associations_dunning(corpus, to_pickle=False, pickle_filename='dun
         he_counter = Counter()
         she_counter = Counter()
         for doc in corpus.documents:
-            he_counter.update(doc.words_associated("he"))
-            she_counter.update(doc.words_associated("she"))
+            for word in MASC_WORDS:
+                he_counter.update(doc.words_associated(word))
+            for word in FEM_WORDS:
+                she_counter.update(doc.words_associated(word))
         if to_pickle:
             results = dunning_total(she_counter, he_counter, filename_to_pickle=pickle_filename)
         else:
