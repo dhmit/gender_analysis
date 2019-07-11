@@ -391,7 +391,7 @@ def compare_word_association_between_corpus_dunning(word, corpus1, corpus2,
     return results
 
 
-def dunning_male_chars_by_author_gender(corpus, to_pickle=False,
+def male_characters_author_gender_differences(corpus, to_pickle=False,
                                         pickle_filename='dunning_male_chars_author_gender.pgz'):
     """
     between male-author and female-author subcorpora, tests distinctiveness of words associated
@@ -414,7 +414,7 @@ def dunning_male_chars_by_author_gender(corpus, to_pickle=False,
                                                            pickle_filename=pickle_filename)
 
 
-def dunning_female_chars_by_author_gender(corpus, to_pickle=False,
+def female_characters_author_gender_differences(corpus, to_pickle=False,
                                           pickle_filename='dunning_female_chars_author_gender.pgz'):
     """
     between male-author and female-author subcorpora, tests distinctiveness of words associated
@@ -526,7 +526,8 @@ def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=Fals
     return results
 
 
-# Male Characters versus Female Characters (words following 'he' versus words following 'she')
+# Male Characters versus Female Characters (words following male pronouns versus words following
+# female pronouns)
 ##############################################################################################
 
 def he_vs_she_associations_dunning(corpus, to_pickle=False, pickle_filename='dunning_he_vs_she_associated_words.pgz'):
@@ -541,51 +542,6 @@ def he_vs_she_associations_dunning(corpus, to_pickle=False, pickle_filename='dun
                                                           to_pickle=True,
                                                           pickle_filename=pickle_filename)
     return compare_word_association_in_corpus_dunning(MASC_WORDS, FEM_WORDS, corpus)
-
-
-# Female characters as written by Male Authors versus Female Authors
-####################################################################
-
-def female_characters_author_gender_differences(corpus, to_pickle=False):
-    """
-    Compares how male authors versus female authors write female characters by looking at the words
-    that follow female pronouns
-
-    :param corpus: Corpus
-    :param to_pickle
-    :return:
-    """
-
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    male_corpus = corpus.filter_by_gender('male')
-    female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_dunning(word=FEM_WORDS,
-                                                           corpus1=female_corpus, corpus2=male_corpus,
-                                                           to_pickle=to_pickle)
-
-
-# Male characters as written by Male Authors versus Female Authors
-####################################################################
-
-def male_characters_author_gender_differences(corpus, to_pickle=False):
-    """
-    Compares how male authors versus female authors write male characters by looking at the words
-    that follow male pronouns
-
-    :param corpus: Corpus
-    :param to_pickle
-    :return:
-    """
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    male_corpus = corpus.filter_by_gender('male')
-    female_corpus = corpus.filter_by_gender('female')
-    return compare_word_association_between_corpus_dunning(word=MASC_WORDS,
-                                                           corpus1=female_corpus, corpus2=male_corpus,
-                                                           to_pickle=to_pickle)
 
 
 def score_plot_to_show(results):
