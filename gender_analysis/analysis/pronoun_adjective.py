@@ -1,6 +1,6 @@
 from statistics import median
-import nltk
 from more_itertools import windowed
+import nltk
 
 from gender_analysis.analysis.instance_distance import male_instance_dist, female_instance_dist
 from gender_analysis import common

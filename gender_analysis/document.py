@@ -9,8 +9,6 @@ import nltk
 from gender_analysis import common
 
 
-
-
 class Document:
     """
     The Document class loads and holds the full text and

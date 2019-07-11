@@ -10,14 +10,6 @@ from gender_analysis import common
 from gender_analysis.analysis import statistical
 
 
-palette = "colorblind"
-style_name = "white"
-style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
-              'font.family': 'serif'}
-sns.set_color_codes(palette)
-sns.set_style(style_name, style_list)
-
-
 def get_count_words(document, words):
     """
     Takes in document, a Document object, and words, a list of words to be counted.
@@ -615,6 +607,7 @@ def box_gender_pronoun_freq(freq_dict, my_pal, title, x="N/A"):
 
     df = pd.DataFrame({x: groups, 'Frequency': val})
     df = df[[x, 'Frequency']]
+    common.load_graph_settings()
     sns.boxplot(x=df[x], y=df['Frequency'],
                 palette=my_pal).set_title("Relative Frequency of Female Pronouns to Total Pronouns")
     plt.xticks(rotation=90)
