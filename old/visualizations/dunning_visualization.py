@@ -46,9 +46,9 @@ if __name__ == '__main__':
     # load_graph_settings(False)
 
     from gender_analysis.corpus import Corpus
-    from gender_analysis.common import BASE_PATH
-    filepath = BASE_PATH / 'corpora' / 'sample_novels' / 'texts'
-    csv_path = BASE_PATH / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+    from gender_analysis.common import TEST_DATA_PATH
+    filepath = TEST_DATA_PATH / 'sample_novels' / 'texts'
+    csv_path = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
     sample = Corpus(filepath, csv_path=csv_path)
 
     analysis_results_unsorted = dunning_result_to_dict(male_vs_female_authors_analysis_dunning(

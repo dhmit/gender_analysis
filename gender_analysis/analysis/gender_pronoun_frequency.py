@@ -1,22 +1,13 @@
+from collections import Counter
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import nltk
-from nltk.corpus import stopwords
-from collections import Counter
 
 from gender_analysis import common
 from gender_analysis.analysis import statistical
-
-nltk.download('stopwords', quiet=True)
-
-palette = "colorblind"
-style_name = "white"
-style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
-              'font.family': 'serif'}
-sns.set_color_codes(palette)
-sns.set_style(style_name, style_list)
 
 
 def get_count_words(document, words):
@@ -29,7 +20,7 @@ def get_count_words(document, words):
     >>> from gender_analysis import common
     >>> from pathlib import Path
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
-    ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
+    ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> get_count_words(scarlett, ["sad", "and"])
     {'sad': 4, 'and': 4}
@@ -55,7 +46,7 @@ def get_comparative_word_freq(freqs):
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(document_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
@@ -93,15 +84,17 @@ def get_counts_by_pos(freqs):
     {'RB': Counter({'quietly': 42, 'usually': 7})}
 
     :param freqs: Counter object of words mapped to their word count
-    :return: dictionary with key as part of speech, value as Counter object of words (of that
-    part of speech) mapped to their word count
+    :return: dictionary with key as part of speech, value as Counter object of words
+        (of that part of speech) mapped to their word count
+
     """
+    common.download_nltk_package_if_not_present('corpora/stopwords')
 
     sorted_words = {}
     # for each word in the counter
     for word in freqs.keys():
-        # filter out if in nltk's list of stop words, e.g. is, the
-        stop_words = set(stopwords.words('english'))
+        # filter out if in nltk's list of stop words, e.g. 'is', 'the'
+        stop_words = set(nltk.corpus.stopwords.words('english'))
         if word not in stop_words:
             # get its part of speech tag from nltk's pos_tag function
             tag = nltk.pos_tag([word])[0][1]
@@ -198,18 +191,19 @@ def books_pronoun_freq(corp, pickle_filepath=None):
     """
     Counts male and female pronouns for every book and finds their relative frequencies per book
     Outputs dictionary mapping novel object to the relative frequency
-        of female pronouns in that book
+    of female pronouns in that book
 
     :param: corp: Corpus object
     :return: dictionary with data organized by groups
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.gender_pronoun_frequency import books_pronoun_freq
-    >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> from gender_analysis.common import TEST_DATA_PATH
+    >>> filepath = TEST_DATA_PATH / 'test_corpus'
+    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> books_pronoun_freq(Corpus(filepath, csv_path=csvpath))
     {<Document (aanrud_longfrock)>: 0.7614617940199335, <Document (abbott_flatlandromance)>: 0.14463840399002492, <Document (abbott_indiscreetletter)>: 0.4160401002506266, <Document (adams_fighting)>: 0.18998330550918197, <Document (alcott_josboys)>: 0.4214648602878916, <Document (alcott_littlemen)>: 0.31113851212494864, <Document (alcott_littlewomen)>: 0.6196017006041621, <Document (alden_chautauqua)>: 0.7515400410677618, <Document (austen_emma)>: 0.566123858869973, <Document (austen_persuasion)>: 0.5303780378037803}
+
     """
     try:
         relative_freq_female = common.load_pickle(pickle_filepath)
@@ -252,18 +246,19 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
     Takes in a Corpus of novels
     Returns a tuple of two dictionaries, one male and female
     Each dictionary maps each Document in the corpus to the proportion of the pronouns
-        of the specified gender in that novel that are subject pronouns
+    of the specified gender in that novel that are subject pronouns
 
     :param corp: Corpus
-    :param to_pickle
+    :param to_pickle:
     :return: tuple of two dictionaries (male, female)
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> from gender_analysis.common import TEST_DATA_PATH
+    >>> filepath = TEST_DATA_PATH / 'test_corpus'
+    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> subject_vs_object_pronoun_freqs(Corpus(filepath, csv_path=csvpath))
     ({<Document (aanrud_longfrock)>: 0.7947761194029851, <Document (abbott_flatlandromance)>: 0.6777777777777777, <Document (abbott_indiscreetletter)>: 0.7938931297709924, <Document (adams_fighting)>: 0.7188093730208993, <Document (alcott_josboys)>: 0.6334563345633456, <Document (alcott_littlemen)>: 0.6454880294659301, <Document (alcott_littlewomen)>: 0.6580560420315237, <Document (alden_chautauqua)>: 0.7583798882681564, <Document (austen_emma)>: 0.7088554720133667, <Document (austen_persuasion)>: 0.6743697478991596}, {<Document (aanrud_longfrock)>: 0.5380577427821522, <Document (abbott_flatlandromance)>: 0.18965517241379312, <Document (abbott_indiscreetletter)>: 0.4457831325301205, <Document (adams_fighting)>: 0.4358523725834798, <Document (alcott_josboys)>: 0.38655886811520973, <Document (alcott_littlemen)>: 0.43472498343273697, <Document (alcott_littlewomen)>: 0.41256335988414194, <Document (alden_chautauqua)>: 0.5462994836488813, <Document (austen_emma)>: 0.48378615249780893, <Document (austen_persuasion)>: 0.48742004264392325})
+
     """
 
     try:
@@ -312,22 +307,24 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
 def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_male=None, pickle_filepath_female=None):
     """
     Takes in a Corpus of novels and a gender.
-    The gender determines whether the male frequency or female frequency will
-        be returned
-    Returns a dictionary of each novel in the Corpus mapped to the portion of
-        the subject pronouns in the book that are of the specified gender
+    The gender determines whether the male frequency or female frequency will be returned.
+
+    Returns a dictionary of each novel in the Corpus mapped to the portion of the subject
+    pronouns in the book that are of the specified gender.
+
     :param corp: Corpus
     :param subject_gender: string 'male' or string 'female'
     :return: dictionary
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> from gender_analysis.common import TEST_DATA_PATH
+    >>> filepath = TEST_DATA_PATH / 'test_corpus'
+    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'male')
     {<Document (aanrud_longfrock)>: 0.25724637681159424, <Document (abbott_flatlandromance)>: 0.9172932330827067, <Document (abbott_indiscreetletter)>: 0.5842696629213483, <Document (adams_fighting)>: 0.8206796818510484, <Document (alcott_josboys)>: 0.573816155988858, <Document (alcott_littlemen)>: 0.6812439261418853, <Document (alcott_littlewomen)>: 0.3974087784241142, <Document (alden_chautauqua)>: 0.2549295774647887, <Document (austen_emma)>: 0.4345710627400768, <Document (austen_persuasion)>: 0.45726495726495725}
     >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'female')
     {<Document (aanrud_longfrock)>: 0.7427536231884058, <Document (abbott_flatlandromance)>: 0.08270676691729323, <Document (abbott_indiscreetletter)>: 0.4157303370786517, <Document (adams_fighting)>: 0.17932031814895155, <Document (alcott_josboys)>: 0.4261838440111421, <Document (alcott_littlemen)>: 0.31875607385811466, <Document (alcott_littlewomen)>: 0.6025912215758857, <Document (alden_chautauqua)>: 0.7450704225352113, <Document (austen_emma)>: 0.5654289372599232, <Document (austen_persuasion)>: 0.5427350427350427}
+
     """
 
     if not(subject_gender == 'male' or subject_gender == 'female'):
@@ -408,10 +405,10 @@ def freq_by_author_gender(d):
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> novel_metadata = {'author': 'Brontë, Anne', 'title': 'The Tenant of Wildfell Hall', 'date': '1848', 'author_gender':'female',
-    ...                   'filename': 'bronte_wildfell.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'bronte_wildfell.txt')}
+    ...                   'filename': 'bronte_wildfell.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'bronte_wildfell.txt')}
     >>> bronte = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Adams, William Taylor', 'title': 'Fighting for the Right', 'date': '1892', 'author_gender':'male',
-    ...                   'filename': 'adams_fighting.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'adams_fighting.txt')}
+    ...                   'filename': 'adams_fighting.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'adams_fighting.txt')}
     >>> fighting = document.Document(novel_metadata)
     >>> d = {fighting:0.3, bronte:0.6}
     >>> freq_by_author_gender(d)
@@ -438,20 +435,18 @@ def freq_by_author_gender(d):
 
 def freq_by_date(d, time_frame, bin_size):
     """
-    Takes in a dictionary of novel objects mapped to relative frequencies
-        (output of above function)
-    Returns a dictionary with frequencies binned by decades into lists
-        List name is mapped to the list of frequencies
+    Takes in a dictionary of novel objects mapped to relative frequencies, and
+    returns a dictionary with frequencies binned by decades into lists
+    List name is mapped to the list of frequencies
 
     list names key:
     date_to_1810 - publication dates before and not including 1810
     date_x_to_y (by decade) - publication dates from x to y
-        Example: date_1810_to_1819 - publication dates from 1810 to 1819
+    Example: date_1810_to_1819 - publication dates from 1810 to 1819
     date_1900_on - publication dates in 1900 and onward
 
     :param d: dictionary
-    :param time_frame: tuple (int start year, int end year) for the range of dates to return
-    frequencies
+    :param time_frame: tuple (int start year, int end year) for the range of dates to return frequencies
     :param bin_size: int for the number of years represented in each list of frequencies
     :return: dictionary {bin_start_year:[frequencies for documents in this bin of years]
 
@@ -460,14 +455,15 @@ def freq_by_date(d, time_frame, bin_size):
     >>> from gender_analysis import common
     >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_date
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_date(d, (1770, 1910), 10)
     {1770: [], 1780: [], 1790: [], 1800: [], 1810: [0.3], 1820: [], 1830: [], 1840: [], 1850: [], 1860: [], 1870: [], 1880: [], 1890: [], 1900: [0.5]}
+
     """
 
     data = {}
@@ -505,11 +501,11 @@ def freq_by_location(d):
     >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_location
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt',
-    ...                   'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                   'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata2 = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
     ...                   'country_publication': 'United States', 'filename':'hawthorne_scarlet.txt',
-    ...                   'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    ...                   'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(novel_metadata2)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> freq_by_location(d)
@@ -562,10 +558,10 @@ def sort_every_year(frequency_dict):
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
     >>> novel_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
     >>> sorted_years = sort_every_year(d)
@@ -611,6 +607,7 @@ def box_gender_pronoun_freq(freq_dict, my_pal, title, x="N/A"):
 
     df = pd.DataFrame({x: groups, 'Frequency': val})
     df = df[[x, 'Frequency']]
+    common.load_graph_settings()
     sns.boxplot(x=df[x], y=df['Frequency'],
                 palette=my_pal).set_title("Relative Frequency of Female Pronouns to Total Pronouns")
     plt.xticks(rotation=90)
@@ -677,9 +674,9 @@ def overall_mean(d):
     :return: float: average of all the values
     >>> from gender_analysis.analysis.gender_pronoun_frequency import overall_mean, books_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import BASE_PATH
-    >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
-    >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+    >>> from gender_analysis.common import TEST_DATA_PATH
+    >>> filepath = TEST_DATA_PATH / 'test_corpus'
+    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> c = Corpus(filepath, csv_path=csvpath)
     >>> freq = books_pronoun_freq(c)
     >>> mean = overall_mean(freq)
