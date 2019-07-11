@@ -391,52 +391,50 @@ def compare_word_association_between_corpus_dunning(word, corpus1, corpus2,
     return results
 
 
-def dunning_male_chars_by_author_gender(corpus, display_data=False, to_pickle=False,
-                                        pickle_filename='dunning_male_vs_female_chars.pgz'):
+def dunning_male_chars_by_author_gender(corpus, to_pickle=False,
+                                        pickle_filename='dunning_male_chars_author_gender.pgz'):
     """
     between male-author and female-author subcorpora, tests distinctiveness of words associated
     with male characters
     Prints out the most distinctive terms overall as well as grouped by verbs, adjectives etc.
-
+    :param corpus: Corpus
+    :param to_pickle: boolean, False by default. Set to True in order to pickle results
+    :param pickle_filename: filename of results to be pickled
     :return: dict
     """
 
     if 'author_gender' not in corpus.metadata_fields:
         raise MissingMetadataError(['author_gender'])
 
-    # By default, try to load precomputed results. Only calculate if no stored results are
-    # available.
-    try:
-        results = load_pickle(pickle_filename)
-    except IOError:
+    m_corpus = corpus.filter_by_gender('male')
+    f_corpus = corpus.filter_by_gender('female')
 
-        m_corpus = corpus.filter_by_gender('male')
-        f_corpus = corpus.filter_by_gender('female')
+    return compare_word_association_between_corpus_dunning(MASC_WORDS, m_corpus, f_corpus,
+                                                           word_window=None, to_pickle=to_pickle,
+                                                           pickle_filename=pickle_filename)
 
-        from collections import Counter
-        wordcounter_male = Counter()
-        wordcounter_female = Counter()
 
-        for doc in m_corpus.documents:
-            for word in MASC_WORDS:
-                wordcounter_male += doc.words_associated(word)
+def dunning_female_chars_by_author_gender(corpus, to_pickle=False,
+                                          pickle_filename='dunning_female_chars_author_gender.pgz'):
+    """
+    between male-author and female-author subcorpora, tests distinctiveness of words associated
+    with male characters
+    Prints out the most distinctive terms overall as well as grouped by verbs, adjectives etc.
+    :param corpus: Corpus
+    :param to_pickle: boolean, False by default. Set to True in order to pickle results
+    :param pickle_filename: filename of results to be pickled
+    :return: dict
+    """
 
-        for doc in f_corpus.documents:
-            for word in MASC_WORDS:
-                wordcounter_female += doc.words_associated(word)
+    if 'author_gender' not in corpus.metadata_fields:
+        raise MissingMetadataError(['author_gender'])
 
-        if to_pickle:
-            results = dunning_total(wordcounter_male, wordcounter_female,
-                                    filename_to_pickle=pickle_filename)
-        else:
-            results = dunning_total(wordcounter_male, wordcounter_female)
-    if display_data:
-        for group in [None, 'verbs', 'adjectives', 'pronouns', 'adverbs']:
-            dunning_result_displayer(results, number_of_terms_to_display=20,
-                                     corpus1_display_name='Fem Author',
-                                     corpus2_display_name='Male Author',
-                                     part_of_speech_to_include=group)
-    return results
+    m_corpus = corpus.filter_by_gender('male')
+    f_corpus = corpus.filter_by_gender('female')
+
+    return compare_word_association_between_corpus_dunning(FEM_WORDS, m_corpus, f_corpus,
+                                                           word_window=None, to_pickle=to_pickle,
+                                                           pickle_filename=pickle_filename)
 
 
 def dunning_result_to_dict(dunning_result, number_of_terms_to_display=10,
