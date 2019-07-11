@@ -27,7 +27,7 @@ def dunn_individual_word(total_words_in_corpus_1,
     :param total_words_in_corpus_2: int, total wordcount in corpus 2
     :param count_of_word_in_corpus_1: int, wordcount of one word in corpus 1
     :param count_of_word_in_corpus_2: int, wordcount of one word in corpus 2
-    :return: Dunning log likelihood
+    :return: Float representing the Dunning log likelihood of the given inputs
 
     >>> total_words_m_corpus = 8648489
     >>> total_words_f_corpus = 8700765
@@ -301,6 +301,7 @@ def compare_word_association_in_corpus_analysis_dunning(word1, word2, corpus,
     :param word2: str
     :param corpus: Corpus
     :param to_pickle: boolean
+    :param pickle_filename: str or Path object
     :return: dict
 
     """
@@ -336,21 +337,21 @@ def compare_word_association_between_corpus_analysis_dunning(word, corpus1, corp
                                                              to_pickle=False,
                                                              pickle_filename='dunning_associated_words.pgz'):
     """
-    Uses Dunning analysis to compare words associated with word between corpuses.
+    Finds words associated with the given word between the two corpora. The function can search the
+    document automatically, or passing in a word window can refine results.
 
-    :param word: str
-    :param corpus1: Corpus
-    :param corpus2: Corpus
-    :param word_window:
-    :param to_pickle: boolean determining if results should be pickled
+    :param word: Word to compare between the two corpora
+    :param corpus1: Corpus object
+    :param corpus2: Corpus object
+    :param word_window: If passed in as int, trims results to only show associated words within that range.
+    :param to_pickle: boolean determining if results should be pickled.
+    :param pickle_filename: str or Path object, pointer to existing pickle or save location for new pickle
     :return: dict
 
     """
     corpus1_name = corpus1.name if corpus1.name else 'corpus1'
     corpus2_name = corpus2.name if corpus2.name else 'corpus2'
 
-    if word_window:
-        pickle_filename += f'_word_window_{word_window}'
     try:
         results = load_pickle(pickle_filename)
     except IOError:
@@ -657,14 +658,15 @@ def money_author_gender_differences(corpus, to_pickle=False):
 # America as written by Male Authors versus Female Authors
 ####################################################################
 
-def america_author_gender_differences(corpus, to_pickle=False):
+def america_author_gender_differences(corpus, to_pickle=False, pickle_filename=None):
     """
     Compares how American male authors versus female authors refer to America by looking at the words
-    that follow 'America'
+    that follow 'America'.
 
     :param corpus: Corpus
-    :param to_pickle:
-    :return: Word Association
+    :param to_pickle: Boolean; True if you wish to save the results as a pickled file
+    :param pickle_filename: str or Path object, required if **to_pickle** is true.
+    :return: Dictionary containing data from **dunning_total** with 'America' as a pivot
 
     """
     if 'author_gender' not in corpus.metadata_fields:
@@ -675,7 +677,8 @@ def america_author_gender_differences(corpus, to_pickle=False):
     return compare_word_association_between_corpus_analysis_dunning(word='America',
                                                                     corpus1=female_corpus,
                                                                     corpus2=male_corpus,
-                                                                    to_pickle=to_pickle)
+                                                                    to_pickle=to_pickle,
+                                                                    pickle_filename=pickle_filename)
 
 
 def score_plot_to_show(results):
