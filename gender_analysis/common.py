@@ -108,11 +108,13 @@ def load_pickle(filepath):
     """
     Loads the pickle stored at a given filepath, and returns the Python object that was stored.
 
-    Example in lieu of Doctest to avoid writing out a file.
-
-        my_object = gender_analysis.common.load_pickle('path_to_pickle/example_pickle.pgz')
-        my_object
-        {'a': 4, 'b': 5, 'c': [1, 2, 3]}
+    >>> from gender_analysis import common
+    >>> from pathlib import Path
+    >>> pickle_filepath = Path(common.BASE_PATH, 'testing', 'test_data',\
+                               'test_pickle.pgz')
+    >>> loaded_object = common.load_pickle(pickle_filepath)
+    >>> loaded_object
+    {'a': 4, 'b': 5, 'c': [1, 2, 3]}
 
     :param filepath: str | Path
     :return: object
