@@ -19,6 +19,8 @@ class Document:
     The Document class loads and holds the full text and
     metadata (author, title, publication date, etc.) of a document
 
+    :param metadata_dict: Dictionary with metadata fields as keys and data as values
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -231,9 +233,11 @@ class Document:
 
     def get_tokenized_text(self):
         """
-        Tokenizes the text and returns it as a list of tokens
+        Tokenizes the text and returns it as a list of tokens, while removing all punctuation.
 
         Note: This does not currently properly handle dashes or contractions.
+
+        :return: List of each word in the Document
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
@@ -245,7 +249,6 @@ class Document:
         >>> tokenized_text
         ['allkinds', 'of', 'punctuation', 'and', 'special', 'chars']
 
-        :rtype: list
         """
 
         # Excluded characters: !"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~
@@ -260,7 +263,9 @@ class Document:
 
     def find_quoted_text(self):
         """
-        Finds all of the quoted statements in the document text
+        Finds all of the quoted statements in the document text.
+
+        :return: List of strings enclosed in double-quotations
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
@@ -304,6 +309,9 @@ class Document:
 
         If this is your first time running this method, it may take a moment to perform a count in the document.
 
+        :param word: word to be counted in text
+        :return: Number of occurences of the word, as an int
+
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
@@ -315,8 +323,6 @@ class Document:
         >>> scarlett.get_count_of_word('ThisWordIsNotInTheWordCounts')
         0
 
-        :param word: word to be counted in text
-        :return: int
         """
 
         # If word_counts were not previously initialized, do it now and store it for the future.
@@ -331,6 +337,8 @@ class Document:
 
         If this is your first time running this method, it may take a moment to perform a count in the document.
 
+        :return: Python Counter object
+
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
@@ -340,7 +348,6 @@ class Document:
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
 
-        :return: Counter
         """
 
         # If word_counts were not previously initialized, do it now and store it for the future.
@@ -390,6 +397,10 @@ class Document:
 
         This is not case sensitive.
 
+        :param search_terms: String or list of strings to search for
+        :param window_size: integer representing number of words to search for in either direction
+        :return: Python Counter object
+
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common
@@ -397,17 +408,14 @@ class Document:
         ...                   'filename': 'test_text_12.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_12.txt')}
         >>> scarlett = Document(document_metadata)
 
-        # search_terms can be either a string...
+        search_terms can be either a string...
         >>> scarlett.get_word_windows("his", window_size=2)
         Counter({'he': 1, 'lit': 1, 'cigarette': 1, 'and': 1, 'then': 1, 'began': 1, 'speech': 1, 'which': 1})
 
-        # ... or a list of strings
+        ... or a list of strings
         >>> scarlett.get_word_windows(['purse', 'tears'])
         Counter({'her': 2, 'of': 1, 'and': 1, 'handed': 1, 'proposal': 1, 'drowned': 1, 'the': 1})
 
-        :param search_terms
-        :param window_size: int
-        :return: Counter
         """
 
         if isinstance(search_terms, str):
@@ -453,6 +461,8 @@ class Document:
         Note: the same word can have a different part of speech tags. In the example below,
         see "refuse" and "permit".
 
+        :return: List of tuples (term, speech_tag)
+
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common
@@ -464,7 +474,6 @@ class Document:
         >>> document.get_part_of_speech_tags()[-4:]
         [('the', 'DT'), ('refuse', 'NN'), ('permit', 'NN'), ('.', '.')]
 
-        :rtype: list
         """
         # figure out if they've got the dependencies downloaded here
         # and download them with some kind of interactive doo dah if not
