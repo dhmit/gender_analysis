@@ -4,6 +4,7 @@ import os
 import pickle
 from pathlib import Path
 
+import nltk
 import seaborn as sns
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
@@ -251,7 +252,34 @@ def load_graph_settings(show_grid_lines=True):
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
 
-    
+
+def download_nltk_package_if_not_present(package_name):
+    """
+    Checks to see whether the user already has a given nltk package,
+    and if not, prompts the user whether to download it.
+
+    We download all necessary packages at install time, but this is just
+    in case the user has deleted them.
+
+    :param package_name: name of the nltk package
+    :return:
+    """
+
+    # nltk.data.find uses the folder + name, but download uses just the name...
+    package_download_name = package_name.split('/')[1]
+
+    try:
+        nltk.data.find(package_name)
+    except LookupError:
+        user_key = input(f'This function requires the NLTK package {package_name}, which you do not have installed.\n'
+                         + 'Press ENTER to download and install this package, or n then enter to cancel and exit.\n')
+        if user_key.strip() == 'n':
+            exit()
+
+        nltk.download(package_download_name)
+        print('\n')
+
+
 class MissingMetadataError(Exception):
     """
     Raised when a function that assumes certain metadata is called on a corpus without that
