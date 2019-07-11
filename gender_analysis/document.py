@@ -9,9 +9,6 @@ import nltk
 from gender_analysis import common
 
 
-# nltk as part of speech tagger, requires these two packages
-nltk.download('punkt', quiet=True)
-nltk.download('averaged_perceptron_tagger', quiet=True)
 
 
 class Document:
@@ -466,8 +463,10 @@ class Document:
 
         :rtype: list
         """
-        # figure out if they've got the dependencies downloaded here
-        # and download them with some kind of interactive doo dah if not
+
+        common.download_nltk_package_if_not_present('tokenizers/punkt')
+        common.download_nltk_package_if_not_present('taggers/averaged_perceptron_tagger')
+
         text = nltk.word_tokenize(self.text)
         pos_tags = nltk.pos_tag(text)
         return pos_tags
