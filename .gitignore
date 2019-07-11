@@ -122,13 +122,6 @@ gender_analysis/throttle.ctrl
 gender_analysis/analysis/assets/stanford-parser.jar
 gender_analysis/analysis/assets/stanford-parser-3.9.1-models.jar
 
-# Corpus generator testing
-gender_analysis/test_corpus/
-gender_analysis/corpora/test_books_30/
-
-# The gutenberg corpus will be downloaded and initialized as a whole outside of version control.
-gender_analysis/corpora/gutenberg/texts
-
 # Line profiler files
 *.lprof
 

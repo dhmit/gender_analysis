@@ -21,8 +21,8 @@ class Corpus:
     Once loaded, each corpus contains a list of Document objects
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import BASE_PATH
-    >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+    >>> from gender_analysis.common import TEST_DATA_PATH
+    >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
     >>> c = Corpus(path)
     >>> type(c.documents), len(c)
     (<class 'list'>, 100)
@@ -110,8 +110,8 @@ class Corpus:
         the corpus.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
         >>> c = Corpus(path)
         >>> len(c)
         100
@@ -127,8 +127,8 @@ class Corpus:
         For convenience.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'test_corpus'
         >>> c = Corpus(path)
         Warning: Some files were not loaded because they are not .txt files. If you would like to analyze the text in these files, convert these files to .txt and re-initiate the corpus.
         >>> docs = []
@@ -149,8 +149,8 @@ class Corpus:
         Presumes the documents to be sorted. (They get sorted by the initializer)
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> sorted_docs = sorted(sample_corpus.documents[:20])
         >>> sample_corpus.documents = sorted_docs
@@ -183,8 +183,8 @@ class Corpus:
         Note: retains the name of the first corpus
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> sorted_docs = sorted(sample_corpus.documents[:20])
         >>> sample_corpus.documents = sorted_docs
@@ -212,8 +212,8 @@ class Corpus:
         Return a copy of this Corpus object
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> corpus_copy = sample_corpus.clone()
         >>> len(corpus_copy) == len(sample_corpus)
@@ -258,9 +258,9 @@ class Corpus:
         'author_gender' field in the metadata field of all documents.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'test_corpus'
-        >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'test_corpus' / 'test_corpus.csv'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'test_corpus'
+        >>> path_to_csv = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
         >>> c = Corpus(path, csv_path=path_to_csv)
         >>> c.count_authors_by_gender('female')
         7
@@ -284,9 +284,9 @@ class Corpus:
         matches the given parameter.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+        >>> path_to_csv = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=path_to_csv)
         >>> female_corpus = c.filter_by_gender('female')
         >>> len(female_corpus)
@@ -312,9 +312,9 @@ class Corpus:
         This function returns a Counter object that stores how many times each word appears in the corpus.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+        >>> csvpath = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_wordcount_counter()['fire']
         2274
@@ -331,9 +331,9 @@ class Corpus:
         This function returns a sorted list of the values present in the corpus for a given metadata field
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+        >>> csvpath = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, name='sample_novels', csv_path=csvpath)
         >>> c.get_field_vals('author_gender')
         ['both', 'female', 'male']
@@ -356,9 +356,9 @@ class Corpus:
         Returns a new Corpus object that contains only documents with a given field_value for metadata_field
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+        >>> csvpath = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
         >>> corp = Corpus(path, csv_path=csvpath)
         >>> female_corpus = corp.subcorpus('author_gender','female')
         >>> len(female_corpus)
@@ -428,9 +428,9 @@ class Corpus:
         :return:
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        >>> path_to_csv = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+        >>> path_to_csv = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=path_to_csv)
         >>> corpus_filter = {'author_gender': 'male'}
         >>> len(c.multi_filter(corpus_filter))
@@ -477,9 +477,9 @@ class Corpus:
         selectivity use get_document_multiple_fields, or if you want multiple documents, use the Corpus.subcorpus funtion.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH, MissingMetadataError
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> from gender_analysis.common import TEST_DATA_PATH, MissingMetadataError
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+        >>> csvpath = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_document("author", "Dickens, Charles")
         <Document (dickens_twocities)>
@@ -516,8 +516,8 @@ class Corpus:
         Returns a specified number of example passages that include a certain expression.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> filepath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> filepath = TEST_DATA_PATH / 'sample_novels' / 'texts'
         >>> corpus = Corpus(filepath)
         >>> results = corpus.get_sample_text_passages('he cried', 2)
         >>> 'he cried' in results[0][1]
@@ -556,9 +556,9 @@ class Corpus:
         multiple documents, use the Corpus.subcorpus function.
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.common import BASE_PATH
-        >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
-        >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
+        >>> from gender_analysis.common import TEST_DATA_PATH
+        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+        >>> csvpath = TEST_DATA_PATH / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
         >>> c.get_document_multiple_fields({"author": "Dickens, Charles", "author_gender": "male"})
         <Document (dickens_twocities)>

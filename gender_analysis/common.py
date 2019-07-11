@@ -7,6 +7,7 @@ from pathlib import Path
 import seaborn as sns
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
+TEST_DATA_PATH = Path(BASE_PATH, 'testing', 'test_data')
 MASC_WORDS = set(('he', 'his', 'him', 'himself'))
 FEM_WORDS = set(('she', 'her', 'hers', 'herself'))
 
@@ -17,7 +18,7 @@ def load_csv_to_list(file_path):
 
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> corpus_metadata_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'sample_novels.csv')
+    >>> corpus_metadata_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'sample_novels.csv')
     >>> corpus_metadata = load_csv_to_list(corpus_metadata_path)
     >>> type(corpus_metadata)
     <class 'list'>
@@ -48,7 +49,7 @@ def load_txt_to_string(file_path):
 
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> novel_path = Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')
+    >>> novel_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')
     >>> novel_text = load_txt_to_string(novel_path)
     >>> type(novel_text), len(novel_text)
     (<class 'str'>, 486253)
@@ -143,7 +144,7 @@ def get_text_file_encoding(filepath):
     >>> from pathlib import Path
     >>> import os
 
-    >>> path=Path(common.BASE_PATH,'testing', 'corpora','sample_novels','texts','hawthorne_scarlet.txt')
+    >>> path=Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')
     >>> common.get_text_file_encoding(path)
     'UTF-8-SIG'
 

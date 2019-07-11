@@ -23,7 +23,7 @@ class Document:
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                      'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
@@ -85,7 +85,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
         86291
@@ -107,7 +107,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> document_string = str(austen)
         >>> document_string
@@ -128,7 +128,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> repr(austen)
         '<Document (austen_persuasion)>'
@@ -146,7 +146,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = Document(austen_metadata)
         >>> austen2 = Document(austen_metadata)
         >>> austen == austen2
@@ -183,10 +183,10 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(austen_metadata)
         >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
-        ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+        ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
         >>> hawthorne = document.Document(hawthorne_metadata)
         >>> hawthorne < austen
         False
@@ -239,7 +239,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'test_text_1.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_1.txt')}
+        ...                   'filename': 'test_text_1.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_1.txt')}
         >>> austin = document.Document(document_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
@@ -266,7 +266,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'test_text_0.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_0.txt')}
+        ...                   'date': '1818', 'filename': 'test_text_0.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_0.txt')}
         >>> document_novel = document.Document(document_metadata)
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
@@ -308,7 +308,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'date': '2018', 'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
+        ...                   'date': '2018', 'filename': 'test_text_2.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_count_of_word("sad")
         4
@@ -335,7 +335,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
-        ...                   'filename': 'test_text_10.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_10.txt')}
+        ...                   'filename': 'test_text_10.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_10.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
@@ -361,7 +361,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
-        ...                   'filename': 'test_text_11.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_11.txt')}
+        ...                   'filename': 'test_text_11.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_11.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
@@ -394,7 +394,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
-        ...                   'filename': 'test_text_12.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_12.txt')}
+        ...                   'filename': 'test_text_12.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_12.txt')}
         >>> scarlett = Document(document_metadata)
 
         # search_terms can be either a string...
@@ -436,7 +436,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-        ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_2.txt')}
+        ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> frequency = scarlett.get_word_freq('sad')
         >>> frequency
@@ -457,7 +457,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-        ...                   'filename': 'test_text_13.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_13.txt')}
+        ...                   'filename': 'test_text_13.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_13.txt')}
         >>> document = Document(document_metadata)
         >>> document.get_part_of_speech_tags()[:4]
         [('They', 'PRP'), ('refuse', 'VBP'), ('to', 'TO'), ('permit', 'VB')]
@@ -481,10 +481,10 @@ class Document:
         :return:
 
         >>> from gender_analysis.document import Document
-        >>> from gender_analysis.common import BASE_PATH
+        >>> from gender_analysis.common import TEST_DATA_PATH
         >>> from pathlib import Path
         >>> metadata = {'filename': 'aanrud_longfrock.txt',
-        ...             'filepath': Path(BASE_PATH, 'testing', 'corpora', 'test_corpus', 'aanrud_longfrock.txt'),
+        ...             'filepath': Path(TEST_DATA_PATH, 'test_corpus', 'aanrud_longfrock.txt'),
         ...             'date': '2098'}
         >>> d = Document(metadata)
         >>> new_metadata = {'date': 1903}
