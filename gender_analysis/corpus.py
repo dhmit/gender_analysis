@@ -480,7 +480,8 @@ class Corpus:
 
         This function will only return the first document in self.documents. It should only be used if you're certain
         there is only one match in the Corpus or if you're not picky about which Document you get.  If you want more
-        selectivity use `get_document_multiple_fields`, or if you want multiple documents, use `subcorpus`.
+        selectivity use **get_document_multiple_fields**, or if you want multiple documents,
+        use **subcorpus**.
 
         :param metadata_field: metadata field to search
         :param field_val: search term
@@ -527,7 +528,7 @@ class Corpus:
 
         :param expression: expression to search for
         :param no_passages: number of passages to return
-        :return:
+        :return: List of passages as strings
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import TEST_DATA_PATH
@@ -563,11 +564,11 @@ class Corpus:
 
     def get_document_multiple_fields(self, metadata_dict):
         """
-        Returns a specific Document object from self.documents that has metadata that matches a given metadata dict.
+        Returns a specific Document object from the corpus that has metadata matching a given metadata dict.
 
-        This method will only return the first document in self.documents.  It should only be used if you're certain
+        This method will only return the first document in the corpus.  It should only be used if you're certain
         there is only one match in the Corpus or if you're not picky about which Document you get.  If you want
-        multiple documents, use the Corpus.subcorpus function.
+        multiple documents, use **subcorpus**.
 
         :param metadata_dict: Dictionary with metadata fields as keys and search terms as values
         :return: Document object
