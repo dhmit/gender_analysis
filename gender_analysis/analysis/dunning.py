@@ -417,13 +417,13 @@ def dunning_male_chars_by_author_gender(corpus, display_data=False, to_pickle=Fa
         wordcounter_male = Counter()
         wordcounter_female = Counter()
 
-        for novel in m_corpus:
+        for doc in m_corpus.documents:
             for word in MASC_WORDS:
-                wordcounter_male += novel.words_associated(word)
+                wordcounter_male += doc.words_associated(word)
 
-        for novel in f_corpus:
+        for doc in f_corpus.documents:
             for word in MASC_WORDS:
-                wordcounter_female += novel.words_associated(word)
+                wordcounter_female += doc.words_associated(word)
 
         if to_pickle:
             results = dunning_total(wordcounter_male, wordcounter_female,
