@@ -115,7 +115,7 @@ class Corpus:
         >>> len(c)
         100
 
-        :return: int
+        :return: number of documents in the corpus as an int
         """
         return len(self.documents)
 
@@ -208,7 +208,7 @@ class Corpus:
 
     def clone(self):
         """
-        Return a copy of this Corpus object
+        Return a copy of the Corpus object
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -220,8 +220,8 @@ class Corpus:
 
         :return: Corpus
         """
-        from copy import copy
-        return copy(self)
+        from copy import deepcopy
+        return deepcopy(self)
 
     def _load_documents(self):
         """
@@ -253,8 +253,12 @@ class Corpus:
 
     def count_authors_by_gender(self, gender):
         """
-        This function returns the number of authors in the corpus with the specified gender. NOTE: there must be an
-        'author_gender' field in the metadata field of all documents.
+        This function returns the number of authors in the corpus with the specified gender.
+
+        NOTE: there must be an 'author_gender' field in the metadata of all documents.
+
+        :param gender: gender identifier to search for in the metadata (i.e. 'female', 'male', etc.)
+        :return: int
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -264,8 +268,6 @@ class Corpus:
         >>> c.count_authors_by_gender('female')
         7
 
-        :param gender: str of the gender to search for in the metadata
-        :return: int
         """
         count = 0
         for document in self.documents:
@@ -281,6 +283,9 @@ class Corpus:
         """
         Return a new Corpus object that contains documents only with authors whose gender
         matches the given parameter.
+
+        :param gender: gender identifier (i.e. 'male', 'female', 'unknown', etc.)
+        :return: Corpus object
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -300,8 +305,6 @@ class Corpus:
         >>> male_corpus.documents[0].title
         'Lisbeth Longfrock'
 
-        :param gender: gender identifier (i.e. 'male', 'female', 'unknown', etc.)
-        :return: Corpus
         """
 
         return self.subcorpus('author_gender', gender)
@@ -315,7 +318,8 @@ class Corpus:
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
         >>> csvpath = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'sample_novels.csv'
         >>> c = Corpus(path, csv_path=csvpath)
-        >>> c.get_wordcount_counter()['fire']
+        >>> word_count = c.get_wordcount_counter()
+        >>> word_count['fire']
         2274
 
         """
@@ -327,7 +331,10 @@ class Corpus:
 
     def get_field_vals(self, field):
         """
-        This function returns a sorted list of the values present in the corpus for a given metadata field
+        This function returns a sorted list of the values present in the corpus for a given metadata field.
+
+        :param field: field to search for (i.e. 'location', 'author_gender', etc.)
+        :return: list of strings
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -337,8 +344,6 @@ class Corpus:
         >>> c.get_field_vals('author_gender')
         ['both', 'female', 'male']
 
-        :param field: str
-        :return: list
         """
 
         if field not in self.metadata_fields:
@@ -353,6 +358,10 @@ class Corpus:
     def subcorpus(self, metadata_field, field_value):
         """
         Returns a new Corpus object that contains only documents with a given field_value for metadata_field
+
+        :param metadata_field: metadata field to search
+        :param field_value: search term
+        :return: Corpus object
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -389,9 +398,6 @@ class Corpus:
         >>> england_corpus.documents[0].title
         'Flatland'
 
-        :param metadata_field: str
-        :param field_value: str
-        :return: Corpus
         """
         
         if metadata_field not in self.metadata_fields:
@@ -423,8 +429,8 @@ class Corpus:
         available for the documents in the corpus.
 
 
-        :param characteristic_dict: Dictionary of metadata keys and search terms as
-        :return:
+        :param characteristic_dict: Dictionary with metadata fields as keys and search terms as values
+        :return: Corpus object
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -475,6 +481,10 @@ class Corpus:
         there is only one match in the Corpus or if you're not picky about which Document you get.  If you want more
         selectivity use get_document_multiple_fields, or if you want multiple documents, use the Corpus.subcorpus funtion.
 
+        :param metadata_field: metadata field to search
+        :param field_val: search term
+        :return: Document Object
+
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH, MissingMetadataError
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
@@ -493,9 +503,6 @@ class Corpus:
         In order to run this function, you must create a new metadata csv
         with this field and run Corpus.update_metadata().
 
-        :param metadata_field: str
-        :param field_val: str/int
-        :return: Document
         """
 
         if metadata_field not in self.metadata_fields:
@@ -513,6 +520,13 @@ class Corpus:
     def get_sample_text_passages(self, expression, no_passages):
         """
         Returns a specified number of example passages that include a certain expression.
+
+        The number of passages that you request is a maximum number, and this function may return
+        fewer if there are limited cases of a passage in the corpus.
+
+        :param expression: expression to search for
+        :param no_passages: number of passages to return
+        :return:
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
@@ -554,6 +568,9 @@ class Corpus:
         there is only one match in the Corpus or if you're not picky about which Document you get.  If you want
         multiple documents, use the Corpus.subcorpus function.
 
+        :param metadata_dict: Dictionary with metadata fields as keys and search terms as values
+        :return: Document object
+
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
@@ -564,8 +581,6 @@ class Corpus:
         >>> c.get_document_multiple_fields({"author": "Chopin, Kate", "title": "The Awakening"})
         <Document (chopin_awakening)>
 
-        :param metadata_dict: dict
-        :return: Document
         """
 
         for field in metadata_dict.keys():
@@ -584,8 +599,11 @@ class Corpus:
 
     def update_metadata(self, new_metadata_path):
         """
-        Takes a filepath to a csv with new metadata and updates the metadata in the documents accordingly.
-        The new file does not need to contain every metadata field in the documents - only the fields that you wish to update.
+        Takes a filepath to a csv with new metadata and updates the metadata in the corpus'
+        documents accordingly. The new file does not need to contain every metadata field in
+        the documents - only the fields that you wish to update.
+
+        NOTE: The csv file must include at least a filename for the documents that will be altered.
 
         :param new_metadata_path: Path to new metadata csv file
         :return: None
