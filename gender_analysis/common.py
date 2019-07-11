@@ -150,7 +150,6 @@ def get_text_file_encoding(filepath):
     >>> from gender_analysis import common
     >>> from pathlib import Path
     >>> import os
-
     >>> path=Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')
     >>> common.get_text_file_encoding(path)
     'UTF-8-SIG'
