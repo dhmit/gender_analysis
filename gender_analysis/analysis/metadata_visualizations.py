@@ -13,7 +13,7 @@ def plot_pubyears(corpus, filename=None):
 
     :param corpus: Corpus
     :param filename: str to name plot file
-    RETURNS a pyplot histogram
+
     """
 
     if 'date' not in corpus.metadata_fields:
@@ -59,7 +59,7 @@ def plot_pubcountries(corpus, filename=None):
 
     :param corpus: Corpus
     :param filename: str to name plot file
-    RETURNS a pyplot bargraph
+
     """
     if 'country_publication' not in corpus.metadata_fields:
         raise MissingMetadataError(['country_publication'])
@@ -121,7 +121,7 @@ def plot_gender_breakdown(corpus, filename=None):
 
     :param corpus: Corpus
     :param filename: str to name plot file
-    RETURNS a pie chart
+
     """
     if 'author_gender' not in corpus.metadata_fields:
         raise MissingMetadataError(['author_gender'])

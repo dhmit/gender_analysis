@@ -49,12 +49,9 @@ def linear_regression(array1, array2, pvalue_target=0.05):
     Perform a linear regression on two continuous variables that may or may not be correlated.
     Returns True if the correlation is significant, and false otherwise.
 
-    :param array1: array-like, one set of continuous data to be compared to array2. e.g. list of
-    publication years in a certain order of novels
-    :param array2: array-like, second set of continuous data to be compared to array1, should be
-    the same size as array1. e.g. he/she distance in the same order of novels as array1
-    :param pvalue_target: largest p-value for which we consider the correlation statistically
-    significant
+    :param array1: array-like, one set of continuous data to be compared to array2. e.g. list of publication years in a certain order of novels
+    :param array2: array-like, second set of continuous data to be compared to array1, should be the same size as array1. e.g. he/she distance in the same order of novels as array1
+    :param pvalue_target: largest p-value for which we consider the correlation statistically significant
     :return: True if the correlation is significant, False otherwise
 
     >>> a1 = np.array([1, 2, 3, 4, 5])
@@ -65,6 +62,7 @@ def linear_regression(array1, array2, pvalue_target=0.05):
     >>> a4 = np.array([14, 8, 17, 9, 16])
     >>> linear_regression(a3, a4)
     False
+
     """
 
     pvalue = stats.linregress(array1, array2)[3]
@@ -76,11 +74,10 @@ def pearson_correlation(array1, array2, pvalue_target=0.05):
     Pearson correlation test of two continuous variables for correlation
 
     :param array1: array-like, one set of continuous data to be compared to array2
-    :param array2: array-like, second set of continuous data to be compared to array1, should be
-    the same size as array1
-    :param pvalue_target: largest p-value for which we consider the correlation statistically
-    significant
-    :return: True if the correlation is significant, False otherwise
+    :param array2: array-like, second set of continuous data to be compared to array1, should be the same size as array1
+    :param pvalue_target: largest p-value for which we consider the correlation statistically significant
+    :return: True if the correlation is significant, False otherwise.
+
     >>> a1 = np.array([1, 2, 3, 4, 5])
     >>> a2 = np.array([1, 2, 3, 4, 5])
     >>> pearson_correlation(a1, a2)
@@ -89,6 +86,7 @@ def pearson_correlation(array1, array2, pvalue_target=0.05):
     >>> a4 = np.array([14, 8, 17, 9, 16])
     >>> pearson_correlation(a3, a4)
     False
+
     """
 
     pvalue = stats.pearsonr(array1, array2)[1]

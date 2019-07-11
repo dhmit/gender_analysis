@@ -11,6 +11,10 @@ def find_gender_adj(document, female):
     Takes in a document and boolean indicating gender, and returns a dictionary of adjectives that
     appear within a window of 5 words around each pronoun
 
+    :param: document: Document
+    :param: female: boolean indicating whether to search for female adjectives (true) or male adjectives (false)
+    :return: dictionary of adjectives that appear around pronouns mapped to the number of occurrences
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -20,11 +24,6 @@ def find_gender_adj(document, female):
     >>> find_gender_adj(scarlett, False)
     {'handsome': 3, 'sad': 1}
 
-    :param: document: Document
-    :param: female: boolean indicating whether to search for female adjectives (true) or
-    male adjectives (false)
-    :return: dictionary of adjectives that appear around pronouns mapped to the number of
-    occurrences
     """
     output = {}
     text = document.get_tokenized_text()
@@ -71,6 +70,9 @@ def find_male_adj(document):
     Takes in a document, returns a dictionary of adjectives that appear within a window of 5
     words around each male pronoun.
 
+    :param: document
+    :return: dictionary of adjectives that appear around male pronouns and the number of occurrences
+
    >>> from gender_analysis import document
    >>> from pathlib import Path
    >>> from gender_analysis import common
@@ -80,32 +82,29 @@ def find_male_adj(document):
    >>> find_male_adj(scarlett)
    {'handsome': 3, 'sad': 1}
 
-   :param:document
-   :return: dictionary of adjectives that appear around male pronouns and the number of
-   occurrences
     """
     return find_gender_adj(document, False)
 
 
 def find_female_adj(document):
     """
-    Takes in a document, returns a dictionary of adjectives that appear within a window of 5
-    words around each female pronoun.
+    Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun.
+
+
+    :param document: A Document object
+    :return: dictionary of adjectives that appear around female pronouns and the number of occurrences
 
     >>> from gender_analysis import document
-   >>> from pathlib import Path
-   >>> from gender_analysis import common
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
     ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.BASE_PATH, 'testing', 'corpora', 'document_test_files', 'test_text_9.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> find_female_adj(scarlett)
     {'beautiful': 3, 'sad': 1}
 
-    :param:document
-    :return: dictionary of adjectives that appear around female pronouns and the number of
-    occurrences
-
     """
+
     return find_gender_adj(document, True)
 
 
@@ -116,9 +115,7 @@ def run_adj_analysis(corpus):
     with female pronouns
 
     :param corpus: Corpus
-    :return:dictionary where each key is a novel and the value is 2 dictionaries:
-    - Adjectives and number of occurrences associated with male pronouns
-    - Adjectives and number of occurrences associated with female pronouns
+    :return: dictionary where each key is a novel and the value is 2 dictionaries: Adjectives and number of occurrences associated with male or female pronouns
 
     """
     results = {}
@@ -218,8 +215,8 @@ def results_by_author_gender(full_results):
     an author of that gender.
 
     :param full_results: dictionary from result of run_adj_analysis
-    :return: dictionary in form {'gender_author': {'male': {adj:occurrences}, 'female':{
-    adj:occurrences}}}
+    :return: dictionary in form {'gender_author': {'male': {adj:occurrences}, 'female':{adj:occurrences}}}
+
     """
     data = {'male_author': {'male': {}, 'female': {}}, "female_author": {'male': {}, 'female': {}}}
 
@@ -240,11 +237,10 @@ def results_by_date(full_results, time_frame, bin_size):
     dictionary mapping adjectives to number of occurrences across novels written in that time period
 
     :param full_results: dictionary from result of run_adj_analysis
-    :param time_frame: tuple (int start year, int end year) for the range of dates to return
-    frequencies
+    :param time_frame: tuple (int start year, int end year) for the range of dates to return frequencies
     :param bin_size: int for the number of years represented in each list of frequencies
-    :return: dictionary in form {date: {'male': {adj:occurrences}, 'female':{adj:occurrences}}},
-    where date is the first year in its bin
+    :return: dictionary in form {date: {'male': {adj:occurrences}, 'female':{adj:occurrences}}}, where date is the first year in its bin
+
     """
     data = {}
     for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
@@ -291,8 +287,8 @@ def get_top_adj(full_results, num):
     
     :param full_results: dictionary from result of run_adj_analysis
     :param num: number of top results to return per gender
-    :return: tuple of lists of top adjectives associated with male pronouns and female pronouns,
-    respectively
+    :return: tuple of lists of top adjectives associated with male pronouns and female pronouns, respectively
+
     """
     male_adj = []
     female_adj = []
