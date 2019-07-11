@@ -23,7 +23,7 @@ class Document:
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-    ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                      'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
@@ -85,7 +85,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
         86291
@@ -107,7 +107,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> document_string = str(austen)
         >>> document_string
@@ -128,7 +128,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> repr(austen)
         '<Document (austen_persuasion)>'
@@ -146,7 +146,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = Document(austen_metadata)
         >>> austen2 = Document(austen_metadata)
         >>> austen == austen2
@@ -183,7 +183,7 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(austen_metadata)
         >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
         ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
