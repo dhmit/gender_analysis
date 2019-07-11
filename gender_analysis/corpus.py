@@ -259,7 +259,7 @@ class Corpus:
         NOTE: there must be an 'author_gender' field in the metadata of all documents.
 
         :param gender: gender identifier to search for in the metadata (i.e. 'female', 'male', etc.)
-        :return: int
+        :return: Number of authors of the given gender
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import TEST_DATA_PATH
@@ -480,7 +480,7 @@ class Corpus:
 
         This function will only return the first document in self.documents. It should only be used if you're certain
         there is only one match in the Corpus or if you're not picky about which Document you get.  If you want more
-        selectivity use get_document_multiple_fields, or if you want multiple documents, use the Corpus.subcorpus funtion.
+        selectivity use `get_document_multiple_fields`, or if you want multiple documents, use `subcorpus`.
 
         :param metadata_field: metadata field to search
         :param field_val: search term
