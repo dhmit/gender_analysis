@@ -128,7 +128,7 @@ class Corpus:
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import TEST_DATA_PATH
-        >>> path = TEST_DATA_PATH / 'small_test_corpus'
+        >>> path = TEST_DATA_PATH / 'test_corpus'
         >>> c = Corpus(path)
         Warning: Some files were not loaded because they are not .txt files. If you would like to analyze the text in these files, convert these files to .txt and re-initiate the corpus.
         >>> docs = []
