@@ -3,6 +3,8 @@ import csv
 import os
 import urllib
 
+from clint import textui
+import requests
 from nltk.parse.stanford import StanfordDependencyParser
 from nltk.tokenize import sent_tokenize, word_tokenize
 
@@ -34,7 +36,7 @@ def get_parser_download_if_not_present():
         not os.path.isfile(path_to_models_jar)):
 
         user_key = input(f'This function requires us to download the Stanford Dependency Parser.\n'
-                         + 'This is a SO-AND-SO mb download, which will take SO-AND-SO minutes on a SO-AND_SO connection\n'
+                         + 'This is a 612 MB download, which may take 10-20 minutes to download on an average 10 MBit/s connection.\n'
                          + 'Press y then enter to download and install this package, or n then enter to cancel and exit.\n')
 
         while user_key.strip() not in ['y', 'n']:
@@ -44,10 +46,19 @@ def get_parser_download_if_not_present():
             print('Exiting.')
             exit()
         elif user_key == 'y':
-            url_to_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser.jar"
-            url_to_models_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser-3.9.1-models.jar"
-            urllib.request.urlretrieve(url_to_jar, path_to_jar)
-            urllib.request.urlretrieve(url_to_models_jar, path_to_models_jar)
+            print('Downloading...')
+            parser_url = 'https://nlp.stanford.edu/software/stanford-parser-full-2018-10-17.zip'
+            zip_path  = parser_dir / 'parser.zip'
+            r = requests.get(parser_url, stream=True)
+
+            # doing this chunk by chunk so we can make a progress bar
+            with open(zip_path, 'wb') as f:
+                total_length = int(r.headers.get('content-length'))
+                for chunk in textui.progress.bar(r.iter_content(chunk_size=1024),
+                                                 expected_size=(total_length/1024) + 1):
+                    if chunk:
+                        f.write(chunk)
+                        f.flush()
 
     parser = StanfordDependencyParser(path_to_jar, path_to_models_jar)
     return parser
