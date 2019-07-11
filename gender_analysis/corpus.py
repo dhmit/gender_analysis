@@ -314,6 +314,8 @@ class Corpus:
         """
         This function returns a Counter object that stores how many times each word appears in the corpus.
 
+        :return: Python Counter object
+
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import BASE_PATH
         >>> path = BASE_PATH / 'testing' / 'corpora' / 'sample_novels' / 'texts'
