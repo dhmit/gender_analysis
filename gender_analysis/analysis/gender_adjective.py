@@ -183,7 +183,6 @@ def merge_raw_results(full_results):
     """
     merged_results = {'male': {}, 'female': {}}
     for novel in list(full_results.keys()):
-        print(novel.title, novel.author)
         for gender in list(full_results[novel].keys()):
             merged_results[gender] = merge(full_results[novel][gender], merged_results[gender])
 
