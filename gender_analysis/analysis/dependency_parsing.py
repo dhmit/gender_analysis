@@ -173,7 +173,7 @@ def get_pronoun_usages(tree, gender):
 
 def get_descriptive_adjectives(tree, gender):
     """
-    Returns a list of adjectives describing male pronouns in the given dependency tree.
+    Returns a list of adjectives describing pronouns for the given gender in the given dependency tree.
 
     :param tree: dependency tree for a document, output of **generate_dependency_tree**
     :param gender: 'male' or 'female', defines which pronouns to search for
@@ -202,7 +202,7 @@ def get_descriptive_adjectives(tree, gender):
 
 def get_descriptive_verbs(tree, gender):
     """
-    Returns a list of verbs describing male pronouns in the given dependency tree.
+    Returns a list of verbs describing pronouns of the given gender in the given dependency tree.
 
     :param tree: dependency tree for a document, output of **generate_dependency_tree**
     :param gender: 'male' or 'female', defines which pronouns to search for
