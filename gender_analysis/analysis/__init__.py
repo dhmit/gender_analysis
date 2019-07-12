@@ -1,9 +1,9 @@
 __all__ = [
     'dependency_parsing',
     'dunning',
-    'gender_pronoun_frequency',
+    'gender_frequency',
     'instance_distance',
-    'pronoun_adjective',
+    'gender_adjective',
     'statistical',
 ]
 
