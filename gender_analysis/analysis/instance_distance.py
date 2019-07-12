@@ -1,11 +1,10 @@
 from statistics import median, mean
 
-import matplotlib.pyplot as plt
-import pandas as pnds
 from scipy import stats
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pnds
 import seaborn as sns
-sns.set()
 
 from gender_analysis import common
 
@@ -373,6 +372,7 @@ def box_plots(inst_data, my_pal, title, x="N/A"):
         groups.extend(temp2)
     df = pnds.DataFrame({x: groups, 'Median Female Instance Distance': val})
     df = df[[x, 'Median Female Instance Distance']]
+    common.load_graph_settings()
     sns.boxplot(x=df[x], y=df['Median Female Instance Distance'],
                 palette=my_pal).set_title(title)
     plt.xticks(rotation=90)

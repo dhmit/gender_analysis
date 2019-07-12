@@ -1,22 +1,13 @@
+from collections import Counter
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import nltk
-from nltk.corpus import stopwords
-from collections import Counter
 
 from gender_analysis import common
 from gender_analysis.analysis import statistical
-
-nltk.download('stopwords', quiet=True)
-
-palette = "colorblind"
-style_name = "white"
-style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': 'True',
-              'font.family': 'serif'}
-sns.set_color_codes(palette)
-sns.set_style(style_name, style_list)
 
 
 def get_count_words(document, words):
@@ -97,12 +88,13 @@ def get_counts_by_pos(freqs):
         (of that part of speech) mapped to their word count
 
     """
+    common.download_nltk_package_if_not_present('corpora/stopwords')
 
     sorted_words = {}
     # for each word in the counter
     for word in freqs.keys():
-        # filter out if in nltk's list of stop words, e.g. is, the
-        stop_words = set(stopwords.words('english'))
+        # filter out if in nltk's list of stop words, e.g. 'is', 'the'
+        stop_words = set(nltk.corpus.stopwords.words('english'))
         if word not in stop_words:
             # get its part of speech tag from nltk's pos_tag function
             tag = nltk.pos_tag([word])[0][1]
@@ -615,6 +607,7 @@ def box_gender_pronoun_freq(freq_dict, my_pal, title, x="N/A"):
 
     df = pd.DataFrame({x: groups, 'Frequency': val})
     df = df[[x, 'Frequency']]
+    common.load_graph_settings()
     sns.boxplot(x=df[x], y=df['Frequency'],
                 palette=my_pal).set_title("Relative Frequency of Female Pronouns to Total Pronouns")
     plt.xticks(rotation=90)
