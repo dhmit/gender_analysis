@@ -1,34 +1,96 @@
+from pathlib import Path
+import csv
+import os
 import urllib
+import zipfile
+
+from clint import textui
+import requests
 from nltk.parse.stanford import StanfordDependencyParser
 from nltk.tokenize import sent_tokenize, word_tokenize
+
+from gender_analysis import common
 from gender_analysis.corpus import Corpus
 from gender_analysis.document import Document
-from gender_analysis.common import store_pickle, load_pickle
-import os.path
-import csv
 
-# TODO: Investigate to see if these functions are used
 
-# def get_parser(path_to_jar, path_to_models_jar):
-#     """
-#     The jar files are too big to commit directly, so download them
-#     :param path_to_jar: local path to stanford-parser.jar
-#     :param path_to_models_jar: local path to stanford-parser-3.9.1-models.jar
-#     >>> parser = get_parser("assets/stanford-parser.jar","assets/stanford-parser-3.9.1-models.jar")
-#     >>> parser == None
-#     False
-#     """
-#
-#
-#     url_to_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser.jar"
-#     url_to_models_jar = "http://www.trecento.com/dh_lab/nltk_jar/stanford-parser-3.9.1-models.jar"
-#     if not os.path.isfile(path_to_jar):
-#         urllib.request.urlretrieve(url_to_jar, path_to_jar)
-#     if not os.path.isfile(path_to_models_jar):
-#         urllib.request.urlretrieve(url_to_models_jar, path_to_models_jar)
-#
-#     parser = StanfordDependencyParser(path_to_jar, path_to_models_jar)
-#     return parser
+def get_parser_download_if_not_present():
+    """
+    Initializes and returns the NLTK wrapper for the Stanford Dependency Parser.
+
+    Prompts the user to download the jar files for the parser if they're not already
+    downloaded.
+
+    """
+
+    parser_dir = common.BASE_PATH / 'stanford_parser'
+    if not os.path.exists(parser_dir):
+        os.mkdir(parser_dir)
+
+    parser_filename = 'stanford-parser.jar'
+    models_filename = 'stanford-parser-3.9.2-models.jar'
+    path_to_jar = parser_dir / parser_filename
+    path_to_models_jar = parser_dir / models_filename
+
+
+        
+    if (not os.path.isfile(path_to_jar) or
+        not os.path.isfile(path_to_models_jar)):
+        # The required jar files don't exist,
+        # so we prompt the user
+
+        user_key = input(f'This function requires us to download the Stanford Dependency Parser.\n'
+                         + 'This is a 612 MB download, which may take 10-20 minutes to download on an average 10 MBit/s connection.\n'
+                         + 'This only happens the first time you run this function.\n'
+                         + 'Press y then enter to download and install this package, or n then enter to cancel and exit.\n')
+
+        while user_key.strip() not in ['y', 'n']:
+            user_key = input(f'Press y then enter to download and install this package, or n then enter to cancel and exit.\n')
+
+        if user_key == 'n':
+            print('Exiting.')
+            exit()
+
+        elif user_key == 'y':
+            # Download the Jar files
+            print('Downloading... (Press CTRL+C to cancel at any time)')
+            parser_url = 'https://nlp.stanford.edu/software/stanford-parser-full-2018-10-17.zip'
+            zip_path  = parser_dir / 'parser.zip'
+
+            r = requests.get(parser_url, stream=True)
+
+            # doing this chunk by chunk so we can make a progress bar
+            with open(zip_path, 'wb') as f:
+                total_length = int(r.headers.get('content-length'))
+                for chunk in textui.progress.bar(r.iter_content(chunk_size=1024),
+                                                 expected_size=(total_length/1024) + 1):
+                    if chunk:
+                        f.write(chunk)
+                        f.flush()
+
+            print('Unpacking files...')
+
+            # unzip and move things to the right place
+            zip_base_dir = 'stanford-parser-full-2018-10-17'
+            parser_zip_path = zip_base_dir + '/' + parser_filename
+            models_zip_path = zip_base_dir + '/' + models_filename
+
+            with zipfile.ZipFile(zip_path) as zipped:
+                zipped.extract(parser_zip_path, parser_dir)
+                zipped.extract(models_zip_path, parser_dir)
+
+            jar_unzipped_path = parser_dir / zip_base_dir / parser_filename
+            models_jar_unzipped_path = parser_dir / zip_base_dir / models_filename
+            os.rename(jar_unzipped_path, path_to_jar)
+            os.rename(models_jar_unzipped_path, path_to_models_jar)
+
+            # tidy up
+            os.rmdir(parser_dir / zip_base_dir)
+            os.remove(zip_path)
+            print('Done!')
+
+    parser = StanfordDependencyParser(path_to_jar, path_to_models_jar)
+    return parser
 
 
 def pickle(document, parser, pickle_filepath='dep_tree.pgz'):
@@ -41,7 +103,7 @@ def pickle(document, parser, pickle_filepath='dep_tree.pgz'):
     """
 
     try:
-        tree = load_pickle(pickle_filepath)
+        tree = common.load_pickle(pickle_filepath)
     except (IOError, FileNotFoundError):
         sentences = sent_tokenize(document.text.lower().replace("\n", " "))
         he_she_sentences = []
@@ -67,7 +129,7 @@ def pickle(document, parser, pickle_filepath='dep_tree.pgz'):
                 tree_list[i].append(triple)
             i += 1
         tree = tree_list
-        store_pickle(tree, pickle_filepath)
+        common.store_pickle(tree, pickle_filepath)
     return tree
 
 
@@ -96,8 +158,9 @@ def parse_document(document, parser):
     ('Scarlet Letter', 1, 0, 0, 1, [], ['told'], [], [])
 
     """
-
+    parser = get_parser_download_if_not_present()
     tree = pickle(document, parser)
+
     male_subj_count = male_obj_count = female_subj_count = female_obj_count = 0
     female_adjectives = []
     male_adjectives = []
