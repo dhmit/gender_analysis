@@ -171,8 +171,14 @@ def run_gender_freq(corpus):
     while num < loops:
         dictionary = {}
         for doc in documents[num * 10: min(c, num * 10 + 9)]:
-            # TODO: use masc/fem globals
-            d = {'he': doc.get_word_freq('he'), 'she': doc.get_word_freq('she')}
+            male = 0
+            for word in common.MASC_WORDS:
+                male += doc.get_word_freq(word)
+            female = 0
+            for word in common.FEM_WORDS:
+                female += doc.get_word_freq(word)
+
+            d = {'he': male, 'she': female}
             d = get_comparative_word_freq(d)
             lst = [d["he"], d["she"]]
             title = hasattr(doc, 'title')
@@ -200,7 +206,7 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     :return: dictionary with data organized by groups
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import document_pronoun_freq
+    >>> from gender_analysis.analysis.gender_frequency import document_pronoun_freq
     >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
@@ -452,7 +458,7 @@ def freq_by_date(d, time_frame, bin_size):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_date
+    >>> from gender_analysis.analysis.gender_frequency import freq_by_date
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
@@ -497,7 +503,7 @@ def freq_by_location(d):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_location
+    >>> from gender_analysis.analysis.gender_frequency import freq_by_location
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt',
     ...                   'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
@@ -671,7 +677,7 @@ def overall_mean(d):
     Returns the average of all the values in a dictionary
     :param d: dictionary with numbers as values
     :return: float: average of all the values
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import overall_mean, document_pronoun_freq
+    >>> from gender_analysis.analysis.gender_frequency import overall_mean, document_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
