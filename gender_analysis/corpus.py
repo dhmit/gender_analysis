@@ -1,6 +1,6 @@
 import csv
 import random
-from os import listdir
+import os
 from pathlib import Path
 from collections import Counter
 
@@ -25,12 +25,12 @@ class Corpus:
     >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
     >>> c = Corpus(path)
     >>> type(c.documents), len(c)
-    (<class 'list'>, 100)
+    (<class 'list'>, 99)
 
     """
 
     def __init__(self, path_to_files, name=None, csv_path=None,
-                       pickle_on_load=None, guess_author_gender=False):
+                       pickle_on_load=None, guess_author_genders=False):
         """
         :param path_to_files: Must be either the path to a directory of txt files or an already-pickled corpus
         :param name: Optional name of the corpus, for ease of use and readability
@@ -44,65 +44,120 @@ class Corpus:
             raise ValueError(f'path_to_files must be a str or Path object, not type {type(path_to_files)}')
 
         self.name = name
-        self.csv_path = csv_path
-        self.path_to_files = path_to_files
-        self.documents = []
-        self.metadata_fields = []
+        self.documents, self.metadata_fields = self._load_documents_and_metadata(path_to_files,
+                                                                                 csv_path)
+        if guess_author_genders:
+            self.guess_author_genders()
 
-        if self.path_to_files.suffix == '.pgz':
-            pickle_data = common.load_pickle(self.path_to_files)
-            self.documents = pickle_data.documents
-            self.metadata_fields = pickle_data.metadata_fields
+        if pickle_on_load is not None:
+            common.store_pickle(self, pickle_on_load)
 
-        elif self.path_to_files.suffix == '' and not self.csv_path:
-            files = listdir(self.path_to_files)
-            self.metadata_fields = ['filename', 'filepath']
-            ignored = False
-            for file in files:
-                if file.endswith('.txt'):
-                    metadata_dict = {'filename': file, 'filepath': self.path_to_files / file}
-                    self.documents.append(Document(metadata_dict))
-                elif not ignored:
-                    ignored = True
+    def _load_documents_and_metadata(self, path_to_files, csv_path):
+        """
+        Loads documents into the corpus with metadata from a csv file given at initialization.
+        """
 
-            if len(self.documents) == 0:  # path led to directory with no .txt files
-                raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
+        # load pickle if provided
+        if path_to_files.suffix == '.pgz':
+            pickle_data = common.load_pickle(path_to_files)
+            return pickle_data.documents, pickle_data.metadata_fields
+
+        # load documents without metadata csv
+        elif path_to_files.suffix == '' and not csv_path:
+            files = os.listdir(path_to_files)
+            metadata_fields = ['filename', 'filepath']
+            ignored = []
+            documents = []
+            for filename in files:
+                if filename.endswith('.txt'):
+                    metadata_dict = {'filename': filename, 'filepath': path_to_files / filename}
+                    documents.append(Document(metadata_dict))
+                elif filename.endswith('.csv'):
+                    continue # let's ignore csv files, they're probably metadata
+                else:
+                    ignored.append(filename)
+
+            if len(documents) == 0:  # path led to directory with no .txt files
+                raise ValueError(
+                    f'path_to_files must lead to a previously pickled corpus or directory of .txt files'
+                )
             elif ignored:
-                print('Warning: Some files were not loaded because they are not .txt files. If '
-                      'you would like to analyze the text in these files, convert these files to '
-                      '.txt and re-initiate the corpus.')
+                print(
+                    'WARNING: the following files were not loaded because they are not .txt files.\n'
+                   + str(ignored) + '\n'
+                   + 'If you would like to analyze the text in these files, convert these files to '
+                   + '.txt and create a new Corpus.'
+                )
 
-        elif self.csv_path and self.path_to_files.suffix == '':
-            self.documents = self._load_documents()
+            return documents, metadata_fields
+
+        # load documents based on the metadata csv
+        elif csv_path and path_to_files.suffix == '':
+            documents = []
+            metadata = set()
+
+            try:
+                csv_list = load_csv_to_list(csv_path)
+            except FileNotFoundError:
+                err = ("Could not find the metadata csv file for the "
+                      + f"'{self.name}' corpus in the expected location "
+                      + f"({csv_path}).")
+                raise FileNotFoundError(err)
+            csv_reader = csv.DictReader(csv_list)
+
+            loaded_document_filenames = []
+            for document_metadata in csv_reader:
+                filename = document_metadata['filename']
+                document_metadata['name'] = self.name
+                document_metadata['filepath'] = path_to_files / filename
+                this_document = Document(document_metadata)
+                documents.append(this_document)
+                loaded_document_filenames.append(filename)
+                metadata.update(list(document_metadata))
+
+            all_txt_files = [f for f in os.listdir(path_to_files) if f.endswith('.txt')]
+            num_loaded = len(documents)
+            num_txt_files = len(all_txt_files)
+            if num_loaded != num_txt_files:
+                # some txt files aren't in the metadata, so issue a warning
+                # we don't need to handle the inverse case, because that
+                # will have broken the document init above
+                print(
+                    f'WARNING: The following .txt files were not loaded because they '
+                    + 'are not your metadata csv:\n'
+                    + str(list(set(all_txt_files) - set(loaded_document_filenames)))
+                    + '\nYou may want to check that your metadata matches your files '
+                    + 'to avoid incorrect results.'
+                )
+
+            return sorted(documents), list(metadata)
 
         else:
             raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
 
-        if guess_author_gender:
-            if 'author' not in self.metadata_fields:
-                raise MissingMetadataError(['author'], 'Cannot guess author gender if no author '
-                                                       'metadata is provided.')
-            self.metadata_fields.append('author_gender')
 
-            detector = gender.Detector()
-            for doc in self.documents:
-                if doc.author is None:
-                    continue
+    def guess_author_genders(self):
+        if 'author' not in self.metadata_fields:
+            raise MissingMetadataError(['author'], 'Cannot guess author gender if no author '
+                                                   'metadata is provided.')
+        self.metadata_fields.append('author_gender')
 
-                if hasattr(doc, 'country_publication'):
-                    guess = detector.get_gender(doc.author.split(' ', 1)[0], doc.country_publication)
-                else:
-                    guess = detector.get_gender(doc.author.split(' ', 1)[0])
+        detector = gender.Detector()
+        for doc in self.documents:
+            if doc.author is None:
+                continue
 
-                if guess == 'female' or guess == 'mostly_female':
-                    doc.author_gender = 'female'
-                elif guess == 'male' or guess == 'mostly_male':
-                    doc.author_gender = 'male'
-                else:  # guess == 'unknown' or guess == 'andy'
-                    doc.author_gender = 'unknown'
+            if hasattr(doc, 'country_publication'):
+                guess = detector.get_gender(doc.author.split(' ', 1)[0], doc.country_publication)
+            else:
+                guess = detector.get_gender(doc.author.split(' ', 1)[0])
 
-        if pickle_on_load is not None:
-            common.store_pickle(self, pickle_on_load)
+            if guess == 'female' or guess == 'mostly_female':
+                doc.author_gender = 'female'
+            elif guess == 'male' or guess == 'mostly_male':
+                doc.author_gender = 'male'
+            else:  # guess == 'unknown' or guess == 'andy'
+                doc.author_gender = 'unknown'
 
     def __len__(self):
         """
@@ -114,7 +169,7 @@ class Corpus:
         >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
         >>> c = Corpus(path)
         >>> len(c)
-        100
+        99
 
         :return: int
         """
@@ -130,7 +185,6 @@ class Corpus:
         >>> from gender_analysis.common import TEST_DATA_PATH
         >>> path = TEST_DATA_PATH / 'test_corpus'
         >>> c = Corpus(path)
-        Warning: Some files were not loaded because they are not .txt files. If you would like to analyze the text in these files, convert these files to .txt and re-initiate the corpus.
         >>> docs = []
         >>> for doc in c:
         ...    docs.append(doc)
@@ -224,33 +278,6 @@ class Corpus:
         from copy import copy
         return copy(self)
 
-    def _load_documents(self):
-        """
-        Loads documents into the corpus with metadata from a csv file given at initialization.
-
-        :return: List of sorted Document objects
-        """
-        documents = []
-        metadata = set()
-
-        try:
-            csv_list = load_csv_to_list(self.csv_path)
-        except FileNotFoundError:
-            err = "Could not find the metadata csv file for the "
-            err += f"'{self.name}' corpus in the expected location "
-            err += f"({self.csv_path})."
-            raise FileNotFoundError(err)
-        csv_reader = csv.DictReader(csv_list)
-
-        for document_metadata in csv_reader:
-            document_metadata['name'] = self.name
-            document_metadata['filepath'] = self.path_to_files / document_metadata['filename']
-            this_document = Document(document_metadata)
-            documents.append(this_document)
-            metadata.update(list(document_metadata))
-
-        self.metadata_fields = list(metadata)
-        return sorted(documents)
 
     def count_authors_by_gender(self, gender):
         """
