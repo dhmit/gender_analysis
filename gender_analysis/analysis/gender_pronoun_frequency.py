@@ -19,10 +19,10 @@ def get_count_words(document, words):
     >>> from gender_analysis import document
     >>> from gender_analysis import common
     >>> from pathlib import Path
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
-    ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
-    >>> scarlett = document.Document(document_metadata)
-    >>> get_count_words(scarlett, ["sad", "and"])
+    >>> document_metadata = {'filename': 'test_text_2.txt',
+    ...                      'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
+    >>> doc = document.Document(document_metadata)
+    >>> get_count_words(doc, ['sad', 'and'])
     {'sad': 4, 'and': 4}
 
     :param: words: a list of words to be counted in text
@@ -45,8 +45,8 @@ def get_comparative_word_freq(freqs):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-    ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+    >>> document_metadata = {'filename': 'hawthorne_scarlet.txt',
+    ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(document_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
@@ -187,21 +187,23 @@ def run_gender_freq(corpus):
         num += 1
 
 
-def books_pronoun_freq(corp, pickle_filepath=None):
+def document_pronoun_freq(corp, pickle_filepath=None):
     """
-    Counts male and female pronouns for every book and finds their relative frequencies per book
-    Outputs dictionary mapping novel object to the relative frequency
-    of female pronouns in that book
+    Counts male and female pronouns for every document in a given corpus,
+    and finds their relative frequencies
+
+    Returns a dictionary mapping each Document in the Corpus to the frequency
+    of female pronouns in that Document
 
     :param: corp: Corpus object
     :return: dictionary with data organized by groups
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import books_pronoun_freq
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import document_pronoun_freq
     >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
-    >>> books_pronoun_freq(Corpus(filepath, csv_path=csvpath))
+    >>> document_pronoun_freq(Corpus(filepath, csv_path=csvpath))
     {<Document (aanrud_longfrock)>: 0.7614617940199335, <Document (abbott_flatlandromance)>: 0.14463840399002492, <Document (abbott_indiscreetletter)>: 0.4160401002506266, <Document (adams_fighting)>: 0.18998330550918197, <Document (alcott_josboys)>: 0.4214648602878916, <Document (alcott_littlemen)>: 0.31113851212494864, <Document (alcott_littlewomen)>: 0.6196017006041621, <Document (alden_chautauqua)>: 0.7515400410677618, <Document (austen_emma)>: 0.566123858869973, <Document (austen_persuasion)>: 0.5303780378037803}
 
     """
@@ -551,8 +553,8 @@ def get_mean(data_dict):
 
 def sort_every_year(frequency_dict):
     """
-    Takes in a dictionary of novels mapped to pronoun frequencies and returns a dictionay of
-        years mapped to lists of pronoun frequencies
+    Takes in a dictionary of documents mapped to pronoun frequencies and returns a dictionary of
+    years mapped to lists of pronoun frequencies
 
     >>> from gender_analysis import document
     >>> from pathlib import Path
@@ -569,7 +571,7 @@ def sort_every_year(frequency_dict):
     {1900: [0.5], 1818: [0.3]}
 
 
-    :param frequency_dict: dictionary of novels mapped to pronoun frequencies
+    :param frequency_dict: dictionary of documents mapped to pronoun frequencies
     :return: dictionary of years mapped to lists of pronoun frequencies
     """
 
@@ -672,13 +674,13 @@ def overall_mean(d):
     Returns the average of all the values in a dictionary
     :param d: dictionary with numbers as values
     :return: float: average of all the values
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import overall_mean, books_pronoun_freq
+    >>> from gender_analysis.analysis.gender_pronoun_frequency import overall_mean, document_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> c = Corpus(filepath, csv_path=csvpath)
-    >>> freq = books_pronoun_freq(c)
+    >>> freq = document_pronoun_freq(c)
     >>> mean = overall_mean(freq)
     >>> str(mean)[:7]
     '0.47123'
@@ -689,7 +691,7 @@ def overall_mean(d):
 
 
 def stat_analysis(corpus):
-    tot_female_dict = books_pronoun_freq(corpus)
+    tot_female_dict = document_pronoun_freq(corpus)
     author_to_freq_dict = freq_by_author_gender(tot_female_dict)
 
     author_gender_pronoun_analysis = statistical.get_p_and_ttest_value(author_to_freq_dict[

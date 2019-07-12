@@ -32,7 +32,6 @@ def get_parser_download_if_not_present():
     path_to_jar = parser_dir / parser_filename
     path_to_models_jar = parser_dir / models_filename
 
-
         
     if (not os.path.isfile(path_to_jar) or
         not os.path.isfile(path_to_models_jar)):
