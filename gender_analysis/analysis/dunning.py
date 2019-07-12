@@ -17,6 +17,10 @@ from gender_analysis.common import (
 )
 
 
+################################################################################
+# BASIC DUNNING FUNCTIONS
+################################################################################
+
 def dunn_individual_word(total_words_in_corpus_1,
                          total_words_in_corpus_2,
                          count_of_word_in_corpus_1,
@@ -218,6 +222,165 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
     return dunning_result
 
 
+
+
+def compare_word_association_in_corpus_dunning(word1, word2, corpus,
+                                               to_pickle=False,
+                                               pickle_filename='dunning_vs_associated_words.pgz'):
+    """
+    Uses Dunning analysis to compare words associated with word1 vs words associated with word2 in
+    the Corpus passed in as the parameter.
+
+    :param word1: str
+    :param word2: str
+    :param corpus: Corpus
+    :param to_pickle: boolean
+    :return: dict
+
+    """
+    corpus_name = corpus.name if corpus.name else 'corpus'
+
+    try:
+        results = load_pickle(pickle_filename)
+    except IOError:
+        try:
+            pickle_filename = f'dunning_{word2}_vs_{word1}_associated_words_{corpus_name}'
+            results = load_pickle(pickle_filename)
+        except:
+            word1_counter = Counter()
+            word2_counter = Counter()
+            for doc in corpus.documents:
+                if isinstance(word1, str):
+                    word1_counter.update(doc.words_associated(word1))
+                else:  # word1 is a list of strings
+                    for word in word1:
+                        word1_counter.update(doc.words_associated(word))
+
+                if isinstance(word2, str):
+                    word2_counter.update(doc.words_associated(word2))
+                else:  # word2 is a list of strings
+                    for word in word2:
+                        word2_counter.update(doc.words_associated(word))
+
+            if to_pickle:
+                results = dunning_total(word1_counter, word2_counter,
+                                        filename_to_pickle=pickle_filename)
+            else:
+                results = dunning_total(word1_counter, word2_counter)
+
+    for group in [None, 'verbs', 'adjectives', 'pronouns', 'adverbs']:
+        dunning_result_displayer(results, number_of_terms_to_display=50,
+                                 part_of_speech_to_include=group)
+
+    return results
+
+
+def compare_word_association_between_corpus_dunning(word, corpus1, corpus2,
+                                                    word_window=None,
+                                                    to_pickle=False,
+                                                    pickle_filename='dunning_associated_words.pgz'):
+    """
+    Uses Dunning analysis to compare words associated with word between corpuses.
+
+    :param word: str or list of strings
+    :param corpus1: Corpus
+    :param corpus2: Corpus
+    :param word_window:
+    :param to_pickle: boolean determining if results should be pickled
+    :return: dict
+
+    """
+    corpus1_name = corpus1.name if corpus1.name else 'corpus1'
+    corpus2_name = corpus2.name if corpus2.name else 'corpus2'
+
+    corpus1_counter = Counter()
+    corpus2_counter = Counter()
+
+    for doc in corpus1.documents:
+        if word_window:
+            doc.get_word_windows(word, window_size=word_window)
+        else:
+            if isinstance(word, str):
+                corpus1_counter.update(doc.words_associated(word))
+            else:  # word is a list of actual words
+                for token in word:
+                    corpus1_counter.update(doc.words_associated(token))
+
+    for doc in corpus2.documents:
+        if word_window:
+            doc.get_word_windows(word, window_size=word_window)
+        else:
+            if isinstance(word, str):
+                corpus2_counter.update(doc.words_associated(word))
+            else:  # word is a list of actual words
+                for token in word:
+                    corpus2_counter.update(doc.words_associated(token))
+
+    if to_pickle:
+        results = dunning_total(corpus1_counter,
+                                corpus2_counter,
+                                pickle_filepath=pickle_filename)
+    else:
+        results = dunning_total(corpus1_counter,
+                                corpus2_counter)
+
+    for group in [None, 'verbs', 'adjectives', 'pronouns', 'adverbs']:
+        dunning_result_displayer(results, number_of_terms_to_display=20,
+                                 corpus1_display_name=f'{corpus1_name}. {word}',
+                                 corpus2_display_name=f'{corpus2_name}. {word}',
+                                 part_of_speech_to_include=group)
+
+    return results
+
+
+
+def dunning_result_to_dict(dunning_result,
+                           number_of_terms_to_display=10,
+                           part_of_speech_to_include=None):
+    """
+    Receives a dictionary of results and returns a dictionary of the top
+    number_of_terms_to_display most distinctive results for each corpus that have a part of speech
+    matching part_of_speech_to_include
+    :param dunning_result:              Dunning result dict that will be sorted through
+    :param number_of_terms_to_display:  Number of terms for each corpus to display
+    :param part_of_speech_to_include:   e.g. 'adjectives', or 'verbs'
+    :return: dict
+    """
+
+    pos_names_to_tags = {
+        'adjectives': ['JJ', 'JJR', 'JJS'],
+        'adverbs': ['RB', 'RBR', 'RBS', 'WRB'],
+        'verbs': ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'],
+        'pronouns': ['PRP', 'PRP$', 'WP', 'WP$']
+    }
+    if part_of_speech_to_include in pos_names_to_tags:
+        part_of_speech_to_include = pos_names_to_tags[part_of_speech_to_include]
+
+    final_results_dict = {}
+
+    reverse = True
+    for i in range(2):
+        sorted_results = sorted(dunning_result.items(), key=lambda x: x[1]['dunning'],
+                                    reverse=reverse)
+        count_displayed = 0
+        for result in sorted_results:
+            if count_displayed == number_of_terms_to_display:
+                break
+            term = result[0]
+            term_pos = nltk.pos_tag([term])[0][1]
+            if part_of_speech_to_include and term_pos not in part_of_speech_to_include:
+                continue
+
+            final_results_dict[result[0]] = result[1]
+            count_displayed += 1
+        reverse = False
+    return final_results_dict
+
+
+################################################################################
+# Visualizers
+################################################################################
+
 def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
                              corpus1_display_name=None, corpus2_display_name=None,
                              part_of_speech_to_include=None):
@@ -291,267 +454,6 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
     print(output)
 
 
-def compare_word_association_in_corpus_dunning(word1, word2, corpus, to_pickle=False, pickle_filename='dunning_vs_associated_words.pgz'):
-    """
-    Uses Dunning analysis to compare words associated with word1 vs words associated with word2 in
-    the Corpus passed in as the parameter.
-
-    :param word1: str
-    :param word2: str
-    :param corpus: Corpus
-    :param to_pickle: boolean
-    :return: dict
-
-    """
-    corpus_name = corpus.name if corpus.name else 'corpus'
-
-    try:
-        results = load_pickle(pickle_filename)
-    except IOError:
-        try:
-            pickle_filename = f'dunning_{word2}_vs_{word1}_associated_words_{corpus_name}'
-            results = load_pickle(pickle_filename)
-        except:
-            word1_counter = Counter()
-            word2_counter = Counter()
-            for doc in corpus.documents:
-                if isinstance(word1, str):
-                    word1_counter.update(doc.words_associated(word1))
-                else:  # word1 is a list of strings
-                    for word in word1:
-                        word1_counter.update(doc.words_associated(word))
-
-                if isinstance(word2, str):
-                    word2_counter.update(doc.words_associated(word2))
-                else:  # word2 is a list of strings
-                    for word in word2:
-                        word2_counter.update(doc.words_associated(word))
-
-            if to_pickle:
-                results = dunning_total(word1_counter, word2_counter,
-                                        filename_to_pickle=pickle_filename)
-            else:
-                results = dunning_total(word1_counter, word2_counter)
-
-    for group in [None, 'verbs', 'adjectives', 'pronouns', 'adverbs']:
-        dunning_result_displayer(results, number_of_terms_to_display=50,
-                                 part_of_speech_to_include=group)
-
-    return results
-
-
-def compare_word_association_between_corpus_dunning(word, corpus1, corpus2,
-                                                    word_window=None,
-                                                    to_pickle=False,
-                                                    pickle_filename='dunning_associated_words.pgz'):
-    """
-    Uses Dunning analysis to compare words associated with word between corpuses.
-
-    :param word: str or list of strings
-    :param corpus1: Corpus
-    :param corpus2: Corpus
-    :param word_window:
-    :param to_pickle: boolean determining if results should be pickled
-    :return: dict
-
-    """
-    corpus1_name = corpus1.name if corpus1.name else 'corpus1'
-    corpus2_name = corpus2.name if corpus2.name else 'corpus2'
-
-    if word_window:
-        pickle_filename += f'_word_window_{word_window}'
-    try:
-        results = load_pickle(pickle_filename)
-    except IOError:
-        print("Precalculated result not available. Running analysis now...")
-        corpus1_counter = Counter()
-        corpus2_counter = Counter()
-        for doc in corpus1.documents:
-            if word_window:
-                doc.get_word_windows(word, window_size=word_window)
-            else:
-                if isinstance(word, str):
-                    corpus1_counter.update(doc.words_associated(word))
-                else:  # word is a list of actual words
-                    for token in word:
-                        corpus1_counter.update(doc.words_associated(token))
-        for doc in corpus2.documents:
-            if word_window:
-                doc.get_word_windows(word, window_size=word_window)
-            else:
-                if isinstance(word, str):
-                    corpus2_counter.update(doc.words_associated(word))
-                else:  # word is a list of actual words
-                    for token in word:
-                        corpus2_counter.update(doc.words_associated(token))
-        if to_pickle:
-            results = dunning_total(corpus1_counter, corpus2_counter,
-                                    pickle_filepath=pickle_filename)
-        else:
-            results = dunning_total(corpus1_counter, corpus2_counter)
-
-    for group in [None, 'verbs', 'adjectives', 'pronouns', 'adverbs']:
-        dunning_result_displayer(results, number_of_terms_to_display=20,
-                                 corpus1_display_name=f'{corpus1_name}. {word}',
-                                 corpus2_display_name=f'{corpus2_name}. {word}',
-                                 part_of_speech_to_include=group)
-
-    return results
-
-
-def male_characters_author_gender_differences(corpus, to_pickle=False,
-                                        pickle_filename='dunning_male_chars_author_gender.pgz'):
-    """
-    between male-author and female-author subcorpora, tests distinctiveness of words associated
-    with male characters
-    Prints out the most distinctive terms overall as well as grouped by verbs, adjectives etc.
-    :param corpus: Corpus
-    :param to_pickle: boolean, False by default. Set to True in order to pickle results
-    :param pickle_filename: filename of results to be pickled
-    :return: dict
-    """
-
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    m_corpus = corpus.filter_by_gender('male')
-    f_corpus = corpus.filter_by_gender('female')
-
-    return compare_word_association_between_corpus_dunning(MASC_WORDS, m_corpus, f_corpus,
-                                                           word_window=None, to_pickle=to_pickle,
-                                                           pickle_filename=pickle_filename)
-
-
-def female_characters_author_gender_differences(corpus, to_pickle=False,
-                                          pickle_filename='dunning_female_chars_author_gender.pgz'):
-    """
-    between male-author and female-author subcorpora, tests distinctiveness of words associated
-    with male characters
-    Prints out the most distinctive terms overall as well as grouped by verbs, adjectives etc.
-    :param corpus: Corpus
-    :param to_pickle: boolean, False by default. Set to True in order to pickle results
-    :param pickle_filename: filename of results to be pickled
-    :return: dict
-    """
-
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    m_corpus = corpus.filter_by_gender('male')
-    f_corpus = corpus.filter_by_gender('female')
-
-    return compare_word_association_between_corpus_dunning(FEM_WORDS, m_corpus, f_corpus,
-                                                           word_window=None, to_pickle=to_pickle,
-                                                           pickle_filename=pickle_filename)
-
-
-def dunning_result_to_dict(dunning_result, number_of_terms_to_display=10,
-                             part_of_speech_to_include=None):
-    """
-    Receives a dictionary of results and returns a dictionary of the top
-    number_of_terms_to_display most distinctive results for each corpus that have a part of speech
-    matching part_of_speech_to_include
-    :param dunning_result:              Dunning result dict that will be sorted through
-    :param number_of_terms_to_display:  Number of terms for each corpus to display
-    :param part_of_speech_to_include:   e.g. 'adjectives', or 'verbs'
-    :return: dict
-    """
-
-    pos_names_to_tags = {
-        'adjectives': ['JJ', 'JJR', 'JJS'],
-        'adverbs': ['RB', 'RBR', 'RBS', 'WRB'],
-        'verbs': ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'],
-        'pronouns': ['PRP', 'PRP$', 'WP', 'WP$']
-    }
-    if part_of_speech_to_include in pos_names_to_tags:
-        part_of_speech_to_include = pos_names_to_tags[part_of_speech_to_include]
-
-    final_results_dict = {}
-
-    reverse = True
-    for i in range(2):
-        sorted_results = sorted(dunning_result.items(), key=lambda x: x[1]['dunning'],
-                                    reverse=reverse)
-        count_displayed = 0
-        for result in sorted_results:
-            if count_displayed == number_of_terms_to_display:
-                break
-            term = result[0]
-            term_pos = nltk.pos_tag([term])[0][1]
-            if part_of_speech_to_include and term_pos not in part_of_speech_to_include:
-                continue
-
-            final_results_dict[result[0]] = result[1]
-            count_displayed += 1
-        reverse = False
-    return final_results_dict
-
-
-################################################
-# Individual Analyses                          #
-################################################
-
-
-# Male Authors versus Female Authors
-################################################
-
-def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=False,
-                                   pickle_filename='dunning_male_vs_female_authors.pgz'):
-    """
-    tests distinctiveness of shared words between male and female authors using dunning
-    If called with display_results=True, prints out the most distinctive terms overall as well as
-    grouped by verbs, adjectives etc.
-    Returns a dict of all terms in the corpus mapped to the dunning data for each term
-
-    :return:dict
-    """
-
-    if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError(['author_gender'])
-
-    # By default, try to load precomputed results. Only calculate if no stored results are
-    # available.
-    try:
-        results = load_pickle(pickle_filename)
-    except IOError:
-
-        m_corpus = corpus.filter_by_gender('male')
-        f_corpus = corpus.filter_by_gender('female')
-        wordcounter_male = m_corpus.get_wordcount_counter()
-        wordcounter_female = f_corpus.get_wordcount_counter()
-        if to_pickle:
-            results = dunning_total(wordcounter_female, wordcounter_male,
-                                    filename_to_pickle=pickle_filename)
-        else:
-            results = dunning_total(wordcounter_female, wordcounter_male)
-
-    if display_results:
-        for group in [None, 'verbs', 'adjectives', 'pronouns', 'adverbs']:
-            dunning_result_displayer(results, number_of_terms_to_display=20,
-                                     corpus1_display_name='Fem Author',
-                                     corpus2_display_name='Male Author',
-                                     part_of_speech_to_include=group)
-    return results
-
-
-# Male Characters versus Female Characters (words following male pronouns versus words following
-# female pronouns)
-##############################################################################################
-
-def he_vs_she_associations_dunning(corpus, to_pickle=False, pickle_filename='dunning_he_vs_she_associated_words.pgz'):
-    """
-    Uses Dunning analysis to compare words associated with 'he' vs words associated with 'she' in
-    the Corpus passed in as the parameter.
-    :param corpus: Corpus
-    :param to_pickle: boolean
-    """
-    if to_pickle:
-        return compare_word_association_in_corpus_dunning(MASC_WORDS, FEM_WORDS, corpus,
-                                                          to_pickle=True,
-                                                          pickle_filename=pickle_filename)
-    return compare_word_association_in_corpus_dunning(MASC_WORDS, FEM_WORDS, corpus)
-
-
 def score_plot_to_show(results):
     """
     displays bar plot of dunning scores for all words in results
@@ -600,3 +502,114 @@ def freq_plot_to_show(results):
     ax = sns.barplot(male_rel_freq, words, palette=colors, alpha=opacity)
     sns.despine(ax=ax, bottom=True, left=True)
     plt.show()
+
+
+################################################################################
+# Individual Analyses                          
+################################################################################
+
+# Words associated with male and female characters,
+# based on whether author is male or female
+
+def male_characters_author_gender_differences(corpus, to_pickle=False,
+                                        pickle_filename='dunning_male_chars_author_gender.pgz'):
+    """
+    between male-author and female-author subcorpora, tests distinctiveness of words associated
+    with male characters
+    Prints out the most distinctive terms overall as well as grouped by verbs, adjectives etc.
+    :param corpus: Corpus
+    :param to_pickle: boolean, False by default. Set to True in order to pickle results
+    :param pickle_filename: filename of results to be pickled
+    :return: dict
+    """
+
+    if 'author_gender' not in corpus.metadata_fields:
+        raise MissingMetadataError(['author_gender'])
+
+    m_corpus = corpus.filter_by_gender('male')
+    f_corpus = corpus.filter_by_gender('female')
+
+    return compare_word_association_between_corpus_dunning(MASC_WORDS, m_corpus, f_corpus,
+                                                           word_window=None, to_pickle=to_pickle,
+                                                           pickle_filename=pickle_filename)
+
+
+def female_characters_author_gender_differences(corpus,
+                                                to_pickle=False,
+                                                pickle_filename='dunning_female_chars_author_gender.pgz'):
+    """
+    between male-author and female-author subcorpora, tests distinctiveness of words associated
+    with male characters
+    Prints out the most distinctive terms overall as well as grouped by verbs, adjectives etc.
+    :param corpus: Corpus
+    :param to_pickle: boolean, False by default. Set to True in order to pickle results
+    :param pickle_filename: filename of results to be pickled
+    :return: dict
+    """
+
+    if 'author_gender' not in corpus.metadata_fields:
+        raise MissingMetadataError(['author_gender'])
+
+    m_corpus = corpus.filter_by_gender('male')
+    f_corpus = corpus.filter_by_gender('female')
+
+    return compare_word_association_between_corpus_dunning(FEM_WORDS, m_corpus, f_corpus,
+                                                           word_window=None, to_pickle=to_pickle,
+                                                           pickle_filename=pickle_filename)
+
+
+def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=False,
+                                   pickle_filename='dunning_male_vs_female_authors.pgz'):
+    """
+    tests distinctiveness of shared words between male and female authors using dunning
+    If called with display_results=True, prints out the most distinctive terms overall as well as
+    grouped by verbs, adjectives etc.
+    Returns a dict of all terms in the corpus mapped to the dunning data for each term
+
+    :return:dict
+    """
+
+    if 'author_gender' not in corpus.metadata_fields:
+        raise MissingMetadataError(['author_gender'])
+
+    # By default, try to load precomputed results. Only calculate if no stored results are
+    # available.
+    try:
+        results = load_pickle(pickle_filename)
+    except IOError:
+
+        m_corpus = corpus.filter_by_gender('male')
+        f_corpus = corpus.filter_by_gender('female')
+        wordcounter_male = m_corpus.get_wordcount_counter()
+        wordcounter_female = f_corpus.get_wordcount_counter()
+        if to_pickle:
+            results = dunning_total(wordcounter_female, wordcounter_male,
+                                    filename_to_pickle=pickle_filename)
+        else:
+            results = dunning_total(wordcounter_female, wordcounter_male)
+
+    if display_results:
+        for group in [None, 'verbs', 'adjectives', 'pronouns', 'adverbs']:
+            dunning_result_displayer(results, number_of_terms_to_display=20,
+                                     corpus1_display_name='Fem Author',
+                                     corpus2_display_name='Male Author',
+                                     part_of_speech_to_include=group)
+    return results
+
+
+def masc_fem_associations_dunning(corpus,
+                                  to_pickle=False,
+                                  pickle_filename='dunning_he_vs_she_associated_words.pgz'):
+    """
+    Uses Dunning analysis to compare words associated with MASC_WORDS vs. words associated
+    with FEM_WORDS in a given Corpus.
+    :param corpus: Corpus
+    :param to_pickle: boolean
+    """
+    if to_pickle:
+        return compare_word_association_in_corpus_dunning(MASC_WORDS, FEM_WORDS, corpus,
+                                                          to_pickle=True,
+                                                          pickle_filename=pickle_filename)
+    return compare_word_association_in_corpus_dunning(MASC_WORDS, FEM_WORDS, corpus)
+
+
