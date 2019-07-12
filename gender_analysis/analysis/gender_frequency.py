@@ -210,15 +210,14 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
-    >>> document_pronoun_freq(Corpus(filepath, csv_path=csvpath))
-    {<Document (aanrud_longfrock)>: 0.7614617940199335, <Document (abbott_flatlandromance)>: 0.14463840399002492, <Document (abbott_indiscreetletter)>: 0.4160401002506266, <Document (adams_fighting)>: 0.18998330550918197, <Document (alcott_josboys)>: 0.4214648602878916, <Document (alcott_littlemen)>: 0.31113851212494864, <Document (alcott_littlewomen)>: 0.6196017006041621, <Document (alden_chautauqua)>: 0.7515400410677618, <Document (austen_emma)>: 0.566123858869973, <Document (austen_persuasion)>: 0.5303780378037803}
+    >>> c = Corpus(filepath, csv_path=csvpath)
+    >>> pronoun_freq_dict = document_pronoun_freq(c)
+    >>> flatland = c.get_document('title', 'Flatland')
+    >>> result = pronoun_freq_dict[flatland]
+    >>> format(result, '.5f')
+    '0.14815'
 
     """
-    try:
-        relative_freq_female = common.load_pickle(pickle_filepath)
-        return relative_freq_female
-    except IOError:
-        pass
 
     relative_freq_male = {}
     relative_freq_female = {}
@@ -265,13 +264,6 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
 
     """
 
-    try:
-        relative_freq_male_sub_v_ob = common.load_pickle(pickle_filepath_male)
-        relative_freq_female_sub_v_ob = common.load_pickle(pickle_filepath_female)
-        return relative_freq_male_sub_v_ob, relative_freq_female_sub_v_ob
-    except IOError:
-        pass
-
     relative_freq_male_subject = {}
     relative_freq_female_subject = {}
     relative_freq_male_object = {}
@@ -299,14 +291,10 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
     book._word_counts_counter = None
 
     if pickle_filepath_male and pickle_filepath_female:
-        common.store_pickle(relative_freq_male_subject,
-                            pickle_filepath_male)
-        common.store_pickle(relative_freq_female_subject,
-                            pickle_filepath_female)
+        common.store_pickle(relative_freq_male_subject, pickle_filepath_male)
+        common.store_pickle(relative_freq_female_subject, pickle_filepath_female)
 
-    result_tuple = (relative_freq_male_subject, relative_freq_female_subject)
-
-    return result_tuple
+    return relative_freq_male_subject, relative_freq_female_subject
 
 
 def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_male=None, pickle_filepath_female=None):
@@ -686,7 +674,7 @@ def overall_mean(d):
     >>> freq = document_pronoun_freq(c)
     >>> mean = overall_mean(freq)
     >>> str(mean)[:7]
-    '0.47123'
+    '0.47296'
     """
     l = dict_to_list(d)
     mean = np.mean(l)

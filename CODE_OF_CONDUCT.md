@@ -8,7 +8,7 @@ In order to foster an inclusive and positive space, behavior and language among 
 
 * Use inclusive language
     * Refrain from generalizing or stereotyping
-    * Opt for gender-neutral language in documentation and conversation (e.g. avoid “guys” and other gendered words)
+    * Opt for gender-neutral language in documentation and conversation
 * Be respectful of differing viewpoints and acknowledge that we all have diverse experiences
 * Accept and give feedback gracefully
 * Show empathy towards others

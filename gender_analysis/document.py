@@ -217,10 +217,12 @@ class Document:
 
         try:
             text = common.load_txt_to_string(file_path)
-        except FileNotFoundError:
-            err = "Could not find the document text file "
-            err += f"at the expected location ({file_path})."
-            raise FileNotFoundError(err)
+        except FileNotFoundError as original_err:
+            err = (
+                f'The filename {self.filename} present in your metadata csv does not exist in your '
+               + 'files directory.\nPlease check that your metadata matches your dataset.'
+            )
+            raise FileNotFoundError(err) from original_err
 
         return text
 

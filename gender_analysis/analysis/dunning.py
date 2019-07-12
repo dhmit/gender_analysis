@@ -77,10 +77,9 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> filepath1 = TEST_DATA_PATH / 'document_test_files'
     >>> filepath2 = TEST_DATA_PATH / 'sample_novels' / 'texts'
     >>> corpus1 = Corpus(filepath1)
-    Warning: Some files were not loaded because they are not .txt files. If you would like to analyze the text in these files, convert these files to .txt and re-initiate the corpus.
     >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
-    -425133.12886726425
+    -424393.3850001963
 
     """
 
@@ -383,18 +382,21 @@ def dunning_result_to_dict(dunning_result,
 
 def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
                              corpus1_display_name=None, corpus2_display_name=None,
-                             part_of_speech_to_include=None):
+                             part_of_speech_to_include=None, save_to_filename=None):
     """
     Convenience function to display dunning results as tables.
 
     part_of_speech_to_include can either be a list of POS tags or a 'adjectives, 'adverbs',
     'verbs', or 'pronouns'. If it is None, all terms are included.
 
+    Optionally save the output to a text file
+
     :param dunning_result:              Dunning result dict to display
     :param number_of_terms_to_display:  Number of terms for each corpus to display
     :param corpus1_display_name:        Name of corpus 1 (e.g. "Female Authors")
     :param corpus2_display_name:        Name of corpus 2 (e.g. "Male Authors")
     :param part_of_speech_to_include:   e.g. 'adjectives', or 'verbs'
+    :param save_to_filename:            Filename to save output
     :return:
     """
 
@@ -450,6 +452,10 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
                     output += '  {:17.0f} |'.format(result[1][heading])
             output += '\n'
             count_displayed += 1
+
+    if save_to_filename:
+        with open(save_to_filename + '.txt', 'w') as outfile:
+            outfile.write(output)
 
     print(output)
 
