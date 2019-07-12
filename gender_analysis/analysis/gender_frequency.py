@@ -214,11 +214,6 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     {<Document (aanrud_longfrock)>: 0.764968152866242, <Document (abbott_flatlandromance)>: 0.14814814814814814, <Document (abbott_indiscreetletter)>: 0.41439205955334985, <Document (adams_fighting)>: 0.1853896103896104, <Document (alcott_josboys)>: 0.4220164609053498, <Document (alcott_littlemen)>: 0.31031031031031026, <Document (alcott_littlewomen)>: 0.6221624529316838, <Document (alden_chautauqua)>: 0.7560196560196559, <Document (austen_emma)>: 0.5706387483825432, <Document (austen_persuasion)>: 0.5355621805792163}
 
     """
-    try:
-        relative_freq_female = common.load_pickle(pickle_filepath)
-        return relative_freq_female
-    except IOError:
-        pass
 
     relative_freq_male = {}
     relative_freq_female = {}
@@ -265,13 +260,6 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
 
     """
 
-    try:
-        relative_freq_male_sub_v_ob = common.load_pickle(pickle_filepath_male)
-        relative_freq_female_sub_v_ob = common.load_pickle(pickle_filepath_female)
-        return relative_freq_male_sub_v_ob, relative_freq_female_sub_v_ob
-    except IOError:
-        pass
-
     relative_freq_male_subject = {}
     relative_freq_female_subject = {}
     relative_freq_male_object = {}
@@ -299,14 +287,10 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
     book._word_counts_counter = None
 
     if pickle_filepath_male and pickle_filepath_female:
-        common.store_pickle(relative_freq_male_subject,
-                            pickle_filepath_male)
-        common.store_pickle(relative_freq_female_subject,
-                            pickle_filepath_female)
+        common.store_pickle(relative_freq_male_subject, pickle_filepath_male)
+        common.store_pickle(relative_freq_female_subject, pickle_filepath_female)
 
-    result_tuple = (relative_freq_male_subject, relative_freq_female_subject)
-
-    return result_tuple
+    return relative_freq_male_subject, relative_freq_female_subject
 
 
 def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_male=None, pickle_filepath_female=None):
