@@ -211,7 +211,7 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> document_pronoun_freq(Corpus(filepath, csv_path=csvpath))
-    {<Document (aanrud_longfrock)>: 0.764968152866242, <Document (abbott_flatlandromance)>: 0.14814814814814814, <Document (abbott_indiscreetletter)>: 0.41439205955334996, <Document (adams_fighting)>: 0.1853896103896104, <Document (alcott_josboys)>: 0.42201646090534983, <Document (alcott_littlemen)>: 0.31031031031031026, <Document (alcott_littlewomen)>: 0.6221624529316838, <Document (alden_chautauqua)>: 0.756019656019656, <Document (austen_emma)>: 0.5706387483825431, <Document (austen_persuasion)>: 0.5355621805792163}
+    {<Document (aanrud_longfrock)>: 0.764968152866242, <Document (abbott_flatlandromance)>: 0.14814814814814814, <Document (abbott_indiscreetletter)>: 0.41439205955334985, <Document (adams_fighting)>: 0.1853896103896104, <Document (alcott_josboys)>: 0.4220164609053498, <Document (alcott_littlemen)>: 0.31031031031031026, <Document (alcott_littlewomen)>: 0.6221624529316838, <Document (alden_chautauqua)>: 0.7560196560196559, <Document (austen_emma)>: 0.5706387483825432, <Document (austen_persuasion)>: 0.5355621805792163}
 
     """
     try:
