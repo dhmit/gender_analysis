@@ -14,7 +14,7 @@ from gender_analysis.corpus import Corpus
 from gender_analysis.document import Document
 
 
-def get_parser_download_if_not_present():
+def _get_parser_download_if_not_present():
     """
     Initializes and returns the NLTK wrapper for the Stanford Dependency Parser.
 
@@ -102,7 +102,7 @@ def generate_dependency_tree(document, pickle_filepath=None):
 
     """
 
-    parser = get_parser_download_if_not_present()
+    parser = _get_parser_download_if_not_present()
     sentences = sent_tokenize(document.text.lower().replace("\n", " "))
     he_she_sentences = []
     for sentence in sentences:
