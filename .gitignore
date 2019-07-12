@@ -119,8 +119,7 @@ gender_analysis/apicache-py3/
 gender_analysis/throttle.ctrl
 
 # Stanford NLP Jar files
-gender_analysis/analysis/assets/stanford-parser.jar
-gender_analysis/analysis/assets/stanford-parser-3.9.1-models.jar
+gender_analysis/stanford_parser
 
 # Line profiler files
 *.lprof
