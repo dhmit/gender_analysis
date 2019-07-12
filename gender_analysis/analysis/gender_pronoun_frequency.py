@@ -171,6 +171,7 @@ def run_gender_freq(corpus):
     while num < loops:
         dictionary = {}
         for doc in documents[num * 10: min(c, num * 10 + 9)]:
+            # TODO: use masc/fem globals
             d = {'he': doc.get_word_freq('he'), 'she': doc.get_word_freq('she')}
             d = get_comparative_word_freq(d)
             lst = [d["he"], d["she"]]
@@ -216,25 +217,20 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     relative_freq_male = {}
     relative_freq_female = {}
 
-    for book in corp.documents:
-        he = book.get_word_freq('he')
-        him = book.get_word_freq('him')
-        his = book.get_word_freq('his')
-        male = he + him + his
+    for doc in corp.documents:
+        male = 0
+        for word in common.MASC_WORDS:
+            male += doc.get_word_freq(word)
 
-        she = book.get_word_freq('she')
-        her = book.get_word_freq('her')
-        hers = book.get_word_freq('hers')
-        female = she + her + hers
+        female = 0
+        for word in common.FEM_WORDS:
+            female += doc.get_word_freq(word)
 
         temp_dict = {'male': male, 'female': female}
         temp_dict = get_comparative_word_freq(temp_dict)
 
-        relative_freq_male[book] = temp_dict['male']
-        relative_freq_female[book] = temp_dict['female']
-
-    book.text = ''
-    book._word_counts_counter = None
+        relative_freq_male[doc] = temp_dict['male']
+        relative_freq_female[doc] = temp_dict['female']
 
     if pickle_filepath:
         common.store_pickle(relative_freq_male, pickle_filepath)
@@ -276,6 +272,7 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
     relative_freq_female_object = {}
 
     for book in corp.documents:
+        # pronouns are hard-coded because these are the only ones guaranteed as subjects and objects
         he = book.get_word_freq('he')
         him = book.get_word_freq('him')
 

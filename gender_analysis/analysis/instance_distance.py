@@ -67,7 +67,7 @@ def words_instance_dist(document, words):
 
 def male_instance_dist(document):
     """
-    Takes in a document, returns a list of distances between each instance of a female pronoun
+    Takes in a document, returns a list of distances between each instance of a male pronoun
     in that document.
 
     >>> from gender_analysis import document
@@ -83,7 +83,7 @@ def male_instance_dist(document):
     :return: list of distances between instances of gendered word
 
     """
-    return words_instance_dist(document, ["his", "him", "he", "himself"])
+    return words_instance_dist(document, common.MASC_WORDS)
 
 
 def female_instance_dist(document):
@@ -103,7 +103,7 @@ def female_instance_dist(document):
     :return: list of distances between instances of gendered word
 
     """
-    return words_instance_dist(document, ["her", "hers", "she", "herself"])
+    return words_instance_dist(document, common.FEM_WORDS)
 
 
 def run_distance_analysis(corpus):
@@ -554,8 +554,8 @@ def run_dist_inst(corpus):
         medians_she = []
         books = []
         for document in documents[num * 10: min(c, num * 10 + 9)]:
-            result_he = instance_dist(document, "he")
-            result_she = instance_dist(document, "she")
+            result_he = male_instance_dist(document)
+            result_she = female_instance_dist(document)
             try:
                 medians_he.append(median(result_he))
             except:
