@@ -48,7 +48,7 @@ setuptools.setup(
     description="Toolkit for analyzing gender in documents",
     install_requires=REQUIRED_PACKAGES,
     long_description=LONG_DESCRIPTION,
-    long_description_content_type="text/markdowns",
+    long_description_content_type="text/markdown",
     url="https://github.com/dhmit/gender_analysis",
     packages=setuptools.find_packages(),
     classifiers=[

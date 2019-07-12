@@ -15,7 +15,4 @@ Complete documentation for the toolkit, including installation instructions and 
 is available at https://gender-analysis.readthedocs.io/
 
 ## Contributing
-To use our tools or contribute to the project, please view our guide to contributing, `CONTRIBUTING.md`. It includes information on how to install the tools we used as well as style guidelines for adding code. We are open to contributions and would love to see other people’s ideas, thoughts, and additions to this project, so feel free to leave comments or make a pull request!
-
-## Copyright
-
+To contribute to the project, please view our guide to contributing, `CONTRIBUTING.md`. We are open to contributions and would love to see other people’s ideas, thoughts, and additions to this project, so feel free to leave comments or make a pull request!

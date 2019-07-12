@@ -1,2 +1,2 @@
-global-include *.pgz *.py *.txt *.xml *.pdf *.html *.ipynb *.css *.js *.png *.tiff *.jpg *.xls *.mid *.json *.md *.rst *.zip *.command *nwc  LICENSE
+global-include *.pgz *.py *.txt *.xml *.pdf *.html *.ipynb *.css *.js *.png *.tiff *.jpg *.json *.md *.rst *.zip  LICENSE
 global-exclude *ipynb_checkpoints* *-checkpoint.ipynb
