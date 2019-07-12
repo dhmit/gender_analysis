@@ -455,6 +455,7 @@ class Document:
         """
         Returns the part of speech tags as a list of tuples. The first part of each tuple is the
         term, the second one the part of speech tag.
+
         Note: the same word can have a different part of speech tags. In the example below,
         see "refuse" and "permit".
 

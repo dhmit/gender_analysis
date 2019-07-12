@@ -12,10 +12,11 @@ from gender_analysis.analysis import statistical
 
 def get_count_words(document, words):
     """
-    Takes in document, a Document object, and words, a list of words to be counted.
+    Takes in a Document object and a list of words to be counted.
     Returns a dictionary where the keys are the elements of 'words' list
     and the values are the numbers of occurrences of the elements in the document.
     N.B.: Not case-sensitive.
+
     >>> from gender_analysis import document
     >>> from gender_analysis import common
     >>> from pathlib import Path
@@ -115,7 +116,8 @@ def display_gender_freq(d, title):
 
     :param d: dictionary in the format {"Author/Document": [he_freq, she_freq]}
     :param title: title of graph
-    :return:
+    :return: None
+
     """
     he_val = []
     she_val = []
@@ -195,8 +197,8 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     Returns a dictionary mapping each Document in the Corpus to the frequency
     of female pronouns in that Document
 
-    :param: corp: Corpus object
-    :return: dictionary with data organized by groups
+    :param corp: Corpus object
+    :return: dictionary with data organized by Document
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.gender_pronoun_frequency import document_pronoun_freq
@@ -237,7 +239,6 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     book._word_counts_counter = None
 
     if pickle_filepath:
-        common.store_pickle(relative_freq_male, pickle_filepath)
         common.store_pickle(relative_freq_female, pickle_filepath)
 
     return relative_freq_female
@@ -370,8 +371,9 @@ def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_mal
 
 def dict_to_list(d):
     """
-    Takes in a dictionary and returns a list of the values in the dictionary
+    Takes in a dictionary and returns a list of its values.
     If there are repeats in the values, there will be repeats in the list
+
     :param d: dictionary
     :return: list of values in the dictionary
 
@@ -382,6 +384,7 @@ def dict_to_list(d):
     >>> d2 = {}
     >>> dict_to_list(d2)
     []
+
     """
     L = []
     for key, value in d.items():
@@ -391,10 +394,9 @@ def dict_to_list(d):
 
 def freq_by_author_gender(d):
     """
-    Takes in a dictionary of novel objects mapped to relative frequencies
-        (output of above function)
-    Returns a dictionary with frequencies binned by author gender into lists
-        List name is mapped to the list of frequencies
+    Takes in a dictionary of novel objects mapped to relative frequencies (from **document_pronoun_freq**,
+    **subject_vs_object_freqs**, or **subject_pronouns_gender_comparison**).
+    Returns a dictionary with frequencies binned by author gender into lists.
 
     list names key:
     male_author - male authors
@@ -415,6 +417,7 @@ def freq_by_author_gender(d):
     >>> d = {fighting:0.3, bronte:0.6}
     >>> freq_by_author_gender(d)
     {'Male Author': [0.3], 'Female Author': [0.6]}
+
     """
 
     male_author = []
@@ -591,12 +594,15 @@ def sort_every_year(frequency_dict):
 
 def box_gender_pronoun_freq(freq_dict, my_pal, title, x="N/A"):
     """
-    Takes in a frequency dictionaries and exports its values as a bar-and-whisker graph
-    :param freq_dict: dictionary of frequencies grouped up
+    Takes in a frequency dictionary (from **freq_by_author_gender**, **freq_by_date**,
+     or **freq_by_location**) and exports its values as a bar-and-whisker graph
+
+    :param freq_dict: dictionary of frequencies
     :param my_pal: palette to be used
     :param title: title of exported graph
     :param x: name of x-vars
-    :return:
+    :return: None
+
     """
 
     plt.clf()
@@ -623,13 +629,15 @@ def box_gender_pronoun_freq(freq_dict, my_pal, title, x="N/A"):
 
 def bar_sub_obj_freq(she_freq_dict, he_freq_dict, title, x="N/A"):
     """
-    Creates a bar graph give male/female subject/object frequencies. Meant to be run with data
+    Creates a bar graph given male/female subject/object frequencies. Meant to be run with data
     sorted by 'freq_by_author_gender', 'freq_by_date', or 'freq_by_location'
+
     :param she_freq_dict:
     :param he_freq_dict:
     :param title: name of the exported file
     :param x: value of x axis
-    :return:
+    :return: None
+
     """
 
     fig, ax = plt.subplots()
