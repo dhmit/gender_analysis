@@ -211,7 +211,7 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> document_pronoun_freq(Corpus(filepath, csv_path=csvpath))
-    {<Document (aanrud_longfrock)>: 0.7614617940199335, <Document (abbott_flatlandromance)>: 0.14463840399002492, <Document (abbott_indiscreetletter)>: 0.4160401002506266, <Document (adams_fighting)>: 0.18998330550918197, <Document (alcott_josboys)>: 0.4214648602878916, <Document (alcott_littlemen)>: 0.31113851212494864, <Document (alcott_littlewomen)>: 0.6196017006041621, <Document (alden_chautauqua)>: 0.7515400410677618, <Document (austen_emma)>: 0.566123858869973, <Document (austen_persuasion)>: 0.5303780378037803}
+    {<Document (aanrud_longfrock)>: 0.764968152866242, <Document (abbott_flatlandromance)>: 0.14814814814814814, <Document (abbott_indiscreetletter)>: 0.41439205955334996, <Document (adams_fighting)>: 0.1853896103896104, <Document (alcott_josboys)>: 0.42201646090534983, <Document (alcott_littlemen)>: 0.31031031031031026, <Document (alcott_littlewomen)>: 0.6221624529316838, <Document (alden_chautauqua)>: 0.756019656019656, <Document (austen_emma)>: 0.5706387483825431, <Document (austen_persuasion)>: 0.5355621805792163}
 
     """
     try:
@@ -686,7 +686,7 @@ def overall_mean(d):
     >>> freq = document_pronoun_freq(c)
     >>> mean = overall_mean(freq)
     >>> str(mean)[:7]
-    '0.47123'
+    '0.47296'
     """
     l = dict_to_list(d)
     mean = np.mean(l)
