@@ -171,7 +171,14 @@ def run_gender_freq(corpus):
     while num < loops:
         dictionary = {}
         for doc in documents[num * 10: min(c, num * 10 + 9)]:
-            d = {'he': doc.get_word_freq('he'), 'she': doc.get_word_freq('she')}
+            male = 0
+            for word in common.MASC_WORDS:
+                male += doc.get_word_freq(word)
+            female = 0
+            for word in common.FEM_WORDS:
+                female += doc.get_word_freq(word)
+
+            d = {'he': male, 'she': female}
             d = get_comparative_word_freq(d)
             lst = [d["he"], d["she"]]
             title = hasattr(doc, 'title')
@@ -199,42 +206,36 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     :return: dictionary with data organized by groups
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import document_pronoun_freq
+    >>> from gender_analysis.analysis.gender_frequency import document_pronoun_freq
     >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
-    >>> document_pronoun_freq(Corpus(filepath, csv_path=csvpath))
-    {<Document (aanrud_longfrock)>: 0.7614617940199335, <Document (abbott_flatlandromance)>: 0.14463840399002492, <Document (abbott_indiscreetletter)>: 0.4160401002506266, <Document (adams_fighting)>: 0.18998330550918197, <Document (alcott_josboys)>: 0.4214648602878916, <Document (alcott_littlemen)>: 0.31113851212494864, <Document (alcott_littlewomen)>: 0.6196017006041621, <Document (alden_chautauqua)>: 0.7515400410677618, <Document (austen_emma)>: 0.566123858869973, <Document (austen_persuasion)>: 0.5303780378037803}
+    >>> c = Corpus(filepath, csv_path=csvpath)
+    >>> pronoun_freq_dict = document_pronoun_freq(c)
+    >>> flatland = c.get_document('title', 'Flatland')
+    >>> result = pronoun_freq_dict[flatland]
+    >>> format(result, '.5f')
+    '0.14815'
 
     """
-    try:
-        relative_freq_female = common.load_pickle(pickle_filepath)
-        return relative_freq_female
-    except IOError:
-        pass
 
     relative_freq_male = {}
     relative_freq_female = {}
 
-    for book in corp.documents:
-        he = book.get_word_freq('he')
-        him = book.get_word_freq('him')
-        his = book.get_word_freq('his')
-        male = he + him + his
+    for doc in corp.documents:
+        male = 0
+        for word in common.MASC_WORDS:
+            male += doc.get_word_freq(word)
 
-        she = book.get_word_freq('she')
-        her = book.get_word_freq('her')
-        hers = book.get_word_freq('hers')
-        female = she + her + hers
+        female = 0
+        for word in common.FEM_WORDS:
+            female += doc.get_word_freq(word)
 
         temp_dict = {'male': male, 'female': female}
         temp_dict = get_comparative_word_freq(temp_dict)
 
-        relative_freq_male[book] = temp_dict['male']
-        relative_freq_female[book] = temp_dict['female']
-
-    book.text = ''
-    book._word_counts_counter = None
+        relative_freq_male[doc] = temp_dict['male']
+        relative_freq_female[doc] = temp_dict['female']
 
     if pickle_filepath:
         common.store_pickle(relative_freq_male, pickle_filepath)
@@ -263,19 +264,13 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
 
     """
 
-    try:
-        relative_freq_male_sub_v_ob = common.load_pickle(pickle_filepath_male)
-        relative_freq_female_sub_v_ob = common.load_pickle(pickle_filepath_female)
-        return relative_freq_male_sub_v_ob, relative_freq_female_sub_v_ob
-    except IOError:
-        pass
-
     relative_freq_male_subject = {}
     relative_freq_female_subject = {}
     relative_freq_male_object = {}
     relative_freq_female_object = {}
 
     for book in corp.documents:
+        # pronouns are hard-coded because these are the only ones guaranteed as subjects and objects
         he = book.get_word_freq('he')
         him = book.get_word_freq('him')
 
@@ -296,14 +291,10 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
     book._word_counts_counter = None
 
     if pickle_filepath_male and pickle_filepath_female:
-        common.store_pickle(relative_freq_male_subject,
-                            pickle_filepath_male)
-        common.store_pickle(relative_freq_female_subject,
-                            pickle_filepath_female)
+        common.store_pickle(relative_freq_male_subject, pickle_filepath_male)
+        common.store_pickle(relative_freq_female_subject, pickle_filepath_female)
 
-    result_tuple = (relative_freq_male_subject, relative_freq_female_subject)
-
-    return result_tuple
+    return relative_freq_male_subject, relative_freq_female_subject
 
 
 def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_male=None, pickle_filepath_female=None):
@@ -455,7 +446,7 @@ def freq_by_date(d, time_frame, bin_size):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_date
+    >>> from gender_analysis.analysis.gender_frequency import freq_by_date
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)
@@ -500,7 +491,7 @@ def freq_by_location(d):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import freq_by_location
+    >>> from gender_analysis.analysis.gender_frequency import freq_by_location
     >>> novel_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                   'country_publication': 'United Kingdom', 'filename':  'austen_persuasion.txt',
     ...                   'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
@@ -674,7 +665,7 @@ def overall_mean(d):
     Returns the average of all the values in a dictionary
     :param d: dictionary with numbers as values
     :return: float: average of all the values
-    >>> from gender_analysis.analysis.gender_pronoun_frequency import overall_mean, document_pronoun_freq
+    >>> from gender_analysis.analysis.gender_frequency import overall_mean, document_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
@@ -683,7 +674,7 @@ def overall_mean(d):
     >>> freq = document_pronoun_freq(c)
     >>> mean = overall_mean(freq)
     >>> str(mean)[:7]
-    '0.47123'
+    '0.47296'
     """
     l = dict_to_list(d)
     mean = np.mean(l)
