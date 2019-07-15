@@ -14,6 +14,10 @@ def instance_dist(document, word):
     Takes in a particular word, returns a list of distances between each instance of that word in
     the document.
 
+    :param document: Document object to analyze
+    :param word: str, word to search text for distance between occurrences
+    :return: list of distances between consecutive instances of word
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -22,10 +26,6 @@ def instance_dist(document, word):
     >>> scarlett = document.Document(document_metadata)
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
-
-    :param: document: Document to analyze
-    :param: word: str, word to search text for distance between occurrences
-    :return: list of distances between consecutive instances of word
 
     """
     return words_instance_dist(document, [word])
@@ -36,6 +36,10 @@ def words_instance_dist(document, words):
     Takes in a document and list of words (e.g. gendered pronouns), returns a list of distances
     between each instance of one of the words in that document
 
+    :param document: Document object
+    :param words: list of strings; words to search for in the document
+    :return: list of distances between instances of any word in the supplied list
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -44,10 +48,6 @@ def words_instance_dist(document, words):
     >>> scarlett = document.Document(document_metadata)
     >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
     [6, 5, 6, 6, 7]
-
-    :param: document: Document object
-    :param: words: list of strings
-    :return: list of distances between instances of any word in words
 
     """
     text = document.get_tokenized_text()
@@ -73,6 +73,9 @@ def male_instance_dist(document):
     Takes in a document, returns a list of distances between each instance of a male pronoun
     in that document.
 
+    :param: Document object
+    :return: list of distances between instances of gendered words
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -81,9 +84,6 @@ def male_instance_dist(document):
     >>> scarlett = document.Document(document_metadata)
     >>> male_instance_dist(scarlett)
     [6, 5, 6, 6, 7]
-
-    :param: document
-    :return: list of distances between instances of gendered word
 
     """
     return words_instance_dist(document, common.MASC_WORDS)
@@ -94,6 +94,9 @@ def female_instance_dist(document):
     Takes in a document, returns a list of distances between each instance of a female pronoun
     in that document.
 
+    :param: Document object
+    :return: list of distances between instances of gendered word
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -102,9 +105,6 @@ def female_instance_dist(document):
     >>> scarlett = document.Document(document_metadata)
     >>> female_instance_dist(scarlett)
     [6, 5, 6, 6, 7]
-
-    :param: Document object
-    :return: list of distances between instances of gendered word
 
     """
     return words_instance_dist(document, common.FEM_WORDS)
@@ -299,9 +299,9 @@ def get_highest_distances(results, num):
 
     - Documents with the largest median male instance distance
     - Documents with the largest median female instance distance
-    - Documents with the largest difference between median male & median female instance distances
-        each list contains tuples, where each tuple has a document and the median male/female/difference
-        instance distance
+    - Documents with the largest difference between median male & median female instance distances \
+    each list contains tuples, where each tuple has a document and the median male/female/difference \
+    instance distance
 
     :param results: dictionary of results from run_distance_analysis
     :param num: number of top distances to return
@@ -409,19 +409,18 @@ def box_plots(inst_data, my_pal, title, x="N/A"):
 
 def process_medians(helst, shelst, authlst):
     """
-
-    >>> medians_he = [12, 130, 0, 12, 314, 18, 15, 12, 123]
-    >>> medians_she = [123, 52, 12, 345, 0,  13, 214, 12, 23]
-    >>> books = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
-    >>> process_medians(helst=medians_he, shelst=medians_she, authlst=books)
-    {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215], 'she': [10.25, 0, 28.75, 0, 14.266666666666667, 0, 0], 'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
-
     :param helst: List of male instance distances
     :param shelst: List of female instance distances
     :param authlst:
     :return: a dictionary sorted as so {
         "he":[ratio of he to she if >= 1, else 0], "she":[ratio of she to he if > 1, else 0] "book":[lst of book authors]
         }
+
+    >>> medians_he = [12, 130, 0, 12, 314, 18, 15, 12, 123]
+    >>> medians_she = [123, 52, 12, 345, 0,  13, 214, 12, 23]
+    >>> books = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+    >>> process_medians(helst=medians_he, shelst=medians_she, authlst=books)
+    {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215], 'she': [10.25, 0, 28.75, 0, 14.266666666666667, 0, 0], 'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
 
     """
     d = {"he": [], "she": [], "book": []}
@@ -446,18 +445,19 @@ def process_medians(helst, shelst, authlst):
 
 def bubble_sort_across_lists(dictionary):
     """
+    :param dictionary: containing 3 different list values.
+        Note: dictionary keys MUST contain arguments 'he', 'she', and 'book'
+    :return: dictionary sorted across all three lists in a specific method:
+
+        - Descending order of 'he' values
+        - Ascending order of 'she' values
+        - Corresponding values of 'book' values
+
     >>> d = {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215],
     ...     'she': [10.25, 0, 28.75, 0, 14.266666666666667, 0, 0],
     ...     'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
     >>> bubble_sort_across_lists(d)
     {'he': [5.3478260869565215, 2.5, 1.3846153846153846, 1.0, 0, 0, 0], 'she': [0, 0, 0, 0, 10.25, 14.266666666666667, 28.75], 'book': ['i', 'b', 'f', 'h', 'a', 'g', 'd']}
-
-    :param dictionary: containing 3 different list values.
-        Note: dictionary keys MUST contain arguments 'he', 'she', and 'book'
-    :return: dictionary sorted across all three lists in a specific method
-        1) Descending order of 'he' values
-        2) Ascending order of 'she' values
-        3) Corresponding values of 'book' values
 
     """
     lst1 = dictionary['he']

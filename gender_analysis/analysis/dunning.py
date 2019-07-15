@@ -591,7 +591,7 @@ def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=Fals
     :param display_results: Boolean; reports a visualization of the results if True
     :param to_pickle: Boolean; Will save the results to a pickle file if True
     :param pickle_filename: Path to pickle object; will try to search for results in this location or write pickle file to path if to_pickle is true.
-    :return:dict
+    :return: dict
 
     """
 
