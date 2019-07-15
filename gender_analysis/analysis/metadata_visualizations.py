@@ -9,10 +9,12 @@ def plot_pubyears(corpus, filename=None):
     """
     Creates a histogram displaying the frequency of books that were published within a 20 year 
     period.
-    Requires that corpus contains a 'date' metadata field.
 
-    :param corpus: Corpus
-    :param filename: str to name plot file
+    *NOTE:* Requires that corpus contains a 'date' metadata field.
+
+    :param corpus: Corpus object
+    :param filename: Name of file to save plot as; will not write a file if None
+    :return: None
 
     """
 
@@ -55,10 +57,12 @@ def plot_pubyears(corpus, filename=None):
 def plot_pubcountries(corpus, filename=None):
     """
     Creates a bar graph displaying the frequency of books that were published in each country.
-    Requires that corpus contains a 'country_publication' metadata field.
 
-    :param corpus: Corpus
-    :param filename: str to name plot file
+    *NOTE:* Requires that corpus contains a 'country_publication' metadata field.
+
+    :param corpus: Corpus object
+    :param filename: Name of file to save plot as; will not write a file if None
+    :return: None
 
     """
     if 'country_publication' not in corpus.metadata_fields:
@@ -117,10 +121,12 @@ def plot_pubcountries(corpus, filename=None):
 def plot_gender_breakdown(corpus, filename=None):
     """
     Creates a pie chart displaying the composition of male and female writers in the data.
-    Requires that corpus contains a 'author_gender' metadata field.
 
-    :param corpus: Corpus
-    :param filename: str to name plot file
+    *NOTE:* Requires that corpus contains a 'author_gender' metadata field.
+
+    :param corpus: Corpus object
+    :param filename: Name of file to save plot as; will not write a file if None
+    :return: None
 
     """
     if 'author_gender' not in corpus.metadata_fields:
@@ -168,10 +174,13 @@ def plot_gender_breakdown(corpus, filename=None):
 def plot_metadata_pie(corpus, filename=None):
     """
     Creates a pie chart indicating the fraction of metadata that is filled in the corpus.
-    Requires that corpus contains 'author_gender' and 'country_publication metadata fields.
 
-    :param corpus: Corpus
-    :param filename: str to name plot file
+    *NOTE:* Requires that corpus contains 'author_gender' and 'country_publication' metadata fields.
+
+    :param corpus: Corpus object
+    :param filename: Name of file to save plot as; will not write a file if None
+    :return: None
+
     """
 
     if ('author_gender' not in corpus.metadata_fields
@@ -219,7 +228,9 @@ def create_corpus_summary_visualizations(corpus):
     overall metadata completion of a given corpus.
 
 
-    :param corpus: Corpus
+    :param corpus: Corpus object
+    :return: None
+
     """
     plot_gender_breakdown(corpus)
     plot_pubyears(corpus)

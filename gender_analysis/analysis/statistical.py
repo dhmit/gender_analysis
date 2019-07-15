@@ -2,15 +2,15 @@ import numpy as np
 from scipy import stats
 
 
-def get_p_and_ttest_value(list_a,list_b):
+def get_p_and_ttest_value(list_a, list_b):
 
     """
     Takes in two lists and returns t-test and p value
     can be used to establish correlation between author gender and word usage
     also used for null hypothesis testing
 
-    :param list_a:
-    :param list_b:
+    :param list_a: List of things to compare to list_b
+    :param list_b: List of things to compare to list_a
     :return: (ttest value , p value)
     """
 
@@ -21,20 +21,24 @@ def get_p_and_ttest_value(list_a,list_b):
 def ind_ttest(array1, array2, pvalue_target=0.05):
     """
     Independent t-test for two independent variables
+
     :param array1: array-like, data for one category. e.g. he/she distance in novels authored by
-    women
+        women
     :param array2: array-like, data for second category. e.g. he/she distance in novels authored
-    by men
+        by men
     :param pvalue_target: largest p-value for which we consider the test statistically significant
     :return: True if the difference in the means of the two arrays are significant, False otherwise
+
     >>> a1 = np.array([1, 2, 3, 4, 5])
     >>> a2 = np.array([1, 2, 3, 4, 5])
     >>> ind_ttest(a1, a2)
     False
+
     >>> a3 = np.array([3, 4, 8, 6, 2])
     >>> a4 = np.array([14, 8, 17, 9, 16])
     >>> ind_ttest(a3, a4)
     True
+
     """
 
     # don't assume that the two variables have equal standard deviation
