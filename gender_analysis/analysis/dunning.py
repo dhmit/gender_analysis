@@ -77,10 +77,9 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> filepath1 = TEST_DATA_PATH / 'document_test_files'
     >>> filepath2 = TEST_DATA_PATH / 'sample_novels' / 'texts'
     >>> corpus1 = Corpus(filepath1)
-    Warning: Some files were not loaded because they are not .txt files. If you would like to analyze the text in these files, convert these files to .txt and re-initiate the corpus.
     >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
-    -425133.12886726425
+    -424393.3850001963
 
     """
 

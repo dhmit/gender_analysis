@@ -135,129 +135,95 @@ def generate_dependency_tree(document, pickle_filepath=None):
     return tree
 
 
-def get_male_pronoun_usages(tree):
+def get_pronoun_usages(tree, gender):
     """
-    Returns a dictionary relating the occurrences of male pronouns as the
+    Returns a dictionary relating the occurrences of a given gender's pronouns as the
     subject and object of a sentence.
 
     :param tree: dependency tree for a document, output of **generate_dependency_tree**
+    :param gender: 'male' or 'female', defines which pronouns to search for
     :return: Dictionary counting the times male pronouns are used as the subject and object,
         formatted as {'subject': <int>, 'object': <int>}
 
     """
 
-    male_obj_count = 0
-    male_subj_count = 0
+    if gender.lower() in ['male', 'female']:
+        if gender.lower() == 'male':
+            subj_pronoun = 'he'
+            obj_pronoun = 'him'
+        else:
+            subj_pronoun = 'she'
+            obj_pronoun = 'her'
+
+    else:
+        raise ValueError(f'get_pronoun_usages currently only supports "male" or "female", not {gender}')
+
+    obj_count = 0
+    subj_count = 0
 
     for sentence in tree:
         for triple in sentence:
-            if triple[1] == "nsubj" and triple[2][0] == "he":
-                male_subj_count += 1
-            if triple[1] == "dobj" and triple[2][0] == "him":
-                male_obj_count += 1
+            if triple[1] == "nsubj" and triple[2][0] == subj_pronoun:
+                subj_count += 1
+            if triple[1] == "dobj" and triple[2][0] == obj_pronoun:
+                obj_count += 1
 
-    return {'subject': male_subj_count, 'object': male_obj_count}
+    return {'subject': subj_count, 'object': obj_count}
 
 
-def get_female_pronoun_usages(tree):
+def get_descriptive_adjectives(tree, gender):
     """
-    Returns a dictionary relating the occurrences of male pronouns as the
-    subject and object of a sentence.
+    Returns a list of adjectives describing pronouns for the given gender in the given dependency tree.
 
     :param tree: dependency tree for a document, output of **generate_dependency_tree**
-    :return: Dictionary counting the times male pronouns are used as the subject and object,
-        formatted as {'subject': <int>, 'object': <int>}
-
-    """
-
-    female_obj_count = 0
-    female_subj_count = 0
-
-    for sentence in tree:
-        for triple in sentence:
-            if triple[1] == "nsubj" and triple[2][0] == "she":
-                female_subj_count += 1
-            if triple[1] == "dobj" and triple[2][0] == "her":
-                female_obj_count += 1
-
-    return {'subject': female_subj_count, 'object': female_obj_count}
-
-
-def get_male_adjectives(tree):
-    """
-    Returns a list of adjectives describing male pronouns in the given dependency tree.
-
-    :param tree: dependency tree for a document, output of **generate_dependency_tree**
+    :param gender: 'male' or 'female', defines which pronouns to search for
     :return: List of adjectives as strings
 
     """
 
-    male_adjectives = []
+    if gender.lower() in ['male', 'female']:
+        if gender.lower() == 'male':
+            pronoun = 'he'
+        else:
+            pronoun = 'she'
+    else:
+        raise ValueError(f'get_descriptive_adjectives currently only supports "male" or "female", not {gender}')
+
+    adjectives = []
+
     for sentence in tree:
         for triple in sentence:
             if triple[1] == "nsubj" and triple[0][1] == "JJ":
-                if triple[2][0] == "he":
-                    male_adjectives.append(triple[0][0])
+                if triple[2][0] == pronoun:
+                    adjectives.append(triple[0][0])
 
-    return male_adjectives
+    return adjectives
 
 
-def get_female_adjectives(tree):
+def get_descriptive_verbs(tree, gender):
     """
-    Returns a list of adjectives describing female pronouns in the given dependency tree.
+    Returns a list of verbs describing pronouns of the given gender in the given dependency tree.
 
     :param tree: dependency tree for a document, output of **generate_dependency_tree**
-    :return: List of adjectives as strings
-
-    """
-
-    female_adjectives = []
-    for sentence in tree:
-        for triple in sentence:
-            if triple[1] == "nsubj" and triple[0][1] == "JJ":
-                if triple[2][0] == "she":
-                    female_adjectives.append(triple[0][0])
-
-    return female_adjectives
-
-
-def get_male_verbs(tree):
-    """
-    Returns a list of verbs describing male pronouns in the given dependency tree.
-
-    :param tree: dependency tree for a document, output of **generate_dependency_tree**
+    :param gender: 'male' or 'female', defines which pronouns to search for
     :return: List of verbs as strings
 
     """
+    if gender.lower() in ['male', 'female']:
+        if gender.lower() == 'male':
+            pronoun = 'he'
+        else:
+            pronoun = 'she'
+    else:
+        raise ValueError(f'get_descriptive_verbs get_descriptive_adjectives currently only supports "male" or "female", not {gender}')
 
-    male_verbs = []
+    verbs = []
 
     for sentence in tree:
         for triple in sentence:
             if triple[1] == "nsubj" and (triple[0][1] == "VBD" or triple[0][1] == "VB" or
                                          triple[0][1] == "VBP" or triple[0][1] == "VBZ"):
-                if triple[2][0] == "he":
-                    male_verbs.append(triple[0][0])
+                if triple[2][0] == pronoun:
+                    verbs.append(triple[0][0])
 
-    return male_verbs
-
-
-def get_female_verbs(tree):
-    """
-    Returns a list of verbs describing female pronouns in the given dependency tree.
-
-    :param tree: dependency tree for a document, output of **generate_dependency_tree**
-    :return: List of verbs as strings
-
-    """
-
-    female_verbs = []
-
-    for sentence in tree:
-        for triple in sentence:
-            if triple[1] == "nsubj" and (triple[0][1] == "VBD" or triple[0][1] == "VB" or
-                                         triple[0][1] == "VBP" or triple[0][1] == "VBZ"):
-                if triple[2][0] == "she":
-                    female_verbs.append(triple[0][0])
-
-    return female_verbs
+    return verbs
