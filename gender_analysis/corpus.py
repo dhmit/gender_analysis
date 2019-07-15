@@ -35,7 +35,7 @@ class Corpus:
     """
 
     def __init__(self, path_to_files, name=None, csv_path=None,
-                       pickle_on_load=None, guess_author_gender=False):
+                       pickle_on_load=None, guess_author_genders=False):
 
         if isinstance(path_to_files, str):
             path_to_files = Path(path_to_files)
@@ -133,7 +133,6 @@ class Corpus:
 
         else:
             raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
-
 
     def guess_author_genders(self):
         if 'author' not in self.metadata_fields:
