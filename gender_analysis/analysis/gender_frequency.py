@@ -15,7 +15,8 @@ def get_count_words(document, words):
     Takes in a Document object and a list of words to be counted.
     Returns a dictionary where the keys are the elements of 'words' list
     and the values are the numbers of occurrences of the elements in the document.
-    N.B.: Not case-sensitive.
+
+    Not case-sensitive.
 
     >>> from gender_analysis import document
     >>> from gender_analysis import common

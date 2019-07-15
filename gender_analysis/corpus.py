@@ -278,12 +278,11 @@ class Corpus:
         from copy import deepcopy
         return deepcopy(self)
 
-
     def count_authors_by_gender(self, gender):
         """
         This function returns the number of authors in the corpus with the specified gender.
 
-        NOTE: there must be an 'author_gender' field in the metadata of all documents.
+        *NOTE:* there must be an 'author_gender' field in the metadata of all documents.
 
         :param gender: gender identifier to search for in the metadata (i.e. 'female', 'male', etc.)
         :return: Number of authors of the given gender
