@@ -12,10 +12,18 @@ gender\_analysis.analysis.dunning module
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.analysis.gender\_pronoun\_frequency module
+gender\_analysis.analysis.gender\_adjective module
 -----------------------------------------------------------
 
-.. automodule:: gender_analysis.analysis.gender_pronoun_frequency
+.. automodule:: gender_analysis.analysis.gender_adjective
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+gender\_analysis.analysis.gender\_frequency module
+---------------------------------------------------
+
+.. automodule:: gender_analysis.analysis.gender_frequency
    :members:
    :undoc-members:
    :show-inheritance:
@@ -32,14 +40,6 @@ gender\_analysis.analysis.metadata\_visualizations module
 ---------------------------------------------------------
 
 .. automodule:: gender_analysis.analysis.metadata_visualizations
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-gender\_analysis.analysis.pronoun\_adjective module
----------------------------------------------------
-
-.. automodule:: gender_analysis.analysis.pronoun_adjective
    :members:
    :undoc-members:
    :show-inheritance:
