@@ -88,8 +88,8 @@ def find_male_adj(document):
 
 def find_female_adj(document):
     """
-    Takes in a document, returns a dictionary of adjectives that appear within a window of 5 words around each female pronoun.
-
+    Takes in a document, returns a dictionary of adjectives that appear within a window of 5
+    words around each female pronoun.
 
     :param document: A Document object
     :return: dictionary of adjectives that appear around female pronouns and the number of occurrences
@@ -138,6 +138,7 @@ def store_raw_results(results, pickle_filepath='pronoun_adj_raw_analysis.pgz'):
     :param results: dictionary of results from run_adj_analysis
     :param pickle_filepath: filepath to save the output
     :return: None, saves results as pickled file with name 'pronoun_adj_raw_analysis'
+
     """
     try:
         common.load_pickle(pickle_filepath)
@@ -163,6 +164,7 @@ def merge(novel_adj_dict, full_adj_dict):
     >>> full_adj_dict = {'hello': 15, 'bienvenue': 3, 'hi': 23}
     >>> merge(novel_adj_dict, full_adj_dict)
     {'hello': 20, 'bienvenue': 3, 'hi': 30, 'hola': 9, 'bonjour': 2}
+
     """
     for adj in list(novel_adj_dict.keys()):
         adj_count = novel_adj_dict[adj]
@@ -180,6 +182,7 @@ def merge_raw_results(full_results):
 
     :param full_results: full corpus results from run_adj_analysis
     :return: dictionary in the form {'gender':{'adj': occurrences}}
+
     """
     merged_results = {'male': {}, 'female': {}}
     for novel in list(full_results.keys()):
@@ -196,6 +199,7 @@ def get_overlapping_adjectives_raw_results(merged_results):
     that overlap across both and their occurrences. FORMAT - {'adjective': [male, female]}
     :param merged_results:
     :return: dictionary in the form {'adjective':{'gender': num occurrences associated with gender}}
+
     """
     overlap_results = {}
     male_adj = list(merged_results['male'].keys())
@@ -264,6 +268,7 @@ def results_by_location(full_results):
 
     :param full_results: dictionary from result of run_adj_analysis
     :return: dictionary in form {'location': {'male': {adj:occurrences}, 'female':{adj:occurrences}}}
+
     """
     data = {}
 

@@ -18,6 +18,10 @@ def get_count_words(document, words):
 
     Not case-sensitive.
 
+    :param document: Document object
+    :param words: a list of words to be counted in text
+    :return: a dictionary where the key is the word and the value is the count
+
     >>> from gender_analysis import document
     >>> from gender_analysis import common
     >>> from pathlib import Path
@@ -27,8 +31,6 @@ def get_count_words(document, words):
     >>> get_count_words(doc, ['sad', 'and'])
     {'sad': 4, 'and': 4}
 
-    :param: words: a list of words to be counted in text
-    :return: a dictionary where the key is the word and the value is the count
     """
     dic_word_counts = {}
     for word in words:
@@ -59,6 +61,7 @@ def get_comparative_word_freq(freqs):
     >>> d2 = {'he': 0, 'she': 0}
     >>> d2
     {'he': 0, 'she': 0}
+
     """
 
     total_freq = sum(freqs.values())
@@ -80,14 +83,14 @@ def get_counts_by_pos(freqs):
     and the value is a counter object of words of that part of speech and their frequencies.
     It also filters out words like "is", "the". We used `nltk`'s stop words function for filtering.
 
+    :param freqs: Counter object of words mapped to their word count
+    :return: dictionary with key as part of speech, value as Counter object of words
+        (of that part of speech) mapped to their word count
+
     >>> get_counts_by_pos(Counter({'baked':1,'chair':3,'swimming':4}))
     {'VBN': Counter({'baked': 1}), 'NN': Counter({'chair': 3}), 'VBG': Counter({'swimming': 4})}
     >>> get_counts_by_pos(Counter({'is':10,'usually':7,'quietly':42}))
     {'RB': Counter({'quietly': 42, 'usually': 7})}
-
-    :param freqs: Counter object of words mapped to their word count
-    :return: dictionary with key as part of speech, value as Counter object of words
-        (of that part of speech) mapped to their word count
 
     """
     common.download_nltk_package_if_not_present('corpora/stopwords')
@@ -162,8 +165,10 @@ def run_gender_freq(corpus):
     """
     Runs a program that uses the gender frequency analysis on all documents existing in a given
     corpus, and outputs the data as graphs
+
     :param corpus: Corpus
-    :return:
+    :return: None
+
     """
     documents = corpus.documents
     c = len(documents)
@@ -253,8 +258,9 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
     Each dictionary maps each Document in the corpus to the proportion of the pronouns
     of the specified gender in that novel that are subject pronouns
 
-    :param corp: Corpus
-    :param to_pickle:
+    :param corp: Corpus object
+    :param pickle_filepath_female: Location to store results for male results; will not write a file if None
+    :param pickle_filepath_male: Location to store results for female results; will not write a file if None
     :return: tuple of two dictionaries (male, female)
 
     >>> from gender_analysis.corpus import Corpus
@@ -307,8 +313,10 @@ def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_mal
     Returns a dictionary of each novel in the Corpus mapped to the portion of the subject
     pronouns in the book that are of the specified gender.
 
-    :param corp: Corpus
+    :param corp: Corpus object
     :param subject_gender: string 'male' or string 'female'
+    :param pickle_filepath_male: Location to store results for male results; will not write a file if None
+    :param pickle_filepath_female: Location to store results for female results; will not write a file if None
     :return: dictionary
 
     >>> from gender_analysis.corpus import Corpus
@@ -366,7 +374,7 @@ def dict_to_list(d):
     Takes in a dictionary and returns a list of its values.
     If there are repeats in the values, there will be repeats in the list
 
-    :param d: dictionary
+    :param d: Dictionary
     :return: list of values in the dictionary
 
     >>> d = {'a': 1, 'b': 'bee', 'c': 65}
@@ -479,15 +487,14 @@ def freq_by_date(d, time_frame, bin_size):
 
 def freq_by_location(d):
     """
-    Takes in a dictionary of novel objects mapped to relative frequencies
-        (output of above function)
+    Takes in a dictionary of novel objects mapped to relative frequencies.
     Returns a dictionary with frequencies binned by publication location into lists
-        List name is mapped to the list of frequencies
 
     list names key:
-    location_UK - published in the United Kingdom
-    location_US - published in the US
-    location_other - published somewhere other than the US and England
+
+    - *location_UK* - published in the United Kingdom
+    - *location_US* - published in the US
+    - *location_other* - published somewhere other than the US and England
 
     :param d: dictionary
     :return: dictionary
@@ -551,6 +558,9 @@ def sort_every_year(frequency_dict):
     Takes in a dictionary of documents mapped to pronoun frequencies and returns a dictionary of
     years mapped to lists of pronoun frequencies
 
+    :param frequency_dict: dictionary of documents mapped to pronoun frequencies
+    :return: dictionary of years mapped to lists of pronoun frequencies
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -565,9 +575,6 @@ def sort_every_year(frequency_dict):
     >>> print(sorted_years)
     {1900: [0.5], 1818: [0.3]}
 
-
-    :param frequency_dict: dictionary of documents mapped to pronoun frequencies
-    :return: dictionary of years mapped to lists of pronoun frequencies
     """
 
     every_year_dict = {}
@@ -672,8 +679,10 @@ def bar_sub_obj_freq(she_freq_dict, he_freq_dict, title, x="N/A"):
 def overall_mean(d):
     """
     Returns the average of all the values in a dictionary
+
     :param d: dictionary with numbers as values
-    :return: float: average of all the values
+    :return: float average of all the values
+
     >>> from gender_analysis.analysis.gender_frequency import overall_mean, document_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
