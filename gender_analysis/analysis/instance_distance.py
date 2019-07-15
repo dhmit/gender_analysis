@@ -13,6 +13,11 @@ def instance_dist(document, word):
     """
     Takes in a particular word, returns a list of distances between each instance of that word in
     the document.
+
+    :param document: Document object to analyze
+    :param word: str, word to search text for distance between occurrences
+    :return: list of distances between consecutive instances of word
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -22,30 +27,28 @@ def instance_dist(document, word):
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
 
-    :param: document: Document to analyze
-    :param: word: str
-    :return: list of distances between consecutive instances of word
-
     """
     return words_instance_dist(document, [word])
 
 
 def words_instance_dist(document, words):
     """
-        Takes in a document and list of words (e.g. gendered pronouns), returns a list of distances
-        between each instance of one of the words in that document
-        >>> from gender_analysis import document
-        >>> from pathlib import Path
-        >>> from gender_analysis import common
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-        ...                   'filename': 'test_text_4.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_4.txt')}
-        >>> scarlett = document.Document(document_metadata)
-        >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
-        [6, 5, 6, 6, 7]
+    Takes in a document and list of words (e.g. gendered pronouns), returns a list of distances
+    between each instance of one of the words in that document
 
-        :param: document: Document
-        :param: words: list of strings
-        :return: list of distances between instances of any word in words
+    :param document: Document object
+    :param words: list of strings; words to search for in the document
+    :return: list of distances between instances of any word in the supplied list
+
+    >>> from gender_analysis import document
+    >>> from pathlib import Path
+    >>> from gender_analysis import common
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
+    ...                   'filename': 'test_text_4.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_4.txt')}
+    >>> scarlett = document.Document(document_metadata)
+    >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
+    [6, 5, 6, 6, 7]
+
     """
     text = document.get_tokenized_text()
     output = []
@@ -70,6 +73,9 @@ def male_instance_dist(document):
     Takes in a document, returns a list of distances between each instance of a male pronoun
     in that document.
 
+    :param: Document object
+    :return: list of distances between instances of gendered words
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -79,9 +85,6 @@ def male_instance_dist(document):
     >>> male_instance_dist(scarlett)
     [6, 5, 6, 6, 7]
 
-    :param: document
-    :return: list of distances between instances of gendered word
-
     """
     return words_instance_dist(document, common.MASC_WORDS)
 
@@ -90,6 +93,10 @@ def female_instance_dist(document):
     """
     Takes in a document, returns a list of distances between each instance of a female pronoun
     in that document.
+
+    :param: Document object
+    :return: list of distances between instances of gendered word
+
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
@@ -99,9 +106,6 @@ def female_instance_dist(document):
     >>> female_instance_dist(scarlett)
     [6, 5, 6, 6, 7]
 
-    :param: document
-    :return: list of distances between instances of gendered word
-
     """
     return words_instance_dist(document, common.FEM_WORDS)
 
@@ -109,15 +113,16 @@ def female_instance_dist(document):
 def run_distance_analysis(corpus):
     """
     Takes in a corpus of documents. Return a dictionary with each document mapped to an array of 3 lists:
+
      - median, mean, min, and max distances between male pronoun instances
      - median, mean, min, and max distances between female pronoun instances
      - for each of the above stats, the difference between male and female values. (male stat - \
-     female stat for all stats) POSITIVE DIFFERENCE VALUES mean there is a LARGER DISTANCE BETWEEN \
-     MALE PRONOUNS and therefore HIGHER FEMALE FREQUENCY.
+        female stat for all stats) POSITIVE DIFFERENCE VALUES mean there is a LARGER DISTANCE BETWEEN \
+        MALE PRONOUNS and therefore HIGHER FEMALE FREQUENCY.
 
      dict order - [male, female]
 
-    :param corpus:
+    :param corpus: Corpus object
     :return: dictionary where the key is a document and the value is the results of distance analysis
 
     """
@@ -144,6 +149,13 @@ def run_distance_analysis(corpus):
 
 
 def store_raw_results(results, pickle_filepath='instance_distance_raw_analysis.pgz'):
+    """
+    Stores results from an analysis as a pickle file.
+
+    :param results: A Python object that can be pickled
+    :param pickle_filepath: Destination for pickle file
+    :return: None
+    """
     try:
         common.load_pickle(pickle_filepath)
         x = input("results already stored. overwrite previous analysis? (y/n)")
@@ -157,9 +169,12 @@ def store_raw_results(results, pickle_filepath='instance_distance_raw_analysis.p
 
 def get_stats(distance_results):
     """
-    list order: median, mean, min, max
-    :param distance_results:
+    Returns a dictionary of data from a given set of instance distance data, with keys of 'median',
+    'mean', 'min', and 'max'.
+
+    :param distance_results: Instance Distance data as a list
     :return: dictionary of stats
+
     """
     if len(distance_results) == 0:
         return {'median': 0, 'mean': 0, 'min': 0, 'max': 0}
@@ -170,15 +185,16 @@ def get_stats(distance_results):
 
 def results_by_author_gender(results, metric):
     """
-    takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
+    Takes in a dictionary of results and a specified metric from **run_distance_analysis**, returns a
     dictionary:
+
     - key = 'male' or 'female' (indicating male or female author)
     - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance, \
-    female pronoun distance, and the difference (whether it is median, mean, min, or max depends on \
-    the specified metric) order = [male distance, female distance, difference]
+        female pronoun distance, and the difference (whether it is median, mean, min, or max depends on \
+        the specified metric) order = [male distance, female distance, difference]
 
-    :param results dictionary
-    :param metric ('median', 'mean', 'min', 'max')
+    :param results: dictionary from **run_distance_analysis**
+    :param metric: ('median', 'mean', 'min', 'max')
     :return: dictionary
 
     """
@@ -202,12 +218,13 @@ def results_by_author_gender(results, metric):
 
 def results_by_date(results, metric, time_frame, bin_size):
     """
-    takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
+    Takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
     dictionary:
+
     - key = date range
     - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance, \
-    female pronoun distance, and the difference (whether it is median, mean, min, or max depends on \
-    the specified metric) order = [male distance, female distance, difference]
+        female pronoun distance, and the difference (whether it is median, mean, min, or max depends on \
+        the specified metric) order = [male distance, female distance, difference]
 
     :param results: dictionary
     :param metric: ('median', 'mean', 'min', 'max')
@@ -241,8 +258,9 @@ def results_by_date(results, metric, time_frame, bin_size):
 
 def results_by_location(results, metric):
     """
-    takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
+    Takes in a dictionary of results and a specified metric from **run_distance_analysis**, returns a
     dictionary:
+
     - key = location
     - value  = list of lists. Each list has 3 elements: median/mean/max/min male pronoun distance, \
     female pronoun distance, and the difference (whether it is median, mean, min, \
@@ -278,14 +296,15 @@ def get_highest_distances(results, num):
     Takes results from instance_distance_analysis.run_distance_analysis and a number of top
     results to return.
     Returns 3 lists.
+
     - Documents with the largest median male instance distance
     - Documents with the largest median female instance distance
-    - Documents with the largest difference between median male & median female instance distances
-    each list contains tuples, where each tuple has a document and the median male/female/difference
+    - Documents with the largest difference between median male & median female instance distances \
+    each list contains tuples, where each tuple has a document and the median male/female/difference \
     instance distance
 
     :param results: dictionary of results from run_distance_analysis
-    :param num: number of top distances to get
+    :param num: number of top distances to return
     :return: 3 lists of tuples.
 
     """
@@ -308,16 +327,18 @@ def get_highest_distances(results, num):
 
 def get_p_vals(location_median_results, author_gender_median_results, date_median_results):
     """
-    Takes results from results_by_location(results, 'median'), results_by_author_gender,
-    results_by_date
+    Takes results from **results_by_location(results, 'median')**, **results_by_author_gender**,
+    **results_by_date**.
+
     ANOVA test for independence of:
+
     - male vs female authors' median distance between female instances
     - UK vs. US vs. other country authors' median distance between female instances
     - Date ranges authors' median distance between female instances
 
-    :param location_median_results: result of results_by_location(results, 'median')
-    :param author_gender_median_results: result of results_by_author_gender(results, 'median)
-    :param date_median_results: result of results_by_date(results, 'median')
+    :param location_median_results: result of **results_by_location(results, 'median')**
+    :param author_gender_median_results: result of **results_by_author_gender(results, 'median)**
+    :param date_median_results: result of **results_by_date(results, 'median')**
     :return: data-frame with 3 p-values, one for each category comparison
 
     """
@@ -353,11 +374,13 @@ def get_p_vals(location_median_results, author_gender_median_results, date_media
 def box_plots(inst_data, my_pal, title, x="N/A"):
     """
     Takes in a frequency dictionaries and exports its values as a bar-and-whisker graph
-    :param inst_data
-    :param my_pal: str, palette to be used
+
+    :param inst_data: Dictionary containing instance distance data (from one of the other functions in the module)
+    :param my_pal: str, seaborn palette to be used
     :param title: str, filename of exported graph
     :param x: name of x-vars
-    :return:
+    :return: None
+
     """
     plt.clf()
     groups = []
@@ -386,18 +409,18 @@ def box_plots(inst_data, my_pal, title, x="N/A"):
 
 def process_medians(helst, shelst, authlst):
     """
+    :param helst: List of male instance distances
+    :param shelst: List of female instance distances
+    :param authlst:
+    :return: a dictionary sorted as so {
+        "he":[ratio of he to she if >= 1, else 0], "she":[ratio of she to he if > 1, else 0] "book":[lst of book authors]
+        }
+
     >>> medians_he = [12, 130, 0, 12, 314, 18, 15, 12, 123]
     >>> medians_she = [123, 52, 12, 345, 0,  13, 214, 12, 23]
     >>> books = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
     >>> process_medians(helst=medians_he, shelst=medians_she, authlst=books)
     {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215], 'she': [10.25, 0, 28.75, 0, 14.266666666666667, 0, 0], 'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
-
-    :param helst:
-    :param shelst:
-    :param authlst:
-    :return: a dictionary sorted as so {
-        "he":[ratio of he to she if >= 1, else 0], "she":[ratio of she to he if > 1, else 0] "book":[lst of book authors]
-        }
 
     """
     d = {"he": [], "she": [], "book": []}
@@ -422,18 +445,19 @@ def process_medians(helst, shelst, authlst):
 
 def bubble_sort_across_lists(dictionary):
     """
+    :param dictionary: containing 3 different list values.
+        Note: dictionary keys MUST contain arguments 'he', 'she', and 'book'
+    :return: dictionary sorted across all three lists in a specific method:
+
+        - Descending order of 'he' values
+        - Ascending order of 'she' values
+        - Corresponding values of 'book' values
+
     >>> d = {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215],
     ...     'she': [10.25, 0, 28.75, 0, 14.266666666666667, 0, 0],
     ...     'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
     >>> bubble_sort_across_lists(d)
     {'he': [5.3478260869565215, 2.5, 1.3846153846153846, 1.0, 0, 0, 0], 'she': [0, 0, 0, 0, 10.25, 14.266666666666667, 28.75], 'book': ['i', 'b', 'f', 'h', 'a', 'g', 'd']}
-
-    :param dictionary: containing 3 different list values.
-        Note: dictionary keys MUST contain arguments 'he', 'she', and 'book'
-    :return dictionary sorted across all three lists in a specific method:
-        1) Descending order of 'he' values
-        2) Ascending order of 'she' values
-        3) Corresponding values of 'book' values
 
     """
     lst1 = dictionary['he']
@@ -539,8 +563,10 @@ def run_dist_inst(corpus):
     """
     Runs a program that uses the instance distance analysis on all documents existing in a given
     corpus, and outputs the data as graphs
-    :param corpus:
-    :return:
+
+    :param corpus: Corpus object
+    :return: None
+
     """
     documents = corpus.documents
     c = len(documents)

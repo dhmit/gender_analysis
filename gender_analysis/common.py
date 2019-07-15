@@ -17,6 +17,9 @@ def load_csv_to_list(file_path):
     """
     Loads a csv file from the given filepath and returns its contents as a list of strings.
 
+    :param file_path: str or Path object
+    :return: a list of strings
+
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> corpus_metadata_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'sample_novels.csv')
@@ -24,8 +27,6 @@ def load_csv_to_list(file_path):
     >>> type(corpus_metadata)
     <class 'list'>
 
-    :param file_path: can be a string or Path object
-    :return: a list of strings
     """
     if isinstance(file_path, str):
         file_path = Path(file_path)
@@ -48,6 +49,9 @@ def load_txt_to_string(file_path):
     """
     Loads a txt file and returns a str representation of it.
 
+    :param file_path: str or Path object
+    :return: The file's text as a string
+
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> novel_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')
@@ -55,8 +59,6 @@ def load_txt_to_string(file_path):
     >>> type(novel_text), len(novel_text)
     (<class 'str'>, 486253)
 
-    :param file_path: can be a string or Path object
-    :return: the text as a string type
     """
     if isinstance(file_path, str):
         file_path = Path(file_path)
@@ -84,14 +86,15 @@ def store_pickle(obj, filepath):
     Store a compressed "pickle" of the object in the "pickle_data" directory
     and return the full path to it.
 
+    :param obj: Any Python object that can be pickled
+    :param filepath: str or  Path object
+    :return: Path object
+
     Example in lieu of Doctest to avoid writing out a file.
 
         my_object = {'a': 4, 'b': 5, 'c': [1, 2, 3]}
         gender_analysis.common.store_pickle(my_object, 'path_to_pickle/example_pickle.pgz')
 
-    :param obj: Any Python object that can be pickled
-    :param filepath: str | Path
-    :return: Path
     """
     if isinstance(filepath, str):
         filepath = Path(filepath)
@@ -110,6 +113,9 @@ def load_pickle(filepath):
     """
     Loads the pickle stored at a given filepath, and returns the Python object that was stored.
 
+    :param filepath: str or Path object
+    :return: Previously-pickled object
+
     >>> from gender_analysis import common
     >>> from pathlib import Path
     >>> pickle_filepath = Path(common.BASE_PATH, 'testing', 'test_data',\
@@ -118,8 +124,6 @@ def load_pickle(filepath):
     >>> loaded_object
     {'a': 4, 'b': 5, 'c': [1, 2, 3]}
 
-    :param filepath: str | Path
-    :return: object
     """
     if filepath is None:
         raise IOError('No path supplied')
@@ -141,10 +145,12 @@ def get_text_file_encoding(filepath):
     """
     Returns the text encoding as a string for a txt file at the given filepath.
 
+    :param filepath: str or Path object
+    :return: Name of encoding scheme as a string
+
     >>> from gender_analysis import common
     >>> from pathlib import Path
     >>> import os
-
     >>> path=Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')
     >>> common.get_text_file_encoding(path)
     'UTF-8-SIG'
@@ -165,8 +171,6 @@ def get_text_file_encoding(filepath):
     >>> file_path = Path(common.BASE_PATH, 'example_file.txt')
     >>> os.remove(file_path)
 
-    :param filepath: str or Path object
-    :return: str
     """
     from chardet.universaldetector import UniversalDetector
     detector = UniversalDetector()
@@ -183,11 +187,13 @@ def get_text_file_encoding(filepath):
 def convert_text_file_to_new_encoding(source_path, target_path, target_encoding):
     """
     Converts a text file in source_path to the specified encoding in target_encoding
+
     Note: Currently only supports encodings utf-8, ascii and iso-8859-1
 
     :param source_path: str or Path
     :param target_path: str or Path
     :param target_encoding: str
+    :return: None
 
     >>> from gender_analysis.common import BASE_PATH
     >>> text = ' ¶¶¶¶ here is a test file'
@@ -203,8 +209,6 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
     >>> import os
     >>> os.remove(source_path)
     >>> os.remove(target_path)
-
-    :return:
     """
 
     valid_encodings = ['utf-8', 'utf8', 'UTF-8-SIG', 'ascii', 'iso-8859-1', 'ISO-8859-1',
@@ -238,9 +242,12 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
 
 def load_graph_settings(show_grid_lines=True):
     """
-    This function sets the seaborn graph settings to the defaults for the project.
+    Sets the seaborn graph settings to the defaults for the project.
     Defaults to displaying gridlines. To remove gridlines, call with False.
-    :return:
+
+    :param show_grid_lines: Boolean; Determines whether to show gridlines in graphs.
+    :return: None
+
     """
     show_grid_lines_string = str(show_grid_lines)
     palette = "colorblind"
