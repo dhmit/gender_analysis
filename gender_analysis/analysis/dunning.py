@@ -121,16 +121,16 @@ def dunning_total(counter1, counter2, pickle_filepath=None):
     >>> male_counter =   Counter({'he': 10, 'she': 1,  'and': 10})
     >>> results = dunning_total(female_counter, male_counter)
 
-    # Results is a dict that maps from terms to results
-    # Each result dict contains the dunning score...
+    Results is a dict that maps from terms to results
+    Each result dict contains the dunning score...
     >>> results['he']['dunning']
     -8.547243830635558
 
-    # ... counts for corpora 1 and 2 as well as total count
+    ... counts for corpora 1 and 2 as well as total count
     >>> results['he']['count_total'], results['he']['count_corp1'], results['he']['count_corp2']
     (11, 1, 10)
 
-    # ... and the same for frequencies
+    ... and the same for frequencies
     >>> results['he']['freq_total'], results['he']['freq_corp1'], results['he']['freq_corp2']
     (0.2619047619047619, 0.047619047619047616, 0.47619047619047616)
 
@@ -471,7 +471,7 @@ def score_plot_to_show(results):
     :param results: dict of results from dunning_total or similar, i.e. in the form {'word': {
         'dunning': float}}
     :return: None, displays bar plot of dunning scores for all words in results
-    
+
     """
     load_graph_settings(False)
     results_dict = dict(results)
