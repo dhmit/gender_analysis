@@ -1,9 +1,6 @@
 gender\_analysis.analysis package
 =================================
 
-Submodules
-----------
-
 gender\_analysis.analysis.dunning module
 ----------------------------------------
 
@@ -48,15 +45,6 @@ gender\_analysis.analysis.statistical module
 --------------------------------------------
 
 .. automodule:: gender_analysis.analysis.statistical
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: gender_analysis.analysis
    :members:
    :undoc-members:
    :show-inheritance:

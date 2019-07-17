@@ -8,9 +8,6 @@ Subpackages
 
    gender_analysis.analysis
 
-Submodules
-----------
-
 gender\_analysis.common module
 ------------------------------
 
@@ -36,10 +33,4 @@ gender\_analysis.document module
    :show-inheritance:
 
 
-Module contents
----------------
 
-.. automodule:: gender_analysis
-   :members:
-   :undoc-members:
-   :show-inheritance:
