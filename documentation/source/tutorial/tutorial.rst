@@ -24,7 +24,8 @@ Initialization
 --------------
 
 ``Document`` initialization will typically be handled by the ``Corpus`` object, but, in case we want to create an
-individual Document, we call the ``Document.__init__`` function with a metadata dictionary::
+individual Document, we call the ``Document.__init__`` function with a
+metadata dictionary::
     >>> my_doc = Document({'filename': 'example.txt', 'filepath': 'path/to/example.txt',
     ...                     'author': 'John Doe', 'date': 2019})
 
@@ -43,4 +44,31 @@ With a Document object, you can perform a variety of analyses within a single do
     - Word count: ``my_doc.get_count_words()``
     - Distance between occurrences of words: ``my_doc.words_instance_dist()``
     - Adjectives associated with a certain gender: ``my_doc.find_male_adj()`` and ``my_doc.find_female_adj()``
+
+
+Corpus Class
+============
+
+A ``Corpus`` object is the primary tool of the Gender Analysis Toolkit, as it is responsible for aggregating the metadata
+and documents of a given collection.
+
+Initialization
+--------------
+
+Before creating the corpus, you should first create a folder consisting of all of your documents as .txt files.
+
+To create your own corpus to analyze, import Corpus from ``gender_analysis.corpus``::
+    >>> from gender_analysis.corpus import Corpus
+
+After that, create a Corpus object by passing in a full path to a file consisting of all of the documents to be analyzed.
+This creates a list of Document objects within Corpus to keep track of the
+various .txt files::
+    >>> corpus = Corpus('{filepath}')
+
+To allow for more powerful analysis, we can add metadata about each document to our Corpus object. First, create a .csv
+file with the first row as metadata fields, such as ``'filename'``, ``'author'``, ``'publication_country'``, and
+``'publication_date'`` separated by commas. Then add an additional row for every document in your corpus -- fill
+in each row with the corresponding metadata field values.
+
+
 

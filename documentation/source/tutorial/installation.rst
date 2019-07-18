@@ -33,17 +33,78 @@ Installing the Toolkit
 **********************
 
 After Python is installed on your computer, you can now install the toolkit. We have uploaded the package to the
-Python Package Index (PyPI), so it can be installed through the use of pip. If you would like to set up a `virtual
-environment <https://docs.python.org/3/library/venv.html>`_, you should do this prior to installing the module.
+Python Package Index (PyPI), so it can be installed through the use of pip.
+
+.. note::
+    If you would like to set up a `virtual environment <https://docs.python.org/3/library/venv.html>`_, you should
+    do this prior to installing the module.
 
 To install the Gender Analysis Toolkit and its packages, you only need to enter::
     pip install gender_analysis
 
 After this has finished running, you should have the package installed. From here, we recommend taking a look at our
 :doc:`User's Guide <tutorial>` to learn the basics, or take a look at the `Reference Guide <https://gender-analysis.rtfd.io>`_ to
-look at the Documentation of the toolkit.
+look at the documentation for the toolkit.
 
 
 
 Installation on MacOS/Linux
 ---------------------------
+
+The installation will happen through your operating system's terminal, which will allow us to perform tasks
+such as look at Python's version and install the package requirements for the toolkit.
+
+Installing Python
+*****************
+
+In order to use the toolkit, you need to make sure that you are using Python version 3.6 or newer. To check to see what
+version is installed on your computer, simply run the command::
+    $ python --version
+
+.. note::
+    If you are using macOS, you may need to try the command
+
+    ``$ python3 --version``
+
+    in order to see the proper version.
+
+You should see the terminal report a statement similar to ``Python 3.6.2``. If the version number is older than ``3.6``,
+or you do not have Python installed on your system, you will need to download the latest version from the `Python
+website <http://www.python.org/download/>`_.
+
+Once Python is set up with the proper version, the next step is to make sure that your version of pip
+is up to date::
+    $ pip install -U pip
+
+.. note::
+    If you previously had to run the command
+
+    ``$ python 3 --version``
+
+    you should now use
+
+    ``$ pip3 install -U pip``
+
+After ensuring that pip is using the latest version, you can move on to the next step.
+
+Installing the Toolkit
+**********************
+
+After Python is installed and updated to the correct version, you are able to install the toolkit. Because the package
+is uploaded to the Python Package Index (PyPI), you are able to do this with one command through the use of pip.
+
+.. note::
+    If you would like to set up a `virtual environment <https://docs.python.org/3/library/venv.html>`_, you should
+    do this prior to installing the module.
+
+To install the Gender Analysis Toolkit and its packages, you only need
+to enter::
+    $ pip install gender_analysis
+
+.. note::
+    If you are using macOS or some versions of Linux, it may be necessary to use the command::
+    $ pip3 install gender_analysis
+
+After this has finished running, you should have the package installed. From here, we recommend taking a look at our
+:doc:`User's Guide <tutorial>` to learn the basics, or take a look at the
+`Reference Guide <https://gender-analysis.rtfd.io>`_ to look at the documentation for the toolkit.
