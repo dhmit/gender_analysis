@@ -14,5 +14,7 @@ website, and our research code is available at the [Gender/Novels repo](https://
 Complete documentation for the toolkit, including installation instructions and a user's guide,
 is available at https://gender-analysis.readthedocs.io/
 
+Please note that this project is not yet officially launched, and the instructions for installation via Pip do not yet work. See https://github.com/dhmit/gender_analysis/issues/94 if you'd like to be a very early adopter.
+
 ## Contributing
 To contribute to the project, please view our guide to contributing, `CONTRIBUTING.md`. We are open to contributions and would love to see other people’s ideas, thoughts, and additions to this project, so feel free to leave comments or make a pull request!
