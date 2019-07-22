@@ -25,7 +25,8 @@ Initialization
 
 ``Document`` initialization will typically be handled by the ``Corpus`` object, but, in case we want to create an
 individual Document, we call the ``Document.__init__`` function with a
-metadata dictionary::
+metadata dictionary:
+
     >>> my_doc = Document({'filename': 'example.txt', 'filepath': 'path/to/example.txt',
     ...                     'author': 'John Doe', 'date': 2019})
 
@@ -37,7 +38,7 @@ be helpful for more powerful analyses if working with a corpus, but are not requ
 Operations
 ----------
 
-If we want to change the metadata of a document after initialization, we can call::
+If we want to change the metadata of a document after initialization, we can call:
     >>> my_doc.update_metadata({'author': 'Jane Doe', 'date': 2018})
 
 With a Document object, you can perform a variety of analyses within a single document:
@@ -57,18 +58,76 @@ Initialization
 
 Before creating the corpus, you should first create a folder consisting of all of your documents as .txt files.
 
-To create your own corpus to analyze, import Corpus from ``gender_analysis.corpus``::
+To create your own corpus to analyze, import Corpus from ``gender_analysis.corpus``:
+
     >>> from gender_analysis.corpus import Corpus
 
 After that, create a Corpus object by passing in a full path to a file consisting of all of the documents to be analyzed.
-This creates a list of Document objects within Corpus to keep track of the
-various .txt files::
-    >>> corpus = Corpus('{filepath}')
+This creates a list of Document objects within Corpus to keep track of the various .txt files:
+
+    >>> corpus = Corpus('path/to/file/directory')
 
 To allow for more powerful analysis, we can add metadata about each document to our Corpus object. First, create a .csv
 file with the first row as metadata fields, such as ``'filename'``, ``'author'``, ``'publication_country'``, and
 ``'publication_date'`` separated by commas. Then add an additional row for every document in your corpus -- fill
 in each row with the corresponding metadata field values.
+
+In addition to a directory of txt files, pass in a second parameter, ``csv_path``, which is a full path to the csv
+metadata file that you created.
+
+    >>> corpus = Corpus('path/to/file/directory',
+    ...                 csv_path='path/to/csv_file.csv')
+
+This will automatically update all of the ``Document`` objects in the corpus object with the metadata provided in the
+csv file.
+
+To save some time, the ``Corpus`` class has an optional parameter, ``guess_author_genders``, that will attempt to guess
+the gender of the authors in your corpus when set to ``True``. This will automatically create an ``author_gender`` field
+in the internal metadata for all of your documents.
+
+
+Visualizing Your Metadata
+=========================
+
+Metadata is the cornerstone of the Gender Analysis Toolkit, with it being required for many of the toolkit's functions,
+and it aids in the analysis of several more. Sometimes, it is helpful to get a broad look at some instances of your
+metadata. For instance, how many of the authors in your corpus are male? How many are female? What time periods are you
+looking at? The toolkit provides simple functions for you to visualize all of this, saved as .png files.
+
+To create a visualization of the distribution of author genders, simply use:
+
+    >>> import gender_analysis.analysis.metadata_visualizations
+    >>> from gender_analysis import Corpus
+    >>> my_corpus = Corpus('path/to/files', csv_path='path/to/metadata')
+    >>> plot_gender_breakdown(my_corpus)
+
+Similarly, you can visualize the publication locations via:
+
+    >>> plot_pubcountries(my_corpus)
+
+Or you can visualize publication years with:
+
+    >>> plot_pubyears(my_corpus)
+
+If you want to visualize all three at once, simply call:
+
+    >>> create_corpus_visualizations_summary(my_corpus)
+
+
+Adding Masculine and Feminine Words
+===================================
+
+The Gender Analysis Toolkit comes pre-loaded with several words that it identifies as "masculine" or"feminine", but
+sometimes there are words that are unique to a corpus that are generally not considered gendered in other contexts.
+
+Gender Analysis comes with global constants ``MASC_WORDS`` and ``FEM_WORDS``, which are both sets consisting of
+masculine and feminine pronouns, respectively.
+
+If your corpus frequently references, for example, a woman named Alice, and you would like the toolkit to recognize
+the name Alice as female, then you can add 'Alice' to ``FEM_WORDS``:
+
+    >>> from gender_analysis.common import MASC_WORDS, FEM_WORDS
+    >>> FEM_WORDS.add('Alice')
 
 
 
