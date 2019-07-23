@@ -10,7 +10,8 @@ If you have not yet installed the package, make sure to look at the Installation
 
     installation
 
-This is a work in progress and will be updated as we prepare more tutorials.
+.. note::
+    This is a work in progress and will be updated as we prepare and expand tutorials. Check back soon!
 
 Document Class
 ==============
@@ -128,6 +129,7 @@ the name Alice as female, then you can add 'Alice' to ``FEM_WORDS``:
 
     >>> from gender_analysis.common import MASC_WORDS, FEM_WORDS
     >>> FEM_WORDS.add('Alice')
+
 
 
 
