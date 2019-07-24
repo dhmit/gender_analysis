@@ -90,8 +90,8 @@ in the internal metadata for all of your documents.
 Visualizing Your Metadata
 =========================
 
-Metadata is the cornerstone of the Gender Analysis Toolkit, with it being required for many of the toolkit's functions,
-and it aids in the analysis of several more. Sometimes, it is helpful to get a broad look at some instances of your
+Metadata is the cornerstone of the Gender Analysis Toolkit, with it being required for many of the toolkit's functions
+and aiding in the analysis of several more. Sometimes, it is helpful to get a broad look at some instances of your
 metadata. For instance, how many of the authors in your corpus are male? How many are female? What time periods are you
 looking at? The toolkit provides simple functions for you to visualize all of this, saved as .png files.
 
@@ -129,6 +129,90 @@ the name Alice as female, then you can add 'Alice' to ``FEM_WORDS``:
 
     >>> from gender_analysis.common import MASC_WORDS, FEM_WORDS
     >>> FEM_WORDS.add('Alice')
+
+
+Dunning Analysis
+================
+
+Dunning analysis tests for word distinctiveness between two corpora. Given two corpora, any one word present in both
+has a Dunning log-likelihood value, which is a measure of how likely the frequency of the word in the first corpus is
+greater than the frequency of the word in the second corpus.
+
+Try it out with a single word between two corpora:
+
+    >>> from gender_analysis.analysis import dunning
+    >>> dunning.dunn_individual_word_by_corpus(corpus_1,
+    ...                                        corpus_2,
+    ...                                        my_word)
+
+No metadata is required from either corpora.
+
+Plot Dunning Values for Words Between Two Corpora
+-------------------------------------------------
+
+First, we need to calculate the results to be plotted.
+
+    >>> from gender_analysis import Corpus
+    >>> from gender_analysis.analysis import dunning
+    >>> my_corpus1 = Corpus(filepath1)
+    >>> my_corpus2 = Corpus(filepath2)
+    >>> counter1 = my_corpus1.get_wordcount_counter()
+    >>> counter2 = my_corpus2.get_wordcount_counter()
+    >>> my_results = dunning.dunning_total(counter1, counter2)
+
+Alternatively, we can set my_results to the output of any of the following functions:
+
+    - ``dunning_words_by_author_gender``
+    - ``male_characters_author_gender_differences``
+    - ``female_characters_author_gender_differences``
+    - ``masc_fem_associations_dunning``
+    - ``compare_word_association_in_corpus_dunning``
+
+Then, to plot Dunning values, call:
+
+    >>> dunning.score_plot_to_show(my_results)
+
+For relative word frequency instead of Dunning values:
+
+    >>> dunning.freq_plot_to_show(my_results)
+
+To find the distinctiveness of all shared words between two corpora, call:
+
+    >>> dunning.dunning_total_by_corpus(my_corpus_1, my_corpus_2)
+
+Again, no metadata is required of your two corpora.
+
+Dunning analysis can also be used between corpora to compare associated words of a certain word. For example,
+``female_characters_author_gender_differences`` will identify differences between how female characters are described
+by male authors versus female authors. We also provide an equivalent function for words associated with male characters
+and can compare associations with any word or list of words with ``compare_word_association_between_corpus_dunning``.
+If we want to compare associations with the word 'money', we can call:
+
+    >>> male_corpus = corpus.filter_by_gender('male')
+    >>> female_corpus = corpus.filter_by_gender('female')
+    >>> dunning.compare_word_association_between_corpus_dunning(word='money', corpus1=male_corpus, corpus2=female_corpus)
+
+Or if we want to compare associations with several words relating to money, we can use:
+
+    >>> words = ['money', 'dollars', 'pounds', 'euros', 'dollar', 'pound', 'euro', 'wealth', 'income']
+    >>> dunning.compare_word_association_between_corpus_dunning(word=words, corpus1=male_corpus, corpus2=female_corpus)
+
+Within a single corpus, we can compare words associated with two different words with
+``compare_word_association_in_corpus_dunning``. A special case of this analysis is comparing words associated with
+male and female characters, which is handled by ``masc_fem_associations_dunning``.
+
+Gender Frequency Analysis
+=========================
+
+Gender frequency analysis tests for the frequencies of different genders in the documents given by the corpus.
+
+First, create a corpus to analyze:
+
+    >>> from gender_analysis import Corpus
+    >>> my_corpus = Corpus('path/to/documents')
+
+
+
 
 
 
