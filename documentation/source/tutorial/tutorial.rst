@@ -211,6 +211,38 @@ First, create a corpus to analyze:
     >>> from gender_analysis import Corpus
     >>> my_corpus = Corpus('path/to/documents')
 
+To get the relative frequency of female pronouns in each document in the corpus, call:
+
+    >>> from gender_analysis.analysis.gender_frequency import *
+    >>> document_pronoun_freq(my_corpus)
+
+To get the proportion of instances of male and female pronouns that are the subject of a sentence, call:
+
+    >>> subject_vs_object_pronoun_freqs(my_corpus)
+
+This will return a tuple of dictionaries in the form ``(male, female)``, with each document being a key and the proportion
+of pronouns that are the subject as the values.
+
+To determine what portion of subject pronouns in each document of the corpus is of a specified gender, call:
+
+    >>> subject_pronouns_gender_comparison(my_corpus,'female')
+
+You can also pass in ``'male'`` as a parameter in order to see the proportion of male pronouns.
+
+
+Instance Distance Analysis
+==========================
+
+When analyzing documents, it's often interesting to see not only how many times a word appears in a corpus, but also
+how far apart those instances of the word are.
+
+The first thing you need to do is create a corpus with the documents that you wish to analyze.
+
+    >>> from gender_analysis import Corpus
+    >>> my_corpus = Corpus('path/to/files')
+
+To get the distance between all of the occurrences of a certain word in a document, call
+
 
 
 

@@ -211,6 +211,7 @@ def document_pronoun_freq(corp, pickle_filepath=None):
     of female pronouns in that Document
 
     :param corp: Corpus object
+    :param pickle_filepath: Path to store pickled object; does not write file if None
     :return: dictionary with data organized by Document
 
     >>> from gender_analysis.corpus import Corpus
