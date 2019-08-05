@@ -516,9 +516,9 @@ def bubble_sort_across_lists(dictionary):
     return d
 
 
-def instance_stats(book, medians1, medians2, title):
+def instance_stats(document, medians1, medians2, title):
     """
-    :param book:
+    :param document:
     :param medians1:
     :param medians2:
     :param title: str, desired name of file
@@ -526,17 +526,17 @@ def instance_stats(book, medians1, medians2, title):
         as a bar graph
 
     """
-    print(book, medians1, medians2)
+    print(document, medians1, medians2)
     fig, ax = plt.subplots()
     plt.ylim(0, 50)
 
-    index = np.arange(len(book))
+    index = np.arange(len(document))
     bar_width = .7
     opacity = 0.4
 
     medians_she = tuple(medians2)
     medians_he = tuple(medians1)
-    book = tuple(book)
+    book = tuple(document)
 
     rects1 = ax.bar(index, medians_he, bar_width, alpha=opacity, color='b', label='Male to Female')
     rects2 = ax.bar(index, medians_she, bar_width, alpha=opacity, color='r', label='Female to Male')

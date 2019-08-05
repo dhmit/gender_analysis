@@ -236,12 +236,48 @@ Instance Distance Analysis
 When analyzing documents, it's often interesting to see not only how many times a word appears in a corpus, but also
 how far apart those instances of the word are.
 
-The first thing you need to do is create a corpus with the documents that you wish to analyze.
+Document Analysis
+-----------------
 
-    >>> from gender_analysis import Corpus
-    >>> my_corpus = Corpus('path/to/files')
+The first thing you need to do is create a document that you would like to analyze.
 
-To get the distance between all of the occurrences of a certain word in a document, call
+    >>> from gender_analysis import Document
+    >>> my_document = Document(document_metadata)
+
+To get the distance between all of the occurrences of a certain word in a document, call:
+
+    >>> from gender_analysis.instance_distance import *
+    >>> document = my_corpus[0]  # Gets first document from corpus
+    >>> word = 'word'  # Can be anything
+    >>> instance_dist(document, word)
+
+Similarly, a list of words can be searched for by using ``words_instance_dist(document, words)``.
+
+To get the distances between male words in a document, you can call
+
+    >>> male_instance_dist(document)
+
+Similarly, you can find female distances with
+
+    >>> female_instance_dist(document)
+
+Corpus Analysis
+---------------
+
+While seeing results for individual documents can be very interesting, it tends to be tedious when you are trying to
+iterate over hundreds or thousands of documents. These functions allow you to perform these checks on large corpora,
+and even graph the results.
+
+To get a dictionary mapping each document object to an array of 3 lists containing the median, mean, min, and max
+distances between male and female pronouns instances and another list containing the difference between the male
+and female values, call:
+
+    >>> results = run_distance_analysis(my_corpus)
+
+Because this function might take some time to run, you can save the results as a pickle with
+
+    >>> store_raw_results(results, 'path/to/pickle_file.pgz')
+
 
 
 
