@@ -278,6 +278,25 @@ Because this function might take some time to run, you can save the results as a
 
     >>> store_raw_results(results, 'path/to/pickle_file.pgz')
 
+To retrieve a particular result by author gender, call:
+
+    >>> results_by_author_gender(results, metric)
+
+Where ``metric`` is ``'mean'``, ``'median'``, or ``'mode'``.
+
+Additionally, you can retrieve a given number of the top instance distances with
+
+    >>> results_by_highest_distances(results, num)
+
+To create a bar-and-whisker graph of your results, all you need to call is:
+
+    >>> box_plots(results, 'pastel', x='N/A')
+
+.. note::
+    ``'pastel'`` can be replaced with any seaborn palette
+
+
+
 
 
 
