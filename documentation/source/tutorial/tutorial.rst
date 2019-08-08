@@ -293,14 +293,50 @@ To create a bar-and-whisker graph of your results, all you need to call is:
     >>> box_plots(results, 'pastel', x='N/A')
 
 .. note::
-    ``'pastel'`` can be replaced with any seaborn palette
+    ``'pastel'`` can be replaced with any `seaborn palette <https://seaborn.pydata.org/tutorial/color_palettes.html>`_
 
 
+Gender Adjective Analysis
+=========================
 
+This module scans a document or corpus in order to find the most commonly used adjectives that are associated with each
+gender.
 
+Within a single document, we can find all adjectives associated with gendered words by calling:
 
+    >>> from gender_analysis import Document
+    >>> from gender_analysis.gender_adjective import *
+    >>> my_doc = Document(document_metadata) # You can also use a document from a previously-created Corpus
+    >>> find_male_adj(my_doc)
 
+You can similarly find adjectives associated with female pronouns by using ``find_female_adj``.
 
+If instead we wanted to search through an entire corpus, you could do so with:
 
+    >>> from gender_analysis import Corpus
+    >>> my_corpus = Corpus('path/to/files')
+    >>> my_results = run_adj_analysis(my_corpus)
 
+Note that this will return a dictionary of results based on each document. If we instead wish to get results for the
+corpus as a whole, we can call ``merge_raw_results`` on the output.
 
+    >>> results_by_corpus = merge_raw_results(my_results)
+
+Then, to see compare each adjective’s frequency between genders:
+
+    >>> results_by_adjective = get_overlapping_adjectives_raw_results(results_by_corpus)
+
+As long as the corpus stores the corresponding metadata, we can also bin the results by author gender, date, or
+location.
+
+For example, to bin adjectives from documents published between 1980 and 2020 in groups spanning 5 years:
+
+    >>> results_by_date = results_by_date(my_results, (1980, 2020), 5)
+
+If you would only like to see the top ``num`` associations in the corpus, you can do so by calling:
+
+    >>> top_results = get_top_adj(my_results, num)
+
+Finally, to pickle your results for later if desired:
+
+    >>> store_raw_results(my_results, 'path/to/pickle_file.pgz')
