@@ -9,7 +9,7 @@ Installation on Windows
 -----------------------
 
 Most of the installation process will happen through Windows Powershell, or another terminal program of your choice.
-To ensure that everything installs properly, ensure that you open your command-line tool in Administrator mode.
+To ensure that everything installs properly, make sure to open your command-line tool in Administrator mode.
 
 Installing Python
 *****************
@@ -88,7 +88,7 @@ is up to date::
 .. note::
     If you previously had to run the command::
 
-        $ python 3 --version
+        $ python3 --version
 
     you should now use::
 

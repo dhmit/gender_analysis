@@ -16,8 +16,8 @@ If you have not yet installed the package, make sure to look at the Installation
 Document Class
 ==============
 
-The document class is the base-level unit of metadata storage. It is responsible for keeping track of the metadata,
-text, and file location of a single document. Our analysis will work best if your text is split into documents such
+The ``Document`` class is the base-level unit of data storage. It is responsible for keeping track of the metadata,
+text, and file location of a single document. Our toolkit will work best if your text is split into documents such
 that each document has its own author(s), publication date, etc. For example, a collection of Tweets should be split
 by individual Tweet.
 
@@ -32,7 +32,7 @@ metadata dictionary:
     ...                     'author': 'John Doe', 'date': 2019})
 
 Each key in the metadata dictionary becomes an attribute of the Document object. Only the ``'filename'`` attribute is
-required and its value must end in '.txt'. However, the metadata should also have a ``'filepath'`` attribute that
+required and its value must end in ``.txt``. However, the metadata should also have a ``'filepath'`` attribute that
 points to the file of the document's text, as ``Document`` loads the text from this location. Other metadata fields may
 be helpful for more powerful analyses if working with a corpus, but are not required.
 
@@ -59,9 +59,9 @@ Initialization
 
 Before creating the corpus, you should first create a folder consisting of all of your documents as .txt files.
 
-To create your own corpus to analyze, import Corpus from ``gender_analysis.corpus``:
+To create your own corpus to analyze, import ``Corpus`` from the toolkit:
 
-    >>> from gender_analysis.corpus import Corpus
+    >>> from gender_analysis import Corpus
 
 After that, create a Corpus object by passing in a full path to a file consisting of all of the documents to be analyzed.
 This creates a list of Document objects within Corpus to keep track of the various .txt files:
@@ -97,7 +97,7 @@ looking at? The toolkit provides simple functions for you to visualize all of th
 
 To create a visualization of the distribution of author genders, simply use:
 
-    >>> import gender_analysis.analysis.metadata_visualizations
+    >>> from gender_analysis.analysis.metadata_visualizations import *
     >>> from gender_analysis import Corpus
     >>> my_corpus = Corpus('path/to/files', csv_path='path/to/metadata')
     >>> plot_gender_breakdown(my_corpus)
@@ -114,21 +114,24 @@ If you want to visualize all three at once, simply call:
 
     >>> create_corpus_visualizations_summary(my_corpus)
 
+In order for these functions to work effectively, all relevant metadata must be present in the Corpus that you are
+trying to visualize.
+
 
 Adding Masculine and Feminine Words
 ===================================
 
-The Gender Analysis Toolkit comes pre-loaded with several words that it identifies as "masculine" or"feminine", but
-sometimes there are words that are unique to a corpus that are generally not considered gendered in other contexts.
+The Gender Analysis Toolkit comes pre-loaded with several words that it identifies as "masculine" or "feminine", but
+sometimes there are words unique to a corpus that are generally not considered gendered in other contexts.
 
 Gender Analysis comes with global constants ``MASC_WORDS`` and ``FEM_WORDS``, which are both sets consisting of
 masculine and feminine pronouns, respectively.
 
 If your corpus frequently references, for example, a woman named Alice, and you would like the toolkit to recognize
-the name Alice as female, then you can add 'Alice' to ``FEM_WORDS``:
+the name Alex as female, then you can add 'Alex' to ``FEM_WORDS``:
 
     >>> from gender_analysis.common import MASC_WORDS, FEM_WORDS
-    >>> FEM_WORDS.add('Alice')
+    >>> FEM_WORDS.add('Alex')
 
 
 Dunning Analysis
@@ -241,8 +244,8 @@ Document Analysis
 
 The first thing you need to do is create a document that you would like to analyze.
 
-    >>> from gender_analysis import Document
-    >>> my_document = Document(document_metadata)
+    >>> from gender_analysis import Corpus
+    >>> my_corpus = Corpus(document_metadata)
 
 To get the distance between all of the occurrences of a certain word in a document, call:
 
