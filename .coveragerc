@@ -12,3 +12,6 @@ source = gender_analysis
 # Don't report files that are empty or have 100% test coverage
 skip_empty = True
 skip_covered = True
+
+# Report the lines that weren't tested for each file
+# show_missing = True
