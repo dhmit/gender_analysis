@@ -1,0 +1,5 @@
+Opens the door
+
+Trooper, "Nope."
+
+Closes door

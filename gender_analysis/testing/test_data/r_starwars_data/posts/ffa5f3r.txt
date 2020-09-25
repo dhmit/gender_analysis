@@ -1,0 +1,5 @@
+Verizon uses Asurion insurance, and $200 is their replacement option. They tell you that price when LCD damage is mentioned. Talk to insurance again and only tell them there is a crack in the screen. They should be able to file a claim for $29 if there is a uBreakiFix in the area, or remote tech services.
+
+If you don't have insurance or a repair center isn't near you, shop around at 3rd party competitors. You can find prices ranging from 100 to 150.
+
+I don't recommend doing the repair yourself due to FaceID, if that component breaks, it's game over for that feature as the component is bound to the MB and cannot be replaced without Apple Calibration Tools.

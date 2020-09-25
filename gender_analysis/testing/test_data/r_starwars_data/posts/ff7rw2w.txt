@@ -1,0 +1,1 @@
+No, it was probably accidental. It would be really hard (if not impossible) to replicate the same break twice, including the side effects, like the bright green stripe. Pixels on phone screens are extremely tiny; subpixels even smaller.

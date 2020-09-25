@@ -1,0 +1,8 @@
+*beep. boop.* I'm a bot that provides downloadable links for v.redd.it videos!
+
+* [**Downloadable video link**](https://v.redd.it/j1bpbx3d97c41/DASH_1080?source=fallback)
+
+I also work with links sent by PM
+
+ ***  
+[**Info**](https://old.reddit.com/user/VredditDownloader/comments/cju1dg/info/)&#32;|&#32;[**Support&#32;me&#32;❤**](https://www.paypal.me/synapsensalat)&#32;|&#32;[**Github**](https://github.com/JohannesPertl/vreddit-downloader)

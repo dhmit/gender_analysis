@@ -1,0 +1,1 @@
+It doesn't cap for upvotes. It goes up logarithmically

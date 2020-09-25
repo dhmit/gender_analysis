@@ -12,3 +12,5 @@ requests
 seaborn
 scipy
 wordcloud
+coverage==5.3
+pytest==6.0.2

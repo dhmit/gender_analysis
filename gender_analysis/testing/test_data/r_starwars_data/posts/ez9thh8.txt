@@ -1,0 +1,1 @@
+It shows that the reddit point system won't display overall comment karma as negative

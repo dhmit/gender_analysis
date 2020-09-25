@@ -1,0 +1,1 @@
+How are they calculated? Just adding up the scores of all comments? or do you try to estimate actual downvotes somehow

@@ -1,0 +1,3 @@
+After a certain amount of upvotes or downvotes, votes affect your karma less and less. You could get 5k karma for 5k upvotes, but only 6k karma for 10k.
+
+I’m just pulling numbers out of my ass as an example since I don’t know how the algorithm actually works, but basically the more votes the less karma. This way one post can’t send someone’s karma souring and throw things off balance, since karma is a good indicator of how active and productive a user is.

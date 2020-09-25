@@ -1,0 +1,5 @@
+Actually, comment votes work more like a logarithmic curve ([like this](https://static.bhphotovideo.com/explora/sites/default/files/log-graph1.jpg)) wrt increasing/decreasing your karma: the "first", say, 100 votes translate almost 1-to-1 to how much karma you'll get or lose, but the higher/more negative a comment's score becomes, the less a vote will weigh towards your karma. So, the 10,000th vote may only count towards your karma for 0.1%, where the first counted for the full 100%
+
+[](/u/talonfender)
+
+Edit: I'm 100% sure this is how the mechanism works for upvotes, you might be right that Reddit additionally has a hard limit on per-comment downvote karma but then I've missed the announcement on that

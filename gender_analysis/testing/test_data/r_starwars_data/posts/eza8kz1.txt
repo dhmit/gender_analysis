@@ -1,0 +1,1 @@
+The bonus and level-up crates are not RNG based.
