@@ -7,7 +7,7 @@ TEST_DATA_DIR = Path(BASE_PATH, 'testing', 'test_data')
 SMALL_TEST_CORPUS_PATH = Path(TEST_DATA_DIR, 'test_corpus')
 SMALL_TEST_CORPUS_CSV = Path(TEST_DATA_DIR, 'test_corpus', 'test_corpus.csv')
 
-# A larger corpus with 100 documents
+# A larger corpus with 99 documents
 LARGE_TEST_CORPUS_PATH = Path(TEST_DATA_DIR, 'sample_novels', 'texts')
 LARGE_TEST_CORPUS_CSV = Path(TEST_DATA_DIR, 'sample_novels', 'sample_novels.csv')
 
