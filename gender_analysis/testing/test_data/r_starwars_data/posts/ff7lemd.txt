@@ -1,1 +1,0 @@
-You got sentinel and guardian backwards (yellow > sentinel, blue > guardian)

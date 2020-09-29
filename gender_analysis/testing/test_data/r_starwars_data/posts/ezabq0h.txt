@@ -1,1 +1,0 @@
-All comments are counted then the negative ones are counted as the downvoted comments, this misses a lot of downvotes that we can't see but nothing to do about it, reddit stopped showing "true" scores of comments years ago and started display "points" instead 😢

@@ -1,5 +1,0 @@
-Did mods use CSS to break the left side of this post?
-
-If yes, make it green.
-
-Edit: Nah it seems like it's just some weird interaction between Firefox and RES on desktop. An element overlaps comments on left side for me on video posts.

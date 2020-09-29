@@ -1,3 +1,0 @@
-As others have said, max amount of downvotes is 100. So for example downvotes of 5000 and upvotes of 500 results in a net of 400 upvotes.
-
-That's my understanding, anyone can feel free to correct me if I'm wrong.

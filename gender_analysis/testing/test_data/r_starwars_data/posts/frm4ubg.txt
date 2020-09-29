@@ -1,3 +1,0 @@
->coincidence can set up action, but it can’t be used to resolve an issue
-
-Monty Python: hold my tea

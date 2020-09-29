@@ -1,1 +1,0 @@
-no, if you get -50 karma on a comment, your karma goes down by 50.  If you get -80, goes down by 80.  -100, 100.  But if you get anything lower than -100 it only goes down by 100.  So that -668k comment only took their comment karma down by 100.

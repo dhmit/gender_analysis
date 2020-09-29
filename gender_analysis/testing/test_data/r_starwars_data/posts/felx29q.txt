@@ -1,1 +1,0 @@
-"You know, it would have been easier to do with CGI"
