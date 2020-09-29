@@ -56,7 +56,7 @@ class TestLoadCorpus:
         assert original_corpus.name == 'test_corpus'
 
         # next load the pickle file to make sure data was copied correctly
-        pickle_corpus = Corpus(pickle_path)
+        pickle_corpus = Corpus(pickle_path, name='test_corpus')
         assert len(pickle_corpus) == 10
         assert type(original_corpus.documents) == list
         assert pickle_corpus.name == 'test_corpus'
