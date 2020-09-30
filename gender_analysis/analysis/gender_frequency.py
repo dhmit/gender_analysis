@@ -295,9 +295,6 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
         relative_freq_male_object[book] = temp_dict_male['object']
         relative_freq_female_object[book] = temp_dict_female['object']
 
-    book.text = ''
-    book._word_counts_counter = None
-
     if pickle_filepath_male and pickle_filepath_female:
         common.store_pickle(relative_freq_male_subject, pickle_filepath_male)
         common.store_pickle(relative_freq_female_subject, pickle_filepath_female)
@@ -352,9 +349,6 @@ def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_mal
 
         relative_freq_female_sub[book] = she/(he+she)
         relative_freq_male_sub[book] = he/(he+she)
-
-    book.text = ''
-    book._word_counts_counter = None
 
     if pickle_filepath_male and pickle_filepath_female:
         common.store_pickle(relative_freq_female_sub,
