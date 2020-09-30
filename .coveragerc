@@ -1,0 +1,21 @@
+[run]
+
+# Check branch coverage in addition to statement coverage
+branch = True
+
+# Run test on gender_analysis with `coverage run`
+command_line = -m pytest gender_analysis
+source = gender_analysis
+
+# exclude these patterns from testing/coverage analysis
+omit =
+    gender_analysis/testing/*
+
+[report]
+
+# Don't report files that are empty or have 100% test coverage
+skip_empty = True
+skip_covered = True
+
+# Report the lines that weren't tested for each file
+# show_missing = True
