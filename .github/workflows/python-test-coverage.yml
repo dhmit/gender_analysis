@@ -39,7 +39,7 @@ jobs:
         coverage run
         coverage xml
     - name: Upload Coverage Results
-      uses: actions/upload-artifact@v2
+      uses: codecov/codecov-action@v1
       with:
-        name: coverage-results
-        path: coverage.xml
+        file: coverage.xml
+        fail_cli_if_error: true
