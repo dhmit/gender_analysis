@@ -42,4 +42,4 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         file: coverage.xml
-        fail_cli_if_error: true
+        fail_ci_if_error: true
