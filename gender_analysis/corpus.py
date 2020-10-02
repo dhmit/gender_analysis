@@ -5,6 +5,7 @@ from pathlib import Path
 from collections import Counter
 
 from nltk import tokenize as nltk_tokenize
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 import gender_guesser.detector as gender
 
 from gender_analysis import common
@@ -427,7 +428,7 @@ class Corpus:
         'Flatland'
 
         """
-        
+
         if metadata_field not in self.metadata_fields:
             raise MissingMetadataError([metadata_field])
 
@@ -585,8 +586,9 @@ class Corpus:
                         output.append((document.filename, passage))
                         count += 1
 
+
         if len(output) <= no_passages:
-            return output
+            return TreebankWordDetokenizer().detokenize(output)
         return output[:no_passages]
 
     def get_document_multiple_fields(self, metadata_dict):
