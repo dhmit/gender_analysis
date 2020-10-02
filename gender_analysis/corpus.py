@@ -348,7 +348,7 @@ class Corpus:
         >>> c = Corpus(path, csv_path=csvpath)
         >>> word_count = c.get_wordcount_counter()
         >>> word_count['fire']
-        2274
+        2327
 
         """
         corpus_counter = Counter()
@@ -427,7 +427,7 @@ class Corpus:
         'Flatland'
 
         """
-        
+
         if metadata_field not in self.metadata_fields:
             raise MissingMetadataError([metadata_field])
 
