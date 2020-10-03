@@ -215,6 +215,9 @@ class Document:
 
         :return: str
         """
+
+        from gutenberg_cleaner import simple_cleaner
+
         file_path = Path(self.filepath)
 
         try:
@@ -225,7 +228,7 @@ class Document:
                + 'files directory.\nPlease check that your metadata matches your dataset.'
             )
             raise FileNotFoundError(err) from original_err
-
+        text = simple_cleaner(text)
         return text
 
     def get_tokenized_text(self):

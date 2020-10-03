@@ -2,6 +2,7 @@ chardet
 clint
 dh_testers
 gender-guesser==0.4.0
+gutenberg_cleaner
 matplotlib
 more-itertools
 nltk
