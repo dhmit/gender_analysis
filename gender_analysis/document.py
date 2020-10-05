@@ -209,6 +209,36 @@ class Document:
 
         return hash(repr(self))
 
+    @staticmethod
+    def _clean_quotes(text):
+        """
+        Scans through the text and replaces all of the smart quotes and apostrophes with their
+        "normal" ASCII variants
+
+        >>> from gender_analysis.document import Document
+        >>> smart_text = 'This is a “smart” phrase'
+        >>> Document._clean_quotes(smart_text)
+        'This is a "smart" phrase'
+
+        :param text: The string to reformat
+        :return: A string that is idential to `text`, except with its smart quotes exchanged
+        """
+
+        # Define the quotes that will be swapped out
+        smart_quotes = {
+            '“': '"',
+            '”': '"',
+            "‘": "'",
+            "’": "'",
+        }
+
+        # Replace all entries one by one
+        output_text = text
+        for quote in smart_quotes:
+            output_text = output_text.replace(quote, smart_quotes[quote])
+
+        return output_text
+
     def _load_document_text(self):
         """
         Loads the text of the document at the filepath specified in initialization.
@@ -226,6 +256,8 @@ class Document:
             )
             raise FileNotFoundError(err) from original_err
 
+        # Replace smart quotes with regular quotes to standardize input
+        text = self._clean_quotes(text)
         return text
 
     def get_tokenized_text(self):
