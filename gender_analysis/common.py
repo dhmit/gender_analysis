@@ -1,4 +1,3 @@
-import codecs
 import gzip
 import os
 import pickle
@@ -163,7 +162,7 @@ def get_text_file_encoding(filepath):
     >>> from gender_analysis import common
     >>> text = 'here is an ascii text'
     >>> file_path = Path(common.BASE_PATH, 'example_file.txt')
-    >>> with codecs.open(file_path, 'w', 'utf-8') as source:
+    >>> with open(file_path, 'w') as source:
     ...     source.write(text)
     ...     source.close()
     >>> common.get_text_file_encoding(file_path)
@@ -199,7 +198,7 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
     >>> text = ' ¶¶¶¶ here is a test file'
     >>> source_path = Path(BASE_PATH, 'source_file.txt')
     >>> target_path = Path(BASE_PATH, 'target_file.txt')
-    >>> with codecs.open(source_path, 'w', 'iso-8859-1') as source:
+    >>> with open(source_path, 'w', encoding='iso-8859-1') as source:
     ...     source.write(text)
     >>> get_text_file_encoding(source_path)
     'ISO-8859-1'
@@ -234,9 +233,9 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
         print(f"WARNING: Changing encoding to {target_encoding} on a file that does not end with "
               f".txt. Source: {source_path}. Target: {target_path}")
 
-    with codecs.open(source_path, 'rU', encoding=source_encoding) as source_file:
+    with open(source_path, 'r', encoding=source_encoding) as source_file:
         text = source_file.read()
-    with codecs.open(target_path, 'w', encoding=target_encoding) as target_file:
+    with open(target_path, 'w', encoding=target_encoding) as target_file:
         target_file.write(text)
 
 
