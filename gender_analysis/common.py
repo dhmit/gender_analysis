@@ -163,7 +163,7 @@ def get_text_file_encoding(filepath):
     >>> text = 'here is an ascii text'
     >>> file_path = Path(common.BASE_PATH, 'example_file.txt')
     >>> with open(file_path, 'w') as source:
-    ...     source.write(text)
+    ...     _ = source.write(text)
     ...     source.close()
     >>> common.get_text_file_encoding(file_path)
     'ascii'
@@ -199,7 +199,7 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
     >>> source_path = Path(BASE_PATH, 'source_file.txt')
     >>> target_path = Path(BASE_PATH, 'target_file.txt')
     >>> with open(source_path, 'w', encoding='iso-8859-1') as source:
-    ...     source.write(text)
+    ...     _ = source.write(text)
     >>> get_text_file_encoding(source_path)
     'ISO-8859-1'
     >>> convert_text_file_to_new_encoding(source_path, target_path, target_encoding='utf-8')
@@ -236,7 +236,7 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
     with open(source_path, 'r', encoding=source_encoding) as source_file:
         text = source_file.read()
     with open(target_path, 'w', encoding=target_encoding) as target_file:
-        target_file.write(text)
+        _ = target_file.write(text)
 
 
 def load_graph_settings(show_grid_lines=True):
