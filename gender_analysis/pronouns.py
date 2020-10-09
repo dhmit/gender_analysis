@@ -72,3 +72,33 @@ class PronounSeries:
         """
 
         return self.identifier + '-series'
+
+    def __hash__(self):
+        """
+        Makes the `PronounSeries` class hashable
+        """
+
+        return self.identifier.__hash__()
+
+    def __eq__(self, other):
+        """
+        Determines whether two `PronunSeries` are equal. Note that they are only equal if
+        they have the same identifier and the exact same set of pronouns.
+
+        >>> from gender_analysis.pronouns import PronounSeries
+        >>> fem_series = PronounSeries('Fem', {'she', 'her', 'hers'})
+        >>> second_fem_series = PronounSeries('Fem', {'she', 'her', 'hers'})
+        >>> fem_series == second_fem_series
+        True
+        >>> masc_series = PronounSeries('Masc', {'he', 'him', 'his'})
+        >>> fem_series == masc_series
+        False
+
+        :param other: The `PronounSeries` object to compare
+        :return: `True` if the two series are the same, `False` otherwise.
+        """
+        
+        return (
+            self.identifier == other.identifier and
+            self.pronouns == other.pronouns
+        )
