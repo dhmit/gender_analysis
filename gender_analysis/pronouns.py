@@ -82,7 +82,7 @@ class PronounSeries:
 
     def __eq__(self, other):
         """
-        Determines whether two `PronunSeries` are equal. Note that they are only equal if
+        Determines whether two `PronounSeries` are equal. Note that they are only equal if
         they have the same identifier and the exact same set of pronouns.
 
         >>> from gender_analysis.pronouns import PronounSeries
@@ -97,7 +97,7 @@ class PronounSeries:
         :param other: The `PronounSeries` object to compare
         :return: `True` if the two series are the same, `False` otherwise.
         """
-        
+
         return (
             self.identifier == other.identifier and
             self.pronouns == other.pronouns
