@@ -3,6 +3,7 @@ import string
 from collections import Counter
 from pathlib import Path
 
+from gutenberg_cleaner import simple_cleaner
 from more_itertools import windowed
 import nltk
 
@@ -246,8 +247,6 @@ class Document:
         :return: str
         """
 
-        from gutenberg_cleaner import simple_cleaner
-
         file_path = Path(self.filepath)
 
         try:
@@ -258,8 +257,10 @@ class Document:
                + 'files directory.\nPlease check that your metadata matches your dataset.'
             )
             raise FileNotFoundError(err) from original_err
+
         # Remove Gutenberg header and footer.
-        text = simple_cleaner(text)
+        if "project gutenberg" in text.lower():
+            text = simple_cleaner(text)
         # Replace smart quotes with regular quotes to standardize input
         text = self._clean_quotes(text)
         return text
