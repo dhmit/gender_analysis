@@ -348,7 +348,7 @@ class Corpus:
         >>> c = Corpus(path, csv_path=csvpath)
         >>> word_count = c.get_wordcount_counter()
         >>> word_count['fire']
-        2327
+        2322
 
         """
         corpus_counter = Counter()

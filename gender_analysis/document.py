@@ -25,7 +25,7 @@ class Document:
     >>> type(austen.text)
     <class 'str'>
     >>> len(austen.text)
-    486253
+    475233
     """
 
     def __init__(self, metadata_dict):
@@ -86,7 +86,7 @@ class Document:
         ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
-        86291
+        83285
 
         """
 
