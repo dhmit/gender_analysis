@@ -1,5 +1,3 @@
-from collections import Counter
-
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -29,10 +27,10 @@ def get_count_words(document, words):
     ...                      'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
     >>> doc = document.Document(document_metadata)
     >>> get_count_words(doc, ['sad', 'and'])
-    Counter({'sad': 4, 'and': 4})
+    {'sad': 4, 'and': 4}
 
     """
-    dic_word_counts = Counter()
+    dic_word_counts = dict()
     for word in words:
         dic_word_counts[word] = document.get_count_of_word(word)
     return dic_word_counts
@@ -80,17 +78,17 @@ def get_comparative_word_freq(freqs):
 def get_counts_by_pos(freqs):
     """
     This functions returns a dictionary where each key is a part of speech tag (e.g. 'NN' for nouns)
-    and the value is a counter object of words of that part of speech and their frequencies.
+    and the value is a dictionary of words of that part of speech and their frequencies.
     It also filters out words like "is", "the". We used `nltk`'s stop words function for filtering.
 
-    :param freqs: Counter object of words mapped to their word count
-    :return: dictionary with key as part of speech, value as Counter object of words
+    :param freqs: dictionary of words mapped to their word count
+    :return: dictionary with key as part of speech, value as dictionary of words
         (of that part of speech) mapped to their word count
 
-    >>> get_counts_by_pos(Counter({'baked':1,'chair':3,'swimming':4}))
-    {'VBN': Counter({'baked': 1}), 'NN': Counter({'chair': 3}), 'VBG': Counter({'swimming': 4})}
-    >>> get_counts_by_pos(Counter({'is':10,'usually':7,'quietly':42}))
-    {'RB': Counter({'quietly': 42, 'usually': 7})}
+    >>> get_counts_by_pos({'baked':1,'chair':3,'swimming':4})
+    {'VBN': {'baked': 1}, 'NN': {'chair': 3}, 'VBG': {'swimming': 4}}
+    >>> get_counts_by_pos({'is':10,'usually':7,'quietly':42})
+    {'RB': {'usually': 7, 'quietly': 42}}
 
     """
     common.download_nltk_package_if_not_present('corpora/stopwords')
@@ -105,7 +103,7 @@ def get_counts_by_pos(freqs):
             tag = nltk.pos_tag([word])[0][1]
             # add that word to the counter object in the relevant dict entry
             if tag not in sorted_words.keys():
-                sorted_words[tag] = Counter({word:freqs[word]})
+                sorted_words[tag] = {word: freqs[word]}
             else:
                 sorted_words[tag].update({word: freqs[word]})
     return sorted_words

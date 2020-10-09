@@ -375,7 +375,7 @@ class Document:
         ...                   'filename': 'test_text_10.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_10.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
-        {'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1}
+        {'hester': 1, 'was': 2, 'convicted': 2, 'of': 1, 'adultery': 1}
 
         """
 
@@ -446,7 +446,7 @@ class Document:
         ... or a list of strings.
 
         >>> scarlett.get_word_windows(['purse', 'tears'])
-        {'her': 2, 'of': 1, 'and': 1, 'handed': 1, 'proposal': 1, 'drowned': 1, 'the': 1}
+        {'of': 1, 'her': 2, 'and': 1, 'handed': 1, 'proposal': 1, 'drowned': 1, 'the': 1}
 
         """
 

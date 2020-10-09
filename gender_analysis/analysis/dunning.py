@@ -101,17 +101,17 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
 
 def dunning_total(counter1, counter2, pickle_filepath=None):
     """
-    Runs dunning_individual on words shared by both counter objects
-    (-) end of spectrum is words for counter_2
-    (+) end of spectrum is words for counter_1
+    Runs dunning_individual on words shared by both dictionaries
+    (-) end of spectrum is words for counter2
+    (+) end of spectrum is words for counter1
     the larger the magnitude of the number, the more distinctive that word is in its
     respective counter object
 
     use pickle_filepath to store the result so it only has to be calculated once and can be
     used for multiple analyses.
 
-    :param counter1: Python Counter object
-    :param counter2: Python Counter object
+    :param counter1: Python Dictionary
+    :param counter2: Python Dictionary
     :param pickle_filepath: Filepath to store pickled results; will not save output if None
     :return: Dictionary
 
@@ -142,7 +142,7 @@ def dunning_total(counter1, counter2, pickle_filepath=None):
     # get word total in respective counters
     for word1 in counter1:
         total_words_counter1 += counter1[word1]
-    for word2 in  counter2:
+    for word2 in counter2:
         total_words_counter2 += counter2[word2]
 
     # dictionary where results will be returned

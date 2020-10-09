@@ -23,7 +23,7 @@ def find_gender_adj(document, female):
     ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_7.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> find_gender_adj(scarlett, False)
-    Counter({'handsome': 3, 'sad': 1})
+    {'handsome': 3, 'sad': 1}
 
     """
     output = Counter()
@@ -61,7 +61,7 @@ def find_gender_adj(document, female):
                 word = words[tag_index]
                 output[word] += 1
 
-    return output
+    return dict(output)
 
 
 def find_male_adj(document):
@@ -79,7 +79,7 @@ def find_male_adj(document):
    ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_8.txt')}
    >>> scarlett = document.Document(document_metadata)
    >>> find_male_adj(scarlett)
-   Counter({'handsome': 3, 'sad': 1})
+   {'handsome': 3, 'sad': 1}
 
     """
     return find_gender_adj(document, False)
@@ -100,7 +100,7 @@ def find_female_adj(document):
     ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_9.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> find_female_adj(scarlett)
-    Counter({'beautiful': 3, 'sad': 1})
+    {'beautiful': 3, 'sad': 1}
 
     """
 
@@ -157,12 +157,12 @@ def merge(novel_adj_dict, full_adj_dict):
 
     :param novel_adj_dict: dictionary of adjectives/#occurrences for one novel
     :param full_adj_dict: dictionary of adjectives/#occurrences for multiple novels
-    :return: Counter object that merges both dictionaries
+    :return: dictionary object that merges both dictionaries
 
     >>> novel_adj_dict = {'hello': 5, 'hi': 7, 'hola': 9, 'bonjour': 2}
     >>> full_adj_dict = {'hello': 15, 'bienvenue': 3, 'hi': 23}
     >>> merge(novel_adj_dict, full_adj_dict)
-    Counter({'hi': 30, 'hello': 20, 'hola': 9, 'bienvenue': 3, 'bonjour': 2})
+    {'hello': 20, 'bienvenue': 3, 'hi': 30, 'hola': 9, 'bonjour': 2}
 
     """
 
@@ -170,7 +170,7 @@ def merge(novel_adj_dict, full_adj_dict):
     for adj in list(novel_adj_dict.keys()):
         merge_result[adj] += novel_adj_dict[adj]
 
-    return merge_result
+    return dict(merge_result)
 
 
 def merge_raw_results(full_results):
