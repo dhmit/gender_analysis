@@ -162,7 +162,7 @@ def get_text_file_encoding(filepath):
     >>> from gender_analysis import common
     >>> text = 'here is an ascii text'
     >>> file_path = Path(common.BASE_PATH, 'example_file.txt')
-    >>> with open(file_path, 'w') as source:
+    >>> with open(file_path, 'w', encoding='utf-8') as source:
     ...     _ = source.write(text)
     ...     source.close()
     >>> common.get_text_file_encoding(file_path)
