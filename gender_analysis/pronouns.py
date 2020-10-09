@@ -45,8 +45,30 @@ class PronounSeries:
 
         >>> from gender_analysis.pronouns import PronounSeries
         >>> pronoun_group = PronounSeries('Fem', {'She', 'Her', 'hers', 'herself'})
-        >>> sorted(list(pronoun_group))
+        >>> sorted(pronoun_group)
         ['her', 'hers', 'herself', 'she']
 
         """
         yield from self.pronouns
+
+    def __repr__(self):
+        """
+        >>> from gender_analysis.pronouns import PronounSeries
+        >>> PronounSeries('Masc', {'he', 'him', 'his'})
+        <Masc: ['he', 'him', 'his']>
+
+        :return: A console-friendly representation of the pronoun series
+        """
+
+        return f'<{self.identifier}: {sorted(self.pronouns)}>'
+
+    def __str__(self):
+        """
+        >>> from gender_analysis.pronouns import PronounSeries
+        >>> str(PronounSeries('Andy', {'Xe', 'Xis', 'Xer'}))
+        "Andy-series: ['xe', 'xer', 'xis']"
+
+        :return: A string-representation of the pronoun series
+        """
+
+        return f'{self.identifier}-series: {sorted(self.pronouns)}'
