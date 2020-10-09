@@ -66,9 +66,9 @@ class PronounSeries:
         """
         >>> from gender_analysis.pronouns import PronounSeries
         >>> str(PronounSeries('Andy', {'Xe', 'Xis', 'Xer'}))
-        "Andy-series: ['xe', 'xer', 'xis']"
+        'Andy-series'
 
         :return: A string-representation of the pronoun series
         """
 
-        return f'{self.identifier}-series: {sorted(self.pronouns)}'
+        return self.identifier + '-series'
