@@ -337,9 +337,10 @@ class Corpus:
 
     def get_wordcount_counter(self):
         """
-        This function returns a Counter object that stores how many times each word appears in the corpus.
+        This function returns a Dictionary that stores how many times each word appears in
+        the corpus.
 
-        :return: Python Counter object
+        :return: Python Dictionary object
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import TEST_DATA_PATH
@@ -355,7 +356,7 @@ class Corpus:
         for current_document in self.documents:
             document_counter = current_document.get_wordcount_counter()
             corpus_counter += document_counter
-        return corpus_counter
+        return dict(corpus_counter)
 
     def get_field_vals(self, field):
         """

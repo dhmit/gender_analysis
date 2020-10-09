@@ -361,11 +361,12 @@ class Document:
 
     def get_wordcount_counter(self):
         """
-        Returns a counter object of all of the words in the text.
+        Returns a dictionary counting of all of the words in the text.
 
-        If this is your first time running this method, it may take a moment to perform a count in the document.
+        If this is your first time running this method, it may take a moment to perform a
+        count in the document.
 
-        :return: Python Counter object
+        :return: Dicitonary that contains all of the wordcounts in this `Document`
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
@@ -374,18 +375,18 @@ class Document:
         ...                   'filename': 'test_text_10.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_10.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
-        Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
+        {'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1}
 
         """
 
         # If word_counts were not previously initialized, do it now and store it for the future.
         if not self._word_counts_counter:
             self._word_counts_counter = Counter(self.get_tokenized_text())
-        return self._word_counts_counter
+        return dict(self._word_counts_counter)
 
     def words_associated(self, word):
         """
-        Returns a Counter of the words found after a given word.
+        Returns a dictionary counter of the words found after a given word.
 
         In the case of double/repeated words, the counter would include the word itself and the next
         new word.
@@ -393,7 +394,7 @@ class Document:
         Note: words always return lowercase.
 
         :param word: Single word to search for in the document's text
-        :return: a Python Counter() object with {associated_word: occurrences}
+        :return: a Python dictionary object with {associated_word: occurrences}
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
@@ -402,7 +403,7 @@ class Document:
         ...                   'filename': 'test_text_11.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_11.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.words_associated("his")
-        Counter({'cigarette': 1, 'speech': 1})
+        {'cigarette': 1, 'speech': 1}
 
         """
         word = word.lower()
@@ -416,7 +417,7 @@ class Document:
                 check = False
             if w == word:
                 check = True
-        return word_count
+        return dict(word_count)
 
     def get_word_windows(self, search_terms, window_size=2):
         """
@@ -428,7 +429,7 @@ class Document:
 
         :param search_terms: String or list of strings to search for
         :param window_size: integer representing number of words to search for in either direction
-        :return: Python Counter object
+        :return: Python Dictionary object
 
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
@@ -440,12 +441,12 @@ class Document:
         search_terms can be either a string...
 
         >>> scarlett.get_word_windows("his", window_size=2)
-        Counter({'he': 1, 'lit': 1, 'cigarette': 1, 'and': 1, 'then': 1, 'began': 1, 'speech': 1, 'which': 1})
+        {'he': 1, 'lit': 1, 'cigarette': 1, 'and': 1, 'then': 1, 'began': 1, 'speech': 1, 'which': 1}
 
         ... or a list of strings.
 
         >>> scarlett.get_word_windows(['purse', 'tears'])
-        Counter({'her': 2, 'of': 1, 'and': 1, 'handed': 1, 'proposal': 1, 'drowned': 1, 'the': 1})
+        {'her': 2, 'of': 1, 'and': 1, 'handed': 1, 'proposal': 1, 'drowned': 1, 'the': 1}
 
         """
 
@@ -462,7 +463,7 @@ class Document:
                     if surrounding_word not in search_terms:
                         counter[surrounding_word] += 1
 
-        return counter
+        return dict(counter)
 
     def get_word_freq(self, word):
         """
