@@ -157,21 +157,20 @@ def merge(novel_adj_dict, full_adj_dict):
 
     :param novel_adj_dict: dictionary of adjectives/#occurrences for one novel
     :param full_adj_dict: dictionary of adjectives/#occurrences for multiple novels
-    :return: full_results dictionary with novel_results merged in
+    :return: Counter object that merges both dictionaries
 
     >>> novel_adj_dict = {'hello': 5, 'hi': 7, 'hola': 9, 'bonjour': 2}
     >>> full_adj_dict = {'hello': 15, 'bienvenue': 3, 'hi': 23}
     >>> merge(novel_adj_dict, full_adj_dict)
-    {'hello': 20, 'bienvenue': 3, 'hi': 30, 'hola': 9, 'bonjour': 2}
+    Counter({'hi': 30, 'hello': 20, 'hola': 9, 'bienvenue': 3, 'bonjour': 2})
 
     """
+
+    merge_result = Counter(full_adj_dict)
     for adj in list(novel_adj_dict.keys()):
-        adj_count = novel_adj_dict[adj]
-        if adj in list(full_adj_dict.keys()):
-            full_adj_dict[adj] += adj_count
-        else:
-            full_adj_dict[adj] = adj_count
-    return full_adj_dict
+        merge_result[adj] += novel_adj_dict[adj]
+
+    return merge_result
 
 
 def merge_raw_results(full_results):

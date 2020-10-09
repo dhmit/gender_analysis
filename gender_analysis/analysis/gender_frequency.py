@@ -29,10 +29,10 @@ def get_count_words(document, words):
     ...                      'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
     >>> doc = document.Document(document_metadata)
     >>> get_count_words(doc, ['sad', 'and'])
-    {'sad': 4, 'and': 4}
+    Counter({'sad': 4, 'and': 4})
 
     """
-    dic_word_counts = {}
+    dic_word_counts = Counter()
     for word in words:
         dic_word_counts[word] = document.get_count_of_word(word)
     return dic_word_counts
