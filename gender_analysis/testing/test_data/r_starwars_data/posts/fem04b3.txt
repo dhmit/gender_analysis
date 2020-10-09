@@ -1,1 +1,0 @@
-"This would look a lot better in CGI."

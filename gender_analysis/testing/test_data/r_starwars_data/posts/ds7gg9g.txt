@@ -1,4 +1,0 @@
-Exclamation point followed by Remindme.
-
-Eg:  
-!Remindme

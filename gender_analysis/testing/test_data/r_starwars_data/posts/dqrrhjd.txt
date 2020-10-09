@@ -1,1 +1,0 @@
-The CGI actually *removed* demons from the 405 to make it more believable.

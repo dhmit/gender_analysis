@@ -124,8 +124,6 @@ def run_adj_analysis(corpus):
         novel_female_results = find_female_adj(novel)
         if (novel_male_results != "lower window bound less than 5"
                 and novel_female_results != "lower window bound less than 5"):
-            novel.text = ""
-            novel._word_counts_counter = None
             results[novel] = {'male': novel_male_results, 'female': novel_female_results}
 
     return results
@@ -289,7 +287,7 @@ def get_top_adj(full_results, num):
     """
     Takes dictionary of results from run_adj_analysis and number of top results to return.
     Returns the top num adjectives associated with male pronouns and female pronouns.
-    
+
     :param full_results: dictionary from result of run_adj_analysis
     :param num: number of top results to return per gender
     :return: tuple of lists of top adjectives associated with male pronouns and female pronouns, respectively

@@ -1,1 +1,0 @@
-I think if a comment gets 1,000 karma, the account gets 1,000 karma from the post. But if a comment gets -1,000, the account only gets -100 karma from the post.

@@ -1,1 +1,0 @@
-That doesn't make sense. Why isn't the cap applied on net karma of the comment instead of downvotes? If they want to cap it at eg -10 000; and comment has -50 000 +15 000, it should be net -35 000 and cap should change it to -10 000. Having -10 000 +15 000 and therefore net +5 000 is stupid af.
