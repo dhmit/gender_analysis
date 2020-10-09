@@ -1,4 +1,5 @@
 from statistics import median
+from collections import Counter
 from more_itertools import windowed
 import nltk
 
@@ -22,10 +23,10 @@ def find_gender_adj(document, female):
     ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_7.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> find_gender_adj(scarlett, False)
-    {'handsome': 3, 'sad': 1}
+    Counter({'handsome': 3, 'sad': 1})
 
     """
-    output = {}
+    output = Counter()
     text = document.get_tokenized_text()
 
     if female:
@@ -58,10 +59,8 @@ def find_gender_adj(document, female):
         for tag_index, tag in enumerate(tags):
             if tags[tag_index][1] == "JJ" or tags[tag_index][1] == "JJR" or tags[tag_index][1] == "JJS":
                 word = words[tag_index]
-                if word in output.keys():
-                    output[word] += 1
-                else:
-                    output[word] = 1
+                output[word] += 1
+
     return output
 
 
@@ -80,7 +79,7 @@ def find_male_adj(document):
    ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_8.txt')}
    >>> scarlett = document.Document(document_metadata)
    >>> find_male_adj(scarlett)
-   {'handsome': 3, 'sad': 1}
+   Counter({'handsome': 3, 'sad': 1})
 
     """
     return find_gender_adj(document, False)
@@ -101,7 +100,7 @@ def find_female_adj(document):
     ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_9.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> find_female_adj(scarlett)
-    {'beautiful': 3, 'sad': 1}
+    Counter({'beautiful': 3, 'sad': 1})
 
     """
 
@@ -289,7 +288,7 @@ def get_top_adj(full_results, num):
     """
     Takes dictionary of results from run_adj_analysis and number of top results to return.
     Returns the top num adjectives associated with male pronouns and female pronouns.
-    
+
     :param full_results: dictionary from result of run_adj_analysis
     :param num: number of top results to return per gender
     :return: tuple of lists of top adjectives associated with male pronouns and female pronouns, respectively
