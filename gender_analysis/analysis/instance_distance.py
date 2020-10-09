@@ -141,8 +141,6 @@ def run_distance_analysis(corpus):
             stat_diff = list(male_stats.values())[stat] - list(female_stats.values())[stat]
             diffs[list(male_stats.keys())[stat]] = stat_diff
 
-        novel.text = ""
-        novel._word_counts_counter = None
         results[novel] = {'male': male_stats, 'female': female_stats, 'difference': diffs}
 
     return results
