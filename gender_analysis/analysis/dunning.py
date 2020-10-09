@@ -79,7 +79,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> corpus1 = Corpus(filepath1)
     >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
-    -424393.3850001963
+    -421109.6231373814
 
     """
 
@@ -196,7 +196,7 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
          >>> f_corpus = c.filter_by_gender('female')
          >>> result = dunning_total_by_corpus(m_corpus, f_corpus)
          >>> print(result[0])
-         ('she', (-12320.96452787667, 29100, 45548))
+         ('she', (-12374.391057010947, 29382, 45907))
          """
     wordcounter_male = m_corpus.get_wordcount_counter()
     wordcounter_female = f_corpus.get_wordcount_counter()
@@ -519,7 +519,7 @@ def freq_plot_to_show(results):
 
 
 ################################################################################
-# Individual Analyses                          
+# Individual Analyses
 ################################################################################
 
 # Words associated with male and female characters,
