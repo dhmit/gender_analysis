@@ -180,10 +180,10 @@ def run_gender_freq(corpus):
         dictionary = {}
         for doc in documents[num * 10: min(c, num * 10 + 9)]:
             male = 0
-            for word in common.MASC_WORDS:
+            for word in common.HE_SERIES:
                 male += doc.get_word_freq(word)
             female = 0
-            for word in common.FEM_WORDS:
+            for word in common.SHE_SERIES:
                 female += doc.get_word_freq(word)
 
             d = {'he': male, 'she': female}
@@ -232,11 +232,11 @@ def document_pronoun_freq(corp, pickle_filepath=None):
 
     for doc in corp.documents:
         male = 0
-        for word in common.MASC_WORDS:
+        for word in common.HE_SERIES:
             male += doc.get_word_freq(word)
 
         female = 0
-        for word in common.FEM_WORDS:
+        for word in common.SHE_SERIES:
             female += doc.get_word_freq(word)
 
         temp_dict = {'male': male, 'female': female}

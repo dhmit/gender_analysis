@@ -30,12 +30,12 @@ def find_gender_adj(document, female):
 
     if female:
         distances = female_instance_dist(document)
-        pronouns1 = common.FEM_WORDS
-        pronouns2 = common.MASC_WORDS
+        pronouns1 = common.SHE_SERIES
+        pronouns2 = common.HE_SERIES
     else:
         distances = male_instance_dist(document)
-        pronouns1 = common.MASC_WORDS
-        pronouns2 = common.FEM_WORDS
+        pronouns1 = common.HE_SERIES
+        pronouns2 = common.SHE_SERIES
     if len(distances) == 0:
         return {}
     elif len(distances) <= 3:
