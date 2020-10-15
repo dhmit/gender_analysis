@@ -6,21 +6,21 @@ class Gender:
     Defines a gender that will be operated on in analysis functions
     """
 
-    def __init__(self, identifier, pronoun_series, names=None):
+    def __init__(self, label, pronoun_series, names=None):
         """
         Initializes a Gender object that can be used for comparing and contrasting in the
         analysis functions.
 
         The gender accepts one or more `PronounSeries` that will be used to identify the gender.
 
-        :param identifier: String name of the gender
+        :param label: String name of the gender
         :param pronoun_series: `PronounSeries` or collection of `PronounSeries` that the gender uses
         :param names: A collection of names (as strings) that will be associated with the gender.
             Note that the provided names are case-sensitive.
 
         """
 
-        self.identifier = identifier
+        self.label = label
 
         # Allow the user to input a single PronounSeries if only one applies
         if type(pronoun_series) == PronounSeries:
@@ -49,7 +49,7 @@ class Gender:
         <Female: {<Fem: ['her', 'hers', 'she']>}>
         """
 
-        return f'<{self.identifier}: {self.pronoun_series}>'
+        return f'<{self.label}: {self.pronoun_series}>'
 
     def __str__(self):
         """
@@ -62,14 +62,14 @@ class Gender:
         'Female'
         """
 
-        return self.identifier
+        return self.label
 
     def __hash__(self):
         """
         Allows the Gender object to be hashed
         """
 
-        return self.identifier.__hash__()
+        return self.label.__hash__()
 
     def __eq__(self, other):
         """
@@ -100,7 +100,7 @@ class Gender:
         """
 
         return (
-            self.identifier == other.identifier and
+            self.label == other.label and
             self.pronoun_series == other.pronoun_series and
             self.names == other.names
         )
