@@ -28,15 +28,7 @@ class Gender:
         else:
             self.pronoun_series = set(pronoun_series)
 
-        # Manage names that are associated with the gender
-        self.names = set()
-        if names is not None:
-
-            # If the user inputs a single string, catch it
-            if type(names) == str:
-                self.names.add(names)
-            else:
-                self.names = set(names)
+        self.names = set(names) if names is not None else set()
 
     def __repr__(self):
         """
@@ -198,3 +190,18 @@ class Gender:
             self.uses_name(identifier) or
             self.uses_pronoun(identifier)
         )
+
+    def associations(self):
+        """
+        :return: Set of all words (i.e. pronouns and names) that are associated with the gender
+
+        >>> from gender_analysis.pronouns import PronounSeries
+        >>> from gender_analysis.gender import Gender
+        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'})
+        >>> fem_names = {'Sarah', 'Marigold', 'Annabeth'}
+        >>> female = Gender('Female', fem_pronouns, fem_names)
+        >>> female.associations() == {'she', 'her', 'hers', 'Sarah', 'Marigold', 'Annabeth'}
+        True
+        """
+
+        return self.names.union(self.get_pronouns())
