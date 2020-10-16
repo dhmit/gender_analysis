@@ -276,10 +276,6 @@ class Document:
             )
             raise FileNotFoundError(err) from original_err
 
-        # Remove Gutenberg header and footer. We may eventually want to make this into a parameter,
-        # but for now let's just keep it commented out.
-        # text = self._gutenberg_cleaner(text)
-
         # Replace smart quotes with regular quotes to standardize input
         text = self._clean_quotes(text)
         return text
