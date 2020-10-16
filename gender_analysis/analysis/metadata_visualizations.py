@@ -7,10 +7,11 @@ from collections import Counter
 
 from gender_analysis.common import MissingMetadataError
 
-DEFAULT_FILE_PATH = os.getcwd() + "/gender_analysis_visualizations/"
+DEFAULT_VISUALIZATION_OUTPUT_DIR = Path(os.getcwd()).joinpath(
+    Path("gender_analysis_visualizations"))
 
 
-def plot_pubyears(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
+def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
     Creates a histogram displaying the frequency of books that were published within a 20 year
     period.
@@ -18,16 +19,16 @@ def plot_pubyears(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
     *NOTE:* Requires that corpus contains a 'date' metadata field.
 
     :param corpus: Corpus object
-    :param file_path: path for where to save the file
+    :param output_dir: path for where to save the file
     :param filename: Name of file to save plot as; will not write a file if None
     :return: None
 
     """
 
     if 'date' not in corpus.metadata_fields:
-        raise MissingMetadataError([ 'date' ])
+        raise MissingMetadataError(['date'])
 
-    pub_years = [ ]
+    pub_years = []
     for doc in corpus.documents:
         if doc.date is None:
             continue
@@ -42,43 +43,43 @@ def plot_pubyears(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
     sns.color_palette('colorblind')
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     plt.figure(figsize=(10, 6))
-    bins = [ num for num in range(min(pub_years), max(pub_years) + 4, 5) ]
+    bins = [num for num in range(min(pub_years), max(pub_years) + 4, 5)]
     plt.hist(pub_years, bins, histtype='bar', rwidth=.8, color='c')
     plt.xlabel('Year', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
     plt.title('Publication Year Concentration for ' + corpus_name.title(), size=18, weight='bold',
               color='k')
     plt.yticks(size=15, color='k')
-    plt.xticks([ i for i in range(min(pub_years), max(pub_years) + 9, 10) ], size=15, color='k')
+    plt.xticks([i for i in range(min(pub_years), max(pub_years) + 9, 10)], size=15, color='k')
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(60)
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
-    created_file_path = generate_file_path_for_visualizations(file_path)
-    print(created_file_path)
+    created_file_path = generate_file_path_for_visualizations(output_dir)
+
     if filename:
-        plt.savefig(str(created_file_path) + '/' + filename.replace(' ', '_') + '.png')
+        plt.savefig(created_file_path.joinpath(filename.replace(' ', '_') + '.png'))
     else:
-        plt.savefig(str(created_file_path) + '/' + 'date_of_pub_for_'
-                    + corpus_name.replace(' ', '_') + '.png')
+        plt.savefig(created_file_path.joinpath('date_of_pub_for_'
+                    + corpus_name.replace(' ', '_') + '.png'))
 
 
-def plot_pubcountries(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
+def plot_pubcountries(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
     Creates a bar graph displaying the frequency of books that were published in each country.
 
     *NOTE:* Requires that corpus contains a 'country_publication' metadata field.
 
     :param corpus: Corpus object
-    :param file_path: Path of where to save the plot
+    :param output_dir: Path of where to save the plot
     :param filename: Name of file to save plot as; will not write a file if None
     :return: None
 
     """
     if 'country_publication' not in corpus.metadata_fields:
-        raise MissingMetadataError([ 'country_publication' ])
+        raise MissingMetadataError(['country_publication'])
 
-    pub_country = [ ]
+    pub_country = []
     for doc in corpus.documents:
         if doc.country_publication is None:
             continue
@@ -96,21 +97,21 @@ def plot_pubcountries(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
     country_counter = {}
     totalbooks = 0
     for country in pub_country:
-        country_counter[ country ] = country_counter.setdefault(country, 0) + 1
+        country_counter[country] = country_counter.setdefault(country, 0) + 1
         totalbooks += 1
     country_counter2 = {'Other': 0}
     for country in country_counter:
         if country == '':
             pass
-        elif country_counter[ country ] > (.001 * totalbooks):
+        elif country_counter[country] > (.001 * totalbooks):
             # must be higher than .1% of the total books to have its own country name,
             # otherwise it is classified under others
-            country_counter2[ country ] = country_counter[ country ]
+            country_counter2[country] = country_counter[country]
         else:
-            country_counter2[ 'Other' ] += country_counter[ country ]
-    country_counter2 = sorted(country_counter2.items(), key=lambda kv: -kv[ 1 ])
-    x = [ country[ 0 ] for country in country_counter2 ]
-    y = [ country[ 1 ] for country in country_counter2 ]
+            country_counter2['Other'] += country_counter[country]
+    country_counter2 = sorted(country_counter2.items(), key=lambda kv: -kv[1])
+    x = [country[0] for country in country_counter2]
+    y = [country[1] for country in country_counter2]
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(15)
     plt.bar(x, y, color='c')
@@ -122,30 +123,30 @@ def plot_pubcountries(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
     plt.yticks(color='k', size=15)
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
-    created_file_path = generate_file_path_for_visualizations(file_path)
+    created_file_path = generate_file_path_for_visualizations(output_dir)
     if filename:
-        plt.savefig(str(created_file_path) + '/' + filename.replace(' ', '_') + '.png')
+        plt.savefig(created_file_path.joinpath(filename.replace(' ', '_') + '.png'))
     else:
-        plt.savefig(str(created_file_path) + '/' + 'country_of_pub_for_' +
-                    corpus_name.replace(' ', '_') + '.png')
+        plt.savefig(created_file_path.joinpath('country_of_pub_for_' +
+                    corpus_name.replace(' ', '_') + '.png'))
 
 
-def plot_gender_breakdown(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
+def plot_gender_breakdown(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
     Creates a pie chart displaying the composition of male and female writers in the data.
 
     *NOTE:* Requires that corpus contains a 'author_gender' metadata field.
 
     :param corpus: Corpus object
-    :param file_path: Path of where to save the plot
+    :param output_dir: Path of where to save the plot
     :param filename: Name of file to save plot as; will not write a file if None
     :return: None
 
     """
     if 'author_gender' not in corpus.metadata_fields:
-        raise MissingMetadataError([ 'author_gender' ])
+        raise MissingMetadataError(['author_gender'])
 
-    pub_gender = [ ]
+    pub_gender = []
     for doc in corpus.documents:
         if doc.author_gender is None:
             continue
@@ -160,49 +161,49 @@ def plot_gender_breakdown(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
     gendercount = {}
     for i in pub_gender:
         if i == 'both' or i == 'unknown' or i == 'Both' or i == 'Unknown':
-            gendercount[ 'Unknown' ] = gendercount.setdefault('Unknown', 0) + 1
+            gendercount['Unknown'] = gendercount.setdefault('Unknown', 0) + 1
         else:
-            gendercount[ i ] = gendercount.setdefault(i, 0) + 1
+            gendercount[i] = gendercount.setdefault(i, 0) + 1
     total = 0
     for i in gendercount:
-        total += gendercount[ i ]
-    slices = [ gendercount[ i ] / total for i in gendercount ]
-    genders = [ i for i in gendercount ]
-    labelgenders = [ ]
+        total += gendercount[i]
+    slices = [gendercount[i] / total for i in gendercount]
+    genders = [i for i in gendercount]
+    labelgenders = []
     for i in range(len(genders)):
         labelgenders.append(
-            (genders[ i ] + ': ' + str(int(round(slices[ i ], 2) * 100)) + '%').title())
-    colors = [ 'c', 'b', 'g' ]
+            (genders[i] + ': ' + str(int(round(slices[i], 2) * 100)) + '%').title())
+    colors = ['c', 'b', 'g']
     plt.figure(figsize=(10, 6))
     plt.pie(slices, colors=colors, labels=labelgenders, textprops={'fontsize': 15})
     plt.title('Gender Breakdown for ' + corpus_name.title(), size=18, color='k', weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
 
-    created_file_path = generate_file_path_for_visualizations(file_path)
+    created_file_path = generate_file_path_for_visualizations(output_dir)
     if filename:
-        plt.savefig(str(created_file_path) + '/' + filename.replace(' ', '_') + '.png')
+        plt.savefig(created_file_path.joinpath(filename.replace(' ', '_') + '.png'))
     else:
-        plt.savefig(str(created_file_path) + '/' + 'gender_breakdown_for_' +
-                    corpus_name.replace(' ', '_') + '.png')
+        plt.savefig(created_file_path.joinpath('gender_breakdown_for_' +
+                    corpus_name.replace(' ', '_') + '.png'))
 
 
-def plot_metadata_pie(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
+def plot_metadata_pie(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
     Creates a pie chart indicating the fraction of metadata that is filled in the corpus.
 
     *NOTE:* Requires that corpus contains 'author_gender' and 'country_publication' metadata fields.
 
     :param corpus: Corpus object
-    :param file_path: Path of where to save the plot
+    :param output_dir: Path of where to save the plot
     :param filename: Name of file to save plot as; will not write a file if None
     :return: None
 
     """
 
     if ('author_gender' not in corpus.metadata_fields
-        or 'country_publication' not in corpus.metadata_fields):
-        raise MissingMetadataError([ 'author_gender', 'country_publication' ])
+            or 'country_publication' not in corpus.metadata_fields):
+        raise MissingMetadataError(['author_gender', 'country_publication'])
 
     if corpus.name:
         name = corpus.name
@@ -214,18 +215,18 @@ def plot_metadata_pie(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
     num_documents = len(corpus)
     for doc in corpus.documents:
         if doc.author_gender and doc.author_gender != 'unknown' and doc.country_publication:
-            counter[ 'Both Country and Gender' ] += 1
+            counter['Both Country and Gender'] += 1
         elif doc.author_gender and doc.author_gender != 'unknown':
-            counter[ 'Author Gender Only' ] += 1
+            counter['Author Gender Only'] += 1
         elif doc.country_publication:
-            counter[ 'Country Only' ] += 1
+            counter['Country Only'] += 1
         else:
-            counter[ 'Neither' ] += 1
-    labels = [ ]
+            counter['Neither'] += 1
+    labels = []
     for label, number in counter.items():
         labels.append(label + " " + str(int(round(number / num_documents, 2) * 100)) + r"%")
     sns.set_color_codes('colorblind')
-    colors = [ 'c', 'b', 'g', 'w' ]
+    colors = ['c', 'b', 'g', 'w']
     plt.figure(figsize=(10, 6))
     plt.pie(counter.values(), colors=colors, labels=labels, textprops={'fontsize': 13})
     plt.title('Percentage Acquired Metadata for ' + name.title(), size=18, color='k',
@@ -233,42 +234,42 @@ def plot_metadata_pie(corpus, file_path=DEFAULT_FILE_PATH, filename=None):
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
 
-    created_file_path = generate_file_path_for_visualizations(file_path)
+    created_file_path = generate_file_path_for_visualizations(output_dir)
     if filename:
-        plt.savefig(str(created_file_path) + '/' + filename.replace(' ', '_') + '.png')
+        plt.savefig(created_file_path.joinpath(filename.replace(' ', '_') + '.png'))
     else:
-        plt.savefig(str(created_file_path) + '/' + 'percentage_acquired_metadata_for_' +
-                    name.replace(' ', '_') + '.png')
+        plt.savefig(created_file_path.joinpath('percentage_acquired_metadata_for_' +
+                    name.replace(' ', '_') + '.png'))
 
 
-def create_corpus_summary_visualizations(corpus, file_path=DEFAULT_FILE_PATH):
+def create_corpus_summary_visualizations(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR):
     """
     Creates graphs and summarizes gender breakdowns, publishing years, countries of origin, and
     overall metadata completion of a given corpus.
 
 
     :param corpus: Corpus object
-    :param file_path: Path of where to put the files
+    :param output_dir: Path of where to put the files
     :return: None
 
     """
-    plot_gender_breakdown(corpus, file_path)
-    plot_pubyears(corpus, file_path)
-    plot_pubcountries(corpus, file_path)
-    plot_metadata_pie(corpus, file_path)
+    plot_gender_breakdown(corpus, output_dir)
+    plot_pubyears(corpus, output_dir)
+    plot_pubcountries(corpus, output_dir)
+    plot_metadata_pie(corpus, output_dir)
 
 
-def generate_file_path_for_visualizations(file_path):
+def generate_file_path_for_visualizations(output_dir):
     try:
-        if not os.path.isdir(file_path):
-            os.mkdir(file_path)
-        if isinstance(file_path, str):
-            return Path(file_path).absolute()
+        if not os.path.isdir(output_dir):
+            os.mkdir(output_dir)
+        if isinstance(output_dir, str):
+            return Path(output_dir)
         else:
-            return file_path.absolute()
+            return output_dir
     except OSError:
-        print("Creation of the directory %s failed, saving to current directory" % file_path)
+        print("Creation of the directory %s failed, saving to current directory" % output_dir)
         # Retry creating folder with a folder in the current directory
-        if file_path != os.getcwd() + "/gender_analysis_visualizations/":
+        if output_dir != os.getcwd() + "/gender_analysis_visualizations/":
             return generate_file_path_for_visualizations(
-                Path(os.getcwd() + "/gender_analysis_visualizations/")).absolute()
+                Path(os.getcwd() + "/gender_analysis_visualizations/"))
