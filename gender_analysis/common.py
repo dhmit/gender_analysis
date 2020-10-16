@@ -6,10 +6,12 @@ from pathlib import Path
 import nltk
 import seaborn as sns
 
+from gender_analysis.pronouns import PronounSeries
+
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 TEST_DATA_PATH = Path(BASE_PATH, 'testing', 'test_data')
-MASC_WORDS = set(('he', 'his', 'him', 'himself'))
-FEM_WORDS = set(('she', 'her', 'hers', 'herself'))
+MASC_WORDS = PronounSeries('Masc', {'he', 'his', 'him', 'himself'})
+FEM_WORDS = PronounSeries('Fem', {'she', 'her', 'hers', 'herself'})
 
 
 def load_csv_to_list(file_path):
