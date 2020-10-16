@@ -5,7 +5,6 @@ from pathlib import Path
 from collections import Counter
 
 from nltk import tokenize as nltk_tokenize
-import gender_guesser.detector as gender
 
 from gender_analysis import common
 from gender_analysis.common import MissingMetadataError
@@ -35,7 +34,7 @@ class Corpus:
     """
 
     def __init__(self, path_to_files, name=None, csv_path=None,
-                       pickle_on_load=None, guess_author_genders=False):
+                       pickle_on_load=None):
 
         if isinstance(path_to_files, str):
             path_to_files = Path(path_to_files)
@@ -45,8 +44,6 @@ class Corpus:
         self.name = name
         self.documents, self.metadata_fields = self._load_documents_and_metadata(path_to_files,
                                                                                  csv_path)
-        if guess_author_genders:
-            self.guess_author_genders()
 
         if pickle_on_load is not None:
             common.store_pickle(self, pickle_on_load)
@@ -133,29 +130,6 @@ class Corpus:
 
         else:
             raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
-
-    def guess_author_genders(self):
-        if 'author' not in self.metadata_fields:
-            raise MissingMetadataError(['author'], 'Cannot guess author gender if no author '
-                                                   'metadata is provided.')
-        self.metadata_fields.append('author_gender')
-
-        detector = gender.Detector()
-        for doc in self.documents:
-            if doc.author is None:
-                continue
-
-            if hasattr(doc, 'country_publication'):
-                guess = detector.get_gender(doc.author.split(' ', 1)[0], doc.country_publication)
-            else:
-                guess = detector.get_gender(doc.author.split(' ', 1)[0])
-
-            if guess == 'female' or guess == 'mostly_female':
-                doc.author_gender = 'female'
-            elif guess == 'male' or guess == 'mostly_male':
-                doc.author_gender = 'male'
-            else:  # guess == 'unknown' or guess == 'andy'
-                doc.author_gender = 'unknown'
 
     def __len__(self):
         """
