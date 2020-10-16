@@ -13,6 +13,18 @@ class Gender:
 
         The gender accepts one or more `PronounSeries` that will be used to identify the gender.
 
+        >>> from gender_analysis.pronouns import PronounSeries
+        >>> from gender_analysis.gender import Gender
+        >>> he_series = PronounSeries('Masc', {'he', 'him', 'his'})
+        >>> masc_names = ['Andrew', 'Richard', 'Robert']
+        >>> male = Gender('Male', he_series, names=masc_names)
+        >>> 'Richard' in male.names
+        True
+        >>> 'robert' in male.names
+        False
+        >>> 'his' in male.pronouns
+        True
+
         :param label: String name of the gender
         :param pronoun_series: `PronounSeries` or collection of `PronounSeries` that the gender uses
         :param names: A collection of names (as strings) that will be associated with the gender.
@@ -97,33 +109,8 @@ class Gender:
             self.names == other.names
         )
 
-    def uses_pronoun(self, pronoun):
-        """
-        Performs a check for whether the gender uses the given pronoun. Note that this is
-        case-insensitive
-
-        >>> from gender_analysis.pronouns import PronounSeries
-        >>> from gender_analysis.gender import Gender
-        >>> they_series = PronounSeries('They', {'they', 'them', 'theirs'})
-        >>> xe_series = PronounSeries('Xe', {'Xe', 'Xer', 'Xis'})
-        >>> androgynous = Gender('Androgynous', [they_series, xe_series])
-        >>> androgynous.uses_pronoun('xer')
-        True
-        >>> androgynous.uses_pronoun('she')
-        False
-
-        :param pronoun: String representaion of the pronoun to check
-        :return: `True` if this gender uses the pronoun, `False` otherwise
-        """
-
-        # Check if the gender uses the pronoun in at least one of its series
-        for series in self.pronoun_series:
-            if pronoun in series:
-                return True
-
-        return False
-
-    def get_pronouns(self):
+    @property
+    def pronouns(self):
         """
         :return: A set containing all pronouns that this `Gender` uses
 
@@ -132,7 +119,7 @@ class Gender:
         >>> they_series = PronounSeries('They', {'they', 'them', 'theirs'})
         >>> xe_series = PronounSeries('Xe', {'Xe', 'Xer', 'Xis'})
         >>> androgynous = Gender('Androgynous', [they_series, xe_series])
-        >>> androgynous.get_pronouns() == {'they', 'them', 'theirs', 'xe', 'xer', 'xis'}
+        >>> androgynous.pronouns == {'they', 'them', 'theirs', 'xe', 'xer', 'xis'}
         True
         """
 
@@ -143,65 +130,18 @@ class Gender:
 
         return pronouns
 
-    def uses_name(self, name):
+    @property
+    def identifiers(self):
         """
-        Performs a check for whether the name is associated with the gender.
-
-        Note that names are case-sensitive.
-
-        >>> from gender_analysis.pronouns import PronounSeries
-        >>> from gender_analysis.gender import Gender
-        >>> he_series = PronounSeries('Masc', {'he', 'him', 'his'})
-        >>> masc_names = ['Andrew', 'Richard', 'Robert']
-        >>> male = Gender('Male', he_series, names=masc_names)
-        >>> male.uses_name('Richard')
-        True
-        >>> male.uses_name('robert')
-        False
-
-        :param name: A string name to search for
-        :return: A boolean indicating whether the name is associated with the gender
-        """
-
-        return name in self.names
-
-    def uses(self, identifier):
-        """
-        Checks to see whether the identifier is a name or pronoun that the gender is associated
-        with
-
-        >>> from gender_analysis.pronouns import PronounSeries
-        >>> from gender_analysis.gender import Gender
-        >>> he_series = PronounSeries('Masc', {'he', 'him', 'his'})
-        >>> masc_names = ['Andrew', 'Richard', 'Robert']
-        >>> male = Gender('Male', he_series, names=masc_names)
-        >>> male.uses('he')
-        True
-        >>> male.uses('Richard')
-        True
-        >>> male.uses('she')
-        False
-
-        :param identifier: A string that is either a pronoun or a name to check the gender for
-        :return: true if `identifier` is a pronoun or name that is used by the gender
-        """
-
-        return (
-            self.uses_name(identifier) or
-            self.uses_pronoun(identifier)
-        )
-
-    def associations(self):
-        """
-        :return: Set of all words (i.e. pronouns and names) that are associated with the gender
+        :return: Set of all words (i.e. pronouns and names) that are used to identify the gender
 
         >>> from gender_analysis.pronouns import PronounSeries
         >>> from gender_analysis.gender import Gender
         >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'})
         >>> fem_names = {'Sarah', 'Marigold', 'Annabeth'}
         >>> female = Gender('Female', fem_pronouns, fem_names)
-        >>> female.associations() == {'she', 'her', 'hers', 'Sarah', 'Marigold', 'Annabeth'}
+        >>> female.identifiers == {'she', 'her', 'hers', 'Sarah', 'Marigold', 'Annabeth'}
         True
         """
 
-        return self.names.union(self.get_pronouns())
+        return self.names | self.pronouns
