@@ -1,33 +1,3 @@
-﻿The Project Gutenberg EBook of Flatland, by Edwin Abbott Abbott
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
-with this eBook or online at www.gutenberg.org
-
-
-Title: Flatland
-       A Romance of Many Dimensions
-
-Author: Edwin Abbott Abbott
-
-Other: A Square
-
-Release Date: April 27, 2014 [EBook #45506]
-
-Language: English
-
-Character set encoding: UTF-8
-
-*** START OF THIS PROJECT GUTENBERG EBOOK FLATLAND ***
-
-
-
-
-Produced by Stephen Hutcheson, Chris Curnow and the Online
-Distributed Proofreading Team at http://www.pgdp.net (This
-file was produced from images generously made available
-by The Internet Archive/Canadian Libraries)
 
 
 
@@ -47,7 +17,7 @@ by The Internet Archive/Canadian Libraries)
                         by the Author_, A SQUARE
 
 
-             “_Fie, fie, how franticly I square my talk!_”
+             "_Fie, fie, how franticly I square my talk!_"
 
 
                                  LONDON
@@ -131,7 +101,7 @@ by The Internet Archive/Canadian Libraries)
                                THIS WORLD_
 
 
-            “_Be patient, for the world is broad and wide._”
+            "_Be patient, for the world is broad and wide._"
 
 
 
@@ -160,11 +130,11 @@ fixed in their places, move freely about, on or in the surface, but
 without the power of rising above or sinking below it, very much like
 shadows—only hard and with luminous edges—and you will then have a pretty
 correct notion of my country and countrymen. Alas, a few years ago, I
-should have said “my universe”: but now my mind has been opened to higher
+should have said "my universe": but now my mind has been opened to higher
 views of things.
 
 In such a country, you will perceive at once that it is impossible that
-there should be anything of what you call a “solid” kind; but I dare say
+there should be anything of what you call a "solid" kind; but I dare say
 you will suppose that we could at least distinguish by sight the
 Triangles Squares and other figures moving about as I have described
 them. On the contrary, we could see nothing of the kind, not at least so
@@ -421,7 +391,7 @@ either transfixed without resistance by the small body of their brethren
 whom the Chief Circle keeps in pay for emergencies of this kind; or else
 more often, by means of jealousies and suspicions skilfully fomented
 among them by the Circular party, they are stirred to mutual warfare, and
-perish by one another’s angles. No less than one hundred and twenty
+perish by one another's angles. No less than one hundred and twenty
 rebellions are recorded in our annals, besides minor outbreaks numbered
 at two hundred and thirty-five; and they have all ended thus.
 
@@ -473,13 +443,13 @@ concerning Women are naturally much more stringent. But a general view of
 the Code may be obtained from the following summary:—
 
 1. Every house shall have one entrance in the Eastern side, for the use
-of Females only; by which all females shall enter “in a becoming and
-respectful manner”[2] and not by the Men’s or Western door.
+of Females only; by which all females shall enter "in a becoming and
+respectful manner"[2] and not by the Men's or Western door.
 
 2. No Female shall walk in any public place without continually keeping
 up her Peace-cry, under penalty of death.
 
-3. Any Female, duly certified to be suffering from St. Vitus’s Dance,
+3. Any Female, duly certified to be suffering from St. Vitus's Dance,
 fits, chronic cold accompanied by violent sneezing, or any disease
 necessitating involuntary motions, shall be instantly destroyed.
 
@@ -522,8 +492,8 @@ wife of a common Equilateral, who can achieve nothing beyond a mere
 monotonous swing, like the ticking of a pendulum; and the regular tick of
 the Equilateral is no less admired and copied by the wife of the
 progressive and aspiring Isosceles, in the females of whose family no
-“back-motion” of any kind has become as yet a necessity of life. Hence,
-in every family of position and consideration, “back motion” is as
+"back-motion" of any kind has become as yet a necessity of life. Hence,
+in every family of position and consideration, "back motion" is as
 prevalent as time itself; and the husbands and sons in these households
 enjoy immunity at least from invisible attacks.
 
@@ -555,7 +525,7 @@ discretion on the part of the husbands produces at times indescribable
 disasters. Relying too much on the offensive weapons of their acute
 angles instead of the defensive organs of good sense and seasonable
 simulations, these reckless creatures too often neglect the prescribed
-construction of the Women’s apartments, or irritate their wives by
+construction of the Women's apartments, or irritate their wives by
 ill-advised expressions out of doors, which they refuse immediately to
 retract. Moreover a blunt and stolid regard for literal truth indisposes
 them to make those lavish promises by which the more judicious Circle can
@@ -587,18 +557,18 @@ Peace-cry; but in the homes of the upper classes there is too often no
 peace. There the voluble mouth and bright penetrating eye are ever
 directed towards the Master of the household; and light itself is not
 more persistent than the stream of feminine discourse. The tact and skill
-which suffice to avert a Woman’s sting are unequal to the task of
-stopping a Woman’s mouth; and as the wife has absolutely nothing to say,
+which suffice to avert a Woman's sting are unequal to the task of
+stopping a Woman's mouth; and as the wife has absolutely nothing to say,
 and absolutely no constraint of wit, sense, or conscience to prevent her
 from saying it, not a few cynics have been found to aver that they prefer
 the danger of the death-dealing but inaudible sting to the safe
-sonorousness of a Woman’s other end.
+sonorousness of a Woman's other end.
 
 To my readers in Spaceland the condition of our Women may seem truly
 deplorable, and so indeed it is. A Male of the lowest type of the
 Isosceles may look forward to some improvement of his angle, and to the
 ultimate elevation of the whole of his degraded caste; but no Woman can
-entertain such hopes for her sex. “Once a Woman, always a Woman” is a
+entertain such hopes for her sex. "Once a Woman, always a Woman" is a
 Decree of Nature; and the very Laws of Evolution seem suspended in her
 disfavour. Yet at least we can admire the wise Prearrangement which has
 ordained that, as they have no hopes, so they shall have no memory to
@@ -617,7 +587,7 @@ two eyes, endowed with a knowledge of perspective, and charmed with the
 enjoyment of various colours, you, who can actually _see_ an angle, and
 contemplate the complete circumference of a Circle in the happy region of
 the Three Dimensions—how shall I make clear to you the extreme difficulty
-which we in Flatland experience in recognizing one another’s
+which we in Flatland experience in recognizing one another's
 configurations?
 
 Recall what I told you above. All beings in Flatland, animate or
@@ -644,23 +614,23 @@ himself. A second method is therefore more commonly resorted to.
 _Feeling_ is, among our Women and lower classes—about our upper classes I
 shall speak presently—the principal test of recognition, at all events
 between strangers, and when the question is, not as to the individual,
-but as to the class. What therefore “introduction” is among the higher
-classes in Spaceland, that the process of “feeling” is with us. “Permit
-me to ask you to feel and be felt by my friend Mr. So-and-so”—is still,
+but as to the class. What therefore "introduction" is among the higher
+classes in Spaceland, that the process of "feeling" is with us. "Permit
+me to ask you to feel and be felt by my friend Mr. So-and-so"—is still,
 among the more old-fashioned of our country gentlemen in districts remote
 from towns, the customary formula for a Flatland introduction. But in the
-towns, and among men of business, the words “be felt by” are omitted and
-the sentence is abbreviated to, “Let me ask you to feel Mr. So-and-so”;
-although it is assumed, of course, that the “feeling” is to be
+towns, and among men of business, the words "be felt by" are omitted and
+the sentence is abbreviated to, "Let me ask you to feel Mr. So-and-so";
+although it is assumed, of course, that the "feeling" is to be
 reciprocal. Among our still more modern and dashing young gentlemen—who
 are extremely averse to superfluous effort and supremely indifferent to
 the purity of their native language—the formula is still further
-curtailed by the use of “to feel” in a technical sense, meaning, “to
-recommend-for-the purposes-of-feeling-and-being-felt”; and at this moment
-the “slang” of polite or fast society in the upper classes sanctions such
-a barbarism as “Mr. Smith, permit me to feel you Mr. Jones.”
+curtailed by the use of "to feel" in a technical sense, meaning, "to
+recommend-for-the purposes-of-feeling-and-being-felt"; and at this moment
+the "slang" of polite or fast society in the upper classes sanctions such
+a barbarism as "Mr. Smith, permit me to feel you Mr. Jones."
 
-Let not my Reader however suppose that “feeling” is with us the tedious
+Let not my Reader however suppose that "feeling" is with us the tedious
 process that it would be with you, or that we find it necessary to feel
 right round all the sides of every individual before we determine the
 class to which he belongs. Long practice and training, begun in the
@@ -704,7 +674,7 @@ Ancestor, being afflicted with rheumatism, and in the act of being felt
 by a Polygon, by one sudden start accidentally transfixed the Great Man
 through the diagonal; and thereby, partly in consequence of his long
 imprisonment and degradation, and partly because of the moral shock which
-pervaded the whole of my Ancestor’s relations, threw back our family a
+pervaded the whole of my Ancestor's relations, threw back our family a
 degree and a half in their ascent towards better things. The result was
 that in the next generation the family brain was registered at only 58°,
 and not till the lapse of five generations was the lost ground recovered,
@@ -713,12 +683,12 @@ achieved. And all this series of calamities from one little accident in
 the process of Feeling.
 
 At this point I think I hear some of my better educated readers exclaim,
-“How could you in Flatland know anything about angles and degrees, or
+"How could you in Flatland know anything about angles and degrees, or
 minutes? We can _see_ an angle, because we in the region of Space, can
 see two straight lines inclined to one another; but you, who can see
 nothing but one straight line at a time, or at all events only a number
 of bits of straight lines all in one straight line,—how can you ever
-discern any angle, and much less register angles of different sizes?”
+discern any angle, and much less register angles of different sizes?"
 
 I answer that though we cannot _see_ angles, we can _infer_ them, and
 this with great precision. Our sense of touch, stimulated by necessity,
@@ -755,13 +725,13 @@ the Specimens every month,—which is about the average duration of the
 foodless existence of the Criminal class. In the cheaper schools, what is
 gained by the longer existence of the Specimens is lost, partly in the
 expenditure for food, and partly in the diminished accuracy of the
-angles, which are impaired after a few weeks of constant “feeling.” Nor
+angles, which are impaired after a few weeks of constant "feeling." Nor
 must we forget to add, in enumerating the advantages of the more
 expensive system, that it tends, though slightly yet perceptibly, to the
 diminution of the redundant Isosceles population—an object which every
 statesman in Flatland constantly keeps in view. On the whole
 therefore—although I am not ignorant that, in many popularly elected
-School Boards, there is a reaction in favour of “the cheap system,” as it
+School Boards, there is a reaction in favour of "the cheap system," as it
 is called—I am myself disposed to think that this is one of the many
 cases in which expense is the truest economy.
 
@@ -790,7 +760,7 @@ recognize one another by the sense of sight.
 
 If however the Reader will take the trouble to refer to the passage in
 which Recognition by Feeling is stated to be universal, he will find this
-qualification—“among the lower classes.” It is only among the higher
+qualification—"among the lower classes." It is only among the higher
 classes and in our more temperate climates that Sight Recognition is
 practised.
 
@@ -832,13 +802,13 @@ Now in the case of (1) the Merchant, what shall I see? I shall see a
 straight line DAE, in which the middle point (A) will be very bright
 because it is nearest to me; but on either side the line will shade away
 _rapidly into dimness_, because the sides AC and AD _recede rapidly into
-the fog_; and what appear to me as the Merchant’s extremities, viz. D and
+the fog_; and what appear to me as the Merchant's extremities, viz. D and
 C, will be _very dim indeed_.
 
 On the other hand in the case of (2) the Physician, though I shall here
 also see a line (D′A′E′) with a bright centre (A′), yet it will shade
 away _less rapidly_ into dimness, because the sides (A′C′, A′B′) _recede
-less rapidly into the fog_; and what appear to me the Physician’s
+less rapidly into the fog_; and what appear to me the Physician's
 extremities, viz. D′ and E′, will be _not so dim_ as the extremities of
 the Merchant.
 
@@ -899,7 +869,7 @@ third year in the Pentagonal and Hexagonal classes in the University, and
 were perfect in the theory of the subject, you would still find that
 there was need of many years of experience, before you could move in a
 fashionable crowd without jostling against your betters, whom it is
-against etiquette to ask to “feel,” and who, by their superior culture
+against etiquette to ask to "feel," and who, by their superior culture
 and breeding, know all about your movements, while you know very little
 or nothing about theirs. In a word, to comport oneself with perfect
 propriety in Polygonal society, one ought to be a Polygon oneself. Such
@@ -907,25 +877,25 @@ at least is the painful teaching of my experience.
 
 It is astonishing how much the Art—or I may almost call it instinct—of
 Sight Recognition is developed by the habitual practice of it and by the
-avoidance of the custom of “Feeling.” Just as, with you, the deaf and
+avoidance of the custom of "Feeling." Just as, with you, the deaf and
 dumb, if once allowed to gesticulate and to use the hand-alphabet, will
 never acquire the more difficult but far more valuable art of lip-speech
-and lip-reading, so it is with us as regards “Seeing” and “Feeling.” None
-who in early life resort to “Feeling” will ever learn “Seeing” in
+and lip-reading, so it is with us as regards "Seeing" and "Feeling." None
+who in early life resort to "Feeling" will ever learn "Seeing" in
 perfection.
 
-For this reason, among our Higher Classes, “Feeling” is discouraged or
+For this reason, among our Higher Classes, "Feeling" is discouraged or
 absolutely forbidden. From the cradle their children, instead of going to
 the Public Elementary schools (where the art of Feeling is taught,) are
 sent to higher Seminaries of an exclusive character; and at our
-illustrious University, to “feel” is regarded as a most serious fault,
+illustrious University, to "feel" is regarded as a most serious fault,
 involving Rustication for the first offence, and Expulsion for the
 second.
 
 But among the lower classes the art of Sight Recognition is regarded as
 an unattainable luxury. A common Tradesman cannot afford to let his son
 spend a third of his life in abstract studies. The children of the poor
-are therefore allowed to “feel” from their earliest years, and they gain
+are therefore allowed to "feel" from their earliest years, and they gain
 thereby a precocity and an early vivacity which contrast at first most
 favourably with the inert, undeveloped, and listless behaviour of the
 half-instructed youths of the Polygonal class; but when the latter have
@@ -975,7 +945,7 @@ generally, that in every Polygon, all the sides must be equal.
 The size of the sides would of course depend upon the age of the
 individual. A Female at birth would be about an inch long, while a tall
 adult Woman might extend to a foot. As to the Males of every class, it
-may be roughly said that the length of an adult’s sides, when added
+may be roughly said that the length of an adult's sides, when added
 together, is three feet or a little more. But the size of our sides is
 not under consideration. I am speaking of the _equality_ of sides, and it
 does not need much reflection to see that the whole of the social life in
@@ -994,7 +964,7 @@ in making the most simple social arrangements; in a word, civilization
 would relapse into barbarism.
 
 Am I going too fast to carry my Readers with me to these obvious
-conclusions? Surely a moment’s reflection, and a single instance from
+conclusions? Surely a moment's reflection, and a single instance from
 common life, must convince every one that our whole social system is
 based upon Regularity, or Equality of Angles. You meet, for example, two
 or three Tradesmen in the street, whom you recognize at once to be
@@ -1009,9 +979,9 @@ sticking fast in your house door?
 But I am insulting the intelligence of my Readers by accumulating details
 which must be patent to every one who enjoys the advantages of a
 Residence in Spaceland. Obviously the measurements of a single angle
-would no longer be sufficient under such portentous circumstances; one’s
+would no longer be sufficient under such portentous circumstances; one's
 whole life would be taken up in feeling or surveying the perimeter of
-one’s acquaintances. Already the difficulties of avoiding a collision in
+one's acquaintances. Already the difficulties of avoiding a collision in
 a crowd are enough to tax the sagacity of even a well-educated Square;
 but if no one could calculate the Regularity of a single figure in the
 company, all would be chaos and confusion, and the slightest panic would
@@ -1020,12 +990,12 @@ present—perhaps considerable loss of life.
 
 Expediency therefore concurs with Nature in stamping the seal of its
 approval upon Regularity of conformation: nor has the Law been backward
-in seconding their efforts. “Irregularity of Figure” means with us the
+in seconding their efforts. "Irregularity of Figure" means with us the
 same as, or more than, a combination of moral obliquity and criminality
 with you, and is treated accordingly. There are not wanting, it is true,
 some promulgators of paradoxes who maintain that there is no necessary
-connection between geometrical and moral Irregularity. “The Irregular,”
-they say, “is from his birth scouted by his own parents, derided by his
+connection between geometrical and moral Irregularity. "The Irregular,"
+they say, "is from his birth scouted by his own parents, derided by his
 brothers and sisters, neglected by the domestics, scorned and suspected
 by society, and excluded from all posts of responsibility, trust, and
 useful activity. His every movement is jealously watched by the police
@@ -1036,7 +1006,7 @@ prevented from marriage; forced to drudge at an uninteresting occupation
 for a miserable stipend; obliged to live and board at the office, and to
 take even his vacation under close supervision; what wonder that human
 nature, even in the best and purest, is embittered and perverted by such
-surroundings!”
+surroundings!"
 
 All this very plausible reasoning does not convince me, as it has not
 convinced the wisest of our Statesmen, that our ancestors erred in laying
@@ -1047,7 +1017,7 @@ it shall be hard. If a man with a triangular front and a polygonal back
 were allowed to exist and to propagate a still more Irregular posterity,
 what would become of the arts of life? Are the houses and doors and
 churches in Flatland to be altered in order to accommodate such monsters?
-Are our ticket-collectors to be required to measure every man’s perimeter
+Are our ticket-collectors to be required to measure every man's perimeter
 before they allow him to enter a theatre, or to take his place in a
 lecture room? Is an Irregular to be exempted from the militia? And if
 not, how is he to be prevented from carrying desolation into the ranks of
@@ -1094,7 +1064,7 @@ comprehend. I speak now from the æsthetic and artistic point of view when
 I say that life with us is dull; æsthetically and artistically, very dull
 indeed.
 
-How can it be otherwise, when all one’s prospect, all one’s landscapes,
+How can it be otherwise, when all one's prospect, all one's landscapes,
 historical pieces, portraits, flowers, still life, are nothing but a
 single line, with no varieties except degrees of brightness and
 obscurity?
@@ -1110,7 +1080,7 @@ The convenience as well as the beauty of the results commended themselves
 to all. Wherever Chromatistes,—for by that name the most trustworthy
 authorities concur in calling him,—turned his variegated frame, there he
 at once excited attention, and attracted respect. No one now needed to
-“feel” him; no one mistook his front for his back; all his movements were
+"feel" him; no one mistook his front for his back; all his movements were
 readily ascertained by his neighbours without the slightest strain on
 their powers of calculation; no one jostled him, or failed to make way
 for him; his voice was saved the labour of that exhausting utterance by
@@ -1129,8 +1099,8 @@ the Priests.
 
 Here Nature herself appeared to erect a barrier, and to plead against
 extending the innovation to these two classes. Many-sidedness was almost
-essential as a pretext for the Innovators. “Distinction of sides is
-intended by Nature to imply distinction of colours”—such was the sophism
+essential as a pretext for the Innovators. "Distinction of sides is
+intended by Nature to imply distinction of colours"—such was the sophism
 which in those days flew from mouth to mouth, converting whole towns at a
 time to the new culture. But manifestly to our Priests and Women this
 adage did not apply. The latter had only one side, and therefore—plurally
@@ -1141,7 +1111,7 @@ small sides—were in the habit of boasting (what Women confessed and
 deplored) that they also had no sides, being blessed with a perimeter of
 one line or, in other words, a Circumference. Hence it came to pass that
 these two Classes could see no force in the so-called axiom about
-“Distinction of Sides implying Distinction of Colour”; and when all
+"Distinction of Sides implying Distinction of Colour"; and when all
 others had succumbed to the fascinations of corporal decoration, the
 Priests and the Women alone still remained pure from the pollution of
 paint.
@@ -1168,8 +1138,8 @@ careering across the field in their offices of surgeons, geometricians
 and aides-de-camp—all these may well have been sufficient to render
 credible the famous story how an illustrious Circle, overcome by the
 artistic beauty of the forces under his command, threw aside his
-marshal’s bâton and his royal crown, exclaiming that he henceforth
-exchanged them for the artist’s pencil. How great and glorious the
+marshal's bâton and his royal crown, exclaiming that he henceforth
+exchanged them for the artist's pencil. How great and glorious the
 sensuous development of these days must have been is in part indicated by
 the very language and vocabulary of the period. The commonest utterances
 of the commonest citizens in the time of the Colour Revolt seem to have
@@ -1204,8 +1174,8 @@ raised to an equality with the latter, and enabled to grapple with all
 the difficulties and solve all the problems of life, whether Statical and
 Kinetical, by the simple process of Colour Recognition. Not content with
 the natural neglect into which Sight Recognition was falling, they began
-boldly to demand the legal prohibition of all “monopolising and
-aristocratic Arts” and the consequent abolition of all endowments for the
+boldly to demand the legal prohibition of all "monopolising and
+aristocratic Arts" and the consequent abolition of all endowments for the
 studies of Sight Recognition, Mathematics, and Feeling. Soon, they began
 to insist that inasmuch as Colour, which was a second Nature, had
 destroyed the need of aristocratic distinctions, the Law should follow in
@@ -1306,7 +1276,7 @@ subjected to the chromatic taint, every parental and every childish
 Circle would demoralize each other. Only in discerning between the Father
 and the Mother would the Circular infant find problems for the exercise
 of its understanding—problems too often likely to be corrupted by
-maternal impostures with the result of shaking the child’s faith in all
+maternal impostures with the result of shaking the child's faith in all
 logical conclusions. Thus by degrees the intellectual lustre of the
 Priestly Order would wane, and the road would then lie open for a total
 destruction of all Aristocratic Legislature and for the subversion of our
@@ -1405,10 +1375,10 @@ Chromatistes, in alarm, attempted to step forward and address them. But
 he found himself encompassed with guards and forced to remain silent
 while the Chief Circle in a few impassioned words made a final appeal to
 the Women, exclaiming that, if the Colour Bill passed, no marriage would
-henceforth be safe, no woman’s honour secure; fraud, deception, hypocrisy
+henceforth be safe, no woman's honour secure; fraud, deception, hypocrisy
 would pervade every household; domestic bliss would share the fate of the
 Constitution and pass to speedy perdition. Sooner than this, he cried
-“Come death.”
+"Come death."
 
 At these words, which were the preconcerted signal for action, the
 Isosceles Convicts fell on and transfixed the wretched Chromatistes; the
@@ -1419,16 +1389,16 @@ example of their betters, also opened their ranks. Meantime bands of
 Convicts occupied every entrance with an impenetrable phalanx.
 
 The battle, or rather carnage, was of short duration. Under the skilful
-generalship of the Circles almost every Woman’s charge was fatal, and
+generalship of the Circles almost every Woman's charge was fatal, and
 very many extracted their sting uninjured, ready for a second slaughter.
 But no second blow was needed; the rabble of the Isosceles did the rest
 of the business for themselves. Surprised, leader-less, attacked in front
 by invisible foes, and finding egress cut off by the Convicts behind
 them, they at once—after their manner—lost all presence of mind, and
-raised the cry of “treachery.” This sealed their fate. Every Isosceles
+raised the cry of "treachery." This sealed their fate. Every Isosceles
 now saw and felt a foe in every other. In half an hour not one of that
 vast multitude was living; and the fragments of seven score thousand of
-the Criminal Class slain by one another’s angles attested the triumph of
+the Criminal Class slain by one another's angles attested the triumph of
 Order.
 
 The Circles delayed not to push their victory to the uttermost. The
@@ -1527,7 +1497,7 @@ Nature which limits the increase of sides to one in each generation. If
 it were so, the number of sides in a Circle would be a mere question of
 pedigree and arithmetic, and the four hundred and ninety-seventh
 descendant of an Equilateral Triangle would necessarily be a Polygon with
-five hundred sides. But this is not the case. Nature’s Law prescribes two
+five hundred sides. But this is not the case. Nature's Law prescribes two
 antagonistic decrees affecting Circular propagation; first, that as the
 race climbs higher in the scale of development, so development shall
 proceed at an accelerated pace; second, that in the same proportion, the
@@ -1567,7 +1537,7 @@ domestic sacrifices, which have a dissimilar issue.
 
 
 As to the doctrine of the Circles it may briefly be summed up in a single
-maxim, “Attend to your Configuration.” Whether political, ecclesiastical,
+maxim, "Attend to your Configuration." Whether political, ecclesiastical,
 or moral, all their teaching has for its object the improvement of
 individual and collective Configuration—with special reference of course
 to the Configuration of the Circles, to which all other objects are
@@ -1606,7 +1576,7 @@ drawbacks. In dealing with an Isosceles, if a rascal pleads that he
 cannot help stealing because of his unevenness, you reply that for that
 very reason, because he cannot help being a nuisance to his neighbours,
 you, the Magistrate, cannot help sentencing him to be consumed—and
-there’s an end of the matter. But in little domestic difficulties, where
+there's an end of the matter. But in little domestic difficulties, where
 the penalty of consumption, or death, is out of the question, this theory
 of Configuration sometimes comes in awkwardly; and I must confess that
 occasionally when one of my own Hexagonal Grandsons pleads as an excuse
@@ -1617,13 +1587,13 @@ choicest sweetmeats, I neither see my way logically to reject, nor
 practically to accept, his conclusions.
 
 For my own part, I find it best to assume that a good sound scolding or
-castigation has some latent and strengthening influence on my Grandson’s
+castigation has some latent and strengthening influence on my Grandson's
 Configuration; though I own that I have no grounds for thinking so. At
 all events I am not alone in my way of extricating myself from this
 dilemma; for I find that many of the highest Circles, sitting as Judges
 in Law courts, use praise and blame towards Regular and Irregular
 Figures; and in their homes I know by experience that, when scolding
-their children, they speak about “right” or “wrong” as vehemently and
+their children, they speak about "right" or "wrong" as vehemently and
 passionately as if they believed that these names represented real
 existences, and that a human Figure is really capable of choosing between
 them.
@@ -1634,7 +1604,7 @@ Commandment which in Spaceland regulates the relations between parents
 and children. With you, children are taught to honour their parents; with
 us—next to the Circles, who are the chief object of universal homage—a
 man is taught to honour his Grandson, if he has one; or, if not, his Son.
-By “honour,” however, is by no means meant “indulgence,” but a reverent
+By "honour," however, is by no means meant "indulgence," but a reverent
 regard for their highest interests: and the Circles teach that the duty
 of fathers is to subordinate their own interests to those of posterity,
 thereby advancing the welfare of the whole State as well as that of their
@@ -1666,12 +1636,12 @@ induce an aspiring Isosceles, who had hopes of generating an Equilateral
 Son, to take a wife who reckoned a single Irregularity among her
 Ancestors; a Square or Pentagon, who is confident that his family is
 steadily on the rise, does not enquire above the five-hundredth
-generation; a Hexagon or Dodecahedron is even more careless of the wife’s
+generation; a Hexagon or Dodecahedron is even more careless of the wife's
 pedigree; but a Circle has been known deliberately to take a wife who has
 had an Irregular Great-Grandfather, and all because of some slight
 superiority of lustre, or because of the charms of a low voice—which,
-with us, even more than with you, is thought “an excellent thing in
-Woman.”
+with us, even more than with you, is thought "an excellent thing in
+Woman."
 
 Such ill-judged marriages are, as might be expected, barren, if they do
 not result in positive Irregularity or in diminution of sides; but none
@@ -1701,20 +1671,20 @@ so far as to react injuriously on the Male Sex.
 
 For the consequence is that, as things now are, we Males have to lead a
 kind of bi-lingual, and I may almost say bi-mental existence. With the
-Women, we speak of “love,” “duty,” “right,” “wrong,” “pity,” “hope,” and
+Women, we speak of "love," "duty," "right," "wrong," "pity," "hope," and
 other irrational and emotional conceptions, which have no existence, and
 the fiction of which has no object except to control feminine
 exuberances; but among ourselves, and in our books, we have an entirely
-different vocabulary and I may almost say, idiom. “Love” then becomes
-“the anticipation of benefits;” “duty” becomes “necessity” or “fitness;”
+different vocabulary and I may almost say, idiom. "Love" then becomes
+"the anticipation of benefits;" "duty" becomes "necessity" or "fitness;"
 and other words are correspondingly transmuted. Moreover, among Women, we
 use language implying the utmost deference for their Sex; and they fully
 believe that the Chief Circle Himself is not more devoutly adored by us
 than they are: but behind their backs they are both regarded and spoken
-of—by all except the very young—as being little better than “mindless
-organisms.”
+of—by all except the very young—as being little better than "mindless
+organisms."
 
-Our Theology also in the Women’s chambers is entirely different from our
+Our Theology also in the Women's chambers is entirely different from our
 Theology elsewhere.
 
 Now my humble fear is that this double training, in language as well as
@@ -1740,8 +1710,8 @@ highest Authorities to reconsider the regulations of Female Education.
                              OTHER WORLDS_
 
 
-                  “_O brave new worlds,_
-  _That have such people in them!_”
+                  "_O brave new worlds,_
+  _That have such people in them!_"
 
 
 
@@ -1776,12 +1746,12 @@ Approaching one of the largest of what I thought to be Women, I accosted
 her, but received no answer. A second and third appeal on my part were
 equally ineffectual. Losing patience at what appeared to me intolerable
 rudeness, I brought my mouth into a position full in front of her mouth
-so as to intercept her motion, and loudly repeated my question, “Woman,
+so as to intercept her motion, and loudly repeated my question, "Woman,
 what signifies this concourse, and this strange and confused chirping,
-and this monotonous motion to and fro in one and the same Straight Line?”
+and this monotonous motion to and fro in one and the same Straight Line?"
 
-“I am no Woman,” replied the small Line; “I am the Monarch of the world.
-But thou, whence intrudest thou into my realm of Lineland?” Receiving
+"I am no Woman," replied the small Line; "I am the Monarch of the world.
+But thou, whence intrudest thou into my realm of Lineland?" Receiving
 this abrupt reply, I begged pardon if I had in any way startled or
 molested his Royal Highness; and describing myself as a stranger I
 besought the King to give me some account of his dominions. But I had the
@@ -1798,8 +1768,8 @@ indeed the whole of Space. Not being able either to move or to see, save
 in his Straight Line, he had no conception of anything out of it. Though
 he had heard my voice when I first addressed him, the sounds had come to
 him in a manner so contrary to his experience that he had made no answer,
-“seeing no man,” as he expressed it, “and hearing a voice as it were from
-my own intestines.” Until the moment when I placed my mouth in his World,
+"seeing no man," as he expressed it, "and hearing a voice as it were from
+my own intestines." Until the moment when I placed my mouth in his World,
 he had neither seen me, nor heard anything except confused sounds beating
 against what I called his side, but what he called his _inside_ or
 _stomach_; nor had he even now the least conception of the region from
@@ -1826,19 +1796,19 @@ note the vivacity and cheerfulness of the King. Wondering whether it was
 possible, amid circumstances so unfavourable to domestic relations, to
 enjoy the pleasures of conjugal union, I hesitated for some time to
 question his Royal Highness on so delicate a subject; but at last I
-plunged into it by abruptly inquiring as to the health of his family. “My
-wives and children,” he replied, “are well and happy.”
+plunged into it by abruptly inquiring as to the health of his family. "My
+wives and children," he replied, "are well and happy."
 
 Staggered at this answer—for in the immediate proximity of the Monarch
 (as I had noted in my dream before I entered Lineland) there were none
-but Men—I ventured to reply, “Pardon me, but I cannot imagine how your
+but Men—I ventured to reply, "Pardon me, but I cannot imagine how your
 Royal Highness can at any time either see or approach their Majesties,
 when there are at least half a dozen intervening individuals, whom you
 can neither see through, nor pass by? Is it possible that in Lineland
 proximity is not necessary for marriage and for the generation of
-children?”
+children?"
 
-“How can you ask so absurd a question?” replied the Monarch. “If it were
+"How can you ask so absurd a question?" replied the Monarch. "If it were
 indeed as you suggest, the Universe would soon be depopulated. No, no;
 neighbourhood is needless for the union of hearts; and the birth of
 children is too important a matter to have been allowed to depend upon
@@ -1847,26 +1817,26 @@ you are pleased to affect ignorance, I will instruct you as if you were
 the veriest baby in Lineland. Know, then, that marriages are consummated
 by means of the faculty of sound and the sense of hearing.
 
-“You are of course aware that every Man has two mouths or voices—as well
+"You are of course aware that every Man has two mouths or voices—as well
 as two eyes—a bass at one and a tenor at the other of his extremities. I
 should not mention this, but that I have been unable to distinguish your
-tenor in the course of our conversation.” I replied that I had but one
+tenor in the course of our conversation." I replied that I had but one
 voice, and that I had not been aware that His Royal Highness had two.
-“That confirms my impression,” said the King, “that you are not a Man,
+"That confirms my impression," said the King, "that you are not a Man,
 but a feminine Monstrosity with a bass voice and an utterly uneducated
 ear. But to continue.
 
-“Nature herself having ordained that every Man should wed two wives——”
-“Why two?” asked I. “You carry your affected simplicity too far,” he
-cried. “How can there be a completely harmonious union without the
+"Nature herself having ordained that every Man should wed two wives——"
+"Why two?" asked I. "You carry your affected simplicity too far," he
+cried. "How can there be a completely harmonious union without the
 combination of the Four in One, viz. the Bass and Tenor of the Man and
-the Soprano and Contralto of the two Women?” “But supposing,” said I,
-“that a man should prefer one wife or three?” “It is impossible,” he
-said; “it is as inconceivable as that two and one should make five, or
-that the human eye should see a Straight Line.” I would have interrupted
+the Soprano and Contralto of the two Women?" "But supposing," said I,
+"that a man should prefer one wife or three?" "It is impossible," he
+said; "it is as inconceivable as that two and one should make five, or
+that the human eye should see a Straight Line." I would have interrupted
 him; but he proceeded as follows:
 
-“Once in the middle of each week a Law of Nature compels us to move to
+"Once in the middle of each week a Law of Nature compels us to move to
 and fro with a rhythmic motion of more than usual violence, which
 continues for the time you would take to count a hundred and one. In the
 midst of this choral dance, at the fifty-first pulsation, the inhabitants
@@ -1877,23 +1847,23 @@ of Tenor to Contralto, that oftentimes the Loved Ones, though twenty
 thousand leagues away, recognise at once the responsive note of their
 destined Lover; and, penetrating the paltry obstacles of distance, Love
 unites the three. The marriage in that instant consummated results in a
-threefold Male and Female offspring which takes its place in Lineland.”
+threefold Male and Female offspring which takes its place in Lineland."
 
-“What! Always threefold?” said I. “Must one wife then always have twins?”
+"What! Always threefold?" said I. "Must one wife then always have twins?"
 
-“Bass-voiced Monstrosity! yes,” replied the King. “How else could the
+"Bass-voiced Monstrosity! yes," replied the King. "How else could the
 balance of the Sexes be maintained, if two girls were not born for every
-boy? Would you ignore the very Alphabet of Nature?” He ceased, speechless
+boy? Would you ignore the very Alphabet of Nature?" He ceased, speechless
 for fury; and some time elapsed before I could induce him to resume his
 narrative.
 
-“You will not, of course, suppose that every bachelor among us finds his
+"You will not, of course, suppose that every bachelor among us finds his
 mates at the first wooing in this universal Marriage Chorus. On the
 contrary, the process is by most of us many times repeated. Few are the
-hearts whose happy lot it is at once to recognise in each other’s voices
+hearts whose happy lot it is at once to recognise in each other's voices
 the partner intended for them by Providence, and to fly into a reciprocal
 and perfectly harmonious embrace. With most of us the courtship is of
-long duration. The Wooer’s voices may perhaps accord with one of the
+long duration. The Wooer's voices may perhaps accord with one of the
 future wives, but not with both; or not, at first, with either; or the
 Soprano and Contralto may not quite harmonise. In such cases Nature has
 provided that every weekly Chorus shall bring the three Lovers into
@@ -1905,7 +1875,7 @@ day at last, when, while the wonted Marriage Chorus goes forth from
 universal Lineland, the three far-off Lovers suddenly find themselves in
 exact harmony, and, before they are aware, the wedded Triplet is rapt
 vocally into a duplicate embrace; and Nature rejoices over one more
-marriage and over three more births.”
+marriage and over three more births."
 
 
 
@@ -1916,27 +1886,27 @@ marriage and over three more births.”
 Thinking that it was time to bring down the Monarch from his raptures to
 the level of common sense, I determined to endeavour to open up to him
 some glimpses of the truth, that is to say of the nature of things in
-Flatland. So I began thus: “How does your Royal Highness distinguish the
+Flatland. So I began thus: "How does your Royal Highness distinguish the
 shapes and positions of his subjects? I for my part noticed by the sense
 of sight, before I entered your Kingdom, that some of your people are
-Lines and others Points, and that some of the Lines are larger——”
+Lines and others Points, and that some of the Lines are larger——"
 
-“You speak of an impossibility,” interrupted the King; “you must have
+"You speak of an impossibility," interrupted the King; "you must have
 seen a vision; for to detect the difference between a Line and a Point by
 the sense of sight is, as every one knows, in the nature of things,
 impossible; but it can be detected by the sense of hearing, and by the
 same means my shape can be exactly ascertained. Behold me—I am a Line,
-the longest in Lineland, over six inches of Space——” “Of Length,” I
-ventured to suggest. “Fool,” said he, “Space is Length. Interrupt me
-again, and I have done.”
+the longest in Lineland, over six inches of Space——" "Of Length," I
+ventured to suggest. "Fool," said he, "Space is Length. Interrupt me
+again, and I have done."
 
-I apologised; but he continued scornfully, “Since you are impervious to
+I apologised; but he continued scornfully, "Since you are impervious to
 argument, you shall hear with your ears how by means of my two voices I
 reveal my shape to my Wives, who are at this moment six thousand miles
 seventy yards two feet eight inches away, the one to the North, the other
-to the South. Listen, I call to them.”
+to the South. Listen, I call to them."
 
-He chirruped, and then complacently continued: “My wives at this moment
+He chirruped, and then complacently continued: "My wives at this moment
 receiving the sound of one of my voices, closely followed by the other,
 and perceiving that the latter reaches them after an interval in which
 sound can traverse 6.457 inches, infer that one of my mouths is 6.457
@@ -1945,20 +1915,20 @@ be 6.457 inches. But you will of course understand that my wives do not
 make this calculation every time they hear my two voices. They made it,
 once for all, before we were married. But they _could_ make it at any
 time. And in the same way I can estimate the shape of any of my Male
-subjects by the sense of sound.”
+subjects by the sense of sound."
 
-“But how,” said I, “if a Man feigns a Woman’s voice with one of his two
+"But how," said I, "if a Man feigns a Woman's voice with one of his two
 voices, or so disguises his Southern voice that it cannot be recognised
 as the echo of the Northern? May not such deceptions cause great
 inconvenience? And have you no means of checking frauds of this kind by
-commanding your neighbouring subjects to feel one another?” This of
+commanding your neighbouring subjects to feel one another?" This of
 course was a very stupid question, for feeling could not have answered
 the purpose; but I asked with the view of irritating the Monarch, and I
 succeeded perfectly.
 
-“What!” cried he in horror, “explain your meaning.” “Feel, touch, come
-into contact,” I replied. “If you mean by _feeling_,” said the King,
-“approaching so close as to leave no space between two individuals, know,
+"What!" cried he in horror, "explain your meaning." "Feel, touch, come
+into contact," I replied. "If you mean by _feeling_," said the King,
+"approaching so close as to leave no space between two individuals, know,
 Stranger, that this offence is punishable in my dominions by death. And
 the reason is obvious. The frail form of a Woman, being liable to be
 shattered by such an approximation, must be preserved by the State; but
@@ -1967,11 +1937,11 @@ Law ordains universally that neither Man nor Woman shall be approached so
 closely as to destroy the interval between the approximator and the
 approximated.
 
-“And indeed what possible purpose would be served by this illegal and
+"And indeed what possible purpose would be served by this illegal and
 unnatural excess of approximation which you call _touching_, when all the
 ends of so brutal and coarse a process are attained at once more easily
 and more exactly by the sense of hearing. As to your suggested danger of
-deception, it is non-existent: for the Voice, being the essence of one’s
+deception, it is non-existent: for the Voice, being the essence of one's
 Being, cannot be thus changed at will. But come, suppose that I had the
 power of passing through solid things, so that I could penetrate my
 subjects, one after another, even to the number of a billion, verifying
@@ -1979,13 +1949,13 @@ the size and distance of each by the sense of _feeling_: how much time
 and energy would be wasted in this clumsy and inaccurate method! Whereas
 now, in one moment of audition, I take as it were the census and
 statistics, local, corporal, mental, and spiritual, of every living being
-in Lineland. Hark, only hark!”
+in Lineland. Hark, only hark!"
 
 So saying he paused and listened, as if in an ecstasy, to a sound which
 seemed to me no better than a tiny chirping from an innumerable multitude
 of lilliputian grasshoppers.
 
-“Truly,” replied I, “your sense of hearing serves you in good stead, and
+"Truly," replied I, "your sense of hearing serves you in good stead, and
 fills up many of your deficiencies. But permit me to point out that your
 life in Lineland must be deplorably dull. To see nothing but a Point! Not
 even to be able to Contemplate a Straight Line! Nay, not even to know
@@ -1998,18 +1968,18 @@ multitudinous twittering or chirping. But at least I can discern, by
 sight, a Line from a Point. And let me prove it. Just before I came into
 your kingdom, I saw you dancing from left to right, and then from right
 to left, with seven Men and a Woman in your immediate proximity on the
-left, and eight Men and two Women on your right. Is not this correct?”
+left, and eight Men and two Women on your right. Is not this correct?"
 
-“It is correct,” said the King, “so far as the numbers and sexes are
-concerned, though I know not what you mean by ‘right’ and ‘left.’ But I
+"It is correct," said the King, "so far as the numbers and sexes are
+concerned, though I know not what you mean by 'right' and 'left.' But I
 deny that you saw these things. For how could you see the Line, that is
 to say the inside, of any Man? But you must have heard these things, and
 then dreamed that you saw them. And let me ask what you mean by those
-words ‘left’ and ‘right.’ I suppose it is your way of saying Northward
-and Southward.”
+words 'left' and 'right.' I suppose it is your way of saying Northward
+and Southward."
 
-“Not so,” replied I; “besides your motion of Northward and Southward,
-there is another motion which I call from right to left.”
+"Not so," replied I; "besides your motion of Northward and Southward,
+there is another motion which I call from right to left."
 
 _King._ Exhibit to me, if you please, this motion from left to right.
 
@@ -2038,7 +2008,7 @@ side is now fronting? In other words, instead of always moving in the
 direction of one of your extremities, do you never feel a desire to move
 in the direction, so to speak, of your side?
 
-_King._ Never. And what do you mean? How can a man’s inside “front” in
+_King._ Never. And what do you mean? How can a man's inside "front" in
 any direction? Or how can a man move in the direction of his inside?
 
 _I._ Well then, since words cannot explain the matter, I will try deeds,
@@ -2047,23 +2017,23 @@ to indicate to you.
 
 At the word I began to move my body out of Lineland. As long as any part
 of me remained in his dominion and in his view, the King kept exclaiming,
-“I see you, I see you still; you are not moving.” But when I had at last
-moved myself out of his Line, he cried in his shrillest voice, “She is
-vanished; she is dead.” “I am not dead,” replied I; “I am simply out of
+"I see you, I see you still; you are not moving." But when I had at last
+moved myself out of his Line, he cried in his shrillest voice, "She is
+vanished; she is dead." "I am not dead," replied I; "I am simply out of
 Lineland, that is to say, out of the Straight Line which you call Space,
 and in the true Space, where I can see things as they are. And at this
 moment I can see your Line, or side—or inside as you are pleased to call
 it; and I can also see the Men and Women on the North and South of you,
 whom I will now enumerate, describing their order, their size, and the
-interval between each.”
+interval between each."
 
 [Illustration: ]
 
-When I had done this at great length, I cried triumphantly, “Does this at
-last convince you?” And, with that, I once more entered Lineland, taking
+When I had done this at great length, I cried triumphantly, "Does this at
+last convince you?" And, with that, I once more entered Lineland, taking
 up the same position as before.
 
-But the Monarch replied, “If you were a Man of sense—though, as you
+But the Monarch replied, "If you were a Man of sense—though, as you
 appear to have only one voice I have little doubt you are not a Man but a
 Woman—but, if you had a particle of sense, you would listen to reason.
 You ask me to believe that there is another Line besides that which my
@@ -2074,10 +2044,10 @@ exercise some magic art of vanishing and returning to sight; and instead
 of any lucid description of your new World, you simply tell me the
 numbers and sizes of some forty of my retinue, facts known to any child
 in my capital. Can anything be more irrational or audacious? Acknowledge
-your folly or depart from my dominions.”
+your folly or depart from my dominions."
 
 Furious at his perversity, and especially indignant that he professed to
-be ignorant of my Sex, I retorted in no measured terms, “Besotted Being!
+be ignorant of my Sex, I retorted in no measured terms, "Besotted Being!
 You think yourself the perfection of existence, while you are in reality
 the most imperfect and imbecile. You profess to see, whereas you can see
 nothing but a Point! You plume yourself on inferring the existence of a
@@ -2087,7 +2057,7 @@ waste more words? suffice it that I am the completion of your incomplete
 self. You are a Line, but I am a Line of Lines, called in my country a
 Square: and even I, infinitely superior though I am to you, am of little
 account among the great Nobles of Flatland, whence I have come to visit
-you, in the hope of enlightening your ignorance.”
+you, in the hope of enlightening your ignorance."
 
 Hearing these words the King advanced towards me with a menacing cry as
 if to pierce me through the diagonal; and in that same moment there arose
@@ -2130,55 +2100,55 @@ as to make one large Square, with a side of three inches, and I had hence
 proved to my little Grandson that—though it was impossible for us to
 _see_ the inside of the Square—yet we might ascertain the number of
 square inches in a Square by simply squaring the number of inches in the
-side: “and thus,” said I, “we know that 3², or 9, represents the number
-of square inches in a Square whose side is 3 inches long.”
+side: "and thus," said I, "we know that 3², or 9, represents the number
+of square inches in a Square whose side is 3 inches long."
 
-The little Hexagon meditated on this awhile and then said to me: “But you
+The little Hexagon meditated on this awhile and then said to me: "But you
 have been teaching me to raise numbers to the third power; I suppose 3³
-must mean something in Geometry; what does it mean?” “Nothing at all,”
-replied I, “not at least in Geometry; for Geometry has only Two
-Dimensions.” And then I began to show the boy how a Point by moving
+must mean something in Geometry; what does it mean?" "Nothing at all,"
+replied I, "not at least in Geometry; for Geometry has only Two
+Dimensions." And then I began to show the boy how a Point by moving
 through a length of three inches makes a Line of three inches, which may
 be represented by 3; and how a Line of three inches, moving parallel to
 itself through a length of three inches, makes a Square of three inches
 every way, which may be represented by 3².
 
 Upon this, my Grandson, again returning to his former suggestion, took me
-up rather suddenly and exclaimed, “Well, then, if a Point by moving three
+up rather suddenly and exclaimed, "Well, then, if a Point by moving three
 inches, makes a Line of three inches represented by 3; and if a straight
 Line of three inches, moving parallel to itself, makes a Square of three
 inches every way, represented by 3²; it must be that a Square of three
-inches every way, moving somehow parallel to itself (but I don’t see how)
-must make a Something else (but I don’t see what) of three inches every
-way—and this must be represented by 3³.”
+inches every way, moving somehow parallel to itself (but I don't see how)
+must make a Something else (but I don't see what) of three inches every
+way—and this must be represented by 3³."
 
-“Go to bed,” said I, a little ruffled by his interruption; “if you would
-talk less nonsense, you would remember more sense.”
+"Go to bed," said I, a little ruffled by his interruption; "if you would
+talk less nonsense, you would remember more sense."
 
-So my Grandson had disappeared in disgrace; and there I sat by my Wife’s
+So my Grandson had disappeared in disgrace; and there I sat by my Wife's
 side, endeavouring to form a retrospect of the year 1999 and of the
 possibilities of the year 2000, but not quite able to shake off the
 thoughts suggested by the prattle of my bright little Hexagon. Only a few
 sands now remained in the half-hour glass. Rousing myself from my reverie
 I turned the glass Northward for the last time in the old Millennium; and
-in the act, I exclaimed aloud, “The boy is a fool.”
+in the act, I exclaimed aloud, "The boy is a fool."
 
 Straightway I became conscious of a Presence in the room, and a chilling
-breath thrilled through my very being. “He is no such thing,” cried my
-Wife, “and you are breaking the Commandments in thus dishonouring your
-own Grandson.” But I took no notice of her. Looking round in every
+breath thrilled through my very being. "He is no such thing," cried my
+Wife, "and you are breaking the Commandments in thus dishonouring your
+own Grandson." But I took no notice of her. Looking round in every
 direction I could see nothing; yet still I _felt_ a Presence, and
-shivered as the cold whisper came again. I started up. “What is the
-matter?” said my Wife, “there is no draught; what are you looking for?
-There is nothing.” There was nothing; and I resumed my seat, again
-exclaiming, “The boy is a fool, I say; 3³ can have no meaning in
-Geometry.” At once there came a distinctly audible reply, “The boy is not
-a fool; and 3³ has an obvious Geometrical meaning.”
+shivered as the cold whisper came again. I started up. "What is the
+matter?" said my Wife, "there is no draught; what are you looking for?
+There is nothing." There was nothing; and I resumed my seat, again
+exclaiming, "The boy is a fool, I say; 3³ can have no meaning in
+Geometry." At once there came a distinctly audible reply, "The boy is not
+a fool; and 3³ has an obvious Geometrical meaning."
 
 My Wife as well as myself heard the words, although she did not
 understand their meaning, and both of us sprang forward in the direction
 of the sound. What was our horror when we saw before us a Figure! At the
-first glance it appeared to be a Woman, seen sideways; but a moment’s
+first glance it appeared to be a Woman, seen sideways; but a moment's
 observation shewed me that the extremities passed into dimness too
 rapidly to represent one of the Female Sex; and I should have thought it
 a Circle, only that it seemed to change its size in a manner impossible
@@ -2187,27 +2157,27 @@ for a Circle or for any Regular Figure of which I had had experience.
 But my Wife had not my experience, nor the coolness necessary to note
 these characteristics. With the usual hastiness and unreasoning jealousy
 of her Sex, she flew at once to the conclusion that a Woman had entered
-the house through some small aperture. “How comes this person here?” she
-exclaimed, “you promised me, my dear, that there should be no ventilators
-in our new house.” “Nor are there any,” said I; “but what makes you think
-that the stranger is a Woman? I see by my power of Sight Recognition——”
-“Oh, I have no patience with your Sight Recognition,” replied she,
-“‘Feeling is believing’ and ‘A Straight Line to the touch is worth a
-Circle to the sight’”—two Proverbs, very common with the Frailer Sex in
+the house through some small aperture. "How comes this person here?" she
+exclaimed, "you promised me, my dear, that there should be no ventilators
+in our new house." "Nor are there any," said I; "but what makes you think
+that the stranger is a Woman? I see by my power of Sight Recognition——"
+"Oh, I have no patience with your Sight Recognition," replied she,
+"'Feeling is believing' and 'A Straight Line to the touch is worth a
+Circle to the sight'"—two Proverbs, very common with the Frailer Sex in
 Flatland.
 
-“Well,” said I, for I was afraid of irritating her, “if it must be so,
-demand an introduction.” Assuming her most gracious manner, my Wife
-advanced towards the Stranger, “Permit me, Madam, to feel and be felt
-by——” then, suddenly recoiling, “Oh! it is not a Woman, and there are no
+"Well," said I, for I was afraid of irritating her, "if it must be so,
+demand an introduction." Assuming her most gracious manner, my Wife
+advanced towards the Stranger, "Permit me, Madam, to feel and be felt
+by——" then, suddenly recoiling, "Oh! it is not a Woman, and there are no
 angles either, not a trace of one. Can it be that I have so misbehaved to
-a perfect Circle?”
+a perfect Circle?"
 
-“I am indeed, in a certain sense a Circle,” replied the Voice, “and a
+"I am indeed, in a certain sense a Circle," replied the Voice, "and a
 more perfect Circle than any in Flatland; but to speak more accurately, I
-am many Circles in one.” Then he added more mildly, “I have a message,
+am many Circles in one." Then he added more mildly, "I have a message,
 dear Madam, to your husband, which I must not deliver in your presence;
-and, if you would suffer us to retire for a few minutes——” But my Wife
+and, if you would suffer us to retire for a few minutes——" But my Wife
 would not listen to the proposal that our august Visitor should so
 incommode himself, and assuring the Circle that the hour for her own
 retirement had long passed, with many reiterated apologies for her recent
@@ -2223,7 +2193,7 @@ Millennium had begun.
                         mysteries of Spaceland._
 
 
-As soon as the sound of my Wife’s retreating footsteps had died away, I
+As soon as the sound of my Wife's retreating footsteps had died away, I
 began to approach the Stranger with the intention of taking a nearer view
 and of bidding him be seated: but his appearance struck me dumb and
 motionless with astonishment. Without the slightest symptoms of
@@ -2237,7 +2207,7 @@ house, and was now preparing to stab me with his acute angle.
 In a sitting-room, the absence of Fog (and the season happened to be
 remarkably dry), made it difficult for me to trust to Sight Recognition,
 especially at the short distance at which I was standing. Desperate with
-fear, I rushed forward with an unceremonious “You must permit me, Sir—”
+fear, I rushed forward with an unceremonious "You must permit me, Sir—"
 and felt him. My Wife was right. There was not the trace of an angle, not
 the slightest roughness or inequality: never in my life had I met with a
 more perfect Circle. He remained motionless while I walked round him,
@@ -2290,7 +2260,7 @@ _I._ My Lord means seemingly that it is Northward and Southward.
 _Stranger._ I mean nothing of the kind. I mean a direction in which you
 cannot look, because you have no eye in your side.
 
-_I._ Pardon me, my Lord, a moment’s inspection will convince your
+_I._ Pardon me, my Lord, a moment's inspection will convince your
 Lordship that I have a perfect luminary at the juncture of two of my
 sides.
 
@@ -2304,8 +2274,8 @@ _Stranger._ I am in no jesting humour. I tell you that I come from Space,
 or, since you will not understand what Space means, from the Land of
 Three Dimensions whence I but lately looked down upon your Plane which
 you call Space forsooth. From that position of advantage I discerned all
-that you speak of as _solid_ (by which you mean “enclosed on four
-sides”), your houses, your churches, your very chests and safes, yes even
+that you speak of as _solid_ (by which you mean "enclosed on four
+sides"), your houses, your churches, your very chests and safes, yes even
 your insides and stomachs, all lying open and exposed to my view.
 
 _I._ Such assertions are easily made, my Lord.
@@ -2328,7 +2298,7 @@ of your children and household.
 
 _I._ Your Lordship must be aware that such facts touching the belongings
 of his humble servant might be easily ascertained by any one in the
-neighbourhood possessing your Lordship’s ample means of obtaining
+neighbourhood possessing your Lordship's ample means of obtaining
 information.
 
 _Stranger._ How shall I convince him? Surely a plain statement of facts
@@ -2369,12 +2339,12 @@ finally vanishes.
 
 [Illustration: ]
 
-There was no “rising” that I could see; but he diminished and finally
+There was no "rising" that I could see; but he diminished and finally
 vanished. I winked once or twice to make sure that I was not dreaming.
 But it was no dream. For from the depths of nowhere came forth a hollow
-voice—close to my heart it seemed—“Am I quite gone? Are you convinced
+voice—close to my heart it seemed—"Am I quite gone? Are you convinced
 now? Well, now I will gradually return to Flatland, and you shall see my
-section become larger and larger.”
+section become larger and larger."
 
 Every reader in Spaceland will easily understand that my mysterious Guest
 was speaking the language of truth and even of simplicity. But to me,
@@ -2391,12 +2361,12 @@ and that he had now reappeared and was rapidly making himself larger.
 When he had regained his original size, he heaved a deep sigh; for he
 perceived by my silence that I had altogether failed to comprehend him.
 And indeed I was now inclining to the belief that he must be no Circle at
-all, but some extremely clever juggler; or else that the old wives’ tales
+all, but some extremely clever juggler; or else that the old wives' tales
 were true, and that after all there were such people as Enchanters and
 Magicians.
 
-After a long pause he muttered to himself, “One resource alone remains,
-if I am not to resort to action. I must try the method of Analogy.” Then
+After a long pause he muttered to himself, "One resource alone remains,
+if I am not to resort to action. I must try the method of Analogy." Then
 followed a still longer silence, after which he continued our dialogue.
 
 _Sphere._ Tell me, Mr. Mathematician; if a Point moves Northward, and
@@ -2442,9 +2412,9 @@ Restraining my impatience—for I was now under a strong temptation to rush
 blindly at my Visitor and to precipitate him into Space, or out of
 Flatland, anywhere, so that I could get rid of him—I replied:—
 
-“And what may be the nature of the Figure which I am to shape out by this
-motion which you are pleased to denote by the word ‘upward’? I presume it
-is describable in the language of Flatland.”
+"And what may be the nature of the Figure which I am to shape out by this
+motion which you are pleased to denote by the word 'upward'? I presume it
+is describable in the language of Flatland."
 
 _Sphere._ Oh, certainly. It is all plain and simple, and in strict
 accordance with Analogy—only, by the way, you must not speak of the
@@ -2466,14 +2436,14 @@ _Something-which-you-do-not-as-yet-know-a-name-for-but-which-we-call-a-Cube_
 with _eight_ terminal Points. Now are you convinced?
 
 _I._ And has this Creature sides, as well as angles or what you call
-“terminal Points?”
+"terminal Points?"
 
 _Sphere._ Of course; and all according to Analogy. But, by the way, not
 what _you_ call sides, but what _we_ call sides. You would call them
 _solids_.
 
 _I._ And how many solids or sides will appertain to this Being whom I am
-to generate by the motion of my inside in an “upward” direction, and whom
+to generate by the motion of my inside in an "upward" direction, and whom
 you call a Cube?
 
 _Sphere._ How can you ask? And you a mathematician! The side of anything
@@ -2493,8 +2463,8 @@ _Sphere._ Exactly. Then you see you have answered your own question. The
 Cube which you will generate will be bounded by six sides, that is to
 say, six of your insides. You see it all now, eh?
 
-“Monster,” I shrieked, “be thou juggler, enchanter, dream, or devil, no
-more will I endure thy mockeries. Either thou or I must perish.” And
+"Monster," I shrieked, "be thou juggler, enchanter, dream, or devil, no
+more will I endure thy mockeries. Either thou or I must perish." And
 saying these words I precipitated myself upon him.
 
 
@@ -2508,7 +2478,7 @@ with the Stranger, pressing on him with a force sufficient to have
 destroyed any ordinary Circle: but I could feel him slowly and
 unarrestably slipping from my contact; not edging to the right nor to the
 left, but moving somehow out of the world and vanishing to nothing. Soon
-there was a blank. But I still heard the Intruder’s voice.
+there was a blank. But I still heard the Intruder's voice.
 
 _Sphere._ Why will you refuse to listen to reason? I had hoped to find in
 you—as being a man of sense and an accomplished mathematician—a fit
@@ -2534,7 +2504,7 @@ the room, and at the same time the tablet appeared upon the floor. I took
 it up. There could be no doubt—it was the missing tablet.
 
 I groaned with horror, doubting whether I was not out of my senses; but
-the Stranger continued: “Surely you must now see that my explanation, and
+the Stranger continued: "Surely you must now see that my explanation, and
 no other, suits the phenomena. What you call Solid things are really
 superficial; what you call Space is really nothing but a great Plane. I
 am in Space, and look down upon the insides of the things of which you
@@ -2542,7 +2512,7 @@ only see the outsides. You could leave this Plane yourself, if you could
 but summon up the necessary volition. A slight upward or downward motion
 would enable you to see all that I can see.
 
-“The higher I mount, and the further I go from your Plane, the more I can
+"The higher I mount, and the further I go from your Plane, the more I can
 see, though of course I see it on a smaller scale. For example, I am
 ascending; now I can see your neighbour the Hexagon and his family in
 their several apartments; now I see the inside of the Theatre, ten doors
@@ -2551,18 +2521,18 @@ side a Circle in his study, sitting at his books. Now I shall come back
 to you. And, as a crowning proof, what do you say to my giving you a
 touch, just the least touch, in your stomach? It will not seriously
 injure you, and the slight pain you may suffer cannot be compared with
-the mental benefit you will receive.”
+the mental benefit you will receive."
 
 Before I could utter a word of remonstrance, I felt a shooting pain in my
 inside, and a demoniacal laugh seemed to issue from within me. A moment
 afterwards the sharp agony had ceased, leaving nothing but a dull ache
 behind, and the Stranger began to reappear, saying, as he gradually
-increased in size, “There, I have not hurt you much, have I? If you are
-not convinced now, I don’t know what will convince you. What say you?”
+increased in size, "There, I have not hurt you much, have I? If you are
+not convinced now, I don't know what will convince you. What say you?"
 
 My resolution was taken. It seemed intolerable that I should endure
 existence subject to the arbitrary visitations of a Magician who could
-thus play tricks with one’s very stomach. If only I could in any way
+thus play tricks with one's very stomach. If only I could in any way
 manage to pin him against the wall till help came!
 
 Once more I dashed my hardest angle against him, at the same time
@@ -2572,21 +2542,21 @@ found difficulty in rising. In any case he remained motionless, while I,
 hearing, as I thought, the sound of some help approaching, pressed
 against him with redoubled vigour, and continued to shout for assistance.
 
-A convulsive shudder ran through the Sphere. “This must not be,” I
-thought I heard him say; “either he must listen to reason, or I must have
-recourse to the last resource of civilization.” Then, addressing me in a
-louder tone, he hurriedly exclaimed, “Listen: no stranger must witness
+A convulsive shudder ran through the Sphere. "This must not be," I
+thought I heard him say; "either he must listen to reason, or I must have
+recourse to the last resource of civilization." Then, addressing me in a
+louder tone, he hurriedly exclaimed, "Listen: no stranger must witness
 what you have witnessed. Send your Wife back at once, before she enters
 the apartment. The Gospel of Three Dimensions must not be thus
 frustrated. Not thus must the fruits of one thousand years of waiting be
 thrown away. I hear her coming. Back! back! Away from me, or you must go
-with me—whither you know not—into the Land of Three Dimensions!”
+with me—whither you know not—into the Land of Three Dimensions!"
 
-“Fool! Madman! Irregular!” I exclaimed; “never will I release thee; thou
-shalt pay the penalty of thine impostures.”
+"Fool! Madman! Irregular!" I exclaimed; "never will I release thee; thou
+shalt pay the penalty of thine impostures."
 
-“Ha! Is it come to this?” thundered the Stranger: “then meet your fate:
-out of your Plane you go. Once, twice, thrice! ’Tis done!”
+"Ha! Is it come to this?" thundered the Stranger: "then meet your fate:
+out of your Plane you go. Once, twice, thrice! 'Tis done!"
 
 
 
@@ -2597,40 +2567,40 @@ out of your Plane you go. Once, twice, thrice! ’Tis done!”
 An unspeakable horror seized me. There was a darkness; then a dizzy,
 sickening sensation of sight that was not like seeing; I saw a Line that
 was no Line; Space that was not Space; I was myself, and not myself. When
-I could find voice, I shrieked aloud in agony, “Either this is madness or
-it is Hell.” “It is neither,” calmly replied the voice of the Sphere, “it
+I could find voice, I shrieked aloud in agony, "Either this is madness or
+it is Hell." "It is neither," calmly replied the voice of the Sphere, "it
 is Knowledge; it is Three Dimensions: open your eye once again and try to
-look steadily.”
+look steadily."
 
 I looked, and, behold, a new world! There stood before me, visibly
 incorporate, all that I had before inferred, conjectured, dreamed, of
-perfect Circular beauty. What seemed the centre of the Stranger’s form
+perfect Circular beauty. What seemed the centre of the Stranger's form
 lay open to my view: yet I could see no heart, nor lungs, nor arteries,
 only a beautiful harmonious Something—for which I had no words; but you,
 my Readers in Spaceland, would call it the surface of the Sphere.
 
-Prostrating myself mentally before my Guide, I cried, “How is it, O
+Prostrating myself mentally before my Guide, I cried, "How is it, O
 divine ideal of consummate loveliness and wisdom, that I see thy inside,
-and yet cannot discern thy heart, thy lungs, thy arteries, thy liver?”
-“What you think you see, you see not,” he replied; “it is not given to
+and yet cannot discern thy heart, thy lungs, thy arteries, thy liver?"
+"What you think you see, you see not," he replied; "it is not given to
 you, nor to any other Being, to behold my internal parts. I am of a
 different order of Beings from those in Flatland. Were I a Circle, you
 could discern my intestines, but I am a Being composed, as I told you
 before, of many Circles, the Many in the One, called in this country a
 Sphere. And, just as the outside of a Cube is a Square, so the outside of
-a Sphere presents the appearance of a Circle.”
+a Sphere presents the appearance of a Circle."
 
-Bewildered though I was by my Teacher’s enigmatic utterance, I no longer
+Bewildered though I was by my Teacher's enigmatic utterance, I no longer
 chafed against it, but worshipped him in silent adoration. He continued,
-with more mildness in his voice: “Distress not yourself if you cannot at
+with more mildness in his voice: "Distress not yourself if you cannot at
 first understand the deeper mysteries of Spaceland. By degrees they will
 dawn upon you. Let us begin by casting back a glance at the region whence
 you came. Return with me a while to the plains of Flatland, and I will
 show you that which you have so often reasoned and thought about, but
-never seen with the sense of sight—a visible angle.” “Impossible!” I
+never seen with the sense of sight—a visible angle." "Impossible!" I
 cried; but, the Sphere leading the way, I followed as if in a dream, till
-once more his voice arrested me: “Look yonder, and behold your own
-Pentagonal house and all its inmates.”
+once more his voice arrested me: "Look yonder, and behold your own
+Pentagonal house and all its inmates."
 
 I looked below, and saw with my physical eye all that domestic
 individuality which I had hitherto merely inferred with the
@@ -2649,10 +2619,10 @@ which the Sphere had made mention.
 
 [Illustration: ]
 
-Touched by my Wife’s distress, I would have sprung downward to reassure
-her, but I found myself incapable of motion. “Trouble not yourself about
-your Wife,” said my Guide; “she will not be long left in anxiety;
-meantime, let us take a survey of Flatland.”
+Touched by my Wife's distress, I would have sprung downward to reassure
+her, but I found myself incapable of motion. "Trouble not yourself about
+your Wife," said my Guide; "she will not be long left in anxiety;
+meantime, let us take a survey of Flatland."
 
 Once more I felt myself rising through space. It was even as the Sphere
 had said. The further we receded from the object we beheld, the larger
@@ -2662,14 +2632,14 @@ mounted higher, and lo, the secrets of the earth, the depths of mines and
 inmost caverns of the hills, were bared before me.
 
 Awestruck at the sight of the mysteries of the earth, thus unveiled
-before my unworthy eye, I said to my Companion, “Behold, I am become as a
+before my unworthy eye, I said to my Companion, "Behold, I am become as a
 God. For the wise men in our country say that to see all things, or as
-they express it, _omnividence_, is the attribute of God alone.” There was
-something of scorn in the voice of my Teacher as he made answer: “Is it
+they express it, _omnividence_, is the attribute of God alone." There was
+something of scorn in the voice of my Teacher as he made answer: "Is it
 so indeed? Then the very pickpockets and cut-throats of my country are to
 be worshipped by your wise men as being Gods: for there is not one of
 them that does not see as much as you see now. But trust me, your wise
-men are wrong.”
+men are wrong."
 
 _I._ Then is omnividence the attribute of others beside Gods?
 
@@ -2680,7 +2650,7 @@ God. This omnividence, as you call it—it is not a common word in
 Spaceland—does it make you more just, more merciful, less selfish, more
 loving? Not in the least. Then how does it make you more divine?
 
-_I._ “More merciful, more loving!” But these are the qualities of women!
+_I._ "More merciful, more loving!" But these are the qualities of women!
 And we know that a Circle is a higher Being than a Straight Line, in so
 far as knowledge and wisdom are more to be esteemed than mere affection.
 
@@ -2696,7 +2666,7 @@ surrounded by dense lines of Pentagonal buildings at right angles to each
 other, which I knew to be streets; and I perceived that I was approaching
 the great Metropolis.
 
-“Here we descend,” said my Guide. It was now morning, the first hour of
+"Here we descend," said my Guide. It was now morning, the first hour of
 the first day of the two thousandth year of our era. Acting, as was their
 wont, in strict accordance with precedent, the highest Circles of the
 realm were meeting in solemn conclave, as they had met on the first hour
@@ -2706,7 +2676,7 @@ first day of the year 0.
 The minutes of the previous meetings were now read by one whom I at once
 recognized as my brother, a perfectly Symmetrical Square, and the Chief
 Clerk of the High Council. It was found recorded on each occasion that:
-“Whereas the States had been troubled by divers ill-intentioned persons
+"Whereas the States had been troubled by divers ill-intentioned persons
 pretending to have received revelations from another World, and
 professing to produce demonstrations whereby they had instigated to
 frenzy both themselves and others, it had been for this cause unanimously
@@ -2717,43 +2687,43 @@ formality of mathematical examination, to destroy all such as were
 Isosceles of any degree, to scourge and imprison any regular Triangle, to
 cause any Square or Pentagon to be sent to the district Asylum, and to
 arrest any one of higher rank, sending him straightway to the Capital to
-be examined and judged by the Council.”
+be examined and judged by the Council."
 
-“You hear your fate,” said the Sphere to me, while the Council was
-passing for the third time the formal resolution. “Death or imprisonment
-awaits the Apostle of the Gospel of Three Dimensions.” “Not so,” replied
-I, “the matter is now so clear to me, the nature of real space so
+"You hear your fate," said the Sphere to me, while the Council was
+passing for the third time the formal resolution. "Death or imprisonment
+awaits the Apostle of the Gospel of Three Dimensions." "Not so," replied
+I, "the matter is now so clear to me, the nature of real space so
 palpable, that methinks I could make a child understand it. Permit me but
-to descend at this moment and enlighten them.” “Not yet,” said my Guide,
-“the time will come for that. Meantime I must perform my mission. Stay
-thou there in thy place.” Saying these words, he leaped with great
+to descend at this moment and enlighten them." "Not yet," said my Guide,
+"the time will come for that. Meantime I must perform my mission. Stay
+thou there in thy place." Saying these words, he leaped with great
 dexterity into the sea (if I may so call it) of Flatland, right in the
-midst of the ring of Counsellors. “I come,” cried he, “to proclaim that
-there is a land of Three Dimensions.”
+midst of the ring of Counsellors. "I come," cried he, "to proclaim that
+there is a land of Three Dimensions."
 
 I could see many of the younger Counsellors start back in manifest
-horror, as the Sphere’s circular section widened before them. But on a
+horror, as the Sphere's circular section widened before them. But on a
 sign from the presiding Circle,—who showed not the slightest alarm or
 surprise—six Isosceles of a low type from six different quarters rushed
-upon the Sphere. “We have him,” they cried; “No; yes; we have him still!
-he’s going! he’s gone!”
+upon the Sphere. "We have him," they cried; "No; yes; we have him still!
+he's going! he's gone!"
 
-“My Lords,” said the President to the Junior Circles of the Council,
-“there is not the slightest need for surprise; the secret archives, to
+"My Lords," said the President to the Junior Circles of the Council,
+"there is not the slightest need for surprise; the secret archives, to
 which I alone have access, tell me that a similar occurrence happened on
 the last two millennial commencements. You will, of course, say nothing
-of these trifles outside the Cabinet.”
+of these trifles outside the Cabinet."
 
-Raising his voice, he now summoned the guard. “Arrest the policemen; gag
-them. You know your duty.” After he had consigned to their fate the
+Raising his voice, he now summoned the guard. "Arrest the policemen; gag
+them. You know your duty." After he had consigned to their fate the
 wretched policemen—ill-fated and unwilling witnesses of a State-secret
 which they were not to be permitted to reveal—he again addressed the
-Counsellors. “My Lords, the business of the Council being concluded, I
-have only to wish you a happy New Year.” Before departing, he expressed,
+Counsellors. "My Lords, the business of the Council being concluded, I
+have only to wish you a happy New Year." Before departing, he expressed,
 at some length, to the Clerk, my excellent but most unfortunate brother,
 his sincere regret that, in accordance with precedent and for the sake of
 secrecy, he must condemn him to perpetual imprisonment, but added his
-satisfaction that, unless some mention were made by him of that day’s
+satisfaction that, unless some mention were made by him of that day's
 incident, his life would be spared.
 
 
@@ -2767,31 +2737,31 @@ When I saw my poor brother led away to imprisonment, I attempted to leap
 down into the Council Chamber, desiring to intercede on his behalf, or at
 least bid him farewell. But I found that I had no motion of my own. I
 absolutely depended on the volition of my Guide, who said in gloomy
-tones, “Heed not thy brother; haply thou shalt have ample time hereafter
-to condole with him. Follow me.”
+tones, "Heed not thy brother; haply thou shalt have ample time hereafter
+to condole with him. Follow me."
 
 [Illustration: ]
 
-Once more we ascended into space. “Hitherto,” said the Sphere, “I have
+Once more we ascended into space. "Hitherto," said the Sphere, "I have
 shown you naught save Plane Figures and their interiors. Now I must
 introduce you to Solids, and reveal to you the plan upon which they are
 constructed. Behold this multitude of moveable square cards. See, I put
 one on another, not, as you supposed, Northward of the other, but _on_
 the other. Now a second, now a third. See, I am building up a Solid by a
 multitude of Squares parallel to one another. Now the Solid is complete,
-being as high as it is long and broad, and we call it a Cube.”
+being as high as it is long and broad, and we call it a Cube."
 
-“Pardon me, my Lord,” replied I; “but to my eye the appearance is as of
+"Pardon me, my Lord," replied I; "but to my eye the appearance is as of
 an Irregular Figure whose inside is laid open to the view; in other
 words, methinks I see no Solid, but a Plane such as we infer in Flatland;
 only of an Irregularity which betokens some monstrous criminal, so that
-the very sight of it is painful to my eyes.”
+the very sight of it is painful to my eyes."
 
-“True,” said the Sphere; “it appears to you a Plane, because you are not
+"True," said the Sphere; "it appears to you a Plane, because you are not
 accustomed to light and shade and perspective; just as in Flatland a
 Hexagon would appear a Straight Line to one who has not the Art of Sight
 Recognition. But in reality it is a Solid, as you shall learn by the
-sense of Feeling.”
+sense of Feeling."
 
 He then introduced me to the Cube, and I found that this marvellous Being
 was indeed no Plane, but a Solid; and that he was endowed with six plane
@@ -2802,10 +2772,10 @@ that so insignificant a Creature as I could in some sense be called the
 Progenitor of so illustrious an offspring.
 
 But still I could not fully understand the meaning of what my Teacher had
-told me concerning “light” and “shade” and “perspective”; and I did not
+told me concerning "light" and "shade" and "perspective"; and I did not
 hesitate to put my difficulties before him.
 
-Were I to give the Sphere’s explanation of these matters, succinct and
+Were I to give the Sphere's explanation of these matters, succinct and
 clear though it was, it would be tedious to an inhabitant of Space, who
 knows these things already. Suffice it, that by his lucid statements, and
 by changing the position of objects and lights, and by allowing me to
@@ -2834,16 +2804,16 @@ Pentahedrons, Hexahedrons, Dodecahedrons and Spheres: but I ventured to
 interrupt him. Not that I was wearied of knowledge. On the contrary, I
 thirsted for yet deeper and fuller draughts than he was offering to me.
 
-“Pardon me,” said I, “O Thou Whom I must no longer address as the
+"Pardon me," said I, "O Thou Whom I must no longer address as the
 Perfection of all Beauty; but let me beg thee to vouchsafe thy servant a
-sight of thine interior.”
+sight of thine interior."
 
-_Sphere._ “My what?”
+_Sphere._ "My what?"
 
-_I._ “Thine interior: thy stomach, thy intestines.”
+_I._ "Thine interior: thy stomach, thy intestines."
 
-_Sphere._ “Whence this ill-timed impertinent request? And what mean you
-by saying that I am no longer the Perfection of all Beauty?”
+_Sphere._ "Whence this ill-timed impertinent request? And what mean you
+by saying that I am no longer the Perfection of all Beauty?"
 
 _I._ My Lord, your own wisdom has taught me to aspire to One even more
 great, more beautiful, and more closely approximate to Perfection than
@@ -2919,8 +2889,8 @@ motion of a divine Cube result in a still more divine Organization with
 _sixteen_ terminal points?
 
 Behold the infallible confirmation of the Series, 2, 4, 8, 16: is not
-this a Geometrical Progression? Is not this—if I might quote my Lord’s
-own words—“strictly according to Analogy”?
+this a Geometrical Progression? Is not this—if I might quote my Lord's
+own words—"strictly according to Analogy"?
 
 Again, was I not taught by my Lord that as in a Line there are _two_
 bounding Points, and in a Square there are _four_ bounding Lines, so in a
@@ -2929,7 +2899,7 @@ confirming Series, 2, 4, 6: is not this an Arithmetical Progression? And
 consequently does it not of necessity follow that the more divine
 offspring of the divine Cube in the Land of Four Dimensions, must have 8
 bounding Cubes: and is not this also, as my Lord has taught me to
-believe, “strictly according to Analogy”?
+believe, "strictly according to Analogy"?
 
 O, my Lord, my Lord, behold, I cast myself in faith upon conjecture, not
 knowing the facts; and I appeal to your Lordship to confirm or deny my
@@ -3018,10 +2988,10 @@ happened. When I was at last by myself, a drowsy sensation fell on me;
 but before my eyes closed I endeavoured to reproduce the Third Dimension,
 and especially the process by which a Cube is constructed through the
 motion of a Square. It was not so clear as I could have wished; but I
-remembered that it must be “Upward, and yet not Northward,” and I
+remembered that it must be "Upward, and yet not Northward," and I
 determined steadfastly to retain these words as the clue which, if firmly
 grasped, could not fail to guide me to the solution. So mechanically
-repeating, like a charm, the words, “Upward yet not Northward,” I fell
+repeating, like a charm, the words, "Upward yet not Northward," I fell
 into a sound refreshing sleep.
 
 During my slumber I had a dream. I thought I was once more by the side of
@@ -3035,13 +3005,13 @@ the Vacuum through which we soared, the sound reached not our ears till
 we checked our flight at a distance from it of something under twenty
 human diagonals.
 
-“Look yonder,” said my Guide, “in Flatland thou hast lived; of Lineland
+"Look yonder," said my Guide, "in Flatland thou hast lived; of Lineland
 thou hast received a vision; thou hast soared with me to the heights of
 Spaceland; now, in order to complete the range of thy experience, I
 conduct thee downward to the lowest depth of existence, even to the realm
 of Pointland, the Abyss of No Dimensions.
 
-“Behold yon miserable creature. That Point is a Being like ourselves, but
+"Behold yon miserable creature. That Point is a Being like ourselves, but
 confined to the non-dimensional Gulf. He is himself his own World, his
 own Universe; of any other than himself he can form no conception; he
 knows not Length, nor Breadth, nor Height, for he has had no experience
@@ -3049,53 +3019,53 @@ of them; he has no cognizance even of the number Two; nor has he a
 thought of Plurality; for he is himself his One and All, being really
 Nothing. Yet mark his perfect self-contentment, and hence learn this
 lesson, that to be self-contented is to be vile and ignorant, and that to
-aspire is better than to be blindly and impotently happy. Now listen.”
+aspire is better than to be blindly and impotently happy. Now listen."
 
 He ceased; and there arose from the little buzzing creature a tiny, low,
 monotonous, but distinct tinkling, as from one of your Spaceland
-phonographs, from which I caught these words, “Infinite beatitude of
-existence! It is; and there is none else beside It.”
+phonographs, from which I caught these words, "Infinite beatitude of
+existence! It is; and there is none else beside It."
 
-“What,” said I, “does the puny creature mean by ‘it’?” “He means
-himself,” said the Sphere: “have you not noticed before now, that babies
+"What," said I, "does the puny creature mean by 'it'?" "He means
+himself," said the Sphere: "have you not noticed before now, that babies
 and babyish people who cannot distinguish themselves from the world,
-speak of themselves in the Third Person? But hush!”
+speak of themselves in the Third Person? But hush!"
 
-“It fills all Space,” continued the little soliloquizing Creature, “and
+"It fills all Space," continued the little soliloquizing Creature, "and
 what It fills, It is. What It thinks, that It utters; and what It utters,
 that It hears; and It itself is Thinker, Utterer, Hearer, Thought, Word,
 Audition; it is the One, and yet the All in All. Ah, the happiness, ah,
-the happiness of Being!”
+the happiness of Being!"
 
-“Can you not startle the little thing out of its complacency?” said I.
-“Tell it what it really is, as you told me; reveal to it the narrow
-limitations of Pointland, and lead it up to something higher.” “That is
-no easy task,” said my Master; “try you.”
+"Can you not startle the little thing out of its complacency?" said I.
+"Tell it what it really is, as you told me; reveal to it the narrow
+limitations of Pointland, and lead it up to something higher." "That is
+no easy task," said my Master; "try you."
 
 Hereon, raising my voice to the uttermost, I addressed the Point as
 follows:
 
-“Silence, silence, contemptible Creature. You call yourself the All in
+"Silence, silence, contemptible Creature. You call yourself the All in
 All, but you are the Nothing: your so-called Universe is a mere speck in
-a Line, and a Line is a mere shadow as compared with—” “Hush, hush, you
-have said enough,” interrupted the Sphere, “now listen, and mark the
-effect of your harangue on the King of Pointland.”
+a Line, and a Line is a mere shadow as compared with—" "Hush, hush, you
+have said enough," interrupted the Sphere, "now listen, and mark the
+effect of your harangue on the King of Pointland."
 
 The lustre of the Monarch, who beamed more brightly than ever upon
 hearing my words, showed clearly that he retained his complacency; and I
-had hardly ceased when he took up his strain again. “Ah, the joy, ah, the
+had hardly ceased when he took up his strain again. "Ah, the joy, ah, the
 joy of Thought! What can It not achieve by thinking! Its own Thought
 coming to Itself, suggestive of Its disparagement, thereby to enhance Its
 happiness! Sweet rebellion stirred up to result in triumph! Ah, the
-divine creative power of the All in One! Ah, the joy, the joy of Being!”
+divine creative power of the All in One! Ah, the joy, the joy of Being!"
 
-“You see,” said my Teacher, “how little your words have done. So far as
+"You see," said my Teacher, "how little your words have done. So far as
 the Monarch understands them at all, he accepts them as his own—for he
 cannot conceive of any other except himself—and plumes himself upon the
-variety of ‘Its Thought’ as an instance of creative Power. Let us leave
+variety of 'Its Thought' as an instance of creative Power. Let us leave
 this God of Pointland to the ignorant fruition of his omnipresence and
 omniscience: nothing that you or I can do can rescue him from his
-self-satisfaction.”
+self-satisfaction."
 
 After this, as we floated gently back to Flatland, I could hear the mild
 voice of my Companion pointing the moral of my vision, and stimulating me
@@ -3105,7 +3075,7 @@ since then, he had received fresh insight, and he was not too proud to
 acknowledge his error to a Pupil. Then he proceeded to initiate me into
 mysteries yet higher than those I had witnessed, showing me how to
 construct Extra-Solids by the motion of Solids, and Double Extra-Solids
-by the motion of Extra-Solids, and all “strictly according to Analogy,”
+by the motion of Extra-Solids, and all "strictly according to Analogy,"
 all by methods so simple, so easy, as to be patent even to the Female
 Sex.
 
@@ -3123,7 +3093,7 @@ Dimensions be proclaimed. I would begin with my Wife.
 
 Just as I had decided on the plan of my operations, I heard the sound of
 many voices in the street commanding silence. Then followed a louder
-voice. It was a herald’s proclamation. Listening attentively, I
+voice. It was a herald's proclamation. Listening attentively, I
 recognized the words of the Resolution of the Council, enjoining the
 arrest, imprisonment, or execution of any one who should pervert the
 minds of the people by delusions, and by professing to have received
@@ -3133,7 +3103,7 @@ I reflected. This danger was not to be trifled with. It would be better
 to avoid it by omitting all mention of my Revelation, and by proceeding
 on the path of Demonstration—which after all, seemed so simple and so
 conclusive that nothing would be lost by discarding the former means.
-“Upward, not Northward”—was the clue to the whole proof. It had seemed to
+"Upward, not Northward"—was the clue to the whole proof. It had seemed to
 me fairly clear before I fell asleep; and when I first awoke, fresh from
 my dream, it had appeared as patent as Arithmetic; but somehow it did not
 seem to me quite so obvious now. Though my Wife entered the room
@@ -3173,30 +3143,30 @@ sitting down by his side and taking our mathematical tablets—or, as you
 would call them, Lines—I told him we would resume the lesson of
 yesterday. I taught him once more how a Point by motion in One Dimension
 produces a Line, and how a straight Line in Two Dimensions produces a
-Square. After this, forcing a laugh, I said, “And now, you scamp, you
+Square. After this, forcing a laugh, I said, "And now, you scamp, you
 wanted to make me believe that a Square may in the same way by motion
-‘Upward, not Northward,’ produce another figure, a sort of extra Square
-in Three Dimensions. Say that again, you young rascal.”
+'Upward, not Northward,' produce another figure, a sort of extra Square
+in Three Dimensions. Say that again, you young rascal."
 
-At this moment we heard once more the herald’s “O yes! O yes!” outside in
+At this moment we heard once more the herald's "O yes! O yes!" outside in
 the street proclaiming the Resolution of the Council. Young though he
 was, my Grandson—who was unusually intelligent for his age, and bred up
 in perfect reverence for the authority of the Circles—took in the
 situation with an acuteness for which I was quite unprepared. He remained
 silent till the last words of the Proclamation had died away, and then,
-bursting into tears, “Dear Grandpapa,” he said, “that was only my fun,
+bursting into tears, "Dear Grandpapa," he said, "that was only my fun,
 and of course I meant nothing at all by it; and we did not know anything
-then about the new Law; and I don’t think I said anything about the Third
-Dimension; and I am sure I did not say one word about ‘Upward, not
-Northward,’ for that would be such nonsense, you know. How could a thing
+then about the new Law; and I don't think I said anything about the Third
+Dimension; and I am sure I did not say one word about 'Upward, not
+Northward,' for that would be such nonsense, you know. How could a thing
 move Upward, and not Northward? Upward, and not Northward! Even if I were
-a baby, I could not be so absurd as that. How silly it is! Ha! ha! ha!”
+a baby, I could not be so absurd as that. How silly it is! Ha! ha! ha!"
 
-“Not at all silly,” said I, losing my temper; “here for example, I take
-this Square,”—and, at the word, I grasped a moveable Square, which was
-lying at hand—“and I move it, you see, not Northward but—yes, I move it
+"Not at all silly," said I, losing my temper; "here for example, I take
+this Square,"—and, at the word, I grasped a moveable Square, which was
+lying at hand—"and I move it, you see, not Northward but—yes, I move it
 Upward—that is to say, not Northward, but I move it somewhere—not exactly
-like this, but somehow—” Here I brought my sentence to an inane
+like this, but somehow—" Here I brought my sentence to an inane
 conclusion, shaking the Square about in a purposeless manner, much to the
 amusement of my Grandson, who burst out laughing louder than ever, and
 declared that I was not teaching him, but joking with him; and so saying
@@ -3213,7 +3183,7 @@ to convert a pupil to the Gospel of Three Dimensions.
 My failure with my Grandson did not encourage me to communicate my secret
 to others of my household; yet neither was I led by it to despair of
 success. Only I saw that I must not wholly rely on the catch-phrase
-“Upward, not Northward,” but must rather endeavour to seek a
+"Upward, not Northward," but must rather endeavour to seek a
 demonstration by setting before the public a clear view of the whole
 subject; and for this purpose it seemed necessary to resort to writing.
 
@@ -3229,7 +3199,7 @@ such diagrams as were necessary for my purpose; for of course, in our
 country of Flatland, there are no tablets but Lines, and no diagrams but
 Lines, all in one straight Line and only distinguishable by difference of
 size and brightness; so that, when I had finished my treatise (which I
-entitled “Through Flatland to Thoughtland”) I could not feel certain that
+entitled "Through Flatland to Thoughtland") I could not feel certain that
 many would understand my meaning.
 
 Meanwhile my life was under a cloud. All pleasures palled upon me; all
@@ -3261,9 +3231,9 @@ treatment of those lunatics who said that they had received the power of
 seeing the insides of things, I would quote the saying of an ancient
 Circle, who declared that prophets and inspired people are always
 considered by the majority to be mad; and I could not help occasionally
-dropping such expressions as “the eye that discerns the interiors of
-things,” and “the all-seeing land:” once or twice I even let fall the
-forbidden terms “the Third and Fourth Dimensions.” At last, to complete a
+dropping such expressions as "the eye that discerns the interiors of
+things," and "the all-seeing land:" once or twice I even let fall the
+forbidden terms "the Third and Fourth Dimensions." At last, to complete a
 series of minor indiscretions, at a meeting of our Local Speculative
 Society held at the palace of the Prefect himself,—some extremely silly
 person having read an elaborate paper exhibiting the precise reasons why
@@ -3297,7 +3267,7 @@ some of the junior Circles had been moved by my evident earnestness,
 asked me two questions:—
 
 1. Whether I could indicate the direction which I meant when I used the
-words “Upward, not Northward”?
+words "Upward, not Northward"?
 
 2. Whether I could by any diagrams or descriptions (other than the
 enumeration of imaginary sides and angles) indicate the Figure I was
@@ -3321,7 +3291,7 @@ of my jailers. My brother is one of the best of Squares, just, sensible,
 cheerful, and not without fraternal affection; yet I must confess that my
 weekly interviews, at least in one respect, cause me the bitterest pain.
 He was present when the Sphere manifested himself in the Council Chamber;
-he saw the Sphere’s changing sections; he heard the explanation of the
+he saw the Sphere's changing sections; he heard the explanation of the
 phenomena then given to the Circles. Since that time, scarcely a week has
 passed during seven whole years, without his hearing from me a repetition
 of the part I played in that manifestation, together with ample
@@ -3344,7 +3314,7 @@ That is the hope of my brighter moments. Alas, it is not always so.
 Heavily weighs on me at times the burdensome reflection that I cannot
 honestly say I am confident as to the exact shape of the once-seen,
 oft-regretted Cube; and in my nightly visions the mysterious precept,
-“Upward, not Northward,” haunts me like a soul-devouring Sphinx. It is
+"Upward, not Northward," haunts me like a soul-devouring Sphinx. It is
 part of the martyrdom which I endure for the cause of the Truth that
 there are seasons of mental weakness, when Cubes and Spheres flit away
 into the background of scarce-possible existences; when the Land of Three
@@ -3362,9 +3332,9 @@ the baseless fabric of a dream.
                                Footnotes
 
 
-[1]“What need of a certificate?” a Spaceland critic may ask: “Is not the
+[1]"What need of a certificate?" a Spaceland critic may ask: "Is not the
     procreation of a Square Son a certificate from Nature herself,
-    proving the Equal-sidedness of the Father?” I reply that no Lady of
+    proving the Equal-sidedness of the Father?" I reply that no Lady of
     any position will marry an uncertified Triangle. Square offspring has
     sometimes resulted from a slightly Irregular Triangle: but in almost
     every such case the Irregularity of the first generation is visited
@@ -3374,15 +3344,15 @@ the baseless fabric of a dream.
 [2]When I was in Spaceland I understood that some of your Priestly
     Circles have in the same way a separate entrance for Villagers,
     Farmers, and Teachers of Board Schools (_Spectator_, Sept. 1884, p.
-    1255) that they may “approach in a becoming and respectful manner.”
+    1255) that they may "approach in a becoming and respectful manner."
 
-[3]When I say “sitting,” of course I do not mean any change of attitude
+[3]When I say "sitting," of course I do not mean any change of attitude
     such as you in Spaceland signify by that word; for as we have no
-    feet, we can no more “sit” nor “stand” (in your sense of the word)
+    feet, we can no more "sit" nor "stand" (in your sense of the word)
     than one of your soles or flounders.
 
     Nevertheless, we perfectly well recognise the different mental states
-    of volition implied in “lying,” “sitting,” and “standing,” which are
+    of volition implied in "lying," "sitting," and "standing," which are
     to some extent indicated to a beholder by a slight increase of lustre
     corresponding to the increase of volition.
 
@@ -3395,7 +3365,7 @@ the baseless fabric of a dream.
 
 
 
-                          Transcriber’s Notes
+                          Transcriber's Notes
 
 
 --This eBook represents the text of the first printed edition.
@@ -3413,364 +3383,3 @@ the baseless fabric of a dream.
 
 
 
-
-End of the Project Gutenberg EBook of Flatland, by Edwin Abbott Abbott
-
-*** END OF THIS PROJECT GUTENBERG EBOOK FLATLAND ***
-
-***** This file should be named 45506-0.txt or 45506-0.zip *****
-This and all associated files of various formats will be found in:
-        http://www.gutenberg.org/4/5/5/0/45506/
-
-Produced by Stephen Hutcheson, Chris Curnow and the Online
-Distributed Proofreading Team at http://www.pgdp.net (This
-file was produced from images generously made available
-by The Internet Archive/Canadian Libraries)
-
-
-Updated editions will replace the previous one--the old editions
-will be renamed.
-
-Creating the works from public domain print editions means that no
-one owns a United States copyright in these works, so the Foundation
-(and you!) can copy and distribute it in the United States without
-permission and without paying copyright royalties.  Special rules,
-set forth in the General Terms of Use part of this license, apply to
-copying and distributing Project Gutenberg-tm electronic works to
-protect the PROJECT GUTENBERG-tm concept and trademark.  Project
-Gutenberg is a registered trademark, and may not be used if you
-charge for the eBooks, unless you receive specific permission.  If you
-do not charge anything for copies of this eBook, complying with the
-rules is very easy.  You may use this eBook for nearly any purpose
-such as creation of derivative works, reports, performances and
-research.  They may be modified and printed and given away--you may do
-practically ANYTHING with public domain eBooks.  Redistribution is
-subject to the trademark license, especially commercial
-redistribution.
-
-
-
-*** START: FULL LICENSE ***
-
-THE FULL PROJECT GUTENBERG LICENSE
-PLEASE READ THIS BEFORE YOU DISTRIBUTE OR USE THIS WORK
-
-To protect the Project Gutenberg-tm mission of promoting the free
-distribution of electronic works, by using or distributing this work
-(or any other work associated in any way with the phrase "Project
-Gutenberg"), you agree to comply with all the terms of the Full Project
-Gutenberg-tm License available with this file or online at
-  www.gutenberg.org/license.
-
-
-Section 1.  General Terms of Use and Redistributing Project Gutenberg-tm
-electronic works
-
-1.A.  By reading or using any part of this Project Gutenberg-tm
-electronic work, you indicate that you have read, understand, agree to
-and accept all the terms of this license and intellectual property
-(trademark/copyright) agreement.  If you do not agree to abide by all
-the terms of this agreement, you must cease using and return or destroy
-all copies of Project Gutenberg-tm electronic works in your possession.
-If you paid a fee for obtaining a copy of or access to a Project
-Gutenberg-tm electronic work and you do not agree to be bound by the
-terms of this agreement, you may obtain a refund from the person or
-entity to whom you paid the fee as set forth in paragraph 1.E.8.
-
-1.B.  "Project Gutenberg" is a registered trademark.  It may only be
-used on or associated in any way with an electronic work by people who
-agree to be bound by the terms of this agreement.  There are a few
-things that you can do with most Project Gutenberg-tm electronic works
-even without complying with the full terms of this agreement.  See
-paragraph 1.C below.  There are a lot of things you can do with Project
-Gutenberg-tm electronic works if you follow the terms of this agreement
-and help preserve free future access to Project Gutenberg-tm electronic
-works.  See paragraph 1.E below.
-
-1.C.  The Project Gutenberg Literary Archive Foundation ("the Foundation"
-or PGLAF), owns a compilation copyright in the collection of Project
-Gutenberg-tm electronic works.  Nearly all the individual works in the
-collection are in the public domain in the United States.  If an
-individual work is in the public domain in the United States and you are
-located in the United States, we do not claim a right to prevent you from
-copying, distributing, performing, displaying or creating derivative
-works based on the work as long as all references to Project Gutenberg
-are removed.  Of course, we hope that you will support the Project
-Gutenberg-tm mission of promoting free access to electronic works by
-freely sharing Project Gutenberg-tm works in compliance with the terms of
-this agreement for keeping the Project Gutenberg-tm name associated with
-the work.  You can easily comply with the terms of this agreement by
-keeping this work in the same format with its attached full Project
-Gutenberg-tm License when you share it without charge with others.
-
-1.D.  The copyright laws of the place where you are located also govern
-what you can do with this work.  Copyright laws in most countries are in
-a constant state of change.  If you are outside the United States, check
-the laws of your country in addition to the terms of this agreement
-before downloading, copying, displaying, performing, distributing or
-creating derivative works based on this work or any other Project
-Gutenberg-tm work.  The Foundation makes no representations concerning
-the copyright status of any work in any country outside the United
-States.
-
-1.E.  Unless you have removed all references to Project Gutenberg:
-
-1.E.1.  The following sentence, with active links to, or other immediate
-access to, the full Project Gutenberg-tm License must appear prominently
-whenever any copy of a Project Gutenberg-tm work (any work on which the
-phrase "Project Gutenberg" appears, or with which the phrase "Project
-Gutenberg" is associated) is accessed, displayed, performed, viewed,
-copied or distributed:
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
-with this eBook or online at www.gutenberg.org
-
-1.E.2.  If an individual Project Gutenberg-tm electronic work is derived
-from the public domain (does not contain a notice indicating that it is
-posted with permission of the copyright holder), the work can be copied
-and distributed to anyone in the United States without paying any fees
-or charges.  If you are redistributing or providing access to a work
-with the phrase "Project Gutenberg" associated with or appearing on the
-work, you must comply either with the requirements of paragraphs 1.E.1
-through 1.E.7 or obtain permission for the use of the work and the
-Project Gutenberg-tm trademark as set forth in paragraphs 1.E.8 or
-1.E.9.
-
-1.E.3.  If an individual Project Gutenberg-tm electronic work is posted
-with the permission of the copyright holder, your use and distribution
-must comply with both paragraphs 1.E.1 through 1.E.7 and any additional
-terms imposed by the copyright holder.  Additional terms will be linked
-to the Project Gutenberg-tm License for all works posted with the
-permission of the copyright holder found at the beginning of this work.
-
-1.E.4.  Do not unlink or detach or remove the full Project Gutenberg-tm
-License terms from this work, or any files containing a part of this
-work or any other work associated with Project Gutenberg-tm.
-
-1.E.5.  Do not copy, display, perform, distribute or redistribute this
-electronic work, or any part of this electronic work, without
-prominently displaying the sentence set forth in paragraph 1.E.1 with
-active links or immediate access to the full terms of the Project
-Gutenberg-tm License.
-
-1.E.6.  You may convert to and distribute this work in any binary,
-compressed, marked up, nonproprietary or proprietary form, including any
-word processing or hypertext form.  However, if you provide access to or
-distribute copies of a Project Gutenberg-tm work in a format other than
-"Plain Vanilla ASCII" or other format used in the official version
-posted on the official Project Gutenberg-tm web site (www.gutenberg.org),
-you must, at no additional cost, fee or expense to the user, provide a
-copy, a means of exporting a copy, or a means of obtaining a copy upon
-request, of the work in its original "Plain Vanilla ASCII" or other
-form.  Any alternate format must include the full Project Gutenberg-tm
-License as specified in paragraph 1.E.1.
-
-1.E.7.  Do not charge a fee for access to, viewing, displaying,
-performing, copying or distributing any Project Gutenberg-tm works
-unless you comply with paragraph 1.E.8 or 1.E.9.
-
-1.E.8.  You may charge a reasonable fee for copies of or providing
-access to or distributing Project Gutenberg-tm electronic works provided
-that
-
-- You pay a royalty fee of 20% of the gross profits you derive from
-     the use of Project Gutenberg-tm works calculated using the method
-     you already use to calculate your applicable taxes.  The fee is
-     owed to the owner of the Project Gutenberg-tm trademark, but he
-     has agreed to donate royalties under this paragraph to the
-     Project Gutenberg Literary Archive Foundation.  Royalty payments
-     must be paid within 60 days following each date on which you
-     prepare (or are legally required to prepare) your periodic tax
-     returns.  Royalty payments should be clearly marked as such and
-     sent to the Project Gutenberg Literary Archive Foundation at the
-     address specified in Section 4, "Information about donations to
-     the Project Gutenberg Literary Archive Foundation."
-
-- You provide a full refund of any money paid by a user who notifies
-     you in writing (or by e-mail) within 30 days of receipt that s/he
-     does not agree to the terms of the full Project Gutenberg-tm
-     License.  You must require such a user to return or
-     destroy all copies of the works possessed in a physical medium
-     and discontinue all use of and all access to other copies of
-     Project Gutenberg-tm works.
-
-- You provide, in accordance with paragraph 1.F.3, a full refund of any
-     money paid for a work or a replacement copy, if a defect in the
-     electronic work is discovered and reported to you within 90 days
-     of receipt of the work.
-
-- You comply with all other terms of this agreement for free
-     distribution of Project Gutenberg-tm works.
-
-1.E.9.  If you wish to charge a fee or distribute a Project Gutenberg-tm
-electronic work or group of works on different terms than are set
-forth in this agreement, you must obtain permission in writing from
-both the Project Gutenberg Literary Archive Foundation and Michael
-Hart, the owner of the Project Gutenberg-tm trademark.  Contact the
-Foundation as set forth in Section 3 below.
-
-1.F.
-
-1.F.1.  Project Gutenberg volunteers and employees expend considerable
-effort to identify, do copyright research on, transcribe and proofread
-public domain works in creating the Project Gutenberg-tm
-collection.  Despite these efforts, Project Gutenberg-tm electronic
-works, and the medium on which they may be stored, may contain
-"Defects," such as, but not limited to, incomplete, inaccurate or
-corrupt data, transcription errors, a copyright or other intellectual
-property infringement, a defective or damaged disk or other medium, a
-computer virus, or computer codes that damage or cannot be read by
-your equipment.
-
-1.F.2.  LIMITED WARRANTY, DISCLAIMER OF DAMAGES - Except for the "Right
-of Replacement or Refund" described in paragraph 1.F.3, the Project
-Gutenberg Literary Archive Foundation, the owner of the Project
-Gutenberg-tm trademark, and any other party distributing a Project
-Gutenberg-tm electronic work under this agreement, disclaim all
-liability to you for damages, costs and expenses, including legal
-fees.  YOU AGREE THAT YOU HAVE NO REMEDIES FOR NEGLIGENCE, STRICT
-LIABILITY, BREACH OF WARRANTY OR BREACH OF CONTRACT EXCEPT THOSE
-PROVIDED IN PARAGRAPH 1.F.3.  YOU AGREE THAT THE FOUNDATION, THE
-TRADEMARK OWNER, AND ANY DISTRIBUTOR UNDER THIS AGREEMENT WILL NOT BE
-LIABLE TO YOU FOR ACTUAL, DIRECT, INDIRECT, CONSEQUENTIAL, PUNITIVE OR
-INCIDENTAL DAMAGES EVEN IF YOU GIVE NOTICE OF THE POSSIBILITY OF SUCH
-DAMAGE.
-
-1.F.3.  LIMITED RIGHT OF REPLACEMENT OR REFUND - If you discover a
-defect in this electronic work within 90 days of receiving it, you can
-receive a refund of the money (if any) you paid for it by sending a
-written explanation to the person you received the work from.  If you
-received the work on a physical medium, you must return the medium with
-your written explanation.  The person or entity that provided you with
-the defective work may elect to provide a replacement copy in lieu of a
-refund.  If you received the work electronically, the person or entity
-providing it to you may choose to give you a second opportunity to
-receive the work electronically in lieu of a refund.  If the second copy
-is also defective, you may demand a refund in writing without further
-opportunities to fix the problem.
-
-1.F.4.  Except for the limited right of replacement or refund set forth
-in paragraph 1.F.3, this work is provided to you 'AS-IS', WITH NO OTHER
-WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PURPOSE.
-
-1.F.5.  Some states do not allow disclaimers of certain implied
-warranties or the exclusion or limitation of certain types of damages.
-If any disclaimer or limitation set forth in this agreement violates the
-law of the state applicable to this agreement, the agreement shall be
-interpreted to make the maximum disclaimer or limitation permitted by
-the applicable state law.  The invalidity or unenforceability of any
-provision of this agreement shall not void the remaining provisions.
-
-1.F.6.  INDEMNITY - You agree to indemnify and hold the Foundation, the
-trademark owner, any agent or employee of the Foundation, anyone
-providing copies of Project Gutenberg-tm electronic works in accordance
-with this agreement, and any volunteers associated with the production,
-promotion and distribution of Project Gutenberg-tm electronic works,
-harmless from all liability, costs and expenses, including legal fees,
-that arise directly or indirectly from any of the following which you do
-or cause to occur: (a) distribution of this or any Project Gutenberg-tm
-work, (b) alteration, modification, or additions or deletions to any
-Project Gutenberg-tm work, and (c) any Defect you cause.
-
-
-Section  2.  Information about the Mission of Project Gutenberg-tm
-
-Project Gutenberg-tm is synonymous with the free distribution of
-electronic works in formats readable by the widest variety of computers
-including obsolete, old, middle-aged and new computers.  It exists
-because of the efforts of hundreds of volunteers and donations from
-people in all walks of life.
-
-Volunteers and financial support to provide volunteers with the
-assistance they need are critical to reaching Project Gutenberg-tm's
-goals and ensuring that the Project Gutenberg-tm collection will
-remain freely available for generations to come.  In 2001, the Project
-Gutenberg Literary Archive Foundation was created to provide a secure
-and permanent future for Project Gutenberg-tm and future generations.
-To learn more about the Project Gutenberg Literary Archive Foundation
-and how your efforts and donations can help, see Sections 3 and 4
-and the Foundation information page at www.gutenberg.org
-
-
-Section 3.  Information about the Project Gutenberg Literary Archive
-Foundation
-
-The Project Gutenberg Literary Archive Foundation is a non profit
-501(c)(3) educational corporation organized under the laws of the
-state of Mississippi and granted tax exempt status by the Internal
-Revenue Service.  The Foundation's EIN or federal tax identification
-number is 64-6221541.  Contributions to the Project Gutenberg
-Literary Archive Foundation are tax deductible to the full extent
-permitted by U.S. federal laws and your state's laws.
-
-The Foundation's principal office is located at 4557 Melan Dr. S.
-Fairbanks, AK, 99712., but its volunteers and employees are scattered
-throughout numerous locations.  Its business office is located at 809
-North 1500 West, Salt Lake City, UT 84116, (801) 596-1887.  Email
-contact links and up to date contact information can be found at the
-Foundation's web site and official page at www.gutenberg.org/contact
-
-For additional contact information:
-     Dr. Gregory B. Newby
-     Chief Executive and Director
-     gbnewby@pglaf.org
-
-Section 4.  Information about Donations to the Project Gutenberg
-Literary Archive Foundation
-
-Project Gutenberg-tm depends upon and cannot survive without wide
-spread public support and donations to carry out its mission of
-increasing the number of public domain and licensed works that can be
-freely distributed in machine readable form accessible by the widest
-array of equipment including outdated equipment.  Many small donations
-($1 to $5,000) are particularly important to maintaining tax exempt
-status with the IRS.
-
-The Foundation is committed to complying with the laws regulating
-charities and charitable donations in all 50 states of the United
-States.  Compliance requirements are not uniform and it takes a
-considerable effort, much paperwork and many fees to meet and keep up
-with these requirements.  We do not solicit donations in locations
-where we have not received written confirmation of compliance.  To
-SEND DONATIONS or determine the status of compliance for any
-particular state visit www.gutenberg.org/donate
-
-While we cannot and do not solicit contributions from states where we
-have not met the solicitation requirements, we know of no prohibition
-against accepting unsolicited donations from donors in such states who
-approach us with offers to donate.
-
-International donations are gratefully accepted, but we cannot make
-any statements concerning tax treatment of donations received from
-outside the United States.  U.S. laws alone swamp our small staff.
-
-Please check the Project Gutenberg Web pages for current donation
-methods and addresses.  Donations are accepted in a number of other
-ways including checks, online payments and credit card donations.
-To donate, please visit:  www.gutenberg.org/donate
-
-
-Section 5.  General Information About Project Gutenberg-tm electronic
-works.
-
-Professor Michael S. Hart was the originator of the Project Gutenberg-tm
-concept of a library of electronic works that could be freely shared
-with anyone.  For forty years, he produced and distributed Project
-Gutenberg-tm eBooks with only a loose network of volunteer support.
-
-Project Gutenberg-tm eBooks are often created from several printed
-editions, all of which are confirmed as Public Domain in the U.S.
-unless a copyright notice is included.  Thus, we do not necessarily
-keep eBooks in compliance with any particular paper edition.
-
-Most people start at our Web site which has the main PG search facility:
-
-     www.gutenberg.org
-
-This Web site includes information about Project Gutenberg-tm,
-including how to make donations to the Project Gutenberg Literary
-Archive Foundation, how to help produce our new eBooks, and how to
-subscribe to our email newsletter to hear about new eBooks.

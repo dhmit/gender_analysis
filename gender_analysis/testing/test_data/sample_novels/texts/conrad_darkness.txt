@@ -1,28 +1,3 @@
-﻿The Project Gutenberg EBook of Heart of Darkness, by Joseph Conrad
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
-with this eBook or online at www.gutenberg.org
-
-
-Title: Heart of Darkness
-
-Author: Joseph Conrad
-
-Release Date: February 1995 [EBook #219]
-Last Updated: March 2, 2018
-
-Language: English
-
-Character set encoding: UTF-8
-
-*** START OF THIS PROJECT GUTENBERG EBOOK HEART OF DARKNESS ***
-
-
-
-
-Produced by Judith Boss and David Widger
 
 
 
@@ -95,7 +70,7 @@ waterway leading to the uttermost ends of the earth. We looked at the
 venerable stream not in the vivid flush of a short day that comes and
 departs for ever, but in the august light of abiding memories. And
 indeed nothing is easier for a man who has, as the phrase goes,
-“followed the sea” with reverence and affection, than to evoke the
+"followed the sea" with reverence and affection, than to evoke the
 great spirit of the past upon the lower reaches of the Thames. The tidal
 current runs to and fro in its unceasing service, crowded with memories
 of men and ships it had borne to the rest of home or to the battles
@@ -109,7 +84,7 @@ to the _Erebus_ and _Terror_, bound on other conquests--and that never
 returned. It had known the ships and the men. They had sailed from
 Deptford, from Greenwich, from Erith--the adventurers and the settlers;
 kings' ships and the ships of men on 'Change; captains, admirals, the
-dark “interlopers” of the Eastern trade, and the commissioned “generals”
+dark "interlopers" of the Eastern trade, and the commissioned "generals"
  of East India fleets. Hunters for gold or pursuers of fame, they all
 had gone out on that stream, bearing the sword, and often the torch,
 messengers of the might within the land, bearers of a spark from the
@@ -124,10 +99,10 @@ great stir of lights going up and going down. And farther west on the
 upper reaches the place of the monstrous town was still marked ominously
 on the sky, a brooding gloom in sunshine, a lurid glare under the stars.
 
-“And this also,” said Marlow suddenly, “has been one of the dark places
-of the earth.”
+"And this also," said Marlow suddenly, "has been one of the dark places
+of the earth."
 
-He was the only man of us who still “followed the sea.” The worst that
+He was the only man of us who still "followed the sea." The worst that
 could be said of him was that he did not represent his class. He was a
 seaman, but he was a wanderer, too, while most seamen lead, if one may
 so express it, a sedentary life. Their minds are of the stay-at-home
@@ -151,7 +126,7 @@ of moonshine.
 
 His remark did not seem at all surprising. It was just like Marlow.
 It was accepted in silence. No one took the trouble to grunt even; and
-presently he said, very slow--“I was thinking of very old times, when
+presently he said, very slow--"I was thinking of very old times, when
 the Romans first came here, nineteen hundred years ago--the other day
 .... Light came out of this river since--you say Knights? Yes; but
 it is like a running blaze on a plain, like a flash of lightning in the
@@ -186,14 +161,14 @@ wild men. There's no initiation either into such mysteries. He has to
 live in the midst of the incomprehensible, which is also detestable. And
 it has a fascination, too, that goes to work upon him. The fascination
 of the abomination--you know, imagine the growing regrets, the longing
-to escape, the powerless disgust, the surrender, the hate.”
+to escape, the powerless disgust, the surrender, the hate."
 
 He paused.
 
-“Mind,” he began again, lifting one arm from the elbow, the palm of the
+"Mind," he began again, lifting one arm from the elbow, the palm of the
 hand outwards, so that, with his legs folded before him, he had the
 pose of a Buddha preaching in European clothes and without a
-lotus-flower--“Mind, none of us would feel exactly like this. What saves
+lotus-flower--"Mind, none of us would feel exactly like this. What saves
 us is efficiency--the devotion to efficiency. But these chaps were not
 much account, really. They were no colonists; their administration was
 merely a squeeze, and nothing more, I suspect. They were conquerors, and
@@ -208,7 +183,7 @@ noses than ourselves, is not a pretty thing when you look into it too
 much. What redeems it is the idea only. An idea at the back of it; not
 a sentimental pretence but an idea; and an unselfish belief in the
 idea--something you can set up, and bow down before, and offer a
-sacrifice to....”
+sacrifice to...."
 
 He broke off. Flames glided in the river, small green flames, red
 flames, white flames, pursuing, overtaking, joining, crossing each
@@ -216,15 +191,15 @@ other--then separating slowly or hastily. The traffic of the great city
 went on in the deepening night upon the sleepless river. We looked on,
 waiting patiently--there was nothing else to do till the end of
 the flood; but it was only after a long silence, when he said, in
-a hesitating voice, “I suppose you fellows remember I did once turn
-fresh-water sailor for a bit,” that we knew we were fated, before
+a hesitating voice, "I suppose you fellows remember I did once turn
+fresh-water sailor for a bit," that we knew we were fated, before
 the ebb began to run, to hear about one of Marlow's inconclusive
 experiences.
 
-“I don't want to bother you much with what happened to me personally,”
+"I don't want to bother you much with what happened to me personally,"
  he began, showing in this remark the weakness of many tellers of tales
 who seem so often unaware of what their audience would like best to
-hear; “yet to understand the effect of it on me you ought to know how I
+hear; "yet to understand the effect of it on me you ought to know how I
 got out there, what I saw, how I went up that river to the place where I
 first met the poor chap. It was the farthest point of navigation and the
 culminating point of my experience. It seemed somehow to throw a kind
@@ -232,7 +207,7 @@ of light on everything about me--and into my thoughts. It was sombre
 enough, too--and pitiful--not extraordinary in any way--not very clear
 either. No, not very clear. And yet it seemed to throw a kind of light.
 
-“I had then, as you remember, just returned to London after a lot of
+"I had then, as you remember, just returned to London after a lot of
 Indian Ocean, Pacific, China Seas--a regular dose of the East--six years
 or so, and I was loafing about, hindering you fellows in your work and
 invading your homes, just as though I had got a heavenly mission to
@@ -241,7 +216,7 @@ tired of resting. Then I began to look for a ship--I should think the
 hardest work on earth. But the ships wouldn't even look at me. And I got
 tired of that game, too.
 
-“Now when I was a little chap I had a passion for maps. I would look for
+"Now when I was a little chap I had a passion for maps. I would look for
 hours at South America, or Africa, or Australia, and lose myself in all
 the glories of exploration. At that time there were many blank spaces on
 the earth, and when I saw one that looked particularly inviting on a map
@@ -253,7 +228,7 @@ have been in some of them, and... well, we won't talk about that. But
 there was one yet--the biggest, the most blank, so to speak--that I had
 a hankering after.
 
-“True, by this time it was not a blank space any more. It had got filled
+"True, by this time it was not a blank space any more. It had got filled
 since my boyhood with rivers and lakes and names. It had ceased to be
 a blank space of delightful mystery--a white patch for a boy to dream
 gloriously over. It had become a place of darkness. But there was in it
@@ -268,11 +243,11 @@ kind of craft on that lot of fresh water--steamboats! Why shouldn't I
 try to get charge of one? I went on along Fleet Street, but could not
 shake off the idea. The snake had charmed me.
 
-“You understand it was a Continental concern, that Trading society; but
+"You understand it was a Continental concern, that Trading society; but
 I have a lot of relations living on the Continent, because it's cheap
 and not so nasty as it looks, they say.
 
-“I am sorry to own I began to worry them. This was already a fresh
+"I am sorry to own I began to worry them. This was already a fresh
 departure for me. I was not used to get things that way, you know. I
 always went my own road and on my own legs where I had a mind to go. I
 wouldn't have believed it of myself; but, then--you see--I felt somehow
@@ -286,7 +261,7 @@ very high personage in the Administration, and also a man who has lots
 of influence with,' etc. She was determined to make no end of fuss to
 get me appointed skipper of a river steamboat, if such was my fancy.
 
-“I got my appointment--of course; and I got it very quick. It appears
+"I got my appointment--of course; and I got it very quick. It appears
 the Company had received news that one of their captains had been killed
 in a scuffle with the natives. This was my chance, and it made me the
 more anxious to go. It was only months and months afterwards, when I
@@ -321,7 +296,7 @@ think the cause of progress got them, anyhow. However, through this
 glorious affair I got my appointment, before I had fairly begun to hope
 for it.
 
-“I flew around like mad to get ready, and before forty-eight hours I
+"I flew around like mad to get ready, and before forty-eight hours I
 was crossing the Channel to show myself to my employers, and sign the
 contract. In a very few hours I arrived in a city that always makes me
 think of a whited sepulchre. Prejudice no doubt. I had no difficulty in
@@ -329,7 +304,7 @@ finding the Company's offices. It was the biggest thing in the town,
 and everybody I met was full of it. They were going to run an over-sea
 empire, and make no end of coin by trade.
 
-“A narrow and deserted street in deep shadow, high houses, innumerable
+"A narrow and deserted street in deep shadow, high houses, innumerable
 windows with venetian blinds, a dead silence, grass sprouting right and
 left, immense double doors standing ponderously ajar. I slipped through
 one of these cracks, went up a swept and ungarnished staircase, as arid
@@ -357,12 +332,12 @@ six, I should judge, and had his grip on the handle-end of ever so many
 millions. He shook hands, I fancy, murmured vaguely, was satisfied with
 my French. _Bon Voyage_.
 
-“In about forty-five seconds I found myself again in the waiting-room
+"In about forty-five seconds I found myself again in the waiting-room
 with the compassionate secretary, who, full of desolation and sympathy,
 made me sign some document. I believe I undertook amongst other things
 not to disclose any trade secrets. Well, I am not going to.
 
-“I began to feel slightly uneasy. You know I am not used to such
+"I began to feel slightly uneasy. You know I am not used to such
 ceremonies, and there was something ominous in the atmosphere. It
 was just as though I had been let into some conspiracy--I don't
 know--something not quite right; and I was glad to get out. In the outer
@@ -383,7 +358,7 @@ the other scrutinizing the cheery and foolish faces with unconcerned old
 eyes. _Ave!_ Old knitter of black wool. _Morituri te salutant_. Not
 many of those she looked at ever saw her again--not half, by a long way.
 
-“There was yet a visit to the doctor. 'A simple formality,' assured me
+"There was yet a visit to the doctor. 'A simple formality,' assured me
 the secretary, with an air of taking an immense part in all my sorrows.
 Accordingly a young chap wearing his hat over the left eyebrow, some
 clerk I suppose--there must have been clerks in the business, though
@@ -399,7 +374,7 @@ once. 'I am not such a fool as I look, quoth Plato to his disciples,'
 he said sententiously, emptied his glass with great resolution, and we
 rose.
 
-“The old doctor felt my pulse, evidently thinking of something else
+"The old doctor felt my pulse, evidently thinking of something else
 the while. 'Good, good for there,' he mumbled, and then with a certain
 eagerness asked me whether I would let him measure my head. Rather
 surprised, I said Yes, when he produced a thing like calipers and got
@@ -430,7 +405,7 @@ you English say, eh? Good-bye. Ah! Good-bye. _Adieu_. In the tropics one
 must before everything keep calm.'... He lifted a warning forefinger....
 '_Du calme, du calme_.'
 
-“One thing more remained to do--say good-bye to my excellent aunt. I
+"One thing more remained to do--say good-bye to my excellent aunt. I
 found her triumphant. I had a cup of tea--the last decent cup of tea for
 many days--and in a room that most soothingly looked just as you would
 expect a lady's drawing-room to look, we had a long quiet chat by the
@@ -449,7 +424,7 @@ those ignorant millions from their horrid ways,' till, upon my word, she
 made me quite uncomfortable. I ventured to hint that the Company was run
 for profit.
 
-“'You forget, dear Charlie, that the labourer is worthy of his hire,'
+"'You forget, dear Charlie, that the labourer is worthy of his hire,'
 she said, brightly. It's queer how out of touch with truth women are.
 They live in a world of their own, and there has never been anything
 like it, and never can be. It is too beautiful altogether, and if they
@@ -457,7 +432,7 @@ were to set it up it would go to pieces before the first sunset. Some
 confounded fact we men have been living contentedly with ever since the
 day of creation would start up and knock the whole thing over.
 
-“After this I got embraced, told to wear flannel, be sure to write
+"After this I got embraced, told to wear flannel, be sure to write
 often, and so on--and I left. In the street--I don't know why--a queer
 feeling came to me that I was an imposter. Odd thing that I, who used to
 clear out for any part of the world at twenty-four hours' notice, with
@@ -468,7 +443,7 @@ that, for a second or two, I felt as though, instead of going to the
 centre of a continent, I were about to set off for the centre of the
 earth.
 
-“I left in a French steamer, and she called in every blamed port they
+"I left in a French steamer, and she called in every blamed port they
 have out there, for, as far as I could see, the sole purpose of landing
 soldiers and custom-house officers. I watched the coast. Watching a
 coast as it slips by the ship is like thinking about an enigma. There
@@ -523,7 +498,7 @@ not dissipated by somebody on board assuring me earnestly there was
 a camp of natives--he called them enemies!--hidden out of sight
 somewhere.
 
-“We gave her her letters (I heard the men in that lonely ship were dying
+"We gave her her letters (I heard the men in that lonely ship were dying
 of fever at the rate of three a day) and went on. We called at some more
 places with farcical names, where the merry dance of death and trade
 goes on in a still and earthy atmosphere as of an overheated catacomb;
@@ -536,12 +511,12 @@ stop long enough to get a particularized impression, but the general
 sense of vague and oppressive wonder grew upon me. It was like a weary
 pilgrimage amongst hints for nightmares.
 
-“It was upward of thirty days before I saw the mouth of the big river.
+"It was upward of thirty days before I saw the mouth of the big river.
 We anchored off the seat of the government. But my work would not begin
 till some two hundred miles farther on. So as soon as I could I made a
 start for a place thirty miles higher up.
 
-“I had my passage on a little sea-going steamer. Her captain was a
+"I had my passage on a little sea-going steamer. Her captain was a
 Swede, and knowing me for a seaman, invited me on the bridge. He was a
 young man, lean, fair, and morose, with lanky hair and a shuffling gait.
 As we left the miserable little wharf, he tossed his head contemptuously
@@ -557,7 +532,7 @@ up a man who hanged himself on the road. He was a Swede, too.'
 out watchfully. 'Who knows? The sun too much for him, or the country
 perhaps.'
 
-“At last we opened a reach. A rocky cliff appeared, mounds of turned-up
+"At last we opened a reach. A rocky cliff appeared, mounds of turned-up
 earth by the shore, houses on a hill, others with iron roofs, amongst a
 waste of excavations, or hanging to the declivity. A continuous noise of
 the rapids above hovered over this scene of inhabited devastation. A
@@ -568,7 +543,7 @@ said the Swede, pointing to three wooden barrack-like structures on the
 rocky slope. 'I will send your things up. Four boxes did you say? So.
 Farewell.'
 
-“I came upon a boiler wallowing in the grass, then found a path
+"I came upon a boiler wallowing in the grass, then found a path
 leading up the hill. It turned aside for the boulders, and also for an
 undersized railway-truck lying there on its back with its wheels in
 the air. One was off. The thing looked as dead as the carcass of some
@@ -581,7 +556,7 @@ all. No change appeared on the face of the rock. They were building a
 railway. The cliff was not in the way or anything; but this objectless
 blasting was all the work going on.
 
-“A slight clinking behind me made me turn my head. Six black men
+"A slight clinking behind me made me turn my head. Six black men
 advanced in a file, toiling up the path. They walked erect and slow,
 balancing small baskets full of earth on their heads, and the clink kept
 time with their footsteps. Black rags were wound round their loins, and
@@ -607,7 +582,7 @@ large, white, rascally grin, and a glance at his charge, seemed to take
 me into partnership in his exalted trust. After all, I also was a part
 of the great cause of these high and just proceedings.
 
-“Instead of going up, I turned and descended to the left. My idea was to
+"Instead of going up, I turned and descended to the left. My idea was to
 let that chain-gang get out of sight before I climbed the hill. You know
 I am not particularly tender; I've had to strike and to fend off.
 I've had to resist and to attack sometimes--that's only one way of
@@ -623,7 +598,7 @@ several months later and a thousand miles farther. For a moment I
 stood appalled, as though by a warning. Finally I descended the hill,
 obliquely, towards the trees I had seen.
 
-“I avoided a vast artificial hole somebody had been digging on the
+"I avoided a vast artificial hole somebody had been digging on the
 slope, the purpose of which I found it impossible to divine. It wasn't
 a quarry or a sandpit, anyhow. It was just a hole. It might have
 been connected with the philanthropic desire of giving the criminals
@@ -639,14 +614,14 @@ stillness of the grove, where not a breath stirred, not a leaf moved,
 with a mysterious sound--as though the tearing pace of the launched
 earth had suddenly become audible.
 
-“Black shapes crouched, lay, sat between the trees leaning against the
+"Black shapes crouched, lay, sat between the trees leaning against the
 trunks, clinging to the earth, half coming out, half effaced within
 the dim light, in all the attitudes of pain, abandonment, and despair.
 Another mine on the cliff went off, followed by a slight shudder of the
 soil under my feet. The work was going on. The work! And this was the
 place where some of the helpers had withdrawn to die.
 
-“They were dying slowly--it was very clear. They were not enemies, they
+"They were dying slowly--it was very clear. They were not enemies, they
 were not criminals, they were nothing earthly now--nothing but black
 shadows of disease and starvation, lying confusedly in the greenish
 gloom. Brought from all the recesses of the coast in all the legality
@@ -667,7 +642,7 @@ Was it a badge--an ornament--a charm--a propitiatory act? Was there any
 idea at all connected with it? It looked startling round his black neck,
 this bit of white thread from beyond the seas.
 
-“Near the same tree two more bundles of acute angles sat with their legs
+"Near the same tree two more bundles of acute angles sat with their legs
 drawn up. One, with his chin propped on his knees, stared at nothing,
 in an intolerable and appalling manner: his brother phantom rested its
 forehead, as if overcome with a great weariness; and all about others
@@ -678,7 +653,7 @@ the river to drink. He lapped out of his hand, then sat up in the
 sunlight, crossing his shins in front of him, and after a time let his
 woolly head fall on his breastbone.
 
-“I didn't want any more loitering in the shade, and I made haste towards
+"I didn't want any more loitering in the shade, and I made haste towards
 the station. When near the buildings I met a white man, in such an
 unexpected elegance of get-up that in the first moment I took him for
 a sort of vision. I saw a high starched collar, white cuffs, a light
@@ -686,7 +661,7 @@ alpaca jacket, snowy trousers, a clean necktie, and varnished boots. No
 hat. Hair parted, brushed, oiled, under a green-lined parasol held in a
 big white hand. He was amazing, and had a penholder behind his ear.
 
-“I shook hands with this miracle, and I learned he was the Company's
+"I shook hands with this miracle, and I learned he was the Company's
 chief accountant, and that all the book-keeping was done at this
 station. He had come out for a moment, he said, 'to get a breath of
 fresh air. The expression sounded wonderfully odd, with its suggestion
@@ -705,13 +680,13 @@ difficult. She had a distaste for the work.' Thus this man had verily
 accomplished something. And he was devoted to his books, which were in
 apple-pie order.
 
-“Everything else in the station was in a muddle--heads, things,
+"Everything else in the station was in a muddle--heads, things,
 buildings. Strings of dusty niggers with splay feet arrived and
 departed; a stream of manufactured goods, rubbishy cottons, beads,
 and brass-wire sent into the depths of darkness, and in return came a
 precious trickle of ivory.
 
-“I had to wait in the station for ten days--an eternity. I lived in a
+"I had to wait in the station for ten days--an eternity. I lived in a
 hut in the yard, but to be out of the chaos I would sometimes get into
 the accountant's office. It was built of horizontal planks, and so badly
 put together that, as he bent over his high desk, he was barred from
@@ -726,7 +701,7 @@ groans of this sick person,' he said, 'distract my attention. And
 without that it is extremely difficult to guard against clerical errors
 in this climate.'
 
-“One day he remarked, without lifting his head, 'In the interior you
+"One day he remarked, without lifting his head, 'In the interior you
 will no doubt meet Mr. Kurtz.' On my asking who Mr. Kurtz was, he
 said he was a first-class agent; and seeing my disappointment at
 this information, he added slowly, laying down his pen, 'He is a very
@@ -736,7 +711,7 @@ true ivory-country, at 'the very bottom of there. Sends in as much ivory
 as all the others put together...' He began to write again. The sick
 man was too ill to groan. The flies buzzed in a great peace.
 
-“Suddenly there was a growing murmur of voices and a great tramping of
+"Suddenly there was a growing murmur of voices and a great tramping of
 feet. A caravan had come in. A violent babble of uncouth sounds burst
 out on the other side of the planks. All the carriers were speaking
 together, and in the midst of the uproar the lamentable voice of the
@@ -756,17 +731,17 @@ bulging eyes. 'Oh, he will go far, very far,' he began again. 'He
 will be a somebody in the Administration before long. They, above--the
 Council in Europe, you know--mean him to be.'
 
-“He turned to his work. The noise outside had ceased, and presently
+"He turned to his work. The noise outside had ceased, and presently
 in going out I stopped at the door. In the steady buzz of flies the
 homeward-bound agent was lying finished and insensible; the other,
 bent over his books, was making correct entries of perfectly correct
 transactions; and fifty feet below the doorstep I could see the still
 tree-tops of the grove of death.
 
-“Next day I left that station at last, with a caravan of sixty men, for
+"Next day I left that station at last, with a caravan of sixty men, for
 a two-hundred-mile tramp.
 
-“No use telling you much about that. Paths, paths, everywhere; a
+"No use telling you much about that. Paths, paths, everywhere; a
 stamped-in network of paths spreading over the empty land, through the
 long grass, through burnt grass, through thickets, down and up chilly
 ravines, up and down stony hills ablaze with heat; and a solitude, a
@@ -826,7 +801,7 @@ quite correct. 'Everybody had behaved splendidly! splendidly!'--'you
 must,' he said in agitation, 'go and see the general manager at once. He
 is waiting!'
 
-“I did not see the real significance of that wreck at once. I fancy I
+"I did not see the real significance of that wreck at once. I fancy I
 see it now, but I am not sure--not at all. Certainly the affair was too
 stupid--when I think of it--to be altogether natural. Still... But
 at the moment it presented itself simply as a confounded nuisance. The
@@ -839,7 +814,7 @@ plenty to do in fishing my command out of the river. I had to set about
 it the very next day. That, and the repairs when I brought the pieces to
 the station, took some months.
 
-“My first interview with the manager was curious. He did not ask me to
+"My first interview with the manager was curious. He did not ask me to
 sit down after my twenty-mile walk that morning. He was commonplace in
 complexion, in features, in manners, and in voice. He was of middle
 size and of ordinary build. His eyes, of the usual blue, were perhaps
@@ -882,7 +857,7 @@ his unalterable conviction. He was neither civil nor uncivil. He was
 quiet. He allowed his 'boy'--an overfed young negro from the coast--to
 treat the white men, under his very eyes, with provoking insolence.
 
-“He began to speak as soon as he saw me. I had been very long on the
+"He began to speak as soon as he saw me. I had been very long on the
 road. He could not wait. Had to start without me. The up-river stations
 had to be relieved. There had been so many delays already that he did
 not know who was dead and who was alive, and how they got on--and so on,
@@ -910,7 +885,7 @@ Afterwards I took it back when it was borne in upon me startlingly
 with what extreme nicety he had estimated the time requisite for the
 'affair.'
 
-“I went to work the next day, turning, so to speak, my back on that
+"I went to work the next day, turning, so to speak, my back on that
 station. In that way only it seemed to me I could keep my hold on the
 redeeming facts of life. Still, one must look about sometimes; and then
 I saw this station, these men strolling aimlessly about in the sunshine
@@ -925,7 +900,7 @@ speck on the earth struck me as something great and invincible, like
 evil or truth, waiting patiently for the passing away of this fantastic
 invasion.
 
-“Oh, these months! Well, never mind. Various things happened. One
+"Oh, these months! Well, never mind. Various things happened. One
 evening a grass shed full of calico, cotton prints, beads, and I don't
 know what else, burst into a blaze so suddenly that you would have
 thought the earth had opened to let an avenging fire consume all that
@@ -936,7 +911,7 @@ pail in his hand, assured me that everybody was 'behaving splendidly,
 splendidly,' dipped about a quart of water and tore back again. I
 noticed there was a hole in the bottom of his pail.
 
-“I strolled up. There was no hurry. You see the thing had gone off like
+"I strolled up. There was no hurry. You see the thing had gone off like
 a box of matches. It had been hopeless from the very first. The flame
 had leaped high, driven everybody back, lighted up everything--and
 collapsed. The shed was already a heap of embers glowing fiercely. A
@@ -986,7 +961,7 @@ well. He has done it. Perhaps he can ride. But there is a way of looking
 at a halter that would provoke the most charitable of saints into a
 kick.
 
-“I had no idea why he wanted to be sociable, but as we chatted in
+"I had no idea why he wanted to be sociable, but as we chatted in
 there it suddenly occurred to me the fellow was trying to get at
 something--in fact, pumping me. He alluded constantly to Europe, to the
 people I was supposed to know there--putting leading questions as to my
@@ -1005,13 +980,13 @@ a lighted torch. The background was sombre--almost black. The movement
 of the woman was stately, and the effect of the torchlight on the face
 was sinister.
 
-“It arrested me, and he stood by civilly, holding an empty half-pint
+"It arrested me, and he stood by civilly, holding an empty half-pint
 champagne bottle (medical comforts) with the candle stuck in it. To my
 question he said Mr. Kurtz had painted this--in this very station more
 than a year ago--while waiting for means to go to his trading post.
 'Tell me, pray,' said I, 'who is this Mr. Kurtz?'
 
-“'The chief of the Inner Station,' he answered in a short tone, looking
+"'The chief of the Inner Station,' he answered in a short tone, looking
 away. 'Much obliged,' I said, laughing. 'And you are the brickmaker of
 the Central Station. Every one knows that.' He was silent for a while.
 'He is a prodigy,' he said at last. 'He is an emissary of pity and
@@ -1032,7 +1007,7 @@ the Company's confidential correspondence?' I asked. He hadn't a word
 to say. It was great fun. 'When Mr. Kurtz,' I continued, severely, 'is
 General Manager, you won't have the opportunity.'
 
-“He blew the candle out suddenly, and we went outside. The moon had
+"He blew the candle out suddenly, and we went outside. The moon had
 risen. Black figures strolled about listlessly, pouring water on
 the glow, whence proceeded a sound of hissing; steam ascended in the
 moonlight, the beaten nigger groaned somewhere. 'What a row the brute
@@ -1058,7 +1033,7 @@ especially by you, who will see Mr. Kurtz long before I can have
 that pleasure. I wouldn't like him to get a false idea of my
 disposition....'
 
-“I let him run on, this _papier-mache_ Mephistopheles, and it seemed to me
+"I let him run on, this _papier-mache_ Mephistopheles, and it seemed to me
 that if I tried I could poke my forefinger through him, and would find
 nothing inside but a little loose dirt, maybe. He, don't you see, had
 been planning to be assistant-manager by and by under the present man,
@@ -1104,19 +1079,19 @@ you see anything? It seems to me I am trying to tell you a
 dream--making a vain attempt, because no relation of a dream can convey
 the dream-sensation, that commingling of absurdity, surprise, and
 bewilderment in a tremor of struggling revolt, that notion of being
-captured by the incredible which is of the very essence of dreams....”
+captured by the incredible which is of the very essence of dreams...."
 
 He was silent for a while.
 
-“... No, it is impossible; it is impossible to convey the
+"... No, it is impossible; it is impossible to convey the
 life-sensation of any given epoch of one's existence--that which makes
 its truth, its meaning--its subtle and penetrating essence. It is
-impossible. We live, as we dream--alone....”
+impossible. We live, as we dream--alone...."
 
 He paused again as if reflecting, then added:
 
-“Of course in this you fellows see more than I could then. You see me,
-whom you know....”
+"Of course in this you fellows see more than I could then. You see me,
+whom you know...."
 
 It had become so pitch dark that we listeners could hardly see one
 another. For a long time already he, sitting apart, had been no more
@@ -1126,7 +1101,7 @@ for the sentence, for the word, that would give me the clue to the
 faint uneasiness inspired by this narrative that seemed to shape itself
 without human lips in the heavy night-air of the river.
 
-“... Yes--I let him run on,” Marlow began again, “and think what
+"... Yes--I let him run on," Marlow began again, "and think what
 he pleased about the powers that were behind me. I did! And there was
 nothing behind me! There was nothing but that wretched, old, mangled
 steamboat I was leaning against, while he talked fluently about 'the
@@ -1152,7 +1127,7 @@ shudder only to look at it, glass beads value about a penny a quart,
 confounded spotted cotton handkerchiefs. And no rivets. Three carriers
 could have brought all that was wanted to set that steamboat afloat.
 
-“He was becoming confidential now, but I fancy my unresponsive attitude
+"He was becoming confidential now, but I fancy my unresponsive attitude
 must have exasperated him at last, for he judged it necessary to inform
 me he feared neither God nor devil, let alone any mere man. I said I
 could see that very well, but what I wanted was a certain quantity of
@@ -1186,7 +1161,7 @@ work--the chance to find yourself. Your own reality--for yourself, not
 for others--what no other man can ever know. They can only see the mere
 show, and never can tell what it really means.
 
-“I was not surprised to see somebody sitting aft, on the deck, with
+"I was not surprised to see somebody sitting aft, on the deck, with
 his legs dangling over the mud. You see I rather chummed with the few
 mechanics there were in that station, whom the other pilgrims naturally
 despised--on account of their imperfect manners, I suppose. This was the
@@ -1206,7 +1181,7 @@ his ears. In the evening he could be seen squatted on the bank rinsing
 that wrapper in the creek with great care, then spreading it solemnly on
 a bush to dry.
 
-“I slapped him on the back and shouted, 'We shall have rivets!' He
+"I slapped him on the back and shouted, 'We shall have rivets!' He
 scrambled to his feet exclaiming, 'No! Rivets!' as though he couldn't
 believe his ears. Then in a low voice, 'You... eh?' I don't know why
 we behaved like lunatics. I put my finger to the side of my nose and
@@ -1230,7 +1205,7 @@ boiler-maker in a reasonable tone, 'why shouldn't we get the rivets?'
 Why not, indeed! I did not know of any reason why we shouldn't. 'They'll
 come in three weeks,' I said confidently.
 
-“But they didn't. Instead of rivets there came an invasion, an
+"But they didn't. Instead of rivets there came an invasion, an
 infliction, a visitation. It came in sections during the next three
 weeks, each section headed by a donkey carrying a white man in new
 clothes and tan shoes, bowing from that elevation right and left to the
@@ -1244,7 +1219,7 @@ would think, they were lugging, after a raid, into the wilderness for
 equitable division. It was an inextricable mess of things decent in
 themselves but that human folly made look like the spoils of thieving.
 
-“This devoted band called itself the Eldorado Exploring Expedition, and
+"This devoted band called itself the Eldorado Exploring Expedition, and
 I believe they were sworn to secrecy. Their talk, however, was the talk
 of sordid buccaneers: it was reckless without hardihood, greedy without
 audacity, and cruel without courage; there was not an atom of foresight
@@ -1255,20 +1230,20 @@ moral purpose at the back of it than there is in burglars breaking into
 a safe. Who paid the expenses of the noble enterprise I don't know; but
 the uncle of our manager was leader of that lot.
 
-“In exterior he resembled a butcher in a poor neighbourhood, and his
+"In exterior he resembled a butcher in a poor neighbourhood, and his
 eyes had a look of sleepy cunning. He carried his fat paunch with
 ostentation on his short legs, and during the time his gang infested the
 station spoke to no one but his nephew. You could see these two roaming
 about all day long with their heads close together in an everlasting
 confab.
 
-“I had given up worrying myself about the rivets. One's capacity for
+"I had given up worrying myself about the rivets. One's capacity for
 that kind of folly is more limited than you would suppose. I said
 Hang!--and let things slide. I had plenty of time for meditation,
 and now and then I would give some thought to Kurtz. I wasn't very
 interested in him. No. Still, I was curious to see whether this man, who
 had come out equipped with moral ideas of some sort, would climb to the
-top after all and how he would set about his work when there.”
+top after all and how he would set about his work when there."
 
 
 
@@ -1277,7 +1252,7 @@ II
 
 
 
-“One evening as I was lying flat on the deck of my steamboat, I heard
+"One evening as I was lying flat on the deck of my steamboat, I heard
 voices approaching--and there were the nephew and the uncle strolling
 along the bank. I laid my head on my arm again, and had nearly lost
 myself in a doze, when somebody said in my ear, as it were: 'I am as
@@ -1295,16 +1270,16 @@ nose'--bits of absurd sentences that got the better of my drowsiness,
 so that I had pretty near the whole of my wits about me when the uncle
 said, 'The climate may do away with this difficulty for you. Is he alone
 there?' 'Yes,' answered the manager; 'he sent his assistant down the
-river with a note to me in these terms: “Clear this poor devil out of
+river with a note to me in these terms: "Clear this poor devil out of
 the country, and don't bother sending more of that sort. I had rather be
-alone than have the kind of men you can dispose of with me.” It was more
+alone than have the kind of men you can dispose of with me." It was more
 than a year ago. Can you imagine such impudence!' 'Anything since then?'
 asked the other hoarsely. 'Ivory,' jerked the nephew; 'lots of it--prime
 sort--lots--most annoying, from him.' 'And with that?' questioned the
 heavy rumble. 'Invoice,' was the reply fired out, so to speak. Then
 silence. They had been talking about Kurtz.
 
-“I was broad awake by this time, but, lying perfectly at ease, remained
+"I was broad awake by this time, but, lying perfectly at ease, remained
 still, having no inducement to change my position. 'How did that ivory
 come all this way?' growled the elder man, who seemed very vexed. The
 other explained that it had come with a fleet of canoes in charge of an
@@ -1343,9 +1318,9 @@ but there before I left I took care to--' They moved off and whispered,
 then their voices rose again. 'The extraordinary series of delays is
 not my fault. I did my best.' The fat man sighed. 'Very sad.' 'And the
 pestiferous absurdity of his talk,' continued the other; 'he bothered
-me enough when he was here. “Each station should be like a beacon on the
+me enough when he was here. "Each station should be like a beacon on the
 road towards better things, a centre for trade of course, but also for
-humanizing, improving, instructing.” Conceive you--that ass! And
+humanizing, improving, instructing." Conceive you--that ass! And
 he wants to be manager! No, it's--' Here he got choked by excessive
 indignation, and I lifted my head the least bit. I was surprised to see
 how near they were--right under me. I could have spat upon their hats.
@@ -1367,14 +1342,14 @@ the foolish notions that come to one sometimes. The high stillness
 confronted these two figures with its ominous patience, waiting for the
 passing away of a fantastic invasion.
 
-“They swore aloud together--out of sheer fright, I believe--then
+"They swore aloud together--out of sheer fright, I believe--then
 pretending not to know anything of my existence, turned back to the
 station. The sun was low; and leaning forward side by side, they seemed
 to be tugging painfully uphill their two ridiculous shadows of unequal
 length, that trailed behind them slowly over the tall grass without
 bending a single blade.
 
-“In a few days the Eldorado Expedition went into the patient wilderness,
+"In a few days the Eldorado Expedition went into the patient wilderness,
 that closed upon it as the sea closes over a diver. Long afterwards the
 news came that all the donkeys were dead. I know nothing as to the fate
 of the less valuable animals. They, no doubt, like the rest of us, found
@@ -1383,7 +1358,7 @@ the prospect of meeting Kurtz very soon. When I say very soon I mean
 it comparatively. It was just two months from the day we left the creek
 when we came to the bank below Kurtz's station.
 
-“Going up that river was like traveling back to the earliest beginnings
+"Going up that river was like traveling back to the earliest beginnings
 of the world, when vegetation rioted on the earth and the big trees were
 kings. An empty stream, a great silence, an impenetrable forest. The air
 was warm, thick, heavy, sluggish. There was no joy in the brilliance of
@@ -1413,12 +1388,12 @@ to the mere incidents of the surface, the reality--the reality, I tell
 you--fades. The inner truth is hidden--luckily, luckily. But I felt it
 all the same; I felt often its mysterious stillness watching me at
 my monkey tricks, just as it watches you fellows performing on your
-respective tight-ropes for--what is it? half-a-crown a tumble--”
+respective tight-ropes for--what is it? half-a-crown a tumble--"
 
-“Try to be civil, Marlow,” growled a voice, and I knew there was at
+"Try to be civil, Marlow," growled a voice, and I knew there was at
 least one listener awake besides myself.
 
-“I beg your pardon. I forgot the heartache which makes up the rest of
+"I beg your pardon. I forgot the heartache which makes up the rest of
 the price. And indeed what does the price matter, if the trick be well
 done? You do your tricks very well. And I didn't do badly either, since
 I managed not to sink that steamboat on my first trip. It's a wonder to
@@ -1480,7 +1455,7 @@ not understand because we were too far and could not remember because we
 were travelling in the night of first ages, of those ages that are gone,
 leaving hardly a sign--and no memories.
 
-“The earth seemed unearthly. We are accustomed to look upon the shackled
+"The earth seemed unearthly. We are accustomed to look upon the shackled
 form of a conquered monster, but there--there you could look at a thing
 monstrous and free. It was unearthly, and the men were--No, they were
 not inhuman. Well, you know, that was the worst of it--this suspicion
@@ -1535,7 +1510,7 @@ and shallow, the boiler seemed indeed to have a sulky devil in it, and
 thus neither that fireman nor I had any time to peer into our creepy
 thoughts.
 
-“Some fifty miles below the Inner Station we came upon a hut of reeds,
+"Some fifty miles below the Inner Station we came upon a hut of reeds,
 an inclined and melancholy pole, with the unrecognizable tatters of
 what had been a flag of some sort flying from it, and a neatly stacked
 wood-pile. This was unexpected. We came to the bank, and on the stack of
@@ -1576,20 +1551,20 @@ cipher! Yes, it looked like cipher. Fancy a man lugging with him a
 book of that description into this nowhere and studying it--and making
 notes--in cipher at that! It was an extravagant mystery.
 
-“I had been dimly aware for some time of a worrying noise, and when I
+"I had been dimly aware for some time of a worrying noise, and when I
 lifted my eyes I saw the wood-pile was gone, and the manager, aided by
 all the pilgrims, was shouting at me from the riverside. I slipped the
 book into my pocket. I assure you to leave off reading was like tearing
 myself away from the shelter of an old and solid friendship.
 
-“I started the lame engine ahead. 'It must be this miserable trader--this
+"I started the lame engine ahead. 'It must be this miserable trader--this
 intruder,' exclaimed the manager, looking back malevolently at the place
 we had left. 'He must be English,' I said. 'It will not save him from
 getting into trouble if he is not careful,' muttered the manager darkly.
 I observed with assumed innocence that no man was safe from trouble in
 this world.
 
-“The current was more rapid now, the steamer seemed at her last gasp,
+"The current was more rapid now, the steamer seemed at her last gasp,
 the stern-wheel flopped languidly, and I caught myself listening on
 tiptoe for the next beat of the boat, for in sober truth I expected the
 wretched thing to give up every moment. It was like watching the last
@@ -1606,7 +1581,7 @@ gets sometimes such a flash of insight. The essentials of this affair
 lay deep under the surface, beyond my reach, and beyond my power of
 meddling.
 
-“Towards the evening of the second day we judged ourselves about eight
+"Towards the evening of the second day we judged ourselves about eight
 miles from Kurtz's station. I wanted to push on; but the manager looked
 grave, and told me the navigation up there was so dangerous that it
 would be advisable, the sun being very low already, to wait where we
@@ -1659,7 +1634,7 @@ her--and that was all. The rest of the world was nowhere, as far as our
 eyes and ears were concerned. Just nowhere. Gone, disappeared; swept off
 without leaving a whisper or a shadow behind.
 
-“I went forward, and ordered the chain to be hauled in short, so as to
+"I went forward, and ordered the chain to be hauled in short, so as to
 be ready to trip the anchor and move the steamboat at once if necessary.
 'Will they attack?' whispered an awed voice. 'We will be all butchered
 in this fog,' murmured another. The faces twitched with the strain, the
@@ -1749,7 +1724,7 @@ of it--than the curious, inexplicable note of desperate grief in this
 savage clamour that had swept by us on the river-bank, behind the blind
 whiteness of the fog.
 
-“Two pilgrims were quarrelling in hurried whispers as to which bank.
+"Two pilgrims were quarrelling in hurried whispers as to which bank.
 'Left.' 'no, no; how can you? Right, right, of course.' 'It is very
 serious,' said the manager's voice behind me; 'I would be desolated if
 anything should happen to Mr. Kurtz before we came up.' I looked at him,
@@ -1775,7 +1750,7 @@ by as many dangers as though he had been an enchanted princess sleeping
 in a fabulous castle. 'Will they attack, do you think?' asked the
 manager, in a confidential tone.
 
-“I did not think they would attack, for several obvious reasons. The
+"I did not think they would attack, for several obvious reasons. The
 thick fog was one. If they left the bank in their canoes they would get
 lost in it, as we would be if we attempted to move. Still, I had also
 judged the jungle of both banks quite impenetrable--and yet eyes were
@@ -1792,7 +1767,7 @@ grief. The danger, if any, I expounded, was from our proximity to a
 great human passion let loose. Even extreme grief may ultimately vent
 itself in violence--but more generally takes the form of apathy....
 
-“You should have seen the pilgrims stare! They had no heart to grin, or
+"You should have seen the pilgrims stare! They had no heart to grin, or
 even to revile me: but I believe they thought me gone mad--with fright,
 maybe. I delivered a regular lecture. My dear boys, it was no good
 bothering. Keep a lookout? Well, you may guess I watched the fog for
@@ -1805,7 +1780,7 @@ attempt at repulse. The action was very far from being aggressive--it
 was not even defensive, in the usual sense: it was undertaken under the
 stress of desperation, and in its essence was purely protective.
 
-“It developed itself, I should say, two hours after the fog lifted, and
+"It developed itself, I should say, two hours after the fog lifted, and
 its commencement was at a spot, roughly speaking, about a mile and a
 half below Kurtz's station. We had just floundered and flopped round a
 bend, when I saw an islet, a mere grassy hummock of bright green, in the
@@ -1820,7 +1795,7 @@ course. The banks looked pretty well alike, the depth appeared the same;
 but as I had been informed the station was on the west side, I naturally
 headed for the western passage.
 
-“No sooner had we fairly entered it than I became aware it was much
+"No sooner had we fairly entered it than I became aware it was much
 narrower than I had supposed. To the left of us there was the long
 uninterrupted shoal, and to the right a high, steep bank heavily
 overgrown with bushes. Above the bush the trees stood in serried ranks.
@@ -1832,7 +1807,7 @@ we steamed up--very slowly, as you may imagine. I sheered her well
 inshore--the water being deepest near the bank, as the sounding-pole
 informed me.
 
-“One of my hungry and forbearing friends was sounding in the bows just
+"One of my hungry and forbearing friends was sounding in the bows just
 below me. This steamboat was exactly like a decked scow. On the deck,
 there were two little teakwood houses, with doors and windows. The
 boiler was in the fore-end, and the machinery right astern. Over
@@ -1852,7 +1827,7 @@ He steered with no end of a swagger while you were by; but if he lost
 sight of you, he became instantly the prey of an abject funk, and would
 let that cripple of a steamboat get the upper hand of him in a minute.
 
-“I was looking down at the sounding-pole, and feeling much annoyed to
+"I was looking down at the sounding-pole, and feeling much annoyed to
 see at each try a little more of it stick out of that river, when I saw
 my poleman give up on the business suddenly, and stretch himself flat on
 the deck, without even taking the trouble to haul his pole in. He kept
@@ -1900,7 +1875,7 @@ had wanted to, the snag was somewhere very near ahead in that confounded
 smoke, there was no time to lose, so I just crowded her into the
 bank--right into the bank, where I knew the water was deep.
 
-“We tore slowly along the overhanging bushes in a whirl of broken twigs
+"We tore slowly along the overhanging bushes in a whirl of broken twigs
 and flying leaves. The fusillade below stopped short, as I had foreseen
 it would when the squirts got empty. I threw my head back to a glinting
 whizz that traversed the pilot-house, in at one shutter-hole and out
@@ -1939,7 +1914,7 @@ the pilgrim in pink pyjamas, very hot and agitated, appeared in the
 doorway. 'The manager sends me--' he began in an official tone, and
 stopped short. 'Good God!' he said, glaring at the wounded man.
 
-“We two whites stood over him, and his lustrous and inquiring glance
+"We two whites stood over him, and his lustrous and inquiring glance
 enveloped us both. I declare it looked as though he would presently put
 to us some questions in an understandable language; but he died without
 uttering a sound, without moving a limb, without twitching a muscle.
@@ -1955,7 +1930,7 @@ dead,' murmured the fellow, immensely impressed. 'No doubt about it,'
 said I, tugging like mad at the shoe-laces. 'And by the way, I suppose
 Mr. Kurtz is dead as well by this time.'
 
-“For the moment that was the dominant thought. There was a sense of
+"For the moment that was the dominant thought. There was a sense of
 extreme disappointment, as though I had found out I had been striving
 after something altogether without a substance. I couldn't have been
 more disgusted if I had travelled all this way for the sole purpose of
@@ -1976,7 +1951,7 @@ the illuminating, the most exalted and the most contemptible, the
 pulsating stream of light, or the deceitful flow from the heart of an
 impenetrable darkness.
 
-“The other shoe went flying unto the devil-god of that river. I thought,
+"The other shoe went flying unto the devil-god of that river. I thought,
 'By Jove! it's all over. We are too late; he has vanished--the gift has
 vanished, by means of some spear, arrow, or club. I will never hear that
 chap speak after all'--and my sorrow had a startling extravagance of
@@ -1984,7 +1959,7 @@ emotion, even such as I had noticed in the howling sorrow of these
 savages in the bush. I couldn't have felt more of lonely desolation
 somehow, had I been robbed of a belief or had missed my destiny in
 life.... Why do you sigh in this beastly way, somebody? Absurd? Well,
-absurd. Good Lord! mustn't a man ever--Here, give me some tobacco.”...
+absurd. Good Lord! mustn't a man ever--Here, give me some tobacco."...
 
 There was a pause of profound stillness, then a match flared, and
 Marlow's lean face appeared, worn, hollow, with downward folds and
@@ -1992,7 +1967,7 @@ dropped eyelids, with an aspect of concentrated attention; and as he
 took vigorous draws at his pipe, it seemed to retreat and advance out of
 the night in the regular flicker of tiny flame. The match went out.
 
-“Absurd!” he cried. “This is the worst of trying to tell.... Here
+"Absurd!" he cried. "This is the worst of trying to tell.... Here
 you all are, each moored with two good addresses, like a hulk with
 two anchors, a butcher round one corner, a policeman round another,
 excellent appetites, and temperature normal--you hear--normal from
@@ -2008,12 +1983,12 @@ voice. And I heard--him--it--this voice--other voices--all of them were
 so little more than voices--and the memory of that time itself lingers
 around me, impalpable, like a dying vibration of one immense jabber,
 silly, atrocious, sordid, savage, or simply mean, without any kind of
-sense. Voices, voices--even the girl herself--now--”
+sense. Voices, voices--even the girl herself--now--"
 
 He was silent for a long time.
 
-“I laid the ghost of his gifts at last with a lie,” he began, suddenly.
-“Girl! What? Did I mention a girl? Oh, she is out of it--completely.
+"I laid the ghost of his gifts at last with a lie," he began, suddenly.
+"Girl! What? Did I mention a girl? Oh, she is out of it--completely.
 They--the women, I mean--are out of it--should be out of it. We must
 help them to stay in that beautiful world of their own, lest ours
 gets worse. Oh, she had to be out of it. You should have heard the
@@ -2133,7 +2108,7 @@ intimate profundity of that look he gave me when he received his hurt
 remains to this day in my memory--like a claim of distant kinship
 affirmed in a supreme moment.
 
-“Poor fool! If he had only left that shutter alone. He had no restraint,
+"Poor fool! If he had only left that shutter alone. He had no restraint,
 no restraint--just like Kurtz--a tree swayed by the wind. As soon as
 I had put on a dry pair of slippers, I dragged him out, after first
 jerking the spear out of his side, which operation I confess I performed
@@ -2157,7 +2132,7 @@ dead he might have become a first-class temptation, and possibly cause
 some startling trouble. Besides, I was anxious to take the wheel, the
 man in pink pyjamas showing himself a hopeless duffer at the business.
 
-“This I did directly the simple funeral was over. We were going
+"This I did directly the simple funeral was over. We were going
 half-speed, keeping right in the middle of the stream, and I listened
 to the talk about me. They had given up Kurtz, they had given up the
 station; Kurtz was dead, and the station had been burnt--and so on--and
@@ -2174,14 +2149,14 @@ shut. The retreat, I maintained--and I was right--was caused by the
 screeching of the steam whistle. Upon this they forgot Kurtz, and began
 to howl at me with indignant protests.
 
-“The manager stood by the wheel murmuring confidentially about the
+"The manager stood by the wheel murmuring confidentially about the
 necessity of getting well away down the river before dark at all events,
 when I saw in the distance a clearing on the riverside and the outlines
 of some sort of building. 'What's this?' I asked. He clapped his hands
 in wonder. 'The station!' he cried. I edged in at once, still going
 half-speed.
 
-“Through my glasses I saw the slope of a hill interspersed with rare
+"Through my glasses I saw the slope of a hill interspersed with rare
 trees and perfectly free from undergrowth. A long decaying building on
 the summit was half buried in the high grass; the large holes in the
 peaked roof gaped black from afar; the jungle and the woods made a
@@ -2199,7 +2174,7 @@ began to shout, urging us to land. 'We have been attacked,' screamed
 the manager. 'I know--I know. It's all right,' yelled back the other, as
 cheerful as you please. 'Come along. It's all right. I am glad.'
 
-“His aspect reminded me of something I had seen--something funny I had
+"His aspect reminded me of something I had seen--something funny I had
 seen somewhere. As I manoeuvred to get alongside, I was asking myself,
 'What does this fellow look like?' Suddenly I got it. He looked like
 a harlequin. His clothes had been made of some stuff that was brown
@@ -2223,7 +2198,7 @@ with a toss of the head up the hill, and becoming gloomy all of a
 sudden. His face was like the autumn sky, overcast one moment and bright
 the next.
 
-“When the manager, escorted by the pilgrims, all of them armed to the
+"When the manager, escorted by the pilgrims, all of them armed to the
 teeth, had gone to the house this chap came on board. 'I say, I don't
 like this. These natives are in the bush,' I said. He assured me
 earnestly it was all right. 'They are simple people,' he added; 'well,
@@ -2245,9 +2220,9 @@ gabbled: 'Brother sailor... honour... pleasure... delight...
 introduce myself... Russian... son of an arch-priest...
 Government of Tambov... What? Tobacco! English tobacco; the excellent
 English tobacco! Now, that's brotherly. Smoke? Where's a sailor that
-does not smoke?”
+does not smoke?"
 
-“The pipe soothed him, and gradually I made out he had run away from
+"The pipe soothed him, and gradually I made out he had run away from
 school, had gone to sea in a Russian ship; ran away again; served some
 time in English ships; was now reconciled with the arch-priest. He made
 a point of that. 'But when one is young one must see things, gather
@@ -2268,7 +2243,7 @@ small lot of ivory a year ago, so that he can't call me a little thief
 when I get back. I hope he got it. And for the rest I don't care. I had
 some wood stacked for you. That was my old house. Did you see?'
 
-“I gave him Towson's book. He made as though he would kiss me, but
+"I gave him Towson's book. He made as though he would kiss me, but
 restrained himself. 'The only book I had left, and I thought I had lost
 it,' he said, looking at it ecstatically. 'So many accidents happen to
 a man going about alone, you know. Canoes get upset sometimes--and
@@ -2281,7 +2256,7 @@ himself. 'Why did they attack us?' I pursued. He hesitated, then
 said shamefacedly, 'They don't want him to go.' 'Don't they?' I said
 curiously. He nodded a nod full of mystery and wisdom. 'I tell you,' he
 cried, 'this man has enlarged my mind.' He opened his arms wide, staring
-at me with his little blue eyes that were perfectly round.”
+at me with his little blue eyes that were perfectly round."
 
 
 
@@ -2290,7 +2265,7 @@ III
 
 
 
-“I looked at him, lost in astonishment. There he was before me, in
+"I looked at him, lost in astonishment. There he was before me, in
 motley, as though he had absconded from a troupe of mimes, enthusiastic,
 fabulous. His very existence was improbable, inexplicable, and
 altogether bewildering. He was an insoluble problem. It was
@@ -2320,7 +2295,7 @@ he accepted it with a sort of eager fatalism. I must say that to me it
 appeared about the most dangerous thing in every way he had come upon so
 far.
 
-“They had come together unavoidably, like two ships becalmed near
+"They had come together unavoidably, like two ships becalmed near
 each other, and lay rubbing sides at last. I suppose Kurtz wanted an
 audience, because on a certain occasion, when encamped in the forest,
 they had talked all night, or more probably Kurtz had talked. 'We talked
@@ -2330,7 +2305,7 @@ an hour. Everything! Everything!... Of love, too.' 'Ah, he talked to
 you of love!' I said, much amused. 'It isn't what you think,' he cried,
 almost passionately. 'It was in general. He made me see things--things.'
 
-“He threw his arms up. We were on deck at the time, and the headman
+"He threw his arms up. We were on deck at the time, and the headman
 of my wood-cutters, lounging near by, turned upon him his heavy and
 glittering eyes. I looked around, and I don't know why, but I assure you
 that never, never before, did this land, this river, this jungle, the
@@ -2338,7 +2313,7 @@ very arch of this blazing sky, appear to me so hopeless and so dark, so
 impenetrable to human thought, so pitiless to human weakness. 'And, ever
 since, you have been with him, of course?' I said.
 
-“On the contrary. It appears their intercourse had been very much broken
+"On the contrary. It appears their intercourse had been very much broken
 by various causes. He had, as he informed me proudly, managed to nurse
 Kurtz through two illnesses (he alluded to it as you would to some risky
 feat), but as a rule Kurtz wandered alone, far in the depths of the
@@ -2425,7 +2400,7 @@ top of that pole, and, with the shrunken dry lips showing a narrow
 white line of the teeth, was smiling, too, smiling continuously at some
 endless and jocose dream of that eternal slumber.
 
-“I am not disclosing any trade secrets. In fact, the manager said
+"I am not disclosing any trade secrets. In fact, the manager said
 afterwards that Mr. Kurtz's methods had ruined the district. I have no
 opinion on that point, but I want you clearly to understand that there
 was nothing exactly profitable in these heads being there. They only
@@ -2443,7 +2418,7 @@ because he was hollow at the core.... I put down the glass, and the
 head that had appeared near enough to be spoken to seemed at once to
 have leaped away from me into inaccessible distance.
 
-“The admirer of Mr. Kurtz was a bit crestfallen. In a hurried,
+"The admirer of Mr. Kurtz was a bit crestfallen. In a hurried,
 indistinct voice he began to assure me he had not dared to take
 these--say, symbols--down. He was not afraid of the natives; they would
 not stir till Mr. Kurtz gave the word. His ascendancy was extraordinary.
@@ -2476,7 +2451,7 @@ mouthful of invalid food for months here. He was shamefully abandoned.
 A man like this, with such ideas. Shamefully! Shamefully! I--I--haven't
 slept for the last ten nights...'
 
-“His voice lost itself in the calm of the evening. The long shadows of
+"His voice lost itself in the calm of the evening. The long shadows of
 the forest had slipped downhill while we talked, had gone far beyond
 the ruined hovel, beyond the symbolic row of stakes. All this was in the
 gloom, while we down there were yet in the sunshine, and the stretch
@@ -2484,7 +2459,7 @@ of the river abreast of the clearing glittered in a still and dazzling
 splendour, with a murky and overshadowed bend above and below. Not a
 living soul was seen on the shore. The bushes did not rustle.
 
-“Suddenly round the corner of the house a group of men appeared, as
+"Suddenly round the corner of the house a group of men appeared, as
 though they had come up from the ground. They waded waist-deep in the
 grass, in a compact body, bearing an improvised stretcher in their
 midst. Instantly, in the emptiness of the landscape, a cry arose whose
@@ -2496,7 +2471,7 @@ the clearing by the dark-faced and pensive forest. The bushes shook, the
 grass swayed for a time, and then everything stood still in attentive
 immobility.
 
-“'Now, if he does not say the right thing to them we are all done for,'
+"'Now, if he does not say the right thing to them we are all done for,'
 said the Russian at my elbow. The knot of men with the stretcher had
 stopped, too, halfway to the steamer, as if petrified. I saw the man on
 the stretcher sit up, lank and with an uplifted arm, above the shoulders
@@ -2524,7 +2499,7 @@ any perceptible movement of retreat, as if the forest that had ejected
 these beings so suddenly had drawn them in again as the breath is drawn
 in a long aspiration.
 
-“Some of the pilgrims behind the stretcher carried his
+"Some of the pilgrims behind the stretcher carried his
 arms--two shot-guns, a heavy rifle, and a light revolver-carbine--the
 thunderbolts of that pitiful Jupiter. The manager bent over him
 murmuring as he walked beside his head. They laid him down in one of the
@@ -2536,7 +2511,7 @@ composed languor of his expression. It was not so much the exhaustion of
 disease. He did not seem in pain. This shadow looked satiated and calm,
 as though for the moment it had had its fill of all the emotions.
 
-“He rustled one of the letters, and looking straight in my face said,
+"He rustled one of the letters, and looking straight in my face said,
 'I am glad.' Somebody had been writing to him about me. These special
 recommendations were turning up again. The volume of tone he emitted
 without effort, almost without the trouble of moving his lips, amazed
@@ -2545,19 +2520,19 @@ did not seem capable of a whisper. However, he had enough strength in
 him--factitious no doubt--to very nearly make an end of us, as you
 shall hear directly.
 
-“The manager appeared silently in the doorway; I stepped out at once
+"The manager appeared silently in the doorway; I stepped out at once
 and he drew the curtain after me. The Russian, eyed curiously by the
 pilgrims, was staring at the shore. I followed the direction of his
 glance.
 
-“Dark human shapes could be made out in the distance, flitting
+"Dark human shapes could be made out in the distance, flitting
 indistinctly against the gloomy border of the forest, and near the river
 two bronze figures, leaning on tall spears, stood in the sunlight under
 fantastic head-dresses of spotted skins, warlike and still in statuesque
 repose. And from right to left along the lighted shore moved a wild and
 gorgeous apparition of a woman.
 
-“She walked with measured steps, draped in striped and fringed cloths,
+"She walked with measured steps, draped in striped and fringed cloths,
 treading the earth proudly, with a slight jingle and flash of barbarous
 ornaments. She carried her head high; her hair was done in the shape of
 a helmet; she had brass leggings to the knee, brass wire gauntlets to
@@ -2572,7 +2547,7 @@ colossal body of the fecund and mysterious life seemed to look at her,
 pensive, as though it had been looking at the image of its own tenebrous
 and passionate soul.
 
-“She came abreast of the steamer, stood still, and faced us. Her long
+"She came abreast of the steamer, stood still, and faced us. Her long
 shadow fell to the water's edge. Her face had a tragic and fierce
 aspect of wild sorrow and of dumb pain mingled with the fear of some
 struggling, half-shaped resolve. She stood looking at us without a
@@ -2588,11 +2563,11 @@ touch the sky, and at the same time the swift shadows darted out on the
 earth, swept around on the river, gathering the steamer into a shadowy
 embrace. A formidable silence hung over the scene.
 
-“She turned away slowly, walked on, following the bank, and passed into
+"She turned away slowly, walked on, following the bank, and passed into
 the bushes to the left. Once only her eyes gleamed back at us in the
 dusk of the thickets before she disappeared.
 
-“'If she had offered to come aboard I really think I would have tried to
+"'If she had offered to come aboard I really think I would have tried to
 shoot her,' said the man of patches, nervously. 'I have been risking my
 life every day for the last fortnight to keep her out of the house. She
 got in one day and kicked up a row about those miserable rags I picked
@@ -2603,14 +2578,14 @@ tribe. Luckily for me, I fancy Kurtz felt too ill that day to care, or
 there would have been mischief. I don't understand.... No--it's too
 much for me. Ah, well, it's all over now.'
 
-“At this moment I heard Kurtz's deep voice behind the curtain: 'Save
+"At this moment I heard Kurtz's deep voice behind the curtain: 'Save
 me!--save the ivory, you mean. Don't tell me. Save _me!_ Why, I've had to
 save you. You are interrupting my plans now. Sick! Sick! Not so sick as
 you would like to believe. Never mind. I'll carry my ideas out yet--I
 will return. I'll show you what can be done. You with your little
 peddling notions--you are interfering with me. I will return. I....'
 
-“The manager came out. He did me the honour to take me under the arm
+"The manager came out. He did me the honour to take me under the arm
 and lead me aside. 'He is very low, very low,' he said. He considered it
 necessary to sigh, but neglected to be consistently sorrowful. 'We have
 done all we could for him--haven't we? But there is no disguising the
@@ -2621,7 +2596,7 @@ is closed to us for a time. Deplorable! Upon the whole, the trade will
 suffer. I don't deny there is a remarkable quantity of ivory--mostly
 fossil. We must save it, at all events--but look how precarious the
 position is--and why? Because the method is unsound.' 'Do you,' said I,
-looking at the shore, 'call it “unsound method?”' 'Without doubt,' he
+looking at the shore, 'call it "unsound method?"' 'Without doubt,' he
 exclaimed hotly. 'Don't you?'... 'No method at all,' I murmured after
 a while. 'Exactly,' he exulted. 'I anticipated this. Shows a complete
 want of judgment. It is my duty to point it out in the proper quarter.'
@@ -2636,7 +2611,7 @@ with Kurtz as a partisan of methods for which the time was not ripe:
 I was unsound! Ah! but it was something to have at least a choice of
 nightmares.
 
-“I had turned to the wilderness really, not to Mr. Kurtz, who, I was
+"I had turned to the wilderness really, not to Mr. Kurtz, who, I was
 ready to admit, was as good as buried. And for a moment it seemed to me
 as if I also were buried in a vast grave full of unspeakable secrets. I
 felt an intolerable weight oppressing my breast, the smell of the damp
@@ -2649,7 +2624,7 @@ I suspect that for him Mr. Kurtz was one of the immortals. 'Well!' said
 I at last, 'speak out. As it happens, I am Mr. Kurtz's friend--in a
 way.'
 
-“He stated with a good deal of formality that had we not been 'of the
+"He stated with a good deal of formality that had we not been 'of the
 same profession,' he would have kept the matter to himself without
 regard to consequences. 'He suspected there was an active ill-will
 towards him on the part of these white men that--' 'You are right,' I
@@ -2667,7 +2642,7 @@ reputation--but you are a brother seaman and--' 'All right,' said I,
 after a time. 'Mr. Kurtz's reputation is safe with me.' I did not know
 how truly I spoke.
 
-“He informed me, lowering his voice, that it was Kurtz who had ordered
+"He informed me, lowering his voice, that it was Kurtz who had ordered
 the attack to be made on the steamer. 'He hated sometimes the idea of
 being taken away--and then again.... But I don't understand these
 matters. I am a simple man. He thought it would scare you away--that you
@@ -2695,7 +2670,7 @@ mind!' 'Good-bye,' said I. He shook hands and vanished in the night.
 Sometimes I ask myself whether I had ever really seen him--whether it
 was possible to meet such a phenomenon!...
 
-“When I woke up shortly after midnight his warning came to my mind with
+"When I woke up shortly after midnight his warning came to my mind with
 its hint of danger that seemed, in the starred darkness, real enough to
 make me get up for the purpose of having a look round. On the hill a
 big fire burned, illuminating fitfully a crooked corner of the
@@ -2716,7 +2691,7 @@ low droning went on with an effect of audible and soothing silence. I
 glanced casually into the little cabin. A light was burning within, but
 Mr. Kurtz was not there.
 
-“I think I would have raised an outcry if I had believed my eyes. But I
+"I think I would have raised an outcry if I had believed my eyes. But I
 didn't believe them at first--the thing seemed so impossible. The fact
 is I was completely unnerved by a sheer blank fright, pure abstract
 terror, unconnected with any distinct shape of physical danger. What
@@ -2729,7 +2704,7 @@ a sudden onslaught and massacre, or something of the kind, which I saw
 impending, was positively welcome and composing. It pacified me, in
 fact, so much that I did not raise an alarm.
 
-“There was an agent buttoned up inside an ulster and sleeping on a chair
+"There was an agent buttoned up inside an ulster and sleeping on a chair
 on deck within three feet of me. The yells had not awakened him; he
 snored very slightly; I left him to his slumbers and leaped ashore.
 I did not betray Mr. Kurtz--it was ordered I should never betray him--it
@@ -2738,7 +2713,7 @@ anxious to deal with this shadow by myself alone--and to this day I
 don't know why I was so jealous of sharing with any one the peculiar
 blackness of that experience.
 
-“As soon as I got on the bank I saw a trail--a broad trail through the
+"As soon as I got on the bank I saw a trail--a broad trail through the
 grass. I remember the exultation with which I said to myself, 'He can't
 walk--he is crawling on all-fours--I've got him.' The grass was wet
 with dew. I strode rapidly with clenched fists. I fancy I had some vague
@@ -2752,7 +2727,7 @@ woods to an advanced age. Such silly things--you know. And I remember
 I confounded the beat of the drum with the beating of my heart, and was
 pleased at its calm regularity.
 
-“I kept to the track though--then stopped to listen. The night was very
+"I kept to the track though--then stopped to listen. The night was very
 clear; a dark blue space, sparkling with dew and starlight, in which
 black things stood very still. I thought I could see a kind of motion
 ahead of me. I was strangely cocksure of everything that night. I
@@ -2761,7 +2736,7 @@ chuckling to myself) so as to get in front of that stir, of that motion
 I had seen--if indeed I had seen anything. I was circumventing Kurtz as
 though it had been a boyish game.
 
-“I came upon him, and, if he had not heard me coming, I would have
+"I came upon him, and, if he had not heard me coming, I would have
 fallen over him, too, but he got up in time. He rose, unsteady, long,
 pale, indistinct, like a vapour exhaled by the earth, and swayed
 slightly, misty and silent before me; while at my back the fires loomed
@@ -2786,7 +2761,7 @@ thing, though indeed he could not have been more irretrievably lost than
 he was at this very moment, when the foundations of our intimacy were
 being laid--to endure--to endure--even to the end--even beyond.
 
-“'I had immense plans,' he muttered irresolutely. 'Yes,' said I; 'but if
+"'I had immense plans,' he muttered irresolutely. 'Yes,' said I; 'but if
 you try to shout I'll smash your head with--' There was not a stick or
 a stone near. 'I will throttle you for good,' I corrected myself. 'I was
 on the threshold of great things,' he pleaded, in a voice of longing,
@@ -2833,7 +2808,7 @@ ton on my back down that hill. And yet I had only supported him, his
 bony arm clasped round my neck--and he was not much heavier than a
 child.
 
-“When next day we left at noon, the crowd, of whose presence behind the
+"When next day we left at noon, the crowd, of whose presence behind the
 curtain of trees I had been acutely conscious all the time, flowed out
 of the woods again, filled the clearing, covered the slope with a mass
 of naked, breathing, quivering, bronze bodies. I steamed up a bit, then
@@ -2850,23 +2825,23 @@ together strings of amazing words that resembled no sounds of human
 language; and the deep murmurs of the crowd, interrupted suddenly, were
 like the responses of some satanic litany.
 
-“We had carried Kurtz into the pilot-house: there was more air there.
+"We had carried Kurtz into the pilot-house: there was more air there.
 Lying on the couch, he stared through the open shutter. There was an
 eddy in the mass of human bodies, and the woman with helmeted head and
 tawny cheeks rushed out to the very brink of the stream. She put out her
 hands, shouted something, and all that wild mob took up the shout in a
 roaring chorus of articulated, rapid, breathless utterance.
 
-“'Do you understand this?' I asked.
+"'Do you understand this?' I asked.
 
-“He kept on looking out past me with fiery, longing eyes, with a mingled
+"He kept on looking out past me with fiery, longing eyes, with a mingled
 expression of wistfulness and hate. He made no answer, but I saw a
 smile, a smile of indefinable meaning, appear on his colourless lips
 that a moment after twitched convulsively. 'Do I not?' he said slowly,
 gasping, as if the words had been torn out of him by a supernatural
 power.
 
-“I pulled the string of the whistle, and I did this because I saw the
+"I pulled the string of the whistle, and I did this because I saw the
 pilgrims on deck getting out their rifles with an air of anticipating a
 jolly lark. At the sudden screech there was a movement of abject terror
 through that wedged mass of bodies. 'Don't! don't you frighten them
@@ -2878,10 +2853,10 @@ dead. Only the barbarous and superb woman did not so much as flinch,
 and stretched tragically her bare arms after us over the sombre and
 glittering river.
 
-“And then that imbecile crowd down on the deck started their little fun,
+"And then that imbecile crowd down on the deck started their little fun,
 and I could see nothing more for smoke.
 
-“The brown current ran swiftly out of the heart of darkness, bearing us
+"The brown current ran swiftly out of the heart of darkness, bearing us
 down towards the sea with twice the speed of our upward progress; and
 Kurtz's life was running swiftly, too, ebbing, ebbing out of his heart
 into the sea of inexorable time. The manager was very placid, he had
@@ -2893,7 +2868,7 @@ so to speak, numbered with the dead. It is strange how I accepted this
 unforeseen partnership, this choice of nightmares forced upon me in the
 tenebrous land invaded by these mean and greedy phantoms.
 
-“Kurtz discoursed. A voice! a voice! It rang deep to the very last. It
+"Kurtz discoursed. A voice! a voice! It rang deep to the very last. It
 survived his strength to hide in the magnificent folds of eloquence the
 barren darkness of his heart. Oh, he struggled! he struggled! The wastes
 of his weary brain were haunted by shadowy images now--images of wealth
@@ -2907,7 +2882,7 @@ the mysteries it had penetrated fought for the possession of that
 soul satiated with primitive emotions, avid of lying fame, of sham
 distinction, of all the appearances of success and power.
 
-“Sometimes he was contemptibly childish. He desired to have kings meet
+"Sometimes he was contemptibly childish. He desired to have kings meet
 him at railway-stations on his return from some ghastly Nowhere, where
 he intended to accomplish great things. 'You show them you have in you
 something that is really profitable, and then there will be no limits to
@@ -2921,7 +2896,7 @@ ahead--piloting. 'Close the shutter,' said Kurtz suddenly one day; 'I
 can't bear to look at this.' I did so. There was a silence. 'Oh, but I
 will wring your heart yet!' he cried at the invisible wilderness.
 
-“We broke down--as I had expected--and had to lie up for repairs at the
+"We broke down--as I had expected--and had to lie up for repairs at the
 head of an island. This delay was the first thing that shook Kurtz's
 confidence. One morning he gave me a packet of papers and a
 photograph--the lot tied together with a shoe-string. 'Keep this for
@@ -2934,7 +2909,7 @@ fragment of a phrase from some newspaper article? He had been writing
 for the papers and meant to do so again, 'for the furthering of my
 ideas. It's a duty.'
 
-“His was an impenetrable darkness. I looked at him as you peer down at
+"His was an impenetrable darkness. I looked at him as you peer down at
 a man who is lying at the bottom of a precipice where the sun never
 shines. But I had not much time to give him, because I was helping the
 engine-driver to take to pieces the leaky cylinders, to straighten a
@@ -2944,12 +2919,12 @@ ratchet-drills--things I abominate, because I don't get on with them. I
 tended the little forge we fortunately had aboard; I toiled wearily in a
 wretched scrap-heap--unless I had the shakes too bad to stand.
 
-“One evening coming in with a candle I was startled to hear him say a
+"One evening coming in with a candle I was startled to hear him say a
 little tremulously, 'I am lying here in the dark waiting for death.'
 The light was within a foot of his eyes. I forced myself to murmur, 'Oh,
 nonsense!' and stood over him as if transfixed.
 
-“Anything approaching the change that came over his features I have
+"Anything approaching the change that came over his features I have
 never seen before, and hope never to see again. Oh, I wasn't touched.
 I was fascinated. It was as though a veil had been rent. I saw on that
 ivory face the expression of sombre pride, of ruthless power, of craven
@@ -2958,9 +2933,9 @@ in every detail of desire, temptation, and surrender during that supreme
 moment of complete knowledge? He cried in a whisper at some image, at
 some vision--he cried out twice, a cry that was no more than a breath:
 
-“'The horror! The horror!'
+"'The horror! The horror!'
 
-“I blew the candle out and left the cabin. The pilgrims were dining in
+"I blew the candle out and left the cabin. The pilgrims were dining in
 the mess-room, and I took my place opposite the manager, who lifted his
 eyes to give me a questioning glance, which I successfully ignored.
 He leaned back, serene, with that peculiar smile of his sealing the
@@ -2969,9 +2944,9 @@ streamed upon the lamp, upon the cloth, upon our hands and faces.
 Suddenly the manager's boy put his insolent black head in the doorway,
 and said in a tone of scathing contempt:
 
-“'Mistah Kurtz--he dead.'
+"'Mistah Kurtz--he dead.'
 
-“All the pilgrims rushed out to see. I remained, and went on with my
+"All the pilgrims rushed out to see. I remained, and went on with my
 dinner. I believe I was considered brutally callous. However, I did not
 eat much. There was a lamp in there--light, don't you know--and outside
 it was so beastly, beastly dark. I went no more near the remarkable man
@@ -2979,9 +2954,9 @@ who had pronounced a judgment upon the adventures of his soul on this
 earth. The voice was gone. What else had been there? But I am of course
 aware that next day the pilgrims buried something in a muddy hole.
 
-“And then they very nearly buried me.
+"And then they very nearly buried me.
 
-“However, as you see, I did not go to join Kurtz there and then. I did
+"However, as you see, I did not go to join Kurtz there and then. I did
 not. I remained to dream the nightmare out to the end, and to show my
 loyalty to Kurtz once more. Destiny. My destiny! Droll thing life
 is--that mysterious arrangement of merciless logic for a futile purpose.
@@ -3023,7 +2998,7 @@ when a long time after I heard once more, not his own voice, but the
 echo of his magnificent eloquence thrown to me from a soul as
 translucently pure as a cliff of crystal.
 
-“No, they did not bury me, though there is a period of time which I
+"No, they did not bury me, though there is a period of time which I
 remember mistily, with a shuddering wonder, like a passage through some
 inconceivable world that had no hope in it and no desire. I found myself
 back in the sepulchral city resenting the sight of people hurrying
@@ -3097,7 +3072,7 @@ famous Report for publication, if he thought fit. He glanced through it
 hurriedly, mumbling all the time, judged 'it would do,' and took himself
 off with this plunder.
 
-“Thus I was left at last with a slim packet of letters and the girl's
+"Thus I was left at last with a slim packet of letters and the girl's
 portrait. She struck me as beautiful--I mean she had a beautiful
 expression. I know that the sunlight can be made to lie, too, yet one
 felt that no manipulation of light and pose could have conveyed the
@@ -3115,7 +3090,7 @@ wanted. Perhaps it was an impulse of unconscious loyalty, or the
 fulfilment of one of those ironic necessities that lurk in the facts of
 human existence. I don't know. I can't tell. But I went.
 
-“I thought his memory was like the other memories of the dead that
+"I thought his memory was like the other memories of the dead that
 accumulate in every man's life--a vague impress on the brain of shadows
 that had fallen on it in their swift and final passage; but before the
 high and ponderous door, between the tall houses of a street as still
@@ -3146,9 +3121,9 @@ more than justice.'... He wanted no more than justice--no more than
 justice. I rang the bell before a mahogany door on the first floor, and
 while I waited he seemed to stare at me out of the glassy panel--stare
 with that wide and immense stare embracing, condemning, loathing all the
-universe. I seemed to hear the whispered cry, “The horror! The horror!”
+universe. I seemed to hear the whispered cry, "The horror! The horror!"
 
-“The dusk was falling. I had to wait in a lofty drawing-room with three
+"The dusk was falling. I had to wait in a lofty drawing-room with three
 long windows from floor to ceiling that were like three luminous and
 bedraped columns. The bent gilt legs and backs of the furniture shone in
 indistinct curves. The tall marble fireplace had a cold and monumental
@@ -3156,7 +3131,7 @@ whiteness. A grand piano stood massively in a corner; with dark gleams
 on the flat surfaces like a sombre and polished sarcophagus. A high door
 opened--closed. I rose.
 
-“She came forward, all in black, with a pale head, floating towards
+"She came forward, all in black, with a pale head, floating towards
 me in the dusk. She was in mourning. It was more than a year since his
 death, more than a year since the news came; she seemed as though she
 would remember and mourn forever. She took both my hands in hers and
@@ -3186,26 +3161,26 @@ a chair. We sat down. I laid the packet gently on the little table, and
 she put her hand over it.... 'You knew him well,' she murmured, after
 a moment of mourning silence.
 
-“'Intimacy grows quickly out there,' I said. 'I knew him as well as it
+"'Intimacy grows quickly out there,' I said. 'I knew him as well as it
 is possible for one man to know another.'
 
-“'And you admired him,' she said. 'It was impossible to know him and not
+"'And you admired him,' she said. 'It was impossible to know him and not
 to admire him. Was it?'
 
-“'He was a remarkable man,' I said, unsteadily. Then before the
+"'He was a remarkable man,' I said, unsteadily. Then before the
 appealing fixity of her gaze, that seemed to watch for more words on my
 lips, I went on, 'It was impossible not to--'
 
-“'Love him,' she finished eagerly, silencing me into an appalled
+"'Love him,' she finished eagerly, silencing me into an appalled
 dumbness. 'How true! how true! But when you think that no one knew him
 so well as I! I had all his noble confidence. I knew him best.'
 
-“'You knew him best,' I repeated. And perhaps she did. But with every
+"'You knew him best,' I repeated. And perhaps she did. But with every
 word spoken the room was growing darker, and only her forehead, smooth
 and white, remained illumined by the inextinguishable light of belief
 and love.
 
-“'You were his friend,' she went on. 'His friend,' she repeated, a
+"'You were his friend,' she went on. 'His friend,' she repeated, a
 little louder. 'You must have been, if he had given you this, and sent
 you to me. I feel I can speak to you--and oh! I must speak. I want
 you--you who have heard his last words--to know I have been worthy of
@@ -3213,7 +3188,7 @@ him.... It is not pride.... Yes! I am proud to know I understood
 him better than any one on earth--he told me so himself. And since his
 mother died I have had no one--no one--to--to--'
 
-“I listened. The darkness deepened. I was not even sure whether he had
+"I listened. The darkness deepened. I was not even sure whether he had
 given me the right bundle. I rather suspect he wanted me to take care
 of another batch of his papers which, after his death, I saw the manager
 examining under the lamp. And the girl talked, easing her pain in the
@@ -3224,7 +3199,7 @@ not been a pauper all his life. He had given me some reason to infer
 that it was his impatience of comparative poverty that drove him out
 there.
 
-“'... Who was not his friend who had heard him speak once?' she was
+"'... Who was not his friend who had heard him speak once?' she was
 saying. 'He drew men towards him by what was best in them.' She looked
 at me with intensity. 'It is the gift of the great,' she went on, and
 the sound of her low voice seemed to have the accompaniment of all
@@ -3235,48 +3210,48 @@ words cried from afar, the whisper of a voice speaking from beyond the
 threshold of an eternal darkness. 'But you have heard him! You know!'
 she cried.
 
-“'Yes, I know,' I said with something like despair in my heart, but
+"'Yes, I know,' I said with something like despair in my heart, but
 bowing my head before the faith that was in her, before that great and
 saving illusion that shone with an unearthly glow in the darkness, in
 the triumphant darkness from which I could not have defended her--from
 which I could not even defend myself.
 
-“'What a loss to me--to us!'--she corrected herself with beautiful
+"'What a loss to me--to us!'--she corrected herself with beautiful
 generosity; then added in a murmur, 'To the world.' By the last gleams
 of twilight I could see the glitter of her eyes, full of tears--of tears
 that would not fall.
 
-“'I have been very happy--very fortunate--very proud,' she went on. 'Too
+"'I have been very happy--very fortunate--very proud,' she went on. 'Too
 fortunate. Too happy for a little while. And now I am unhappy for--for
 life.'
 
-“She stood up; her fair hair seemed to catch all the remaining light in
+"She stood up; her fair hair seemed to catch all the remaining light in
 a glimmer of gold. I rose, too.
 
-“'And of all this,' she went on mournfully, 'of all his promise, and
+"'And of all this,' she went on mournfully, 'of all his promise, and
 of all his greatness, of his generous mind, of his noble heart, nothing
 remains--nothing but a memory. You and I--'
 
-“'We shall always remember him,' I said hastily.
+"'We shall always remember him,' I said hastily.
 
-“'No!' she cried. 'It is impossible that all this should be lost--that
+"'No!' she cried. 'It is impossible that all this should be lost--that
 such a life should be sacrificed to leave nothing--but sorrow. You
 know what vast plans he had. I knew of them, too--I could not perhaps
 understand--but others knew of them. Something must remain. His words,
 at least, have not died.'
 
-“'His words will remain,' I said.
+"'His words will remain,' I said.
 
-“'And his example,' she whispered to herself. 'Men looked up to
+"'And his example,' she whispered to herself. 'Men looked up to
 him--his goodness shone in every act. His example--'
 
-“'True,' I said; 'his example, too. Yes, his example. I forgot that.'
+"'True,' I said; 'his example, too. Yes, his example. I forgot that.'
 
-“'But I do not. I cannot--I cannot believe--not yet. I cannot believe
+"'But I do not. I cannot--I cannot believe--not yet. I cannot believe
 that I shall never see him again, that nobody will see him again, never,
 never, never.'
 
-“She put out her arms as if after a retreating figure, stretching them
+"She put out her arms as if after a retreating figure, stretching them
 back and with clasped pale hands across the fading and narrow sheen of
 the window. Never see him! I saw him clearly enough then. I shall see
 this eloquent phantom as long as I live, and I shall see her, too,
@@ -3285,45 +3260,45 @@ tragic also, and bedecked with powerless charms, stretching bare brown
 arms over the glitter of the infernal stream, the stream of darkness.
 She said suddenly very low, 'He died as he lived.'
 
-“'His end,' said I, with dull anger stirring in me, 'was in every way
+"'His end,' said I, with dull anger stirring in me, 'was in every way
 worthy of his life.'
 
-“'And I was not with him,' she murmured. My anger subsided before a
+"'And I was not with him,' she murmured. My anger subsided before a
 feeling of infinite pity.
 
-“'Everything that could be done--' I mumbled.
+"'Everything that could be done--' I mumbled.
 
-“'Ah, but I believed in him more than any one on earth--more than his
+"'Ah, but I believed in him more than any one on earth--more than his
 own mother, more than--himself. He needed me! Me! I would have treasured
 every sigh, every word, every sign, every glance.'
 
-“I felt like a chill grip on my chest. 'Don't,' I said, in a muffled
+"I felt like a chill grip on my chest. 'Don't,' I said, in a muffled
 voice.
 
-“'Forgive me. I--I have mourned so long in silence--in silence....
+"'Forgive me. I--I have mourned so long in silence--in silence....
 You were with him--to the last? I think of his loneliness. Nobody near
 to understand him as I would have understood. Perhaps no one to
 hear....'
 
-“'To the very end,' I said, shakily. 'I heard his very last words....'
+"'To the very end,' I said, shakily. 'I heard his very last words....'
 I stopped in a fright.
 
-“'Repeat them,' she murmured in a heart-broken tone. 'I want--I
+"'Repeat them,' she murmured in a heart-broken tone. 'I want--I
 want--something--something--to--to live with.'
 
-“I was on the point of crying at her, 'Don't you hear them?' The dusk
+"I was on the point of crying at her, 'Don't you hear them?' The dusk
 was repeating them in a persistent whisper all around us, in a whisper
 that seemed to swell menacingly like the first whisper of a rising wind.
 'The horror! The horror!'
 
-“'His last word--to live with,' she insisted. 'Don't you understand I
+"'His last word--to live with,' she insisted. 'Don't you understand I
 loved him--I loved him--I loved him!'
 
-“I pulled myself together and spoke slowly.
+"I pulled myself together and spoke slowly.
 
-“'The last word he pronounced was--your name.'
+"'The last word he pronounced was--your name.'
 
-“I heard a light sigh and then my heart stood still, stopped dead short
+"I heard a light sigh and then my heart stood still, stopped dead short
 by an exulting and terrible cry, by the cry of inconceivable triumph and
 of unspeakable pain. 'I knew it--I was sure!'... She knew. She was
 sure. I heard her weeping; she had hidden her face in her hands. It
@@ -3332,11 +3307,11 @@ the heavens would fall upon my head. But nothing happened. The heavens
 do not fall for such a trifle. Would they have fallen, I wonder, if I
 had rendered Kurtz that justice which was his due? Hadn't he said he
 wanted only justice? But I couldn't. I could not tell her. It would have
-been too dark--too dark altogether....”
+been too dark--too dark altogether...."
 
 Marlow ceased, and sat apart, indistinct and silent, in the pose of a
-meditating Buddha. Nobody moved for a time. “We have lost the first of
-the ebb,” said the Director suddenly. I raised my head. The offing was
+meditating Buddha. Nobody moved for a time. "We have lost the first of
+the ebb," said the Director suddenly. I raised my head. The offing was
 barred by a black bank of clouds, and the tranquil waterway leading to
 the uttermost ends of the earth flowed sombre under an overcast
 sky--seemed to lead into the heart of an immense darkness.
@@ -3344,365 +3319,3 @@ sky--seemed to lead into the heart of an immense darkness.
 
 
 
-
-End of the Project Gutenberg EBook of Heart of Darkness, by Joseph Conrad
-
-*** END OF THIS PROJECT GUTENBERG EBOOK HEART OF DARKNESS ***
-
-***** This file should be named 219-0.txt or 219-0.zip *****
-This and all associated files of various formats will be found in:
-        http://www.gutenberg.org/2/1/219/
-
-Produced by Judith Boss and David Widger
-
-Updated editions will replace the previous one--the old editions
-will be renamed.
-
-Creating the works from public domain print editions means that no
-one owns a United States copyright in these works, so the Foundation
-(and you!) can copy and distribute it in the United States without
-permission and without paying copyright royalties.  Special rules,
-set forth in the General Terms of Use part of this license, apply to
-copying and distributing Project Gutenberg-tm electronic works to
-protect the PROJECT GUTENBERG-tm concept and trademark.  Project
-Gutenberg is a registered trademark, and may not be used if you
-charge for the eBooks, unless you receive specific permission.  If you
-do not charge anything for copies of this eBook, complying with the
-rules is very easy.  You may use this eBook for nearly any purpose
-such as creation of derivative works, reports, performances and
-research.  They may be modified and printed and given away--you may do
-practically ANYTHING with public domain eBooks.  Redistribution is
-subject to the trademark license, especially commercial
-redistribution.
-
-
-
-*** START: FULL LICENSE ***
-
-THE FULL PROJECT GUTENBERG LICENSE
-PLEASE READ THIS BEFORE YOU DISTRIBUTE OR USE THIS WORK
-
-To protect the Project Gutenberg-tm mission of promoting the free
-distribution of electronic works, by using or distributing this work
-(or any other work associated in any way with the phrase “Project
-Gutenberg”), you agree to comply with all the terms of the Full Project
-Gutenberg-tm License (available with this file or online at
-http://gutenberg.org/license).
-
-
-Section 1.  General Terms of Use and Redistributing Project Gutenberg-tm
-electronic works
-
-1.A.  By reading or using any part of this Project Gutenberg-tm
-electronic work, you indicate that you have read, understand, agree to
-and accept all the terms of this license and intellectual property
-(trademark/copyright) agreement.  If you do not agree to abide by all
-the terms of this agreement, you must cease using and return or destroy
-all copies of Project Gutenberg-tm electronic works in your possession.
-If you paid a fee for obtaining a copy of or access to a Project
-Gutenberg-tm electronic work and you do not agree to be bound by the
-terms of this agreement, you may obtain a refund from the person or
-entity to whom you paid the fee as set forth in paragraph 1.E.8.
-
-1.B.  “Project Gutenberg” is a registered trademark.  It may only be
-used on or associated in any way with an electronic work by people who
-agree to be bound by the terms of this agreement.  There are a few
-things that you can do with most Project Gutenberg-tm electronic works
-even without complying with the full terms of this agreement.  See
-paragraph 1.C below.  There are a lot of things you can do with Project
-Gutenberg-tm electronic works if you follow the terms of this agreement
-and help preserve free future access to Project Gutenberg-tm electronic
-works.  See paragraph 1.E below.
-
-1.C.  The Project Gutenberg Literary Archive Foundation (“the Foundation”
- or PGLAF), owns a compilation copyright in the collection of Project
-Gutenberg-tm electronic works.  Nearly all the individual works in the
-collection are in the public domain in the United States.  If an
-individual work is in the public domain in the United States and you are
-located in the United States, we do not claim a right to prevent you from
-copying, distributing, performing, displaying or creating derivative
-works based on the work as long as all references to Project Gutenberg
-are removed.  Of course, we hope that you will support the Project
-Gutenberg-tm mission of promoting free access to electronic works by
-freely sharing Project Gutenberg-tm works in compliance with the terms of
-this agreement for keeping the Project Gutenberg-tm name associated with
-the work.  You can easily comply with the terms of this agreement by
-keeping this work in the same format with its attached full Project
-Gutenberg-tm License when you share it without charge with others.
-
-1.D.  The copyright laws of the place where you are located also govern
-what you can do with this work.  Copyright laws in most countries are in
-a constant state of change.  If you are outside the United States, check
-the laws of your country in addition to the terms of this agreement
-before downloading, copying, displaying, performing, distributing or
-creating derivative works based on this work or any other Project
-Gutenberg-tm work.  The Foundation makes no representations concerning
-the copyright status of any work in any country outside the United
-States.
-
-1.E.  Unless you have removed all references to Project Gutenberg:
-
-1.E.1.  The following sentence, with active links to, or other immediate
-access to, the full Project Gutenberg-tm License must appear prominently
-whenever any copy of a Project Gutenberg-tm work (any work on which the
-phrase “Project Gutenberg” appears, or with which the phrase “Project
-Gutenberg” is associated) is accessed, displayed, performed, viewed,
-copied or distributed:
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
-with this eBook or online at www.gutenberg.org
-
-1.E.2.  If an individual Project Gutenberg-tm electronic work is derived
-from the public domain (does not contain a notice indicating that it is
-posted with permission of the copyright holder), the work can be copied
-and distributed to anyone in the United States without paying any fees
-or charges.  If you are redistributing or providing access to a work
-with the phrase “Project Gutenberg” associated with or appearing on the
-work, you must comply either with the requirements of paragraphs 1.E.1
-through 1.E.7 or obtain permission for the use of the work and the
-Project Gutenberg-tm trademark as set forth in paragraphs 1.E.8 or
-1.E.9.
-
-1.E.3.  If an individual Project Gutenberg-tm electronic work is posted
-with the permission of the copyright holder, your use and distribution
-must comply with both paragraphs 1.E.1 through 1.E.7 and any additional
-terms imposed by the copyright holder.  Additional terms will be linked
-to the Project Gutenberg-tm License for all works posted with the
-permission of the copyright holder found at the beginning of this work.
-
-1.E.4.  Do not unlink or detach or remove the full Project Gutenberg-tm
-License terms from this work, or any files containing a part of this
-work or any other work associated with Project Gutenberg-tm.
-
-1.E.5.  Do not copy, display, perform, distribute or redistribute this
-electronic work, or any part of this electronic work, without
-prominently displaying the sentence set forth in paragraph 1.E.1 with
-active links or immediate access to the full terms of the Project
-Gutenberg-tm License.
-
-1.E.6.  You may convert to and distribute this work in any binary,
-compressed, marked up, nonproprietary or proprietary form, including any
-word processing or hypertext form.  However, if you provide access to or
-distribute copies of a Project Gutenberg-tm work in a format other than
-“Plain Vanilla ASCII” or other format used in the official version
-posted on the official Project Gutenberg-tm web site (www.gutenberg.org),
-you must, at no additional cost, fee or expense to the user, provide a
-copy, a means of exporting a copy, or a means of obtaining a copy upon
-request, of the work in its original “Plain Vanilla ASCII” or other
-form.  Any alternate format must include the full Project Gutenberg-tm
-License as specified in paragraph 1.E.1.
-
-1.E.7.  Do not charge a fee for access to, viewing, displaying,
-performing, copying or distributing any Project Gutenberg-tm works
-unless you comply with paragraph 1.E.8 or 1.E.9.
-
-1.E.8.  You may charge a reasonable fee for copies of or providing
-access to or distributing Project Gutenberg-tm electronic works provided
-that
-
-- You pay a royalty fee of 20% of the gross profits you derive from
-     the use of Project Gutenberg-tm works calculated using the method
-     you already use to calculate your applicable taxes.  The fee is
-     owed to the owner of the Project Gutenberg-tm trademark, but he
-     has agreed to donate royalties under this paragraph to the
-     Project Gutenberg Literary Archive Foundation.  Royalty payments
-     must be paid within 60 days following each date on which you
-     prepare (or are legally required to prepare) your periodic tax
-     returns.  Royalty payments should be clearly marked as such and
-     sent to the Project Gutenberg Literary Archive Foundation at the
-     address specified in Section 4, “Information about donations to
-     the Project Gutenberg Literary Archive Foundation.”
-
-- You provide a full refund of any money paid by a user who notifies
-     you in writing (or by e-mail) within 30 days of receipt that s/he
-     does not agree to the terms of the full Project Gutenberg-tm
-     License.  You must require such a user to return or
-     destroy all copies of the works possessed in a physical medium
-     and discontinue all use of and all access to other copies of
-     Project Gutenberg-tm works.
-
-- You provide, in accordance with paragraph 1.F.3, a full refund of any
-     money paid for a work or a replacement copy, if a defect in the
-     electronic work is discovered and reported to you within 90 days
-     of receipt of the work.
-
-- You comply with all other terms of this agreement for free
-     distribution of Project Gutenberg-tm works.
-
-1.E.9.  If you wish to charge a fee or distribute a Project Gutenberg-tm
-electronic work or group of works on different terms than are set
-forth in this agreement, you must obtain permission in writing from
-both the Project Gutenberg Literary Archive Foundation and Michael
-Hart, the owner of the Project Gutenberg-tm trademark.  Contact the
-Foundation as set forth in Section 3 below.
-
-1.F.
-
-1.F.1.  Project Gutenberg volunteers and employees expend considerable
-effort to identify, do copyright research on, transcribe and proofread
-public domain works in creating the Project Gutenberg-tm
-collection.  Despite these efforts, Project Gutenberg-tm electronic
-works, and the medium on which they may be stored, may contain
-“Defects,” such as, but not limited to, incomplete, inaccurate or
-corrupt data, transcription errors, a copyright or other intellectual
-property infringement, a defective or damaged disk or other medium, a
-computer virus, or computer codes that damage or cannot be read by
-your equipment.
-
-1.F.2.  LIMITED WARRANTY, DISCLAIMER OF DAMAGES - Except for the “Right
-of Replacement or Refund” described in paragraph 1.F.3, the Project
-Gutenberg Literary Archive Foundation, the owner of the Project
-Gutenberg-tm trademark, and any other party distributing a Project
-Gutenberg-tm electronic work under this agreement, disclaim all
-liability to you for damages, costs and expenses, including legal
-fees.  YOU AGREE THAT YOU HAVE NO REMEDIES FOR NEGLIGENCE, STRICT
-LIABILITY, BREACH OF WARRANTY OR BREACH OF CONTRACT EXCEPT THOSE
-PROVIDED IN PARAGRAPH F3.  YOU AGREE THAT THE FOUNDATION, THE
-TRADEMARK OWNER, AND ANY DISTRIBUTOR UNDER THIS AGREEMENT WILL NOT BE
-LIABLE TO YOU FOR ACTUAL, DIRECT, INDIRECT, CONSEQUENTIAL, PUNITIVE OR
-INCIDENTAL DAMAGES EVEN IF YOU GIVE NOTICE OF THE POSSIBILITY OF SUCH
-DAMAGE.
-
-1.F.3.  LIMITED RIGHT OF REPLACEMENT OR REFUND - If you discover a
-defect in this electronic work within 90 days of receiving it, you can
-receive a refund of the money (if any) you paid for it by sending a
-written explanation to the person you received the work from.  If you
-received the work on a physical medium, you must return the medium with
-your written explanation.  The person or entity that provided you with
-the defective work may elect to provide a replacement copy in lieu of a
-refund.  If you received the work electronically, the person or entity
-providing it to you may choose to give you a second opportunity to
-receive the work electronically in lieu of a refund.  If the second copy
-is also defective, you may demand a refund in writing without further
-opportunities to fix the problem.
-
-1.F.4.  Except for the limited right of replacement or refund set forth
-in paragraph 1.F.3, this work is provided to you 'AS-IS' WITH NO OTHER
-WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-WARRANTIES OF MERCHANTIBILITY OR FITNESS FOR ANY PURPOSE.
-
-1.F.5.  Some states do not allow disclaimers of certain implied
-warranties or the exclusion or limitation of certain types of damages.
-If any disclaimer or limitation set forth in this agreement violates the
-law of the state applicable to this agreement, the agreement shall be
-interpreted to make the maximum disclaimer or limitation permitted by
-the applicable state law.  The invalidity or unenforceability of any
-provision of this agreement shall not void the remaining provisions.
-
-1.F.6.  INDEMNITY - You agree to indemnify and hold the Foundation, the
-trademark owner, any agent or employee of the Foundation, anyone
-providing copies of Project Gutenberg-tm electronic works in accordance
-with this agreement, and any volunteers associated with the production,
-promotion and distribution of Project Gutenberg-tm electronic works,
-harmless from all liability, costs and expenses, including legal fees,
-that arise directly or indirectly from any of the following which you do
-or cause to occur: (a) distribution of this or any Project Gutenberg-tm
-work, (b) alteration, modification, or additions or deletions to any
-Project Gutenberg-tm work, and (c) any Defect you cause.
-
-
-Section  2.  Information about the Mission of Project Gutenberg-tm
-
-Project Gutenberg-tm is synonymous with the free distribution of
-electronic works in formats readable by the widest variety of computers
-including obsolete, old, middle-aged and new computers.  It exists
-because of the efforts of hundreds of volunteers and donations from
-people in all walks of life.
-
-Volunteers and financial support to provide volunteers with the
-assistance they need, are critical to reaching Project Gutenberg-tm's
-goals and ensuring that the Project Gutenberg-tm collection will
-remain freely available for generations to come.  In 2001, the Project
-Gutenberg Literary Archive Foundation was created to provide a secure
-and permanent future for Project Gutenberg-tm and future generations.
-To learn more about the Project Gutenberg Literary Archive Foundation
-and how your efforts and donations can help, see Sections 3 and 4
-and the Foundation web page at http://www.pglaf.org.
-
-
-Section 3.  Information about the Project Gutenberg Literary Archive
-Foundation
-
-The Project Gutenberg Literary Archive Foundation is a non profit
-501(c)(3) educational corporation organized under the laws of the
-state of Mississippi and granted tax exempt status by the Internal
-Revenue Service.  The Foundation's EIN or federal tax identification
-number is 64-6221541.  Its 501(c)(3) letter is posted at
-http://pglaf.org/fundraising.  Contributions to the Project Gutenberg
-Literary Archive Foundation are tax deductible to the full extent
-permitted by U.S. federal laws and your state's laws.
-
-The Foundation's principal office is located at 4557 Melan Dr. S.
-Fairbanks, AK, 99712., but its volunteers and employees are scattered
-throughout numerous locations.  Its business office is located at
-809 North 1500 West, Salt Lake City, UT 84116, (801) 596-1887, email
-business@pglaf.org.  Email contact links and up to date contact
-information can be found at the Foundation's web site and official
-page at http://pglaf.org
-
-For additional contact information:
-     Dr. Gregory B. Newby
-     Chief Executive and Director
-     gbnewby@pglaf.org
-
-
-Section 4.  Information about Donations to the Project Gutenberg
-Literary Archive Foundation
-
-Project Gutenberg-tm depends upon and cannot survive without wide
-spread public support and donations to carry out its mission of
-increasing the number of public domain and licensed works that can be
-freely distributed in machine readable form accessible by the widest
-array of equipment including outdated equipment.  Many small donations
-($1 to $5,000) are particularly important to maintaining tax exempt
-status with the IRS.
-
-The Foundation is committed to complying with the laws regulating
-charities and charitable donations in all 50 states of the United
-States.  Compliance requirements are not uniform and it takes a
-considerable effort, much paperwork and many fees to meet and keep up
-with these requirements.  We do not solicit donations in locations
-where we have not received written confirmation of compliance.  To
-SEND DONATIONS or determine the status of compliance for any
-particular state visit http://pglaf.org
-
-While we cannot and do not solicit contributions from states where we
-have not met the solicitation requirements, we know of no prohibition
-against accepting unsolicited donations from donors in such states who
-approach us with offers to donate.
-
-International donations are gratefully accepted, but we cannot make
-any statements concerning tax treatment of donations received from
-outside the United States.  U.S. laws alone swamp our small staff.
-
-Please check the Project Gutenberg Web pages for current donation
-methods and addresses.  Donations are accepted in a number of other
-ways including checks, online payments and credit card donations.
-To donate, please visit: http://pglaf.org/donate
-
-
-Section 5.  General Information About Project Gutenberg-tm electronic
-works.
-
-Professor Michael S. Hart is the originator of the Project Gutenberg-tm
-concept of a library of electronic works that could be freely shared
-with anyone.  For thirty years, he produced and distributed Project
-Gutenberg-tm eBooks with only a loose network of volunteer support.
-
-
-Project Gutenberg-tm eBooks are often created from several printed
-editions, all of which are confirmed as Public Domain in the U.S.
-unless a copyright notice is included.  Thus, we do not necessarily
-keep eBooks in compliance with any particular paper edition.
-
-
-Most people start at our Web site which has the main PG search facility:
-
-     http://www.gutenberg.org
-
-This Web site includes information about Project Gutenberg-tm,
-including how to make donations to the Project Gutenberg Literary
-Archive Foundation, how to help produce our new eBooks, and how to
-subscribe to our email newsletter to hear about new eBooks.
