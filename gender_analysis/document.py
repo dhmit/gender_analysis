@@ -26,7 +26,7 @@ class Document:
     >>> type(austen.text)
     <class 'str'>
     >>> len(austen.text)
-    475233
+    466887
     """
 
     def __init__(self, metadata_dict):
@@ -246,19 +246,6 @@ class Document:
         """
         Checks to see if a given text is from Project Gutenberg. If it is, removes the header + footer.
 
-        >>> from pathlib import Path
-        >>> from gender_analysis import Document
-        >>> from gender_analysis import common
-        >>> austen_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')
-        >>> austen_file = open(austen_path, "r", encoding = "utf-8")
-        >>> austen_text = austen_file.read()
-        >>> austen_file.close()
-        >>> len(austen_text)
-        486253
-        >>> cleaned_austen_text = Document._gutenberg_cleaner(austen_text)
-        >>> len(cleaned_austen_text)
-        475233
-
         :param text: The string to reformat
         :return: A string that is idential to 'text' unless 'text' is from Gutenberg, in which case
         the Gutenberg header and footer is removed
@@ -289,8 +276,10 @@ class Document:
             )
             raise FileNotFoundError(err) from original_err
 
-        # Remove Gutenberg header and footer.
-        text = self._gutenberg_cleaner(text)
+        # Remove Gutenberg header and footer. We may eventually want to make this into a parameter,
+        # but for now let's just keep it commented out.
+        # text = self._gutenberg_cleaner(text)
+
         # Replace smart quotes with regular quotes to standardize input
         text = self._clean_quotes(text)
         return text
