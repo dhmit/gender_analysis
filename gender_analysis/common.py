@@ -33,7 +33,8 @@ def load_csv_to_list(file_path):
 
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> corpus_metadata_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'sample_novels.csv')
+    >>> from gender_analysis.testing.common import LARGE_TEST_CORPUS_CSV
+    >>> corpus_metadata_path = LARGE_TEST_CORPUS_CSV
     >>> corpus_metadata = load_csv_to_list(corpus_metadata_path)
     >>> type(corpus_metadata)
     <class 'list'>
