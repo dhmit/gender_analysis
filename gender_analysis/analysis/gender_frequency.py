@@ -40,11 +40,11 @@ def get_count_words(document, words):
 
 def get_comparative_word_freq(freqs):
     """
-    Returns a dictionary of the frequency of words counted relative to each other.
+    Returns a dictionary of the frequency of identifier(s) counted relative to each other.
     If frequency passed in is zero, returns zero
 
-    :param freqs: dictionary in the form {'word':overall_frequency}
-    :return: dictionary in the form {'word':relative_frequency}
+    :param freqs: dictionary in the form {'identifier(s)':overall_frequency}
+    :return: dictionary in the form {'identifier(s)':relative_frequency}
 
     >>> from gender_analysis import document
     >>> from pathlib import Path
@@ -118,55 +118,72 @@ def display_gender_freq(d, title):
 
     Will scale to allow inputs of larger dictionaries with non-binary values
 
-    :param d: dictionary in the format {"Author/Document": [he_freq, she_freq]}
-    :param title: title of graph
+    :param d: dictionary in the format {"Author/Document": {'Gender.label : frequency, ...'} ...}
+    :param title: title of graph (right now, this is usually just a number)
     :return: None
 
     """
-    he_val = []
-    she_val = []
-    authors = []
 
-    for entry in d:
-        authors.append(entry)
-        he_val.append(d[entry][0])
-        she_val.append(d[entry][1])
+    book_labels = []
+    values = {}
+    colors = ['b', 'r', 'g', 'c', 'm', 'y', 'k', 'w']
+
+    result_key_list = list(d.keys())
+    first_key = result_key_list[0]
+    genders = list(d[first_key].keys())
+
+    # I can't work out how to do this better, but I don't love that we're relying on the order
+    # of unlinked objects here (book_labels and the lists in values[gender]) to line up right.
+    # It should be fine, but there's probably a good way to refactor this.
+
+    for gender in genders:
+        values[gender] = []
+
+    for book in d:
+        book_labels.append(book)
+        for gender in genders:
+            if values[gender] == []:
+                values[gender] = [d[book][gender]]
+            else:
+                values[gender].append(d[book][gender])
 
     fig, ax = plt.subplots()
     plt.ylim(0, 1)
 
     index = np.arange(len(d.keys()))
-    bar_width = 0.35
-    opacity = 0.4
+    bar_width = .70/len(genders)
+    opacity = .5
 
-    he_val = tuple(he_val)
-    she_val = tuple(she_val)
-    authors = tuple(authors)
+    lines = {}
+    for x in range(0, len(genders)):
+        current_gender = genders[x]
+        lines[current_gender] = ax.bar(index + x*bar_width, values[genders[x]], bar_width, alpha=opacity, color=colors[x], label=current_gender)
 
-    rects1 = ax.bar(index, he_val, bar_width, alpha=opacity, color='b', label='He')
-    rects2 = ax.bar(index + bar_width, she_val, bar_width, alpha=opacity, color='r', label='She')
-
-    ax.set_xlabel('Authors')
+    ax.set_xlabel('Documents')
     ax.set_ylabel('Frequency')
-    ax.set_title('Gendered Pronouns by Author')
-    ax.set_xticks(index + bar_width / 2)
+    ax.set_title('Gendered Identifiers by Author')
+    ax.set_xticks(index + bar_width*(len(genders)-1) / len(genders))
     plt.xticks(fontsize=8, rotation=90)
-    ax.set_xticklabels(authors)
+    ax.set_xticklabels(book_labels)
     ax.legend()
 
     fig.tight_layout()
-    filepng = "visualizations/he_she_freq" + title + ".png"
-    filepdf = "visualizations/he_she_freq" + title + ".pdf"
+    # TODO: Handle 'this file already exists' gracefully - right now, we don't have permissions to\
+    #  overwrite and so we crash. Easiest solution is to just slap a timestamp on here.
+
+    filepng = "visualizations/gender_freq_" + title + ".png"
+    filepdf = "visualizations/gender_freq_" + title + ".pdf"
     plt.savefig(filepng, bbox_inches='tight')
     plt.savefig(filepdf, bbox_inches='tight')
 
 
-def run_gender_freq(corpus):
+def run_gender_freq(corpus, genders):
     """
     Runs a program that uses the gender frequency analysis on all documents existing in a given
     corpus, and outputs the data as graphs
 
     :param corpus: Corpus
+    :param genders: A list of Gender objects to look for
     :return: None
 
     """
@@ -176,79 +193,77 @@ def run_gender_freq(corpus):
 
     num = 0
 
+    count = {}
     while num < loops:
         dictionary = {}
         for doc in documents[num * 10: min(c, num * 10 + 9)]:
-            male = 0
-            for word in common.HE_SERIES:
-                male += doc.get_word_freq(word)
-            female = 0
-            for word in common.SHE_SERIES:
-                female += doc.get_word_freq(word)
+            for gender in genders:
+                count[gender] = 0
+                for identifier in gender.identifiers:
+                    count[gender] += doc.get_word_freq(identifier)
 
-            d = {'he': male, 'she': female}
-            d = get_comparative_word_freq(d)
-            lst = [d["he"], d["she"]]
+            comp_id_freq = get_comparative_word_freq(count)
+
             title = hasattr(doc, 'title')
             author = hasattr(doc, 'author')
+
             if title and author:
                 doc_label = doc.title[0:20] + "\n" + doc.author
             elif title:
                 doc_label = doc.title[0:20]
             else:
                 doc_label = doc.filename[0:20]
-            dictionary[doc_label] = lst
+
+            dictionary[doc_label] = comp_id_freq
+
         display_gender_freq(dictionary, str(num))
+
         num += 1
 
 
-def document_pronoun_freq(corp, pickle_filepath=None):
+def document_pronoun_freq(corp, genders, pickle_filepath=None):
     """
-    Counts male and female pronouns for every document in a given corpus,
+    Counts gendered identifiers for every document in a given corpus,
     and finds their relative frequencies
 
-    Returns a dictionary mapping each Document in the Corpus to the frequency
-    of female pronouns in that Document
+    Returns a dictionary mapping each Document in the Corpus to the relative frequency of
+    gendered identifiers in that Document
 
     :param corp: Corpus object
+    :param genders: A list of Gender objects
     :return: dictionary with data organized by Document
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.gender_frequency import document_pronoun_freq
     >>> from gender_analysis.common import TEST_DATA_PATH
+    >>> from gender_analysis.common import MALE, FEMALE
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> c = Corpus(filepath, csv_path=csvpath)
-    >>> pronoun_freq_dict = document_pronoun_freq(c)
+    >>> pronoun_freq_dict = document_pronoun_freq(c, [MALE, FEMALE])
     >>> flatland = c.get_document('title', 'Flatland')
-    >>> result = pronoun_freq_dict[flatland]
-    >>> format(result, '.5f')
-    '0.15068'
+    >>> pronoun_freq_dict[flatland]
+    {'Male': 0.8493150684931506, 'Female': 0.15068493150684928}
 
     """
 
-    relative_freq_male = {}
-    relative_freq_female = {}
+    relative_freqs = {}
+    frequencies = {}
 
     for doc in corp.documents:
-        male = 0
-        for word in common.HE_SERIES:
-            male += doc.get_word_freq(word)
+        for gender in genders:
+            frequencies[gender.label] = 0
+            for identifier in gender.identifiers:
+                frequencies[gender.label] += doc.get_word_freq(identifier)
 
-        female = 0
-        for word in common.SHE_SERIES:
-            female += doc.get_word_freq(word)
+        comp_freq_dict = get_comparative_word_freq(frequencies)
 
-        temp_dict = {'male': male, 'female': female}
-        temp_dict = get_comparative_word_freq(temp_dict)
-
-        relative_freq_male[doc] = temp_dict['male']
-        relative_freq_female[doc] = temp_dict['female']
+        relative_freqs[doc] = comp_freq_dict
 
     if pickle_filepath:
-        common.store_pickle(relative_freq_female, pickle_filepath)
+        common.store_pickle(relative_freqs, pickle_filepath)
 
-    return relative_freq_female
+    return relative_freqs
 
 
 def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_filepath_female=None):
@@ -367,6 +382,8 @@ def dict_to_list(d):
     """
     Takes in a dictionary and returns a list of its values.
     If there are repeats in the values, there will be repeats in the list
+
+    TODO: Remove this?
 
     :param d: Dictionary
     :return: list of values in the dictionary
@@ -679,11 +696,11 @@ def overall_mean(d):
 
     >>> from gender_analysis.analysis.gender_frequency import overall_mean, document_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import TEST_DATA_PATH
+    >>> from gender_analysis.common import TEST_DATA_PATH, MALE, FEMALE
     >>> filepath = TEST_DATA_PATH / 'test_corpus'
     >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
     >>> c = Corpus(filepath, csv_path=csvpath)
-    >>> freq = document_pronoun_freq(c)
+    >>> freq = document_pronoun_freq(c, [MALE, FEMALE])
     >>> mean = overall_mean(freq)
     >>> str(mean)[:7]
     '0.47293'
