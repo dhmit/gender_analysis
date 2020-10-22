@@ -74,10 +74,8 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as filepath2, SMALL_TEST_CORPUS_CSV as path_to_csv
     >>> filepath1 = TEST_DATA_PATH / 'document_test_files'
-    >>> filepath2 = TEST_CORPUS_PATH
-    >>> path_to_csv = SMALL_TEST_CORPUS_CSV
     >>> corpus1 = Corpus(filepath1)
     >>> corpus2 = Corpus(filepath2, csv_path = path_to_csv, ignore_warnings = True)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
@@ -190,9 +188,7 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
 
          >>> from gender_analysis.analysis.dunning import dunning_total_by_corpus
          >>> from gender_analysis.corpus import Corpus
-         >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
-         >>> path = TEST_CORPUS_PATH
-         >>> path_to_csv = SMALL_TEST_CORPUS_CSV
+         >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
          >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')
