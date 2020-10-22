@@ -20,9 +20,10 @@ THEY_SERIES = PronounSeries('Andy', {'they', 'them', 'theirs', 'themself'})
 # Common Gender Collections
 MALE = Gender('Male', HE_SERIES)
 FEMALE = Gender('Female', SHE_SERIES)
+NEUTRAL = Gender('Neutral', THEY_SERIES)
 
 BINARY_GROUP = [FEMALE, MALE]
-
+TRINARY_GROUP = [FEMALE, MALE, NEUTRAL]
 
 def load_csv_to_list(file_path):
     """
