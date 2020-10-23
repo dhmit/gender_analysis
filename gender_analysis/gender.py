@@ -15,7 +15,7 @@ class Gender:
 
         >>> from gender_analysis.pronouns import PronounSeries
         >>> from gender_analysis.gender import Gender
-        >>> he_series = PronounSeries('Masc', {'he', 'him', 'his'})
+        >>> he_series = PronounSeries('Masc', {'he', 'him', 'his'}, subj='he', obj='him')
         >>> masc_names = ['Andrew', 'Richard', 'Robert']
         >>> male = Gender('Male', he_series, names=masc_names)
         >>> 'Richard' in male.names
@@ -48,7 +48,7 @@ class Gender:
 
         >>> from gender_analysis.pronouns import PronounSeries
         >>> from gender_analysis.gender import Gender
-        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'})
+        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
         >>> Gender('Female', fem_pronouns)
         <Female: {<Fem: ['her', 'hers', 'she']>}>
         """
@@ -61,7 +61,7 @@ class Gender:
 
         >>> from gender_analysis.pronouns import PronounSeries
         >>> from gender_analysis.gender import Gender
-        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'})
+        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
         >>> str(Gender('Female', fem_pronouns))
         'Female'
         """
@@ -83,7 +83,7 @@ class Gender:
         Note that this comparison works:
         >>> from gender_analysis.pronouns import PronounSeries
         >>> from gender_analysis.gender import Gender
-        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'})
+        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
         >>> female = Gender('Female', fem_pronouns)
         >>> another_female = Gender('Female', fem_pronouns)
         >>> female == another_female
@@ -92,8 +92,8 @@ class Gender:
         But this one does not:
         >>> from gender_analysis.pronouns import PronounSeries
         >>> from gender_analysis.gender import Gender
-        >>> they_series = PronounSeries('They', {'they', 'their', 'theirs'})
-        >>> xe_series = PronounSeries('Xe', {'xe', 'xer', 'xis'})
+        >>> they_series = PronounSeries('They', {'they', 'them', 'theirs'}, subj='they', obj='them')
+        >>> xe_series = PronounSeries('Xe', {'xe', 'xer', 'xem'}, subj='xe', obj='xem')
         >>> androgynous_1 = Gender('NB', they_series)
         >>> androgynous_2 = Gender('NB', xe_series)
         >>> androgynous_1 == androgynous_2
@@ -116,8 +116,8 @@ class Gender:
 
         >>> from gender_analysis.pronouns import PronounSeries
         >>> from gender_analysis.gender import Gender
-        >>> they_series = PronounSeries('They', {'they', 'them', 'theirs'})
-        >>> xe_series = PronounSeries('Xe', {'Xe', 'Xer', 'Xis'})
+        >>> they_series = PronounSeries('They', {'they', 'them', 'theirs'}, subj='they', obj='them')
+        >>> xe_series = PronounSeries('Xe', {'Xe', 'Xer', 'Xis'}, subj='xe', obj='xer')
         >>> androgynous = Gender('Androgynous', [they_series, xe_series])
         >>> androgynous.pronouns == {'they', 'them', 'theirs', 'xe', 'xer', 'xis'}
         True
@@ -137,7 +137,7 @@ class Gender:
 
         >>> from gender_analysis.pronouns import PronounSeries
         >>> from gender_analysis.gender import Gender
-        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'})
+        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
         >>> fem_names = {'Sarah', 'Marigold', 'Annabeth'}
         >>> female = Gender('Female', fem_pronouns, fem_names)
         >>> female.identifiers == {'she', 'her', 'hers', 'Sarah', 'Marigold', 'Annabeth'}
@@ -145,3 +145,45 @@ class Gender:
         """
 
         return self.names | self.pronouns
+
+    @property
+    def subj(self):
+        """
+        :return: set of all subject pronouns used to describe the gender
+
+        >>> from gender_analysis.pronouns import PronounSeries
+        >>> from gender_analysis.gender import Gender
+        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
+        >>> masc_pronouns = PronounSeries('Masc', {'he', 'him', 'his'}, subj='he', obj='him')
+        >>> bigender = Gender('Bigender', [fem_pronouns, masc_pronouns])
+        >>> bigender.subj == {'he', 'she'}
+        True
+
+        """
+
+        subject_pronouns = set()
+        for series in self.pronoun_series:
+            subject_pronouns.add(series.subj)
+
+        return subject_pronouns
+
+    @property
+    def obj(self):
+        """
+        :return: set of all object pronouns used to describe the gender
+
+        >>> from gender_analysis.pronouns import PronounSeries
+        >>> from gender_analysis.gender import Gender
+        >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
+        >>> masc_pronouns = PronounSeries('Masc', {'he', 'him', 'his'}, subj='he', obj='him')
+        >>> bigender = Gender('Bigender', [fem_pronouns, masc_pronouns])
+        >>> bigender.obj == {'him', 'her'}
+        True
+
+        """
+
+        object_pronouns = set()
+        for series in self.pronoun_series:
+            object_pronouns.add(series.obj)
+
+        return object_pronouns
