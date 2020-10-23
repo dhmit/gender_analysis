@@ -7,12 +7,23 @@ import nltk
 import seaborn as sns
 
 from gender_analysis.pronouns import PronounSeries
+from gender_analysis.gender import Gender
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 TEST_DATA_PATH = Path(BASE_PATH, 'testing', 'test_data')
-MASC_WORDS = PronounSeries('Masc', {'he', 'his', 'him', 'himself'})
-FEM_WORDS = PronounSeries('Fem', {'she', 'her', 'hers', 'herself'})
 
+# Common Pronoun Collections
+HE_SERIES = PronounSeries('Masc', {'he', 'his', 'him', 'himself'})
+SHE_SERIES = PronounSeries('Fem', {'she', 'her', 'hers', 'herself'})
+THEY_SERIES = PronounSeries('Andy', {'they', 'them', 'theirs', 'themself'})
+
+# Common Gender Collections
+MALE = Gender('Male', HE_SERIES)
+FEMALE = Gender('Female', SHE_SERIES)
+NONBINARY = Gender('Nonbinary', THEY_SERIES)
+
+BINARY_GROUP = [FEMALE, MALE]
+TRINARY_GROUP = [FEMALE, MALE, NONBINARY]
 
 def load_csv_to_list(file_path):
     """
@@ -23,7 +34,8 @@ def load_csv_to_list(file_path):
 
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> corpus_metadata_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'sample_novels.csv')
+    >>> from gender_analysis.testing.common import LARGE_TEST_CORPUS_CSV
+    >>> corpus_metadata_path = LARGE_TEST_CORPUS_CSV
     >>> corpus_metadata = load_csv_to_list(corpus_metadata_path)
     >>> type(corpus_metadata)
     <class 'list'>

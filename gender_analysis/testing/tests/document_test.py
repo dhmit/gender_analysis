@@ -16,7 +16,7 @@ class TestDocumentInitialization:
             reader = csv.DictReader(csvfile)
             num_documents = 0
             for row in reader:
-                row["filepath"] = common.LARGE_TEST_CORPUS_PATH / row["filename"]
+                row["filepath"] = common.TEST_CORPUS_PATH / row["filename"]
                 documents.append(Document(row))
                 num_documents += 1
             assert num_documents == len(documents)
