@@ -10,8 +10,8 @@ from gender_analysis.pronouns import PronounSeries
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 TEST_DATA_PATH = Path(BASE_PATH, 'testing', 'test_data')
-MASC_WORDS = PronounSeries('Masc', {'he', 'his', 'him', 'himself'})
-FEM_WORDS = PronounSeries('Fem', {'she', 'her', 'hers', 'herself'})
+MASC_WORDS = PronounSeries('Masc', {'he', 'his', 'him', 'himself'}, subj='he', obj='him')
+FEM_WORDS = PronounSeries('Fem', {'she', 'her', 'hers', 'herself'}, subj='she', obj='her')
 
 
 def load_csv_to_list(file_path):
