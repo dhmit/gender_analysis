@@ -20,6 +20,11 @@ class TestMetadataVisualizations:
             str(OUTPUT_DIRECTORY_PATH)) == OUTPUT_DIRECTORY_PATH
         assert os.path.isdir(OUTPUT_DIRECTORY_PATH)
 
+        # Test a bad directory creation
+        assert generate_file_path_for_visualizations(
+            OUTPUT_DIRECTORY_PATH.joinpath("additional_folder").joinpath(
+                "another_folder")) == DEFAULT_VISUALIZATION_OUTPUT_DIR
+
     def test_plot_pubyears_different_file_constructions(self):
         c = Corpus(
             common.LARGE_TEST_CORPUS_PATH,
