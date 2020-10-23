@@ -270,6 +270,6 @@ def generate_file_path_for_visualizations(output_dir):
     except OSError:
         print("Creation of the directory %s failed, saving to current directory" % output_dir)
         # Retry creating folder with a folder in the current directory
-        if output_dir != os.getcwd() + "/gender_analysis_visualizations/":
+        if str(output_dir) != str(Path(os.getcwd()).joinpath("gender_analysis_visualizations")):
             return generate_file_path_for_visualizations(
-                Path(os.getcwd() + "/gender_analysis_visualizations/"))
+                Path(os.getcwd()).joinpath("gender_analysis_visualizations"))
