@@ -114,17 +114,16 @@ class Corpus:
             all_txt_files = [f for f in os.listdir(path_to_files) if f.endswith('.txt')]
             num_loaded = len(documents)
             num_txt_files = len(all_txt_files)
-            if not ignore_warnings:
-                if num_loaded != num_txt_files:
-                    # some txt files aren't in the metadata, so issue a warning
-                    # we don't need to handle the inverse case, because that
-                    # will have broken the document init above
-                    print(
-                        f'WARNING: The following .txt files were not loaded because they '
-                        + 'are not your metadata csv:\n'
-                        + str(list(set(all_txt_files) - set(loaded_document_filenames)))
-                        + '\nYou may want to check that your metadata matches your files '
-                        + 'to avoid incorrect results.'
+            if not ignore_warnings and num_loaded != num_txt_files:
+                # some txt files aren't in the metadata, so issue a warning
+                # we don't need to handle the inverse case, because that
+                # will have broken the document init above
+                print(
+                    f'WARNING: The following .txt files were not loaded because they '
+                    + 'are not your metadata csv:\n'
+                    + str(list(set(all_txt_files) - set(loaded_document_filenames)))
+                    + '\nYou may want to check that your metadata matches your files '
+                    + 'to avoid incorrect results.'
                     )
 
             return sorted(documents), list(metadata)
