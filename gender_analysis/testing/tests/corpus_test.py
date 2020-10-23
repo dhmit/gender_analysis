@@ -13,7 +13,7 @@ class TestLoadCorpus:
         Tests that the corpus properly loads when not provided metadata
         """
 
-        c = Corpus(common.LARGE_TEST_CORPUS_PATH)
+        c = Corpus(common.TEST_CORPUS_PATH)
         assert len(c) == 99
         assert type(c.documents) == list
         assert c.name is None
@@ -24,7 +24,7 @@ class TestLoadCorpus:
         """
 
         c = Corpus(
-            common.LARGE_TEST_CORPUS_PATH,
+            common.TEST_CORPUS_PATH,
             csv_path=common.LARGE_TEST_CORPUS_CSV,
             name='test_corpus',
         )
@@ -44,10 +44,11 @@ class TestLoadCorpus:
         pickle_path = tmp_path / 'pickle.pgz'
 
         original_corpus = Corpus(
-            common.SMALL_TEST_CORPUS_PATH,
+            common.TEST_CORPUS_PATH,
             csv_path=common.SMALL_TEST_CORPUS_CSV,
             name='test_corpus',
-            pickle_on_load=pickle_path
+            pickle_on_load=pickle_path,
+            ignore_warnings = True
         )
 
         # first make sure the small corpus is correct
