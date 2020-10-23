@@ -57,6 +57,10 @@ def load_csv_to_list(file_path):
     file.close()
     return result
 
+ADJ_TAGS = ["JJ", "JJR", "JJS"]
+ADV_TAGS = ["RB", "RBR", "RBS"]
+PROPER_NOUN_TAGS = ["NNP", "NNPS"]
+VERB_TAGS = ["VB","VBD","VBG", "VBN", "VBP", "VBZ"]
 
 def load_txt_to_string(file_path):
     """
