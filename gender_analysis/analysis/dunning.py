@@ -79,7 +79,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> corpus1 = Corpus(filepath1)
     >>> corpus2 = Corpus(filepath2)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
-    -421109.6231373814
+    -407960.36834838963
 
     """
 
@@ -196,7 +196,7 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
          >>> f_corpus = c.filter_by_gender('female')
          >>> result = dunning_total_by_corpus(m_corpus, f_corpus)
          >>> print(result[0])
-         ('she', (-12374.391057010947, 29382, 45907))
+         ('she', (-12345.829803228411, 29324, 45868))
          """
     wordcounter_male = m_corpus.get_wordcount_counter()
     wordcounter_female = f_corpus.get_wordcount_counter()
