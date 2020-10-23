@@ -43,6 +43,7 @@ class Corpus:
 
         self.name = name
         self.documents, self.metadata_fields = self._load_documents_and_metadata(path_to_files,
+                                                                                 csv_path, ignore_warnings = ignore_warnings)
 
         if pickle_on_load is not None:
             common.store_pickle(self, pickle_on_load)
@@ -312,11 +313,11 @@ class Corpus:
         :return: Python Counter object
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, LARGE_TEST_CORPUS_CSV as path_to_csv
-        >>> c = Corpus(path, csv_path=path_to_csv)
+        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
+        >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
         >>> word_count = c.get_wordcount_counter()
         >>> word_count['fire']
-        2327
+        157
 
         """
         corpus_counter = Counter()

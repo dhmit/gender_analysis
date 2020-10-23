@@ -79,7 +79,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> corpus1 = Corpus(filepath1)
     >>> corpus2 = Corpus(filepath2, csv_path = path_to_csv, ignore_warnings = True)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
-    -343815.8965715768
+    -332112.16673673474
 
     """
 
@@ -194,7 +194,7 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
          >>> f_corpus = c.filter_by_gender('female')
          >>> result = dunning_total_by_corpus(m_corpus, f_corpus)
          >>> print(result[0])
-         ('mrs', (-699.2117991006629, 1, 2031))
+         ('mrs', (-675.5338738828469, 1, 2031))
          """
     wordcounter_male = m_corpus.get_wordcount_counter()
     wordcounter_female = f_corpus.get_wordcount_counter()
