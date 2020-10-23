@@ -654,28 +654,6 @@ def bar_sub_obj_freq(she_freq_dict, he_freq_dict, title, x="N/A"):
     plt.savefig(filepng, bbox_inches='tight')
     plt.savefig(filepdf, bbox_inches='tight')
 
-
-def overall_mean(d):
-    """
-    Returns the average of all the values in a dictionary
-
-    :param d: dictionary with numbers as values
-    :return: float average of all the values
-
-    >>> from gender_analysis.analysis.gender_frequency import overall_mean, document_pronoun_freq
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
-    >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
-    >>> freq = document_pronoun_freq(c)
-    >>> mean = overall_mean(freq)
-    >>> str(mean)[:7]
-    '0.47300'
-    """
-    l = dict_to_list(d)
-    mean = np.mean(l)
-    return mean
-
-
 def stat_analysis(corpus):
     tot_female_dict = document_pronoun_freq(corpus)
     author_to_freq_dict = freq_by_author_gender(tot_female_dict)
