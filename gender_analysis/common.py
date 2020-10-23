@@ -70,7 +70,7 @@ def load_txt_to_string(file_path):
     >>> novel_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')
     >>> novel_text = load_txt_to_string(novel_path)
     >>> type(novel_text), len(novel_text)
-    (<class 'str'>, 486253)
+    (<class 'str'>, 466887)
 
     """
     if isinstance(file_path, str):
@@ -166,7 +166,7 @@ def get_text_file_encoding(filepath):
     >>> import os
     >>> path=Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')
     >>> common.get_text_file_encoding(path)
-    'UTF-8-SIG'
+    'ascii'
 
     Note: For files containing only ascii characters, this function will return 'ascii' even if
     the file was encoded with utf-8

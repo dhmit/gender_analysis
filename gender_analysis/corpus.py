@@ -5,7 +5,6 @@ from pathlib import Path
 from collections import Counter
 
 from nltk import tokenize as nltk_tokenize
-import gender_guesser.detector as gender
 
 from gender_analysis import common
 from gender_analysis.common import MissingMetadataError
@@ -35,7 +34,7 @@ class Corpus:
     """
 
     def __init__(self, path_to_files, name=None, csv_path=None,
-                       pickle_on_load=None, ignore_warnings = False):
+                       pickle_on_load=None, ignore_warnings=False):
 
         if isinstance(path_to_files, str):
             path_to_files = Path(path_to_files)
@@ -44,7 +43,6 @@ class Corpus:
 
         self.name = name
         self.documents, self.metadata_fields = self._load_documents_and_metadata(path_to_files,
-                                                                                 csv_path, ignore_warnings = ignore_warnings)
 
         if pickle_on_load is not None:
             common.store_pickle(self, pickle_on_load)

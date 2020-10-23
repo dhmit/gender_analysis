@@ -3,6 +3,7 @@ import string
 from collections import Counter
 from pathlib import Path
 
+from gutenberg_cleaner import simple_cleaner
 from more_itertools import windowed
 import nltk
 
@@ -25,7 +26,7 @@ class Document:
     >>> type(austen.text)
     <class 'str'>
     >>> len(austen.text)
-    486253
+    466887
     """
 
     def __init__(self, metadata_dict):
@@ -86,7 +87,7 @@ class Document:
         ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
-        86291
+        83285
 
         """
 
@@ -239,12 +240,31 @@ class Document:
 
         return output_text
 
+    @staticmethod
+    def _gutenberg_cleaner(text):
+
+        """
+        Checks to see if a given text is from Project Gutenberg. If it is, removes the header + footer.
+
+        :param text: The string to reformat
+        :return: A string that is idential to 'text' unless 'text' is from Gutenberg, in which case
+        the Gutenberg header and footer is removed
+        """
+
+        output_text = text
+        beginning = text[0:100]
+        if "project gutenberg" in beginning.lower():
+            output_text = simple_cleaner(output_text)
+
+        return output_text
+
     def _load_document_text(self):
         """
         Loads the text of the document at the filepath specified in initialization.
 
         :return: str
         """
+
         file_path = Path(self.filepath)
 
         try:
@@ -559,4 +579,3 @@ class Document:
                     raise ValueError(f"the metadata field 'date' must be a number for document {self.filename}, not "
                                      f"'{new_metadata['date']}'")
             setattr(self, key, new_metadata[key])
-
