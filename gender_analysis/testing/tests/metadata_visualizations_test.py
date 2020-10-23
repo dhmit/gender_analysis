@@ -27,7 +27,7 @@ class TestMetadataVisualizations:
 
     def test_plot_pubyears_different_file_constructions(self):
         c = Corpus(
-            common.LARGE_TEST_CORPUS_PATH,
+            common.TEST_CORPUS_PATH,
             csv_path=common.LARGE_TEST_CORPUS_CSV,
             name='test_corpus',
         )
@@ -54,7 +54,7 @@ class TestMetadataVisualizations:
 
     def test_plot_pubcountries_different_file_constructions(self):
         c = Corpus(
-            common.LARGE_TEST_CORPUS_PATH,
+            common.TEST_CORPUS_PATH,
             csv_path=common.LARGE_TEST_CORPUS_CSV,
             name='test_corpus',
         )
@@ -81,7 +81,7 @@ class TestMetadataVisualizations:
 
     def test_plot_gender_breakdown_different_file_constructions(self):
         c = Corpus(
-            common.LARGE_TEST_CORPUS_PATH,
+            common.TEST_CORPUS_PATH,
             csv_path=common.LARGE_TEST_CORPUS_CSV,
             name='test_corpus',
         )
@@ -108,7 +108,7 @@ class TestMetadataVisualizations:
 
     def test_plot_metadata_pie_different_file_constructions(self):
         c = Corpus(
-            common.LARGE_TEST_CORPUS_PATH,
+            common.TEST_CORPUS_PATH,
             csv_path=common.LARGE_TEST_CORPUS_CSV,
             name='test_corpus',
         )
@@ -135,7 +135,7 @@ class TestMetadataVisualizations:
 
     def test_create_all_visualizations_but_with_no_corpus_name(self):
         c = Corpus(
-            common.LARGE_TEST_CORPUS_PATH,
+            common.TEST_CORPUS_PATH,
             csv_path=common.LARGE_TEST_CORPUS_CSV
         )
 
