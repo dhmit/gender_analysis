@@ -54,10 +54,10 @@ def get_comparative_word_freq(freqs):
     >>> scarlet = document.Document(document_metadata)
     >>> d = {'he':scarlet.get_word_freq('he'), 'she':scarlet.get_word_freq('she')}
     >>> d
-    {'he': 0.007099649057997783, 'she': 0.005702807536017732}
+    {'he': 0.0073307821095431715, 'she': 0.005895718727577134}
     >>> x = get_comparative_word_freq(d)
     >>> x
-    {'he': 0.5545536519386836, 'she': 0.44544634806131655}
+    {'he': 0.554249547920434, 'she': 0.445750452079566}
     >>> d2 = {'he': 0, 'she': 0}
     >>> d2
     {'he': 0, 'she': 0}
@@ -235,13 +235,11 @@ def document_pronoun_freq(corp, genders, pickle_filepath=None):
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.gender_frequency import document_pronoun_freq
-    >>> from gender_analysis.common import TEST_DATA_PATH
-    >>> from gender_analysis.common import MALE, FEMALE
-    >>> filepath = TEST_DATA_PATH / 'test_corpus'
-    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
-    >>> c = Corpus(filepath, csv_path=csvpath)
-    >>> pronoun_freq_dict = document_pronoun_freq(c, [MALE, FEMALE])
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
+    >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
+    >>> pronoun_freq_dict = document_pronoun_freq(c)
     >>> flatland = c.get_document('title', 'Flatland')
+    >>> result = pronoun_freq_dict[flatland]
     >>> pronoun_freq_dict[flatland]
     {'Male': 0.8493150684931506, 'Female': 0.15068493150684928}
 
@@ -279,11 +277,9 @@ def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_file
     :return: tuple of two dictionaries (male, female)
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import TEST_DATA_PATH
-    >>> filepath = TEST_DATA_PATH / 'test_corpus'
-    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
-    >>> subject_vs_object_pronoun_freqs(Corpus(filepath, csv_path=csvpath))
-    ({<Document (aanrud_longfrock)>: 0.7947761194029851, <Document (abbott_flatlandromance)>: 0.6775956284153005, <Document (abbott_indiscreetletter)>: 0.7938931297709924, <Document (adams_fighting)>: 0.7188093730208993, <Document (alcott_josboys)>: 0.6339066339066339, <Document (alcott_littlemen)>: 0.6444245409762652, <Document (alcott_littlewomen)>: 0.6580560420315237, <Document (alden_chautauqua)>: 0.7583798882681564, <Document (austen_emma)>: 0.7038087520259318, <Document (austen_persuasion)>: 0.6743697478991596}, {<Document (aanrud_longfrock)>: 0.5380577427821522, <Document (abbott_flatlandromance)>: 0.21666666666666667, <Document (abbott_indiscreetletter)>: 0.4457831325301205, <Document (adams_fighting)>: 0.4358523725834798, <Document (alcott_josboys)>: 0.38636363636363635, <Document (alcott_littlemen)>: 0.43631613324624424, <Document (alcott_littlewomen)>: 0.41256335988414194, <Document (alden_chautauqua)>: 0.5462994836488813, <Document (austen_emma)>: 0.4831533477321814, <Document (austen_persuasion)>: 0.48742004264392325})
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
+    >>> subject_vs_object_pronoun_freqs(Corpus(path, csv_path=path_to_csv, ignore_warnings = True))
+    ({<Document (aanrud_longfrock)>: 0.793233082706767, <Document (abbott_flatlandromance)>: 0.6740331491712708, <Document (abbott_indiscreetletter)>: 0.7906976744186047, <Document (adams_fighting)>: 0.7184527584020292, <Document (alcott_josboys)>: 0.6334563345633457, <Document (alcott_littlemen)>: 0.6441057821604661, <Document (alcott_littlewomen)>: 0.6577563540753725, <Document (alden_chautauqua)>: 0.7577030812324931, <Document (austen_emma)>: 0.7035685320356854, <Document (austen_persuasion)>: 0.6739130434782609}, {<Document (aanrud_longfrock)>: 0.5376532399299474, <Document (abbott_flatlandromance)>: 0.20338983050847456, <Document (abbott_indiscreetletter)>: 0.4424242424242424, <Document (adams_fighting)>: 0.43485915492957744, <Document (alcott_josboys)>: 0.3860535624052551, <Document (alcott_littlemen)>: 0.43594771241830066, <Document (alcott_littlewomen)>: 0.4124569980083288, <Document (alden_chautauqua)>: 0.5461432506887053, <Document (austen_emma)>: 0.48304169367033917, <Document (austen_persuasion)>: 0.4872013651877133})
 
     """
 
@@ -332,13 +328,11 @@ def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_mal
     :return: dictionary
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import TEST_DATA_PATH
-    >>> filepath = TEST_DATA_PATH / 'test_corpus'
-    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
-    >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'male')
-    {<Document (aanrud_longfrock)>: 0.25724637681159424, <Document (abbott_flatlandromance)>: 0.9051094890510949, <Document (abbott_indiscreetletter)>: 0.5842696629213483, <Document (adams_fighting)>: 0.8206796818510484, <Document (alcott_josboys)>: 0.5742904841402336, <Document (alcott_littlemen)>: 0.6829615567157096, <Document (alcott_littlewomen)>: 0.3974087784241142, <Document (alden_chautauqua)>: 0.2549295774647887, <Document (austen_emma)>: 0.43709109209864117, <Document (austen_persuasion)>: 0.45726495726495725}
-    >>> subject_pronouns_gender_comparison(Corpus(filepath, csv_path=csvpath), 'female')
-    {<Document (aanrud_longfrock)>: 0.7427536231884058, <Document (abbott_flatlandromance)>: 0.0948905109489051, <Document (abbott_indiscreetletter)>: 0.4157303370786517, <Document (adams_fighting)>: 0.17932031814895155, <Document (alcott_josboys)>: 0.42570951585976624, <Document (alcott_littlemen)>: 0.3170384432842905, <Document (alcott_littlewomen)>: 0.6025912215758857, <Document (alden_chautauqua)>: 0.7450704225352113, <Document (austen_emma)>: 0.5629089079013588, <Document (austen_persuasion)>: 0.5427350427350427}
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
+    >>> subject_pronouns_gender_comparison(Corpus(path, csv_path=path_to_csv, ignore_warnings = True), 'male')
+    {<Document (aanrud_longfrock)>: 0.2557575757575758, <Document (abbott_flatlandromance)>: 0.9104477611940299, <Document (abbott_indiscreetletter)>: 0.582857142857143, <Document (adams_fighting)>: 0.8210144927536231, <Document (alcott_josboys)>: 0.5741360089186176, <Document (alcott_littlemen)>: 0.6829847908745247, <Document (alcott_littlewomen)>: 0.39719502513892563, <Document (alden_chautauqua)>: 0.2543488481429243, <Document (austen_emma)>: 0.43691765298413493, <Document (austen_persuasion)>: 0.45696623870660963}
+    >>> subject_pronouns_gender_comparison(Corpus(path, csv_path=path_to_csv, ignore_warnings = True), 'female')
+    {<Document (aanrud_longfrock)>: 0.7442424242424243, <Document (abbott_flatlandromance)>: 0.08955223880597016, <Document (abbott_indiscreetletter)>: 0.4171428571428572, <Document (adams_fighting)>: 0.17898550724637682, <Document (alcott_josboys)>: 0.42586399108138234, <Document (alcott_littlemen)>: 0.31701520912547526, <Document (alcott_littlewomen)>: 0.6028049748610743, <Document (alden_chautauqua)>: 0.7456511518570758, <Document (austen_emma)>: 0.563082347015865, <Document (austen_persuasion)>: 0.5430337612933904}
 
     """
 
@@ -376,32 +370,6 @@ def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_mal
         return relative_freq_female_sub
     else:
         raise ValueError('subject_gender must be \'male\' or \'female\'')
-
-
-def dict_to_list(d):
-    """
-    Takes in a dictionary and returns a list of its values.
-    If there are repeats in the values, there will be repeats in the list
-
-    TODO: Remove this?
-
-    :param d: Dictionary
-    :return: list of values in the dictionary
-
-    >>> d = {'a': 1, 'b': 'bee', 'c': 65}
-    >>> dict_to_list(d)
-    [1, 'bee', 65]
-
-    >>> d2 = {}
-    >>> dict_to_list(d2)
-    []
-
-    """
-    L = []
-    for key, value in d.items():
-        L.append(value)
-    return L
-
 
 def freq_by_author_gender(d):
     """
@@ -696,14 +664,12 @@ def overall_mean(d):
 
     >>> from gender_analysis.analysis.gender_frequency import overall_mean, document_pronoun_freq
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import TEST_DATA_PATH, MALE, FEMALE
-    >>> filepath = TEST_DATA_PATH / 'test_corpus'
-    >>> csvpath = TEST_DATA_PATH / 'test_corpus' / 'test_corpus.csv'
-    >>> c = Corpus(filepath, csv_path=csvpath)
-    >>> freq = document_pronoun_freq(c, [MALE, FEMALE])
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
+    >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
+    >>> freq = document_pronoun_freq(c)
     >>> mean = overall_mean(freq)
     >>> str(mean)[:7]
-    '0.47293'
+    '0.47300'
     """
     l = dict_to_list(d)
     mean = np.mean(l)
