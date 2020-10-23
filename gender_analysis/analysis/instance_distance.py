@@ -86,7 +86,7 @@ def male_instance_dist(document):
     [6, 5, 6, 6, 7]
 
     """
-    return words_instance_dist(document, common.MASC_WORDS)
+    return words_instance_dist(document, common.HE_SERIES)
 
 
 def female_instance_dist(document):
@@ -107,7 +107,7 @@ def female_instance_dist(document):
     [6, 5, 6, 6, 7]
 
     """
-    return words_instance_dist(document, common.FEM_WORDS)
+    return words_instance_dist(document, common.SHE_SERIES)
 
 
 def run_distance_analysis(corpus):
