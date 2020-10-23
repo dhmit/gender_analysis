@@ -2,17 +2,18 @@ from statistics import median
 from more_itertools import windowed
 import nltk
 
-from gender_analysis.analysis.instance_distance import male_instance_dist, female_instance_dist
+from gender_analysis.analysis.instance_distance import words_instance_dist
 from gender_analysis import common
 
 
-def find_gender_adj(document, female):
+def find_gender_adj(document, gender_to_find, genders_to_exclude = []):
     """
-    Takes in a document and boolean indicating gender, and returns a dictionary of adjectives that
-    appear within a window of 5 words around each pronoun
+    Takes in a document and a Gender to look for, and returns a dictionary of adjectives that
+    appear within a window of 5 words around each identifier
 
     :param: document: Document
-    :param: female: boolean indicating whether to search for female adjectives (true) or male adjectives (false)
+    :param: gender_to_find: Gender
+    :param: genders_to_exclude: list of Genders to exclude.
     :return: dictionary of adjectives that appear around pronouns mapped to the number of occurrences
 
     >>> from gender_analysis import document
@@ -21,21 +22,22 @@ def find_gender_adj(document, female):
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
     ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_7.txt')}
     >>> scarlett = document.Document(document_metadata)
-    >>> find_gender_adj(scarlett, False)
+    >>> find_gender_adj(scarlett, common.MALE, [common.FEMALE])
     {'handsome': 3, 'sad': 1}
 
     """
     output = {}
     text = document.get_tokenized_text()
 
-    if female:
-        distances = female_instance_dist(document)
-        pronouns1 = common.FEM_WORDS
-        pronouns2 = common.MASC_WORDS
-    else:
-        distances = male_instance_dist(document)
-        pronouns1 = common.MASC_WORDS
-        pronouns2 = common.FEM_WORDS
+    identifiers_to_find = gender_to_find.identifiers
+
+    identifiers_to_exclude = []
+    for gender in genders_to_exclude:
+        for identifier in gender.identifiers:
+            identifiers_to_exclude.append(identifier)
+
+    distances = words_instance_dist(document, identifiers_to_find)
+
     if len(distances) == 0:
         return {}
     elif len(distances) <= 3:
@@ -45,15 +47,17 @@ def find_gender_adj(document, female):
 
     if not lower_window_bound >= 5:
         return "lower window bound less than 5"
-    for l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11 in windowed(text, 11):
-        l6 = l6.lower()
-        if not l6 in pronouns1:
+
+    for words in windowed(text, 11):
+        if not words[5].lower() in identifiers_to_find:
             continue
-        words = [l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11]
-        if bool(set(words) & set(pronouns2)):
+        if bool(set(words) & set(identifiers_to_exclude)):
             continue
+
+        words = list(words)
         for index, word in enumerate(words):
             words[index] = word.lower()
+
         tags = nltk.pos_tag(words)
         for tag_index, tag in enumerate(tags):
             if tags[tag_index][1] == "JJ" or tags[tag_index][1] == "JJR" or tags[tag_index][1] == "JJS":
@@ -62,8 +66,8 @@ def find_gender_adj(document, female):
                     output[word] += 1
                 else:
                     output[word] = 1
-    return output
 
+    return output
 
 def find_male_adj(document):
     """
@@ -83,7 +87,8 @@ def find_male_adj(document):
    {'handsome': 3, 'sad': 1}
 
     """
-    return find_gender_adj(document, False)
+
+    return find_gender_adj(document, common.MALE, [common.FEMALE])
 
 
 def find_female_adj(document):
@@ -105,29 +110,37 @@ def find_female_adj(document):
 
     """
 
-    return find_gender_adj(document, True)
+    return find_gender_adj(document, common.FEMALE, [common.MALE])
 
 
-def run_adj_analysis(corpus):
+def run_adj_analysis(corpus, gender_list = common.BINARY_GROUP):
     """
-    Takes in a corpus of novels. Return a dictionary with each novel mapped to 2 dictionaries:
-    adjectives/#occurences associated with male pronouns, and adjectives/# occurrences associated
-    with female pronouns
+    Takes in a corpus of novels. Return a dictionary with each novel mapped to n dictionaries, where
+    n is the number of Genders in gender_list.
+    The dictionary contains adjectives:occurences for each gendered set of identifiers.
 
     :param corpus: Corpus
-    :return: dictionary where each key is a novel and the value is 2 dictionaries: Adjectives and number of occurrences associated with male or female pronouns
+    :return: dictionary where each key is a novel and the value is 2 dictionaries: Adjectives and
+    number of occurrences associated with male or female pronouns
 
     """
     results = {}
+
     for novel in corpus:
-        novel_male_results = find_male_adj(novel)
-        novel_female_results = find_female_adj(novel)
-        if (novel_male_results != "lower window bound less than 5"
-                and novel_female_results != "lower window bound less than 5"):
-            results[novel] = {'male': novel_male_results, 'female': novel_female_results}
+        results[novel] = {}
+        for gender in gender_list:
+            if gender.label == "Female":
+                novel_result = find_female_adj(novel)
+            elif gender.label == "Male":
+                novel_result = find_male_adj(novel)
+            else:
+                # Note that we exclude male from female and female from male but do not do this
+                # with other genders.
+                novel_result = find_gender_adj(novel, gender)
+            if novel_result != "lower window bound less than 5":
+                results[novel].update({gender.label : novel_result})
 
     return results
-
 
 def store_raw_results(results, pickle_filepath='pronoun_adj_raw_analysis.pgz'):
     """
@@ -175,37 +188,57 @@ def merge(novel_adj_dict, full_adj_dict):
 
 def merge_raw_results(full_results):
     """
-    Merges all of the male adjectives across novels into a single dictionary, and merges all
-    of the female adjectives across novels into a single dictionary.
+    Merges all adjectives across novels into dictionaries sorted by gender.
 
     :param full_results: full corpus results from run_adj_analysis
     :return: dictionary in the form {'gender':{'adj': occurrences}}
 
     """
-    merged_results = {'male': {}, 'female': {}}
-    for novel in list(full_results.keys()):
-        print(novel.title, novel.author)
-        for gender in list(full_results[novel].keys()):
+
+    # First, we need to get the genders used in full_results. There's probably a better way to do
+    # this, but...
+
+    result_key_list = list(full_results.keys())
+    first_key = result_key_list[0]
+    genders = list(full_results[first_key].keys())
+
+    merged_results = {}
+
+    for gender in genders:
+        merged_results[gender] = {}
+
+    for novel in result_key_list:
+        for gender in genders:
             merged_results[gender] = merge(full_results[novel][gender], merged_results[gender])
 
     return merged_results
 
-
 def get_overlapping_adjectives_raw_results(merged_results):
     """
-    Looks through the male adjectives and female adjectives across the corpus and extracts adjective
-    that overlap across both and their occurrences. FORMAT - {'adjective': [male, female]}
-    :param merged_results:
-    :return: dictionary in the form {'adjective':{'gender': num occurrences associated with gender}}
+    Looks through the gendered adjectives across the corpus and extracts adjectives that overlap
+    that overlap across all genders and their occurrences.
+    FORMAT - {'adjective': [gender1, gender2, ...]}
+    :param merged_results: the results of merge_raw_results.
+    :return: dictionary in form {'adjective': ['gender1': occurrences, 'gender2': occurences, ... }}
+
+    TODO: Consider adding a more granular function that gets all sub-intersections.
 
     """
-    overlap_results = {}
-    male_adj = list(merged_results['male'].keys())
-    female_adj = list(merged_results['female'].keys())
 
-    for a in male_adj:
-        if a in female_adj:
-            overlap_results[a] = [merged_results['male'][a], merged_results['female'][a]]
+    overlap_results = {}
+    genders = list(merged_results.keys())
+    sets_of_adjectives = {}
+
+    for gender in genders:
+        sets_of_adjectives[gender] = set(list(merged_results[gender].keys()))
+
+    intersects_with_all = set.intersection(*sets_of_adjectives.values())
+
+    for adj in intersects_with_all:
+        output = []
+        for gender in genders:
+            output.append(merged_results[gender][adj])
+        overlap_results[adj] = output
 
     return overlap_results
 
@@ -219,6 +252,7 @@ def results_by_author_gender(full_results):
     :param full_results: dictionary from result of run_adj_analysis
     :return: dictionary in form {'gender_author': {'male': {adj:occurrences}, 'female':{adj:occurrences}}}
 
+    TODO: Break this binary
     """
     data = {'male_author': {'male': {}, 'female': {}}, "female_author": {'male': {}, 'female': {}}}
 
@@ -239,22 +273,31 @@ def results_by_date(full_results, time_frame, bin_size):
     dictionary mapping adjectives to number of occurrences across novels written in that time period
 
     :param full_results: dictionary from result of run_adj_analysis
-    :param time_frame: tuple (int start year, int end year) for the range of dates to return frequencies
+    :param time_frame: tuple (int start year, int end year) for the range of dates to return
+    frequencies
     :param bin_size: int for the number of years represented in each list of frequencies
-    :return: dictionary in form {date: {'male': {adj:occurrences}, 'female':{adj:occurrences}}}, where date is the first year in its bin
+    :return: dictionary in form {date: {gender1: {adj:occurrences}, 'gender2': {adj:occurrences},
+     ...}}, where date is the first year in its bin
 
     """
     data = {}
+    result_key_list = list(full_results.keys())
+    first_key = result_key_list[0]
+    genders = list(full_results[first_key].keys())
+
     for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
-        data[bin_start_year] = {'male': {}, 'female': {}}
+        output = {}
+        for gender in genders:
+            output[gender] = {}
+        data[bin_start_year] = output
 
     for k in full_results.keys():
         date = getattr(k, 'date', None)
         if date is None:
             continue
         bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
-        data[bin_year]['male'] = merge(full_results[k]['male'], data[bin_year]['male'])
-        data[bin_year]['female'] = merge(full_results[k]['female'], data[bin_year['female']])
+        for gender in genders:
+            data[bin_year][gender] = merge(full_results[k][gender], data[bin_year][gender])
 
     return data
 
@@ -265,10 +308,19 @@ def results_by_location(full_results):
     uses by gender.
 
     :param full_results: dictionary from result of run_adj_analysis
-    :return: dictionary in form {'location': {'male': {adj:occurrences}, 'female':{adj:occurrences}}}
+    :return: dictionary in form {'location': {'gender1': {adj:occurrences},\
+    'gender2':{adj:occurrences}, ...}}
 
     """
     data = {}
+
+    result_key_list = list(full_results.keys())
+    first_key = result_key_list[0]
+    genders = list(full_results[first_key].keys())
+    gendered_output = {}
+
+    for gender in genders:
+        gendered_output[gender] = {}
 
     for k in full_results.keys():
         location = getattr(k, 'country_publication', None)
@@ -276,9 +328,10 @@ def results_by_location(full_results):
             continue
 
         if location not in data:
-            data[location] = {'male': {}, 'female': {}}
-        data[location]['male'] = merge(full_results[k]['male'], data[location]['male'])
-        data[location]['female'] = merge(full_results[k]['female'], data[location]['female'])
+            data[location] = gendered_output
+
+        for gender in genders:
+            data[location][gender] = merge(full_results[k][gender], data[location][gender])
 
     return data
 
@@ -286,21 +339,31 @@ def results_by_location(full_results):
 def get_top_adj(full_results, num):
     """
     Takes dictionary of results from run_adj_analysis and number of top results to return.
-    Returns the top num adjectives associated with male pronouns and female pronouns.
+    Returns the top num adjectives associated with each gender.
 
     :param full_results: dictionary from result of run_adj_analysis
     :param num: number of top results to return per gender
-    :return: tuple of lists of top adjectives associated with male pronouns and female pronouns, respectively
-
+    :return: dictionary of lists of top adjectives associated more with each gender than the others.
     """
-    male_adj = []
-    female_adj = []
+    merged_results = merge_raw_results(full_results)
+    genders = list(merged_results.keys())
 
-    for adj, val in full_results.items():
-        male_adj.append((val[0]-val[1], adj))
-        female_adj.append((val[1]-val[0], adj))
+    top = {}
 
-    male_top = sorted(male_adj, reverse=True)[0:num]
-    female_top = sorted(female_adj, reverse=True)[0:num]
+    excluded_results = {}
+    for gender in genders:
+        excluded_results[gender] = {}
+        other_genders = genders.copy()
+        other_genders.remove(gender)
+        for adj, count in merged_results[gender].items():
+            other_count = 0
+            for other_gender in other_genders:
+                if adj in merged_results[other_gender].keys():
+                    other_count += merged_results[other_gender][adj]
+            new_count = count - other_count
+            excluded_results[gender][adj] = new_count
 
-    return male_top, female_top
+        # Sorts (adj, count) lists by count.
+        top[gender] = sorted(excluded_results[gender].items(), reverse=True, key=lambda x:x[1])[0:num]
+
+    return top
