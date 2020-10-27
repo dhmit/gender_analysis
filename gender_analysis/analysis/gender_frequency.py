@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import nltk
-
+from pathlib import Path
 from gender_analysis import common
 from gender_analysis.analysis import statistical
 
@@ -221,7 +221,7 @@ def run_gender_freq(corpus, genders):
         num += 1
 
 
-def document_pronoun_freq(corp, genders, pickle_filepath=None):
+def corpus_pronoun_freq(corp, genders, pickle_filepath=None):
     """
     Counts gendered identifiers for every document in a given corpus,
     and finds their relative frequencies
@@ -234,14 +234,15 @@ def document_pronoun_freq(corp, genders, pickle_filepath=None):
     :return: dictionary with data organized by Document
 
     >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.analysis.gender_frequency import document_pronoun_freq
+    >>> from gender_analysis.analysis.gender_frequency import corpus_pronoun_freq
+    >>> from gender_analysis.common import BINARY_GROUP
     >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
     >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
-    >>> pronoun_freq_dict = document_pronoun_freq(c)
+    >>> pronoun_freq_dict = corpus_pronoun_freq(c, BINARY_GROUP)
     >>> flatland = c.get_document('title', 'Flatland')
     >>> result = pronoun_freq_dict[flatland]
     >>> pronoun_freq_dict[flatland]
-    {'Male': 0.8493150684931506, 'Female': 0.15068493150684928}
+    {'Female': 0.14942528735632185, 'Male': 0.8505747126436781}
 
     """
 
@@ -249,13 +250,7 @@ def document_pronoun_freq(corp, genders, pickle_filepath=None):
     frequencies = {}
 
     for doc in corp.documents:
-        for gender in genders:
-            frequencies[gender.label] = 0
-            for identifier in gender.identifiers:
-                frequencies[gender.label] += doc.get_word_freq(identifier)
-
-        comp_freq_dict = get_comparative_word_freq(frequencies)
-
+        comp_freq_dict = doc_pronoun_freq(doc, genders)
         relative_freqs[doc] = comp_freq_dict
 
     if pickle_filepath:
@@ -264,56 +259,94 @@ def document_pronoun_freq(corp, genders, pickle_filepath=None):
     return relative_freqs
 
 
-def subject_vs_object_pronoun_freqs(corp, pickle_filepath_male=None, pickle_filepath_female=None):
+def doc_pronoun_freq(document, genders):
+
     """
-    Takes in a Corpus of novels
-    Returns a tuple of two dictionaries, one male and female
+    Counts gendered identifiers in a document and finds their relative frequencies
+
+    Returns a dictionary mapping each Document in the Corpus to the relative frequency of
+    gendered identifiers in that Document
+
+    :param document: Document object
+    :param genders: A list of Gender objects
+    :return: dictionary with data organized by gender
+    """
+
+    frequencies = {}
+
+    for gender in genders:
+        frequencies[gender.label] = 0
+        for identifier in gender.identifiers:
+            frequencies[gender.label] += document.get_word_freq(identifier)
+
+    comp_freq_dict = get_comparative_word_freq(frequencies)
+
+    return comp_freq_dict
+
+
+def corpus_subject_object_freq(corp, genders, pickle_filepath=None):
+    """
+    Takes in a Corpus of novels and genders to look for.
+    Returns a dictionary of dictionaries, one for each gender
     Each dictionary maps each Document in the corpus to the proportion of the pronouns
     of the specified gender in that novel that are subject pronouns
 
     :param corp: Corpus object
-    :param pickle_filepath_female: Location to store results for male results; will not write a file if None
-    :param pickle_filepath_male: Location to store results for female results; will not write a file if None
-    :return: tuple of two dictionaries (male, female)
+    :param genders: a list of Gender objects to compare
+    :param pickle_filepath: Location to store results; will not write a file if None
+    :return: dictionary of results, by document and then by gender.
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
-    >>> subject_vs_object_pronoun_freqs(Corpus(path, csv_path=path_to_csv, ignore_warnings = True))
-    ({<Document (aanrud_longfrock)>: 0.793233082706767, <Document (abbott_flatlandromance)>: 0.6740331491712708, <Document (abbott_indiscreetletter)>: 0.7906976744186047, <Document (adams_fighting)>: 0.7184527584020292, <Document (alcott_josboys)>: 0.6334563345633457, <Document (alcott_littlemen)>: 0.6441057821604661, <Document (alcott_littlewomen)>: 0.6577563540753725, <Document (alden_chautauqua)>: 0.7577030812324931, <Document (austen_emma)>: 0.7035685320356854, <Document (austen_persuasion)>: 0.6739130434782609}, {<Document (aanrud_longfrock)>: 0.5376532399299474, <Document (abbott_flatlandromance)>: 0.20338983050847456, <Document (abbott_indiscreetletter)>: 0.4424242424242424, <Document (adams_fighting)>: 0.43485915492957744, <Document (alcott_josboys)>: 0.3860535624052551, <Document (alcott_littlemen)>: 0.43594771241830066, <Document (alcott_littlewomen)>: 0.4124569980083288, <Document (alden_chautauqua)>: 0.5461432506887053, <Document (austen_emma)>: 0.48304169367033917, <Document (austen_persuasion)>: 0.4872013651877133})
-
+    >>> from gender_analysis.analysis.gender_frequency import corpus_subject_object_freq
+    >>> from gender_analysis.common import MALE, FEMALE, BINARY_GROUP
+    >>> corpus = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
+    >>> pronoun_freqs = corpus_subject_object_freq(corpus, BINARY_GROUP)
+    >>> result = pronoun_freqs.popitem()
+    >>> result[1][FEMALE]
+    {'subj': 0.4872013651877133, 'obj': 0.5127986348122866}
     """
+    freq = {}
+    relative_freq = {}
 
-    relative_freq_male_subject = {}
-    relative_freq_female_subject = {}
-    relative_freq_male_object = {}
-    relative_freq_female_object = {}
+    for document in corp.documents:
+        relative_freq[document] = document_subject_object_freq(document, genders)
 
-    for book in corp.documents:
-        # pronouns are hard-coded because these are the only ones guaranteed as subjects and objects
-        he = book.get_word_freq('he')
-        him = book.get_word_freq('him')
+    if pickle_filepath:
+        for gender in genders:
+            gender_path = Path.join(pickle_filepath, gender.label)
+            common.store_pickle(relative_freq, gender_path)
 
-        she = book.get_word_freq('she')
-        her = book.get_word_freq('her')
-
-        temp_dict_male = {'subject': he, 'object': him}
-        temp_dict_female = {'subject': she, 'object': her}
-        temp_dict_male = get_comparative_word_freq(temp_dict_male)
-        temp_dict_female = get_comparative_word_freq(temp_dict_female)
-
-        relative_freq_male_subject[book] = temp_dict_male['subject']
-        relative_freq_female_subject[book] = temp_dict_female['subject']
-        relative_freq_male_object[book] = temp_dict_male['object']
-        relative_freq_female_object[book] = temp_dict_female['object']
-
-    if pickle_filepath_male and pickle_filepath_female:
-        common.store_pickle(relative_freq_male_subject, pickle_filepath_male)
-        common.store_pickle(relative_freq_female_subject, pickle_filepath_female)
-
-    return relative_freq_male_subject, relative_freq_female_subject
+    return relative_freq
 
 
-def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_male=None, pickle_filepath_female=None):
+def document_subject_object_freq(document, genders):
+
+    freq = {}
+    relative_freq = {}
+
+    for gender in genders:
+        freq[gender] = {}
+        relative_freq[gender] = {}
+        freq[gender]['subj'] = 0
+        freq[gender]['obj'] = 0
+        gender_subjects = gender.subj.copy()
+        gender_objects = gender.obj.copy()
+        for x in range(0, len(gender_subjects)):
+            subject_pronoun = gender_subjects.pop()
+            freq[gender]['subj'] += document.get_word_freq(subject_pronoun)
+        for x in range(0, len(gender_objects)):
+            object_pronoun = gender_objects.pop()
+            freq[gender]['obj'] += document.get_word_freq(object_pronoun)
+
+        comp_freq = get_comparative_word_freq(freq[gender])
+        relative_freq[gender]['subj'] = comp_freq['subj']
+        relative_freq[gender]['obj'] = comp_freq['obj']
+
+    return relative_freq
+
+
+def corpus_subject_pronouns_gender_comparison(corp, gender_to_include, genders_to_exclude, pickle_filepath = None):
     """
     Takes in a Corpus of novels and a gender.
     The gender determines whether the male frequency or female frequency will be returned.
@@ -322,71 +355,98 @@ def subject_pronouns_gender_comparison(corp, subject_gender, pickle_filepath_mal
     pronouns in the book that are of the specified gender.
 
     :param corp: Corpus object
-    :param subject_gender: string 'male' or string 'female'
-    :param pickle_filepath_male: Location to store results for male results; will not write a file if None
-    :param pickle_filepath_female: Location to store results for female results; will not write a file if None
+    :param gender_to_include: a Gender object to look for
+    :param genders_to_exclude: A list of Gender objects to compare against
+    :param pickle_filepath: Location to store results for male results; will not write a file if None
     :return: dictionary
 
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
-    >>> subject_pronouns_gender_comparison(Corpus(path, csv_path=path_to_csv, ignore_warnings = True), 'male')
-    {<Document (aanrud_longfrock)>: 0.2557575757575758, <Document (abbott_flatlandromance)>: 0.9104477611940299, <Document (abbott_indiscreetletter)>: 0.582857142857143, <Document (adams_fighting)>: 0.8210144927536231, <Document (alcott_josboys)>: 0.5741360089186176, <Document (alcott_littlemen)>: 0.6829847908745247, <Document (alcott_littlewomen)>: 0.39719502513892563, <Document (alden_chautauqua)>: 0.2543488481429243, <Document (austen_emma)>: 0.43691765298413493, <Document (austen_persuasion)>: 0.45696623870660963}
-    >>> subject_pronouns_gender_comparison(Corpus(path, csv_path=path_to_csv, ignore_warnings = True), 'female')
-    {<Document (aanrud_longfrock)>: 0.7442424242424243, <Document (abbott_flatlandromance)>: 0.08955223880597016, <Document (abbott_indiscreetletter)>: 0.4171428571428572, <Document (adams_fighting)>: 0.17898550724637682, <Document (alcott_josboys)>: 0.42586399108138234, <Document (alcott_littlemen)>: 0.31701520912547526, <Document (alcott_littlewomen)>: 0.6028049748610743, <Document (alden_chautauqua)>: 0.7456511518570758, <Document (austen_emma)>: 0.563082347015865, <Document (austen_persuasion)>: 0.5430337612933904}
-
+    >>> from gender_analysis.common import MALE, FEMALE
+    >>> from gender_analysis.analysis.gender_frequency import corpus_subject_pronouns_gender_comparison
+    >>> corpus = Corpus(path, csv_path = path_to_csv, ignore_warnings = True)
+    >>>
     """
 
-    if not(subject_gender == 'male' or subject_gender == 'female'):
-        raise ValueError('subject_gender must be \'male\' or \'female\'')
+    # TODO: Work on this pickling. I am not convinced that this is a place for pickling.
 
-    try:
-        relative_freq_male_subject = common.load_pickle(pickle_filepath_male)
-        relative_freq_female_subject = common.load_pickle(pickle_filepath_female)
-        if subject_gender == 'male':
-            return relative_freq_male_subject
-        else:
-            return relative_freq_female_subject
-    except IOError:
-        pass
+    # try:
+    #     relative_freq = common.load_pickle(pickle_filepath)
+    # except IOError:
+    #     pass
 
-    relative_freq_female_sub = {}
-    relative_freq_male_sub = {}
+    relative_freq_sub = {}
 
-    for book in corp.documents:
-        he = book.get_word_freq('he')
-        she = book.get_word_freq('she')
+    for doc in corp.documents:
+        relative_freq_sub[doc] = {}
+        relative_freq_sub[doc] = doc_subject_pronouns_gender_comparison(doc, gender_to_include, genders_to_exclude)
 
-        relative_freq_female_sub[book] = she/(he+she)
-        relative_freq_male_sub[book] = he/(he+she)
+        # TODO: Do we need this pickling? None of this stuff seems too intensive, it's all counts.
+        # if pickle_filepath_male and pickle_filepath_female:
+        #     common.store_pickle(relative_freq_female_sub,
+        #                         pickle_filepath_female)
+        #     common.store_pickle(relative_freq_male_sub, pickle_filepath_male)
 
-    if pickle_filepath_male and pickle_filepath_female:
-        common.store_pickle(relative_freq_female_sub,
-                            pickle_filepath_female)
-        common.store_pickle(relative_freq_male_sub, pickle_filepath_male)
+    return relative_freq_sub
 
-    if subject_gender == 'male':
-        return relative_freq_male_sub
-    elif subject_gender == 'female':
-        return relative_freq_female_sub
-    else:
-        raise ValueError('subject_gender must be \'male\' or \'female\'')
 
-def freq_by_author_gender(d):
+def doc_subject_pronouns_gender_comparison(doc, gender_to_include, genders_to_exclude):
+
     """
-    Takes in a dictionary of novel objects mapped to relative frequencies (from **document_pronoun_freq**,
+    Takes in a document, a gender to look for, and a list of genders to count against.
+
+    Returns the portion of the subject pronouns in the specified doc that are of the included gender
+
+    :param doc: Document object
+    :param gender_to_include: a Gender object to look for
+    :param genders_to_exclude: A list of Gender objects to compare against
+    :return: A float
+
+    >>> from gender_analysis.corpus import Corpus
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
+    >>> from gender_analysis.common import MALE, FEMALE
+    >>> from gender_analysis.analysis.gender_frequency import doc_subject_pronouns_gender_comparison
+    >>> corpus = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
+    >>> emma = corpus.get_document('title', 'Emma')
+    >>> freq = doc_subject_pronouns_gender_comparison(emma, FEMALE, [MALE])
+    0.563082347015865
+    """
+    subject_numerator = 0
+    subjects_to_include = gender_to_include.subj.copy()
+
+    for x in range(0, len(subjects_to_include)):
+        subject_to_include = subjects_to_include.pop()
+        subject_numerator += doc.get_word_freq(subject_to_include)
+
+    subject_denomenator = subject_numerator
+
+    for gender in genders_to_exclude:
+        subjects_to_exclude = gender.subj.copy()
+        for x in range(0, len(subjects_to_exclude)):
+            subject_to_exclude = subjects_to_exclude.pop()
+            subject_denomenator += doc.get_word_freq(subject_to_exclude)
+
+    relative_freq_sub = subject_numerator / subject_denomenator
+
+    return relative_freq_sub
+
+
+def freq_by_author_gender(d, genders):
+    """
+    Takes in a dictionary of novel objects mapped to relative frequencies (from **corpus_pronoun_freq**,
     **subject_vs_object_freqs**, or **subject_pronouns_gender_comparison**).
     Returns a dictionary with frequencies binned by author gender into lists.
 
     list names key:
-    male_author - male authors
-    female_author- female authors
 
     :param d: dictionary
+    :param genders: a list of Gender objects
     :return: dictionary
 
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
+    >>> from gender_analysis.common import MALE, FEMALE
     >>> novel_metadata = {'author': 'Brontë, Anne', 'title': 'The Tenant of Wildfell Hall', 'date': '1848', 'author_gender':'female',
     ...                   'filename': 'bronte_wildfell.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'bronte_wildfell.txt')}
     >>> bronte = document.Document(novel_metadata)
@@ -394,32 +454,27 @@ def freq_by_author_gender(d):
     ...                   'filename': 'adams_fighting.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'adams_fighting.txt')}
     >>> fighting = document.Document(novel_metadata)
     >>> d = {fighting:0.3, bronte:0.6}
-    >>> freq_by_author_gender(d)
+    >>> freq_by_author_gender(d, [MALE, FEMALE])
     {'Male Author': [0.3], 'Female Author': [0.6]}
 
     """
 
-    male_author = []
-    female_author = []
     data = {}
 
-    for k, v in d.items():
-        author_gender = getattr(k, 'author_gender', None)
-        if author_gender == 'male':
-            male_author.append(v)
-
-        elif author_gender == 'female':
-            female_author.append(v)
-
-    data['Male Author'] = male_author
-    data['Female Author'] = female_author
+    for gender in genders:
+        label = gender.label + " Author"
+        data[label] = {}
+        for k, v in d.items():
+            author_gender = getattr(k, 'author_gender', None)
+            if author_gender == gender.label or author_gender == gender.label.lower():
+                data[label][k] = v
 
     return data
 
 
 def freq_by_date(d, time_frame, bin_size):
     """
-    Takes in a dictionary of novel objects mapped to relative frequencies, and
+    Takes in a dictionary of Document objects mapped to relative frequencies, and
     returns a dictionary with frequencies binned by decades into lists
     List name is mapped to the list of frequencies
 
@@ -654,24 +709,32 @@ def bar_sub_obj_freq(she_freq_dict, he_freq_dict, title, x="N/A"):
     plt.savefig(filepng, bbox_inches='tight')
     plt.savefig(filepdf, bbox_inches='tight')
 
-def stat_analysis(corpus):
-    tot_female_dict = document_pronoun_freq(corpus)
-    author_to_freq_dict = freq_by_author_gender(tot_female_dict)
+def stat_analysis(corpus, two_genders):
+    """
+    This function does a variety of statistical analyses on a corpus. The statistical analyses
+    can only compare two genders at a time, so it takes as an argument a list of any two Gender objs
+
+    :param corpus: a Corpus object
+    :param two_genders: a two-item list of Gender objects
+    """
+    cpf = corpus_pronoun_freq(corpus, two_genders)
+    author_to_freq_dict = freq_by_author_gender(cpf)
 
     author_gender_pronoun_analysis = statistical.get_p_and_ttest_value(author_to_freq_dict[
                                                                      'male_author'],
                                                            author_to_freq_dict["female_author"])
     print("values for gender pronoun stats: ", author_gender_pronoun_analysis)
 
-    sub_v_ob_tuple = subject_vs_object_pronoun_freqs(corpus)
+    # This part is done
+    sub_v_obj = corpus_subject_object_freq(corpus, two_genders)
+    sub_v_obj_dict = {}
+    for gender in two_genders:
+        sub_v_obj_dict[gender] = []
+        for document, value in sub_v_obj.items():
+            sub_v_obj_dict[gender].append(value[gender])
 
-    sub_v_ob_male_dict = sub_v_ob_tuple[0]
-    sub_v_ob_male_list = dict_to_list(sub_v_ob_male_dict)
+    a_g_sub_v_obj_corr = statistical.get_p_and_ttest_value(sub_v_obj_dict[two_genders[0]],
+                                                           sub_v_obj_dict[two_genders[1]])
 
-    sub_v_ob_female_dict = sub_v_ob_tuple[1]
-    sub_v__ob_female_list = dict_to_list(sub_v_ob_female_dict)
-
-    author_gender_sub_v_ob_correlation = statistical.get_p_and_ttest_value(sub_v_ob_male_list,
-                                                                           sub_v__ob_female_list)
-    print("values for subject vs object pronouns between male and female authors: ",
-          author_gender_sub_v_ob_correlation)
+    print("values for subject vs object pronouns between ", two_genders[0].label, " and ",
+          two_genders[1].label, "authors: ", a_g_sub_v_obj_corr)
