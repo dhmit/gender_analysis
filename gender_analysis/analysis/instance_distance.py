@@ -352,6 +352,7 @@ def get_highest_distances(results, num):
     return top_medians
 
 
+# TODO: This seems to not be used anywhere, and also just uses another library
 def get_p_vals(location_median_results, author_gender_median_results, date_median_results):
     """
     Takes results from **results_by_location(results, 'median')**, **results_by_author_gender**,
@@ -553,7 +554,7 @@ def instance_stats(book, medians1, medians2, title):
         as a bar graph
 
     """
-    print(book, medians1, medians2)
+
     fig, ax = plt.subplots()
     plt.ylim(0, 50)
 
@@ -561,17 +562,17 @@ def instance_stats(book, medians1, medians2, title):
     bar_width = .7
     opacity = 0.4
 
-    medians_she = tuple(medians2)
-    medians_he = tuple(medians1)
+    medians_gen_2 = tuple(medians2)
+    medians_gen_1 = tuple(medians1)
     book = tuple(book)
 
-    rects1 = ax.bar(index, medians_he, bar_width, alpha=opacity, color='b', label='Male to Female')
-    rects2 = ax.bar(index, medians_she, bar_width, alpha=opacity, color='r', label='Female to Male')
+    ax.bar(index, medians_gen_1, bar_width, alpha=opacity, color='b', label='Gender 1 to Gender 2')
+    ax.bar(index, medians_gen_2, bar_width, alpha=opacity, color='r', label='Gender 2 to Gender 1')
 
     ax.set_xlabel('Book')
     ax.set_ylabel('Ratio of Median Values')
     ax.set_title(
-        'MtF or FtM Ratio of Median Distance of Gendered Instances by Author')
+        'Ratio of Median Distance of Gendered Instances by Author')
     ax.set_xticks(index)
     plt.xticks(fontsize=8, rotation=90)
     ax.set_xticklabels(book)
@@ -586,6 +587,7 @@ def instance_stats(book, medians1, medians2, title):
     plt.savefig(filepdf, bbox_inches='tight')
 
 
+# TODO: This?
 def run_dist_inst(corpus):
     """
     Runs a program that uses the instance distance analysis on all documents existing in a given
@@ -597,7 +599,6 @@ def run_dist_inst(corpus):
     """
     documents = corpus.documents
     c = len(documents)
-    # loops = c//10 + 1
     loops = c//10 if c % 10 == 0 else c//10+1
 
     num = 0
