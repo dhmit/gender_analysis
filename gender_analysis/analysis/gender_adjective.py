@@ -6,14 +6,15 @@ from gender_analysis.analysis.instance_distance import words_instance_dist
 from gender_analysis import common
 
 
-def find_gender_adj(document, gender_to_find, genders_to_exclude = []):
+def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=None):
     """
     Takes in a document and a Gender to look for, and returns a dictionary of adjectives that
     appear within a window of 5 words around each identifier
 
-    :param: document: Document
-    :param: gender_to_find: Gender
-    :param: genders_to_exclude: list of Genders to exclude.
+    :param document: Document
+    :param gender_to_find: Gender
+    :param word_window: number of words to search for in either direction of a gender instance
+    :param genders_to_exclude: list of Genders to exclude, or None
     :return: dictionary of adjectives that appear around pronouns mapped to the number of occurrences
 
     >>> from gender_analysis import document
@@ -22,7 +23,7 @@ def find_gender_adj(document, gender_to_find, genders_to_exclude = []):
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
     ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_7.txt')}
     >>> scarlett = document.Document(document_metadata)
-    >>> find_gender_adj(scarlett, common.MALE, [common.FEMALE])
+    >>> find_gender_adj(scarlett, common.MALE, genders_to_exclude=[common.FEMALE])
     {'handsome': 3, 'sad': 1}
 
     """
@@ -31,25 +32,16 @@ def find_gender_adj(document, gender_to_find, genders_to_exclude = []):
 
     identifiers_to_find = gender_to_find.identifiers
 
+    if genders_to_exclude is None:
+        genders_to_exclude = list()
+
     identifiers_to_exclude = []
     for gender in genders_to_exclude:
         for identifier in gender.identifiers:
             identifiers_to_exclude.append(identifier)
 
-    distances = words_instance_dist(document, identifiers_to_find)
-
-    if len(distances) == 0:
-        return {}
-    elif len(distances) <= 3:
-        lower_window_bound = 5
-    else:
-        lower_window_bound = median(sorted(distances)[:int(len(distances) / 2)])
-
-    if not lower_window_bound >= 5:
-        return "lower window bound less than 5"
-
-    for words in windowed(text, 11):
-        if not words[5].lower() in identifiers_to_find:
+    for words in windowed(text, 2 * word_window + 1):
+        if not words[word_window].lower() in identifiers_to_find:
             continue
         if bool(set(words) & set(identifiers_to_exclude)):
             continue
@@ -68,6 +60,7 @@ def find_gender_adj(document, gender_to_find, genders_to_exclude = []):
                     output[word] = 1
 
     return output
+
 
 def find_male_adj(document):
     """
@@ -88,7 +81,7 @@ def find_male_adj(document):
 
     """
 
-    return find_gender_adj(document, common.MALE, [common.FEMALE])
+    return find_gender_adj(document, common.MALE, genders_to_exclude=[common.FEMALE])
 
 
 def find_female_adj(document):
@@ -110,7 +103,7 @@ def find_female_adj(document):
 
     """
 
-    return find_gender_adj(document, common.FEMALE, [common.MALE])
+    return find_gender_adj(document, common.FEMALE, genders_to_exclude=[common.MALE])
 
 
 def run_adj_analysis(corpus, gender_list = common.BINARY_GROUP):
