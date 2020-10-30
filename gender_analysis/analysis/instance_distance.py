@@ -110,64 +110,44 @@ def female_instance_dist(document):
     return words_instance_dist(document, common.SHE_SERIES)
 
 
-def run_distance_analysis(corpus, gender_1, gender_2):
+def run_distance_analysis(corpus, genders=None):
     """
-    Takes in a corpus of documents. Return a dictionary with each document mapped to an array of 3 lists:
-
-     - median, mean, min, and max distances between words used for `gender_1`
-     - median, mean, min, and max distances between words used for `gender_2`
-     - for each of the above stats, the difference between values between genders. (male stat - \
-        female stat for all stats) POSITIVE DIFFERENCE VALUES mean there is a LARGER DISTANCE \
-        BETWEEN `gender_1` words, and therefore there is a higher frequency of `gender_2` words.
-
-     dict order - [`gender_1`, `female`]
+    Takes in a corpus of documents. Return a dictionary with each document mapped in the following
+    form:
+    ```
+    {
+        <Document object>: {
+            <Gender object>: {
+                'median': float,
+                'mean: float,
+                'min': float,
+                'max': float
+            }
+        }
+    }
+    ```
 
     :param corpus: Corpus object
-    :param gender_1: The first Gender to check the distances of
-    :param gender_2: The second Gender to check the distances of
-    :return: dictionary where the key is a document and the value is the results of distance analysis
+    :param genders: A collection of genders to perform analyses on. If `None`, defaults to an \
+        analysis on `common.MALE` and `common.FEMALE`
+    :return: Nested dictionary, first mapping documents and next mapping genders to their stats.
 
     """
     results = {}
 
-    for novel in corpus:
-        gender_1_results = words_instance_dist(novel, gender_1.identifiers)
-        gender_2_results = words_instance_dist(novel, gender_2.identifiers)
+    if genders is None:
+        genders = {common.MALE, common.FEMALE}
 
-        gender_1_stats = get_stats(gender_1_results)
-        gender_2_stats = get_stats(gender_2_results)
+    for document in corpus:
+        document_stats = dict()
 
-        diffs = {}
-        for stat in range(0, 4):
-            stat_diff = list(gender_1_stats.values())[stat] - list(gender_2_stats.values())[stat]
-            diffs[list(gender_1_stats.keys())[stat]] = stat_diff
+        for gender in genders:
+            gender_results = words_instance_dist(document, gender.identifiers)
+            document_stats[gender] = get_stats(gender_results)
 
-        results[novel] = {
-            gender_1: gender_1_stats,
-            gender_2: gender_2_stats,
-            'difference': diffs
-        }
+        results[document] = document_stats
 
     return results
-
-
-def store_raw_results(results, pickle_filepath='instance_distance_raw_analysis.pgz'):
-    """
-    Stores results from an analysis as a pickle file.
-
-    :param results: A Python object that can be pickled
-    :param pickle_filepath: Destination for pickle file
-    :return: None
-    """
-    try:
-        common.load_pickle(pickle_filepath)
-        x = input("results already stored. overwrite previous analysis? (y/n)")
-        if x == 'y':
-            common.store_pickle(results, pickle_filepath)
-        else:
-            pass
-    except IOError:
-        common.store_pickle(results, pickle_filepath)
 
 
 def get_stats(distance_results):
@@ -186,16 +166,16 @@ def get_stats(distance_results):
             distance_results), 'max': max(distance_results)}
 
 
-def _get_document_field_metrics(document_results, metric):
+def _get_document_gender_metrics(document_results, metric):
     """
     This is a helper function for `results_by` functions.
 
-    Pulls out the given metric from a document's min/max/etc. dictionary and maps each field
-    (gender/difference) as a key.
+    Pulls out the given metric from a document's min/max/etc. dictionary and maps each gender
+    as a key.
 
     :param document_results: A dictionary mapping different fields to a dictionary of min/max/etc.
     :param metric: The metric to extract from results
-    :return: A dictionary mapping each field from `document_results` to the value of the metric for
+    :return: A dictionary mapping each gender from `document_results` to the value of the metric for
         that field
     """
 
@@ -209,22 +189,27 @@ def _get_document_field_metrics(document_results, metric):
 def results_by_author_gender(results, metric):
     """
     Takes in a dictionary of results and a specified metric from **run_distance_analysis**, returns
-    a dictionary:
+    a dictionary in the following form:
 
-    - key = gender of the author
-    - value  = list of dictionaries. Each dictionary has 3 elements: median/mean/max/min gender_1 \
-        pronoun distance, gender_2 pronoun distance, and the difference (whether it is median, \
-        mean, min, or max depends on the specified metric) \
+    ```
+    {
+        'author_gender': {
+            <Document Object>: {
+                <Gender Object>: metric_result
+            }
+        }
+    }
+    ```
 
     :param results: dictionary from **run_distance_analysis**
-    :param metric: ('median', 'mean', 'min', 'max')
+    :param metric: one of ('median', 'mean', 'min', 'max')
     :return: dictionary
 
     """
     data = dict()
-    metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
-    if metric not in metric_indexes:
-        raise ValueError(f"{metric} is not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+    if metric not in {'median', 'mean', 'min', 'max'}:
+        raise ValueError(f"{metric} is not valid metric name. Valid names: 'median', 'mean', "
+                         f"'min', 'max'")
 
     for document in results:
 
@@ -234,39 +219,44 @@ def results_by_author_gender(results, metric):
             continue
 
         if author_gender not in data:
-            data[author_gender] = list()
+            data[author_gender] = dict()
 
-        data[author_gender].append(_get_document_field_metrics(results[document], metric))
+        data[author_gender][document] = _get_document_gender_metrics(results[document], metric)
 
     return data
 
 
-def results_by_date(results, metric, time_frame, bin_size):
+def results_by_year(results, metric, time_frame, bin_size):
     """
     Takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
-    dictionary:
+    dictionary in the following form:
 
-    - key = date range
-    - value  = list of dictionaries. Each dictionary has 3 elements: median/mean/max/min gender_1 \
-        pronoun distance, gender_2 pronoun distance, and the difference (whether it is median, \
-        mean, min, or max depends on the specified metric)
+    ```
+    {
+        year: {
+            <Document Object>: {
+                <Gender Object>: metric_result
+            }
+        }
+    }
+    ```
 
     :param results: dictionary
     :param metric: ('median', 'mean', 'min', 'max')
     :param time_frame: tuple (int start year, int end year) for the range of dates to return
         frequencies
-    :param bin_size: int for the number of years represented in each list of frequencies
-    :return: dictionary
+    :param bin_size: int for the number of years represented in each document dictionary
+    :return: nested dictionary, mapping integer years->`Document`s->`Gender`s->float results
 
     """
 
-    metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
-    if metric not in metric_indexes:
-        raise ValueError(f"{metric} is not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+    if metric not in {'median', 'mean', 'min', 'max'}:
+        raise ValueError(f"{metric} is not valid metric name. Valid names: 'median', 'mean', "
+                         f"'min', 'max'")
 
     data = {}
     for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
-        data[bin_start_year] = []
+        data[bin_start_year] = dict()
 
     for document in results.keys():
 
@@ -275,20 +265,25 @@ def results_by_date(results, metric, time_frame, bin_size):
             continue
 
         bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
-        data[bin_year].append(_get_document_field_metrics(results[document], metric))
+        data[bin_year][document] = _get_document_gender_metrics(results[document], metric)
 
     return data
 
 
 def results_by_location(results, metric):
     """
-    Takes in a dictionary of results and a specified metric from **run_distance_analysis**, returns a
-    dictionary:
+    Takes in a dictionary of results and a specified metric from **run_distance_analysis**, returns
+    a dictionary of the following form:
 
-    - key = location
-    - value  = list of dictionaries. Each dictionary has 3 elements: median/mean/max/min gender_1 \
-        pronoun distance, gender_2 pronoun distance, and the difference (whether it is median, \
-        mean, min, or max depends on the specified metric)
+    ```
+    {
+        'location': {
+            <Document Object>: {
+                <Gender Object>: metric_result
+            }
+        }
+    }
+    ```
 
     :param results: dictionary
     :param metric: ('median', 'mean', 'min', 'max')
@@ -298,7 +293,8 @@ def results_by_location(results, metric):
     data = {}
     metric_indexes = {"median": 0, "mean": 2, "min": 3, "max": 4}
     if metric not in metric_indexes:
-        raise ValueError(f"{metric} is not valid metric name. Valid names: 'median', 'mean', 'min', 'max'")
+        raise ValueError(f"{metric} is not valid metric name. Valid names: 'median', 'mean', "
+                         f"'min', 'max'")
 
     for document in results.keys():
 
@@ -307,28 +303,21 @@ def results_by_location(results, metric):
             continue
 
         if location not in data:
-            data[location] = []
+            data[location] = dict()
 
-        data[location].append(_get_document_field_metrics(results[document], metric))
+        data[location][document] = _get_document_gender_metrics(results[document], metric)
 
     return data
 
 
 def get_highest_distances(results, num):
     """
-    Takes results from instance_distance_analysis.run_distance_analysis and a number of top
-    results to return.
-    Returns 3 lists.
+    Finds the documents with the largest median distances between each gender that was analyzed.
 
-    - Documents with the largest median gender_1 instance distance
-    - Documents with the largest median gender_2 instance distance
-    - Documents with the largest difference between median gender_1 & median gender_2 instance \
-        distances
+    Returns a dictionary mapping genders to a list of tuples of the form (<Document>, median),
+    where `Document`s with higher medians are listed first.
 
-    Each list contains tuples, where each tuple has a document and the median gender/difference
-    instance distance
-
-    :param results: dictionary of results from run_distance_analysis
+    :param results: dictionary of results from `run_distance_analysis`
     :param num: number of top distances to return
     :return: Dictionary of lists of tuples.
 
@@ -338,16 +327,16 @@ def get_highest_distances(results, num):
 
     # Get all of the medians for the documents
     for document in results:
-        for field in results['document']:
-            if field not in medians:
-                medians[field] = list()
+        for gender in results['document']:
+            if gender not in medians:
+                medians[gender] = list()
 
-            medians[field].append((results[document][field]['median'], document))
+            medians[gender].append((results[document][gender]['median'], document))
 
     # Pull out the top medians
     top_medians = dict()
-    for field in medians:
-        top_medians[field] = sorted(medians[field], reverse=True)[0:num]
+    for gender in medians:
+        top_medians[gender] = sorted(medians[gender], reverse=True)[0:num]
 
     return top_medians
 
@@ -398,12 +387,12 @@ def get_p_vals(location_median_results, author_gender_median_results, date_media
     return pnds.DataFrame({"names": names, "pvals": median_distance_between_female_pronouns_pvals})
 
 
-def box_plots(inst_data, my_pal, title, x="N/A"):
+def box_plots(inst_data, palette, title, x="N/A"):
     """
     Takes in a frequency dictionaries and exports its values as a bar-and-whisker graph
 
     :param inst_data: Dictionary containing instance distance data (from one of the other functions in the module)
-    :param my_pal: str, seaborn palette to be used
+    :param palette: str, seaborn palette to be used
     :param title: str, filename of exported graph
     :param x: name of x-vars
     :return: None
@@ -424,7 +413,7 @@ def box_plots(inst_data, my_pal, title, x="N/A"):
     df = df[[x, 'Median Female Instance Distance']]
     common.load_graph_settings()
     sns.boxplot(x=df[x], y=df['Median Female Instance Distance'],
-                palette=my_pal).set_title(title)
+                palette=palette).set_title(title)
     plt.xticks(rotation=90)
     # plt.show()
 
@@ -467,80 +456,6 @@ def process_medians(gen_1_dist, gen_2_dist, authlst):
                 print("ERR: no gen_1 values: " + authlst[num])
             if gen_2_dist == 0:
                 print("ERR: no gen_2 values: " + authlst[num])
-    return d
-
-
-# TODO: What is the purpose of this?
-def bubble_sort_across_lists(dictionary):
-    """
-    :param dictionary: containing 3 different list values.
-        Note: dictionary keys MUST contain arguments 'he', 'she', and 'book'
-    :return: dictionary sorted across all three lists in a specific method:
-
-        - Descending order of 'he' values
-        - Ascending order of 'she' values
-        - Corresponding values of 'book' values
-
-    >>> d = {'he': [0, 2.5, 0, 1.3846153846153846, 0, 1.0, 5.3478260869565215],
-    ...     'she': [10.25, 0, 28.75, 0, 14.266666666666667, 0, 0],
-    ...     'book': ['a', 'b', 'd', 'f', 'g', 'h', 'i']}
-    >>> bubble_sort_across_lists(d)
-    {'he': [5.3478260869565215, 2.5, 1.3846153846153846, 1.0, 0, 0, 0], 'she': [0, 0, 0, 0, 10.25, 14.266666666666667, 28.75], 'book': ['i', 'b', 'f', 'h', 'a', 'g', 'd']}
-
-    """
-    lst1 = dictionary['he']
-    lst2 = dictionary['she']
-    lst3 = dictionary['book']
-    r = range(len(lst1) - 1)
-    p = True
-
-    # sort by lst1 descending
-    for j in r:
-        for i in r:
-            if lst1[i] < lst1[i + 1]:
-                # manipulating lst 1
-                temp1 = lst1[i]
-                lst1[i] = lst1[i + 1]
-                lst1[i + 1] = temp1
-                # manipulating lst 2
-                temp2 = lst2[i]
-                lst2[i] = lst2[i + 1]
-                lst2[i + 1] = temp2
-                # manipulating lst of authors
-                temp3 = lst3[i]
-                lst3[i] = lst3[i + 1]
-                lst3[i + 1] = temp3
-                p = False
-        if p:
-            break
-        else:
-            p = True
-
-    # sort by lst2 ascending
-    for j in r:
-        for i in r:
-            if lst2[i] > lst2[i + 1]:
-                # manipulating lst 1
-                temp1 = lst1[i]
-                lst1[i] = lst1[i + 1]
-                lst1[i + 1] = temp1
-                # manipulating lst 2
-                temp2 = lst2[i]
-                lst2[i] = lst2[i + 1]
-                lst2[i + 1] = temp2
-                # manipulating lst of authors
-                temp3 = lst3[i]
-                lst3[i] = lst3[i + 1]
-                lst3[i + 1] = temp3
-                p = False
-        if p:
-            break
-        else:
-            p = True
-    d = {}
-    d['he'] = lst1
-    d['she'] = lst2
-    d['book'] = lst3
     return d
 
 
@@ -587,13 +502,13 @@ def instance_stats(book, medians1, medians2, title):
     plt.savefig(filepdf, bbox_inches='tight')
 
 
-# TODO: This?
-def run_dist_inst(corpus):
+def run_dist_inst(corpus, genders):
     """
     Runs a program that uses the instance distance analysis on all documents existing in a given
     corpus, and outputs the data as graphs
 
     :param corpus: Corpus object
+    :param genders: Collection of `Gender`s to perform the analysis on
     :return: None
 
     """
@@ -627,6 +542,5 @@ def run_dist_inst(corpus):
             else:
                 books.append(document.filename[0:20])
         d = process_medians(gen_1_dist=medians_he, gen_2_dist=medians_she, authlst=books)
-        d = bubble_sort_across_lists(d)
         instance_stats(d["book"], d["he"], d["she"], "inst_dist" + str(num))
         num += 1
