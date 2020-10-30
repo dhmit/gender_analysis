@@ -341,52 +341,6 @@ def get_highest_distances(results, num):
     return top_medians
 
 
-# TODO: This seems to not be used anywhere, and also just uses another library
-def get_p_vals(location_median_results, author_gender_median_results, date_median_results):
-    """
-    Takes results from **results_by_location(results, 'median')**, **results_by_author_gender**,
-    **results_by_date**.
-
-    ANOVA test for independence of:
-
-    - male vs female authors' median distance between female instances
-    - UK vs. US vs. other country authors' median distance between female instances
-    - Date ranges authors' median distance between female instances
-
-    :param location_median_results: result of **results_by_location(results, 'median')**
-    :param author_gender_median_results: result of **results_by_author_gender(results, 'median)**
-    :param date_median_results: result of **results_by_date(results, 'median')**
-    :return: data-frame with 3 p-values, one for each category comparison
-
-    """
-
-    r1 = location_median_results
-    r2 = author_gender_median_results
-    r3 = date_median_results
-
-    names = ["location", "author_genders", "date"]
-
-    location_medians = []
-    author_gender_medians = []
-    date_medians = []
-
-    med = [location_medians, author_gender_medians, date_medians]
-    res = [r1, r2, r3]
-
-    for r in range(0, 3):
-        for key in list(res[r].keys()):
-            medians = []
-            for el in list(res[r][key]):
-                medians.append(el[1])
-            med[r].append(medians)
-    _, location_pval = stats.f_oneway(location_medians[0], location_medians[1])
-    _, author_gender_pval = stats.f_oneway(author_gender_medians[0], author_gender_medians[1])
-    _, date_pval = stats.f_oneway(*date_medians)
-    median_distance_between_female_pronouns_pvals = [location_pval, author_gender_pval, date_pval]
-
-    return pnds.DataFrame({"names": names, "pvals": median_distance_between_female_pronouns_pvals})
-
-
 def box_plots(inst_data, palette, title, x="N/A"):
     """
     Takes in a frequency dictionaries and exports its values as a bar-and-whisker graph
@@ -542,5 +496,5 @@ def run_dist_inst(corpus, genders):
             else:
                 books.append(document.filename[0:20])
         d = process_medians(gen_1_dist=medians_he, gen_2_dist=medians_she, authlst=books)
-        instance_stats(d["book"], d["he"], d["she"], "inst_dist" + str(num))
+        instance_stats(d["book"], d["gen_1"], d["gen_2"], "inst_dist" + str(num))
         num += 1
