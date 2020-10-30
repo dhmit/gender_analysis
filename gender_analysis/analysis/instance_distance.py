@@ -1,6 +1,5 @@
 from statistics import median, mean
 
-from scipy import stats
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pnds
@@ -143,14 +142,14 @@ def run_distance_analysis(corpus, genders=None):
 
         for gender in genders:
             gender_results = words_instance_dist(document, gender.identifiers)
-            document_stats[gender] = get_stats(gender_results)
+            document_stats[gender] = _get_stats(gender_results)
 
         results[document] = document_stats
 
     return results
 
 
-def get_stats(distance_results):
+def _get_stats(distance_results):
     """
     Returns a dictionary of data from a given set of instance distance data, with keys of 'median',
     'mean', 'min', and 'max'.
