@@ -25,6 +25,7 @@ NONBINARY = Gender('Nonbinary', THEY_SERIES)
 BINARY_GROUP = [FEMALE, MALE]
 TRINARY_GROUP = [FEMALE, MALE, NONBINARY]
 
+
 def load_csv_to_list(file_path):
     """
     Loads a csv file from the given filepath and returns its contents as a list of strings.
@@ -265,10 +266,10 @@ def load_graph_settings(show_grid_lines=True):
     show_grid_lines_string = str(show_grid_lines)
     palette = "colorblind"
     style_name = "white"
-    background_color = (252/255,245/255,233/255,0.4)
+    background_color = (252 / 255, 245 / 255, 233 / 255, 0.4)
     style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': show_grid_lines_string,
-                  'font.family': 'serif', 'axes.facecolor':background_color,
-                  'figure.facecolor':background_color}
+                  'font.family': 'serif', 'axes.facecolor': background_color,
+                  'figure.facecolor': background_color}
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
 
@@ -291,8 +292,9 @@ def download_nltk_package_if_not_present(package_name):
     try:
         nltk.data.find(package_name)
     except LookupError:
-        user_key = input(f'This function requires the NLTK package {package_name}, which you do not have installed.\n'
-                         + 'Press ENTER to download and install this package, or n then enter to cancel and exit.\n')
+        user_key = input(
+            f'This function requires the NLTK package {package_name}, which you do not have installed.\n'
+            + 'Press ENTER to download and install this package, or n then enter to cancel and exit.\n')
         if user_key.strip() == 'n':
             exit()
 
@@ -305,6 +307,7 @@ class MissingMetadataError(Exception):
     Raised when a function that assumes certain metadata is called on a corpus without that
     metadata
     """
+
     def __init__(self, metadata_fields, message=None):
         self.metadata_fields = metadata_fields
         self.message = message if message else ''
@@ -320,14 +323,40 @@ class MissingMetadataError(Exception):
         is_plural = len(self.metadata_fields) > 1
 
         return (
-            'This Corpus is missing the following metadata field' + ('s' if is_plural else '') + ':\n'
+            'This Corpus is missing the following metadata field' + (
+            's' if is_plural else '') + ':\n'
             + '    ' + metadata_string + '\n'
             + self.message + ('\n' if self.message else '')
             + 'In order to run this function, you must create a new metadata csv\n'
-            + 'with ' + ('these ' if is_plural else 'this ') + 'field' + ('s ' if is_plural else ' ')
+            + 'with ' + ('these ' if is_plural else 'this ') + 'field' + (
+                's ' if is_plural else ' ')
             + 'and run Corpus.update_metadata().'
         )
 
+
+def create_path_object_and_directories(output_dir, filename=None):
+    """
+    Creates a path object for the file with the absolute output_dir and with the
+    given filename (if provided). It will create the path to the output_dir if it is non-existent
+    """
+    try:
+        path = output_dir
+
+        if isinstance(output_dir, str):
+            path = Path(output_dir)
+
+        if not os.path.isdir(output_dir):
+            path.mkdir(parents=True)
+
+        if filename:
+            path = path.joinpath(filename)
+
+        return path
+    except OSError:
+        print("Could not creare the correct file and path")
+
+
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test
+
     main_test(import_plus_relative=True)  # this allows for relative calls in the import.

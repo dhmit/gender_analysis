@@ -11,19 +11,18 @@ OUTPUT_DIRECTORY_PATH = Path(os.getcwd()).joinpath(Path("gender_analysis")) \
 
 class TestMetadataVisualizations:
 
-    def test_generate_filepath_for_visualizations_create_directory(self):
-        if os.path.isdir(OUTPUT_DIRECTORY_PATH):
-            shutil.rmtree(OUTPUT_DIRECTORY_PATH)
-
-        assert generate_file_path_for_visualizations(OUTPUT_DIRECTORY_PATH) == OUTPUT_DIRECTORY_PATH
-        assert generate_file_path_for_visualizations(
-            str(OUTPUT_DIRECTORY_PATH)) == OUTPUT_DIRECTORY_PATH
-        assert os.path.isdir(OUTPUT_DIRECTORY_PATH)
-
-        # Test a bad directory creation
-        assert generate_file_path_for_visualizations(
+    def test_create_path_object_and_directories(self):
+        assert create_path_object_and_directories(
             OUTPUT_DIRECTORY_PATH.joinpath("additional_folder").joinpath(
-                "another_folder")) == DEFAULT_VISUALIZATION_OUTPUT_DIR
+                "another_folder"), "random.jpg") == \
+               OUTPUT_DIRECTORY_PATH.joinpath("additional_folder").joinpath(
+                   "another_folder").joinpath("random.jpg")
+
+        assert os.path.isdir(OUTPUT_DIRECTORY_PATH.joinpath("additional_folder").joinpath(
+                "another_folder"))
+
+        if os.path.isdir(OUTPUT_DIRECTORY_PATH.joinpath("additional_folder")):
+            shutil.rmtree(OUTPUT_DIRECTORY_PATH.joinpath("additional_folder"))
 
     def test_plot_pubyears_different_file_constructions(self):
         c = Corpus(
