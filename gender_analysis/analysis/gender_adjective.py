@@ -361,12 +361,16 @@ def get_top_adj(full_results, num):
 
     return top
 
+
 def display_gender_adjectives(result_dict,num_to_return):
-    '''takes the results of find_gender_adj and prints out to the user the top number_to_return
+    '''
+    takes the results of find_gender_adj and prints out to the user the top number_to_return
     adjectives associated with the gender searched for, sorted
+
     result_dict:a dict of word-value frequency
     num_to_return: top num of words to be returned to the user -> threshold, or the top?
-    return: tuples of sorted top num_to_return words with their freq'''
+    return: tuples of sorted top num_to_return words with their freq
+    '''
     result_tup_list = [(key,result_dict[key]) for key in result_dict]
     return sorted(result_tup_list, key=lambda word:word[1], reverse=True)[:num_to_return]
 
