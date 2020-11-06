@@ -2,12 +2,9 @@ from collections import Counter
 
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 import nltk
 from pathlib import Path
 from gender_analysis import common
-from gender_analysis.analysis import statistical
 
 
 def get_count_words(document, words):
@@ -242,7 +239,7 @@ def corpus_pronoun_freq(corp, genders, pickle_filepath=None):
     >>> flatland = c.get_document('title', 'Flatland')
     >>> result = pronoun_freq_dict[flatland]
     >>> pronoun_freq_dict[flatland]
-    {'Female': 0.14942528735632185, 'Male': 0.8505747126436781}
+    {'Female': 0.1494252873563218, 'Male': 0.8505747126436781}
 
     """
 
@@ -455,7 +452,7 @@ def freq_by_author_gender(d, genders):
     >>> fighting = document.Document(novel_metadata)
     >>> d = {fighting:0.3, bronte:0.6}
     >>> freq_by_author_gender(d, [MALE, FEMALE])
-    {'Male': {<Document (adams_fighting)>: 0.3}, 'Female': {<Document (bronte_wildfell)>: 0.6}}
+    {'Male Authors': [0.3], 'Female Authors': [0.6]}
 
     """
 
@@ -500,7 +497,7 @@ def freq_by_date(d, time_frame, bin_size):
     ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
     >>> scarlet = document.Document(novel_metadata)
     >>> d = {scarlet:0.5, austen:0.3}
-    >>> freq_by_date(d, (1770, 1910), 10)
+    >>> freq_by_date(d, (1770, 1900), 10)
     {1770: [], 1780: [], 1790: [], 1800: [], 1810: [0.3], 1820: [], 1830: [], 1840: [], 1850: [], 1860: [], 1870: [], 1880: [], 1890: [], 1900: [0.5]}
 
     """
@@ -625,129 +622,3 @@ def sort_every_year(frequency_dict):
             every_year_dict[key.date].append(frequency_dict[key])
 
     return every_year_dict
-
-
-def box_gender_pronoun_freq(freq_dict, my_pal, title, x="N/A"):
-    """
-    Takes in a frequency dictionary (from **freq_by_author_gender**, **freq_by_date**,
-     or **freq_by_location**) and exports its values as a bar-and-whisker graph
-
-    :param freq_dict: dictionary of frequencies
-    :param my_pal: palette to be used
-    :param title: title of exported graph
-    :param x: name of x-vars
-    :return: None
-
-    X axis should go from 0 to 1
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
-    >>> from gender_analysis.common import MALE, FEMALE
-    >>> from gender_analysis.analysis.gender_frequency import *
-    >>> two_genders = [MALE, FEMALE]
-    >>> corpus = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
-    >>> cpf = corpus_pronoun_freq(corpus, [MALE, FEMALE])
-    >>> f_b_a_g = freq_by_author_gender(cpf, two_genders)
-    >>> box_gender_pronoun_freq(f_b_a_g, "pastel", "test title")
-
-    """
-
-    plt.clf()
-    groups = []
-    val = []
-    df_dict = {}
-    for k, v in freq_dict.items():
-        df_dict[k] = {}
-        df_dict[k] = pd.DataFrame.from_dict(v)
-
-    common.load_graph_settings()
-    sns.boxplot(x=df[x], y=df['Frequency'],
-                palette=my_pal).set_title("Relative Frequency of Female Pronouns to Total Pronouns")
-    plt.xticks(rotation=90)
-    # plt.show()
-
-    filepng = "visualizations/" + title + ".png"
-    filepdf = "visualizations/" + title + ".pdf"
-    plt.savefig(filepng, bbox_inches='tight')
-    plt.savefig(filepdf, bbox_inches='tight')
-
-
-# def bar_sub_obj_freq(she_freq_dict, he_freq_dict, title, x="N/A"):
-#     """
-#     Creates a bar graph given male/female subject/object frequencies. Meant to be run with data
-#     sorted by 'freq_by_author_gender', 'freq_by_date', or 'freq_by_location'
-#
-#     :param she_freq_dict:
-#     :param he_freq_dict:
-#     :param title: name of the exported file
-#     :param x: value of x axis
-#     :return: None
-#
-#     """
-#
-#     fig, ax = plt.subplots()
-#     plt.ylim(0, 1)
-#
-#     key = []
-#
-#     for k, v in she_freq_dict.items():
-#         key.append(k)
-#
-#     m_freq = dict_to_list(he_freq_dict)
-#     f_freq = dict_to_list(she_freq_dict)
-#
-#     index = np.arange(len(she_freq_dict.keys()))
-#     bar_width = 0.35
-#     opacity = 0.4
-#
-#     ax.bar(index, [1]*len(m_freq), bar_width, alpha=opacity, color='c', label="Male Object")
-#     ax.bar(index, m_freq, bar_width, alpha=opacity, color='b', label='Male Subject')
-#     ax.bar(index + bar_width, [1]*len(f_freq), bar_width, alpha=opacity, color='#DE8F05',
-#            label="Female Object")
-#     ax.bar(index + bar_width, f_freq, bar_width, alpha=opacity, color='r', label='Female Subject')
-#
-#     ax.set_xlabel(x)
-#     ax.set_ylabel('Frequency')
-#     ax.set_title('Relative Frequencies of Subject to Object Pronouns')
-#     ax.set_xticks(index + bar_width / 2)
-#     plt.xticks(fontsize=8, rotation=90)
-#     ax.set_xticklabels(key)
-#     ax.legend()
-#
-#     fig.tight_layout()
-#
-#     filepng = "visualizations/" + title + ".png"
-#     filepdf = "visualizations/" + title + ".pdf"
-#     plt.savefig(filepng, bbox_inches='tight')
-#     plt.savefig(filepdf, bbox_inches='tight')
-
-
-def stat_analysis(corpus, two_genders):
-    """
-    This function does a variety of statistical analyses on a corpus. The statistical analyses
-    can only compare two genders at a time, so it takes as an argument a list of any two Gender objs
-
-    :param corpus: a Corpus object
-    :param two_genders: a two-item list of Gender objects
-    """
-
-    cpf = corpus_pronoun_freq(corpus, two_genders)
-    author_to_freq_dict = freq_by_author_gender(cpf)
-
-    author_gender_pronoun_analysis = statistical.get_p_and_ttest_value(author_to_freq_dict[two_genders[0].label],
-                                                           author_to_freq_dict[two_genders[1].label])
-
-    print("values for gender pronoun stats: ", author_gender_pronoun_analysis)
-
-    # This part is done
-    sub_v_obj = corpus_subject_object_freq(corpus, two_genders)
-    sub_v_obj_dict = {}
-    for gender in two_genders:
-        sub_v_obj_dict[gender] = []
-        for document, value in sub_v_obj.items():
-            sub_v_obj_dict[gender].append(value[gender])
-
-    a_g_sub_v_obj_corr = statistical.get_p_and_ttest_value(sub_v_obj_dict[two_genders[0]],
-                                                           sub_v_obj_dict[two_genders[1]])
-
-    print("values for subject vs object pronouns between ", two_genders[0].label, " and ",
-          two_genders[1].label, "authors: ", a_g_sub_v_obj_corr)
