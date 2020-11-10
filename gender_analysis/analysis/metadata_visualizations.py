@@ -2,14 +2,12 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
 from collections import Counter
 
 from gender_analysis.common import MissingMetadataError
 from gender_analysis.common import create_path_object_and_directories
 
-DEFAULT_VISUALIZATION_OUTPUT_DIR = Path(os.getcwd()).joinpath(
-    Path("gender_analysis_visualizations"))
+DEFAULT_VISUALIZATION_OUTPUT_DIR = Path.cwd() / 'gender_analysis_visualizations'
 
 
 def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):

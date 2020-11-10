@@ -352,8 +352,9 @@ def create_path_object_and_directories(output_dir, filename=None):
             path = path.joinpath(filename)
 
         return path
+
     except OSError:
-        print("Could not creare the correct file and path")
+        print("Could not create the correct file and path")
 
 
 if __name__ == '__main__':

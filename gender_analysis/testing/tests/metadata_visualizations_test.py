@@ -4,25 +4,20 @@ from gender_analysis.corpus import Corpus
 from gender_analysis.testing import common
 import filecmp
 
-OUTPUT_DIRECTORY_PATH = Path(os.getcwd()).joinpath(Path("gender_analysis")) \
-    .joinpath(Path("testing")).joinpath(Path("test_files")) \
-    .joinpath(Path("visualizations_test_directory"))
+OUTPUT_DIRECTORY_PATH = common.BASE_PATH / "testing" / "test_files" / "visualizations_test_dir"
 
 
 class TestMetadataVisualizations:
-
     def test_create_path_object_and_directories(self):
-        assert create_path_object_and_directories(
-            OUTPUT_DIRECTORY_PATH.joinpath("additional_folder").joinpath(
-                "another_folder"), "random.jpg") == \
-               OUTPUT_DIRECTORY_PATH.joinpath("additional_folder").joinpath(
-                   "another_folder").joinpath("random.jpg")
+        dir_path = OUTPUT_DIRECTORY_PATH / "additional_folder"
+        input_path = dir_path / "random.jpg"
+        output_path = create_path_object_and_directories(input_path)
 
-        assert os.path.isdir(OUTPUT_DIRECTORY_PATH.joinpath("additional_folder").joinpath(
-                "another_folder"))
+        assert input_path == output_path
+        assert Path.is_dir(dir_path)
 
-        if os.path.isdir(OUTPUT_DIRECTORY_PATH.joinpath("additional_folder")):
-            shutil.rmtree(OUTPUT_DIRECTORY_PATH.joinpath("additional_folder"))
+        # clean up created folders
+        shutil.rmtree(dir_path)
 
     def test_plot_pubyears_different_file_constructions(self):
         c = Corpus(
@@ -37,11 +32,11 @@ class TestMetadataVisualizations:
         test_file_paths = []
 
         plot_pubyears(c, OUTPUT_DIRECTORY_PATH)
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
         test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
 
         plot_pubyears(c, OUTPUT_DIRECTORY_PATH, "testing file1")
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
         test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
 
         for file_created1 in test_file_paths:
@@ -49,7 +44,7 @@ class TestMetadataVisualizations:
                 assert filecmp.cmp(file_created1, file_created2)
 
         for file_created in test_file_paths:
-            os.remove(file_created)
+            Path.unlink(file_created)
 
     def test_plot_pubcountries_different_file_constructions(self):
         c = Corpus(
@@ -64,11 +59,11 @@ class TestMetadataVisualizations:
         test_file_paths = []
 
         plot_pubcountries(c, OUTPUT_DIRECTORY_PATH)
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
         test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
 
         plot_pubcountries(c, OUTPUT_DIRECTORY_PATH, "testing file1")
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
         test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
 
         for file_created1 in test_file_paths:
@@ -76,7 +71,7 @@ class TestMetadataVisualizations:
                 assert filecmp.cmp(file_created1, file_created2)
 
         for file_created in test_file_paths:
-            os.remove(file_created)
+            Path.unlink(file_created)
 
     def test_plot_gender_breakdown_different_file_constructions(self):
         c = Corpus(
@@ -91,11 +86,11 @@ class TestMetadataVisualizations:
         test_file_paths = []
 
         plot_gender_breakdown(c, OUTPUT_DIRECTORY_PATH)
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
         test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
 
         plot_gender_breakdown(c, OUTPUT_DIRECTORY_PATH, "testing file1")
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
         test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
 
         for file_created1 in test_file_paths:
@@ -118,11 +113,11 @@ class TestMetadataVisualizations:
         test_file_paths = []
 
         plot_metadata_pie(c, OUTPUT_DIRECTORY_PATH)
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
         test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
 
         plot_metadata_pie(c, OUTPUT_DIRECTORY_PATH, "testing file1")
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
         test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
 
         for file_created1 in test_file_paths:
@@ -130,7 +125,7 @@ class TestMetadataVisualizations:
                 assert filecmp.cmp(file_created1, file_created2)
 
         for file_created in test_file_paths:
-            os.remove(file_created)
+            Path.unlink(file_created)
 
     def test_create_all_visualizations_but_with_no_corpus_name(self):
         c = Corpus(
@@ -144,7 +139,7 @@ class TestMetadataVisualizations:
         default_pub_date = 'date_of_pub_for_corpus.png'
 
         create_corpus_summary_visualizations(c, OUTPUT_DIRECTORY_PATH)
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(default_gender_breakdown))
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(default_pub_date))
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(default_country_pub))
-        assert os.path.isfile(OUTPUT_DIRECTORY_PATH.joinpath(default_metadata_pie))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_gender_breakdown))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_pub_date))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_country_pub))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_metadata_pie))
