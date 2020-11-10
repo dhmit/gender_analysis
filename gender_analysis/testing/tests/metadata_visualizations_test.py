@@ -98,7 +98,7 @@ class TestMetadataVisualizations:
                 assert filecmp.cmp(file_created1, file_created2)
 
         for file_created in test_file_paths:
-            os.remove(file_created)
+            Path.unlink(file_created)
 
     def test_plot_metadata_pie_different_file_constructions(self):
         c = Corpus(
