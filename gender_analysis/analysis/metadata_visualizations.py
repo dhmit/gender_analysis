@@ -45,7 +45,7 @@ def plot_pubyears(corpus, filename=None):
               weight='bold',
               color='k')
     plt.yticks(size=15, color='k')
-    plt.xticks([i for i in range(min(pub_years), max(pub_years)+9, 10)], size=15, color='k')
+    plt.xticks([i for i in range(min(pub_years), max(pub_years) + 9, 10)], size=15, color='k')
 
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(60)
@@ -55,7 +55,7 @@ def plot_pubyears(corpus, filename=None):
     if filename:
         plt.savefig(filename.replace(' ', '_') + '.png')
     else:
-        plt.savefig('date_of_pub_for_'+corpus_name.replace(' ', '_') + '.png')
+        plt.savefig('date_of_pub_for_' + corpus_name.replace(' ', '_') + '.png')
 
 
 def plot_pubcountries(corpus, filename=None):
@@ -90,13 +90,13 @@ def plot_pubcountries(corpus, filename=None):
     country_counter = {}
     totalbooks = 0
     for country in pub_country:
-        country_counter[country] = country_counter.setdefault(country, 0)+1
+        country_counter[country] = country_counter.setdefault(country, 0) + 1
         totalbooks += 1
     country_counter2 = {'Other': 0}
     for country in country_counter:
         if country == '':
             pass
-        elif country_counter[country] > (.001*totalbooks):
+        elif country_counter[country] > (.001 * totalbooks):
             # must be higher than .1% of the total books to have its own country name,
             # otherwise it is classified under others
             country_counter2[country] = country_counter[country]
@@ -153,28 +153,30 @@ def plot_gender_breakdown(corpus, filename=None):
     gendercount = {}
     for i in pub_gender:
         if i == 'both' or i == 'unknown' or i == 'Both' or i == 'Unknown':
-            gendercount['Unknown'] = gendercount.setdefault('Unknown', 0)+1
+            gendercount['Unknown'] = gendercount.setdefault('Unknown', 0) + 1
         else:
-            gendercount[i] = gendercount.setdefault(i, 0)+1
+            gendercount[i] = gendercount.setdefault(i, 0) + 1
     total = 0
     for i in gendercount:
         total += gendercount[i]
-    slices = [gendercount[i]/total for i in gendercount]
+    slices = [gendercount[i] / total for i in gendercount]
     genders = [i for i in gendercount]
     labelgenders = []
     for i in range(len(genders)):
-        labelgenders.append((genders[i]+': ' + str(int(round(slices[i], 2)*100))+'%').title())
+        labelgenders.append(
+            (genders[i] + ': ' + str(int(round(slices[i], 2) * 100)) + '%').title()
+        )
     colors = ['c', 'b', 'g']
     plt.figure(figsize=(10, 6))
     plt.pie(slices, colors=colors, labels=labelgenders, textprops={'fontsize': 15})
-    plt.title('Gender Breakdown for '+corpus_name.title(), size=18, color='k', weight='bold')
+    plt.title('Gender Breakdown for ' + corpus_name.title(), size=18, color='k', weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_')+'.png')
+        plt.savefig(filename.replace(' ', '_') + '.png')
     else:
-        plt.savefig('gender_breakdown_for_'+corpus_name.replace(' ', '_')+'.png')
+        plt.savefig('gender_breakdown_for_' + corpus_name.replace(' ', '_') + '.png')
 
 
 def plot_metadata_pie(corpus, filename=None):
@@ -212,7 +214,7 @@ def plot_metadata_pie(corpus, filename=None):
             counter['Neither'] += 1
     labels = []
     for label, number in counter.items():
-        labels.append(label + " " + str(int(round(number/num_documents, 2)*100)) + r"%")
+        labels.append(label + " " + str(int(round(number / num_documents, 2) * 100)) + "%")
     sns.set_color_codes('colorblind')
     colors = ['c', 'b', 'g', 'w']
     plt.figure(figsize=(10, 6))

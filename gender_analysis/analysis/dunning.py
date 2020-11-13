@@ -165,8 +165,9 @@ def dunning_total(counter1, counter2, pickle_filepath=None):
                 'count_total': counter1_wordcount + counter2_wordcount,
                 'count_corp1': counter1_wordcount,
                 'count_corp2': counter2_wordcount,
-                'freq_total': (counter1_wordcount + counter2_wordcount) / (total_words_counter1 +
-                                                                           total_words_counter2),
+                'freq_total':
+                    (counter1_wordcount + counter2_wordcount)
+                    / (total_words_counter1 + total_words_counter2),
                 'freq_corp1': counter1_wordcount / total_words_counter1,
                 'freq_corp2': counter2_wordcount / total_words_counter2
             }
