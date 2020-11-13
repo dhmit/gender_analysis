@@ -10,6 +10,7 @@ ignore=
   F401,  # let pylint check for imported but unused (wildcards and exports trigger)
   F821,  # let pylint check for undefined (del at end of module makes undefined)
   F841,  # let pylint check for unused
+  W503,  # line break BEFORE binary operator
 
 exclude=
   .git,
@@ -19,4 +20,6 @@ exclude=
 
 max-line-length=100
 
-# per-file-ignores =
+# F403 = allow for wildcard import
+per-file-ignores =
+  artusi/assignments/sections/fieldTester.py:F403

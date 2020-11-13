@@ -104,9 +104,9 @@ class Gender:
         """
 
         return (
-            self.label == other.label and
-            self.pronoun_series == other.pronoun_series and
-            self.names == other.names
+            self.label == other.label
+            and self.pronoun_series == other.pronoun_series
+            and self.names == other.names
         )
 
     @property

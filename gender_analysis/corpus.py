@@ -19,7 +19,8 @@ class Corpus:
 
     Once loaded, each corpus contains a list of Document objects
 
-    :param path_to_files: Must be either the path to a directory of txt files or an already-pickled corpus
+    :param path_to_files: Must be either the path to a directory of txt files
+                          or an already-pickled corpus
     :param name: Optional name of the corpus, for ease of use and readability
     :param csv_path: Optional path to a csv metadata file
     :param pickle_on_load: Filepath to save a pickled copy of the corpus
@@ -33,22 +34,32 @@ class Corpus:
 
     """
 
-    def __init__(self, path_to_files, name=None, csv_path=None,
-                       pickle_on_load=None, ignore_warnings=False):
-
+    def __init__(
+        self,
+        path_to_files,
+        name=None,
+        csv_path=None,
+        pickle_on_load=None,
+        ignore_warnings=False
+    ):
         if isinstance(path_to_files, str):
             path_to_files = Path(path_to_files)
+
         if not isinstance(path_to_files, Path):
-            raise ValueError(f'path_to_files must be a str or Path object, not type {type(path_to_files)}')
+            raise ValueError(
+                f'path_to_files must be a str or Path object, not type {type(path_to_files)}'
+            )
 
         self.name = name
-        self.documents, self.metadata_fields = self._load_documents_and_metadata(path_to_files,
-                                                                                 csv_path, ignore_warnings = ignore_warnings)
+        self.documents, self.metadata_fields =\
+            self._load_documents_and_metadata(path_to_files,
+                                              csv_path,
+                                              ignore_warnings=ignore_warnings)
 
         if pickle_on_load is not None:
             common.store_pickle(self, pickle_on_load)
 
-    def _load_documents_and_metadata(self, path_to_files, csv_path, ignore_warnings = False):
+    def _load_documents_and_metadata(self, path_to_files, csv_path, ignore_warnings=False):
         """
         Loads documents into the corpus with metadata from a csv file given at initialization.
         """
@@ -75,14 +86,17 @@ class Corpus:
 
             if len(documents) == 0:  # path led to directory with no .txt files
                 raise ValueError(
-                    f'path_to_files must lead to a previously pickled corpus or directory of .txt files'
+                    'path_to_files must lead to a previously pickled corpus '
+                    'or directory of .txt files'
                 )
             elif ignored:
                 print(
-                    'WARNING: the following files were not loaded because they are not .txt files.\n'
-                   + str(ignored) + '\n'
-                   + 'If you would like to analyze the text in these files, convert these files to '
-                   + '.txt and create a new Corpus.'
+                    'WARNING: '
+                    + 'the following files were not loaded because they are not .txt files.\n'
+                    + str(ignored)
+                    + '\n'
+                    + 'If you would like to analyze the text in these files, '
+                    + 'convert these files to .txt and create a new Corpus.'
                 )
 
             return documents, metadata_fields
