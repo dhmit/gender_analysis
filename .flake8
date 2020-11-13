@@ -1,0 +1,22 @@
+[flake8]
+ignore=
+  E126,  # to match visual indentation...
+  E127,  # over indented
+  E128,  # under indented
+  E302,  # blank lines
+  E303,  # blank lines
+  E501,  # let pylint check line length
+  E722,  # let pylint check bare except
+  F401,  # let pylint check for imported but unused (wildcards and exports trigger)
+  F821,  # let pylint check for undefined (del at end of module makes undefined)
+  F841,  # let pylint check for unused
+
+exclude=
+  .git,
+  __pycache__,
+  *.pyc,
+  ext,
+
+max-line-length=100
+
+# per-file-ignores =
