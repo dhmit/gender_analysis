@@ -52,8 +52,8 @@ def load_csv_to_list(file_path):
     if file_type != '.csv':
         raise Exception('Cannot load if current file type is not .csv')
 
-    with open(file_path, encoding='utf-8') as f:
-        result = f.readlines()
+    with open(file_path, encoding='utf-8') as csv_file:
+        result = csv_file.readlines()
 
     return result
 
@@ -81,8 +81,8 @@ def load_txt_to_string(file_path):
     if file_type != '.txt':
         raise Exception('Cannot load if current file type is not .txt')
 
-    with open(file_path, encoding='utf-8') as f:
-        result = f.read()
+    with open(file_path, encoding='utf-8') as txt_file:
+        result = txt_file.read()
 
     return result
 
