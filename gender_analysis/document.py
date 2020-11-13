@@ -190,7 +190,9 @@ class Document:
         """
         Overload less than operator to enable comparing and sorting documents.
 
-        Sorts first by author, title, and then date. If these are not available, it sorts by filenames.
+        Sorts first by author, title, and then date.
+
+        If these are not available, it sorts by filenames.
 
         >>> from gender_analysis import document
         >>> from pathlib import Path

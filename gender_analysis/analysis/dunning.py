@@ -38,10 +38,16 @@ def dunn_individual_word(total_words_in_corpus_1,
     >>> total_words_f_corpus = 8700765
     >>> wordcount_female = 1000
     >>> wordcount_male = 50
-    >>> dunn_individual_word(total_words_m_corpus,total_words_f_corpus,wordcount_male,wordcount_female)
+    >>> dunn_individual_word(total_words_m_corpus,
+    ...                      total_words_f_corpus,
+    ...                      wordcount_male,
+    ...                      wordcount_female)
     -1047.8610274053995
 
     """
+    # NOTE(ra): super short var names actually useful here for reading the math
+    # pylint: disable=invalid-name
+
     a = count_of_word_in_corpus_1
     b = count_of_word_in_corpus_2
     c = total_words_in_corpus_1
@@ -58,7 +64,7 @@ def dunn_individual_word(total_words_in_corpus_1,
     return dunning_log_likelihood
 
 
-def dunn_individual_word_by_corpus(corpus1, corpus2, word):
+def dunn_individual_word_by_corpus(corpus1, corpus2, target_word):
     """
     applies dunning log likelihood to compare individual word in two counter objects
     (-) end of spectrum is words for counter_2
@@ -66,7 +72,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     the larger the magnitude of the number, the more distinctive that word is in its
     respective counter object
 
-    :param word: desired word to compare
+    :param target_word: desired word to compare
     :param corpus1: Corpus object
     :param corpus2: Corpus object
     :return: log likelihoods and p value
@@ -74,7 +80,10 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     >>> from gender_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as filepath2, SMALL_TEST_CORPUS_CSV as path_to_csv
+    >>> from gender_analysis.testing.common import (
+    ...     TEST_CORPUS_PATH as filepath2,
+    ...     SMALL_TEST_CORPUS_CSV as path_to_csv
+    .... )
     >>> filepath1 = TEST_DATA_PATH / 'document_test_files'
     >>> corpus1 = Corpus(filepath1)
     >>> corpus2 = Corpus(filepath2, csv_path = path_to_csv, ignore_warnings = True)
@@ -82,21 +91,23 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, word):
     -332112.16673673474
 
     """
-
     counter1 = corpus1.get_wordcount_counter()
     counter2 = corpus2.get_wordcount_counter()
 
-    a = counter1[word]
-    b = counter2[word]
-    c = 0  # total words in corpus1
-    d = 0  # total words in corpus2
+    word_count_1 = counter1[target_word]
+    word_count_2 = counter2[target_word]
+    total_words_corpus_1 = 0
+    total_words_corpus_2 = 0
 
     for word in counter1:
-        c += counter1[word]
+        total_words_corpus_1 += counter1[word]
     for word in counter2:
-        d += counter2[word]
+        total_words_corpus_2 += counter2[word]
 
-    return dunn_individual_word(a, b, c, d)
+    return dunn_individual_word(word_count_1,
+                                word_count_2,
+                                total_words_corpus_1,
+                                total_words_corpus_2)
 
 
 def dunning_total(counter1, counter2, pickle_filepath=None):
@@ -191,7 +202,10 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
 
          >>> from gender_analysis.analysis.dunning import dunning_total_by_corpus
          >>> from gender_analysis.corpus import Corpus
-         >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
+         >>> from gender_analysis.testing.common import (
+         ...     TEST_CORPUS_PATH as path,
+         ...     SMALL_TEST_CORPUS_CSV as path_to_csv
+         ... )
          >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
          >>> m_corpus = c.filter_by_gender('male')
          >>> f_corpus = c.filter_by_gender('female')
@@ -228,14 +242,16 @@ def compare_word_association_in_corpus_dunning(word1, word2, corpus,
                                                to_pickle=False,
                                                pickle_filename='dunning_vs_associated_words.pgz'):
     """
-    Uses Dunning analysis to compare the words associated with word1 vs those associated with word2 in
-    the given corpus.
+    Uses Dunning analysis to compare the words associated with word1
+    vs those associated with word2 in the given corpus.
 
     :param word1: str
     :param word2: str
     :param corpus: Corpus object
     :param to_pickle: boolean; True if you wish to save the results as a Pickle file
-    :param pickle_filename: str or Path object; Only used if the pickle already exists or you wish to write a new pickle file
+    :param pickle_filename: str or Path object;
+                            Only used if the pickle already exists
+                            or you wish to write a new pickle file
     :return: Dictionary mapping words to dunning scores
 
     """
@@ -287,9 +303,11 @@ def compare_word_association_between_corpus_dunning(word, corpus1, corpus2,
     :param word: Word to compare between the two corpora
     :param corpus1: Corpus object
     :param corpus2: Corpus object
-    :param word_window: If passed in as int, trims results to only show associated words within that range.
+    :param word_window: If passed in as int, trims results
+                        to only show associated words within that range.
     :param to_pickle: boolean determining if results should be pickled.
-    :param pickle_filename: str or Path object, pointer to existing pickle or save location for new pickle
+    :param pickle_filename: str or Path object,
+                            location of existing pickle or save location for new pickle
     :return: Dictionary
 
     """
@@ -591,7 +609,8 @@ def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=Fals
     :param corpus: Corpus object
     :param display_results: Boolean; reports a visualization of the results if True
     :param to_pickle: Boolean; Will save the results to a pickle file if True
-    :param pickle_filename: Path to pickle object; will try to search for results in this location or write pickle file to path if to_pickle is true.
+    :param pickle_filename: Path to pickle object; will try to search for results in this location
+                            or write pickle file to path if to_pickle is true.
     :return: dict
 
     """
@@ -610,8 +629,9 @@ def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=Fals
         wordcounter_male = m_corpus.get_wordcount_counter()
         wordcounter_female = f_corpus.get_wordcount_counter()
         if to_pickle:
-            results = dunning_total(wordcounter_female, wordcounter_male,
-                                    filename_to_pickle=pickle_filename)
+            results = dunning_total(wordcounter_female,
+                                    wordcounter_male,
+                                    pickle_filepath=pickle_filename)
         else:
             results = dunning_total(wordcounter_female, wordcounter_male)
 
