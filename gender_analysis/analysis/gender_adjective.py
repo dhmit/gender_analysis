@@ -326,13 +326,14 @@ def results_by_location(full_results):
     return data
 
 
-def get_top_adj(full_results, num):
+def get_top_adj(full_results, num, remove_swords = False):
     """
     Takes dictionary of results from run_adj_analysis and number of top results to return.
     Returns the top num adjectives associated with each gender.
 
     :param full_results: dictionary from result of run_adj_analysis
     :param num: number of top results to return per gender
+    :param remove_stopwords: Boolean that asks whether to remove English stopwords results
     :return: dictionary of lists of top adjectives associated more with each gender than the others.
     """
     merged_results = merge_raw_results(full_results)
@@ -349,7 +350,11 @@ def get_top_adj(full_results, num):
             other_count = 0
             for other_gender in other_genders:
                 if adj in merged_results[other_gender].keys():
-                    other_count += merged_results[other_gender][adj]
+                    if remove_swords:
+                        if adj in common.SWORDS_ENG:
+                            other_count += merged_results[other_gender][adj]
+                    else:
+                        other_count += merged_results[other_gender][adj]
             new_count = count - other_count
             excluded_results[gender][adj] = new_count
 
