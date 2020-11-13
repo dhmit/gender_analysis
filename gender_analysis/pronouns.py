@@ -4,20 +4,27 @@ class PronounSeries:
     `gender_analysis` functions
     """
 
-    def __init__(self, identifier, pronouns):
+    def __init__(self, identifier, pronouns, subj, obj):
         """
         Creates a new series of pronouns, designated by the given identifier. Pronouns
         are any collection of strings that can be used to identify someone.
+
+        `subj` and `obj` will be considered part of the pronoun series regardless of whether
+        they are listed in `pronouns`.
 
         Note that pronouns are case-insensitive.
 
         :param identifier: String used to identify what the particular series represents
         :param pronouns: Iterable of Strings that are to be used as pronouns for this group
+        :param subj: String used as the "subject" pronoun of the series
+        :param obj: String used as the "object" pronoun of the series
         """
 
         self.identifier = identifier
+        self.subj = subj.lower()
+        self.obj = obj.lower()
 
-        self.pronouns = set()
+        self.pronouns = {self.subj, self.obj}
         for pronoun in pronouns:
             self.pronouns.add(pronoun.lower())
 
@@ -26,7 +33,8 @@ class PronounSeries:
         Checks to see if the given pronoun exists in this group. This check is case-insensitive
 
         >>> from gender_analysis.pronouns import PronounSeries
-        >>> pronoun_group = PronounSeries('Andy', {'They', 'Them', 'Theirs', 'Themself'})
+        >>> pronouns = {'They', 'Them', 'Theirs', 'Themself'}
+        >>> pronoun_group = PronounSeries('Andy', pronouns, 'they', 'them')
         >>> 'they' in pronoun_group
         True
         >>> 'hers' in pronoun_group
@@ -44,7 +52,8 @@ class PronounSeries:
         are returned in lowercase and order is not guaranteed.
 
         >>> from gender_analysis.pronouns import PronounSeries
-        >>> pronoun_group = PronounSeries('Fem', {'She', 'Her', 'hers', 'herself'})
+        >>> pronouns = {'She', 'Her', 'hers', 'herself'}
+        >>> pronoun_group = PronounSeries('Fem', pronouns, subj='she', obj='her')
         >>> sorted(pronoun_group)
         ['her', 'hers', 'herself', 'she']
 
@@ -54,8 +63,8 @@ class PronounSeries:
     def __repr__(self):
         """
         >>> from gender_analysis.pronouns import PronounSeries
-        >>> PronounSeries('Masc', {'he', 'him', 'his'})
-        <Masc: ['he', 'him', 'his']>
+        >>> PronounSeries('Masc', {'he', 'himself', 'his'}, subj='he', obj='him')
+        <Masc: ['he', 'him', 'himself', 'his']>
 
         :return: A console-friendly representation of the pronoun series
         """
@@ -65,7 +74,7 @@ class PronounSeries:
     def __str__(self):
         """
         >>> from gender_analysis.pronouns import PronounSeries
-        >>> str(PronounSeries('Andy', {'Xe', 'Xis', 'Xer'}))
+        >>> str(PronounSeries('Andy', {'Xe', 'Xis', 'Xem'}, subj='xe', obj='xem'))
         'Andy-series'
 
         :return: A string-representation of the pronoun series
@@ -86,11 +95,11 @@ class PronounSeries:
         they have the same identifier and the exact same set of pronouns.
 
         >>> from gender_analysis.pronouns import PronounSeries
-        >>> fem_series = PronounSeries('Fem', {'she', 'her', 'hers'})
-        >>> second_fem_series = PronounSeries('Fem', {'she', 'her', 'hers'})
+        >>> fem_series = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
+        >>> second_fem_series = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
         >>> fem_series == second_fem_series
         True
-        >>> masc_series = PronounSeries('Masc', {'he', 'him', 'his'})
+        >>> masc_series = PronounSeries('Masc', {'he', 'him', 'his'}, subj='he', obj='him')
         >>> fem_series == masc_series
         False
 
@@ -100,5 +109,7 @@ class PronounSeries:
 
         return (
             self.identifier == other.identifier and
-            self.pronouns == other.pronouns
+            self.pronouns == other.pronouns and
+            self.obj == other.obj and
+            self.subj == other.subj
         )

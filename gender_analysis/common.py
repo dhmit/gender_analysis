@@ -13,9 +13,9 @@ BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 TEST_DATA_PATH = Path(BASE_PATH, 'testing', 'test_data')
 
 # Common Pronoun Collections
-HE_SERIES = PronounSeries('Masc', {'he', 'his', 'him', 'himself'})
-SHE_SERIES = PronounSeries('Fem', {'she', 'her', 'hers', 'herself'})
-THEY_SERIES = PronounSeries('Andy', {'they', 'them', 'theirs', 'themself'})
+HE_SERIES = PronounSeries('Masc', {'he', 'his', 'him', 'himself'}, subj='he', obj='him')
+SHE_SERIES = PronounSeries('Fem', {'she', 'her', 'hers', 'herself'}, subj='she', obj='her')
+THEY_SERIES = PronounSeries('Andy', {'they', 'them', 'theirs', 'themself'}, subj='they', obj='them')
 
 # Common Gender Collections
 MALE = Gender('Male', HE_SERIES)
