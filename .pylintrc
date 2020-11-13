@@ -128,7 +128,7 @@ name-group=
 include-naming-hint=no
 
 # Regular expression matching correct function names
-function-rgx=[a-z_][A-Za-z0-9_]{2,40}$
+function-rgx=[a-z_][A-Za-z0-9_]{2,50}$
 
 # Naming hint for function names
 function-name-hint=[a-z_][A-Za-z0-9_]{2,40}$

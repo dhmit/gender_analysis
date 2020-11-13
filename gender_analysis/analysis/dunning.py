@@ -83,7 +83,7 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, target_word):
     >>> from gender_analysis.testing.common import (
     ...     TEST_CORPUS_PATH as filepath2,
     ...     SMALL_TEST_CORPUS_CSV as path_to_csv
-    .... )
+    ... )
     >>> filepath1 = TEST_DATA_PATH / 'document_test_files'
     >>> corpus1 = Corpus(filepath1)
     >>> corpus2 = Corpus(filepath2, csv_path = path_to_csv, ignore_warnings = True)
@@ -263,7 +263,7 @@ def compare_word_association_in_corpus_dunning(word1, word2, corpus,
         try:
             pickle_filename = f'dunning_{word2}_vs_{word1}_associated_words_{corpus_name}'
             results = load_pickle(pickle_filename)
-        except:
+        except IOError:
             word1_counter = Counter()
             word2_counter = Counter()
             for doc in corpus.documents:
@@ -403,9 +403,14 @@ def dunning_result_to_dict(dunning_result,
 # Visualizers
 ################################################################################
 
-def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
-                             corpus1_display_name=None, corpus2_display_name=None,
-                             part_of_speech_to_include=None, save_to_filename=None):
+def dunning_result_displayer(
+    dunning_result,
+    number_of_terms_to_display=10,
+    corpus1_display_name=None,
+    corpus2_display_name=None,
+    part_of_speech_to_include=None,
+    save_to_filename=None
+):
     """
     Convenience function to display dunning results as tables.
 
@@ -422,6 +427,8 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
     :param save_to_filename:            Filename to save output
     :return:
     """
+
+    # pylint: disable=too-many-locals
 
     pos_names_to_tags = {
         'adjectives': ['JJ', 'JJR', 'JJS'],
@@ -532,7 +539,7 @@ def freq_plot_to_show(results):
     opacity = 0.4
 
     colors = ['b']
-    ax = sns.barplot(male_rel_freq, words, palette=colors, alpha=opacity)
+    ax = sns.barplot(x=male_rel_freq, y=words, palette=colors, alpha=opacity)
     sns.despine(ax=ax, bottom=True, left=True)
     plt.show()
 
@@ -570,9 +577,11 @@ def male_characters_author_gender_differences(corpus, to_pickle=False,
                                                            pickle_filename=pickle_filename)
 
 
-def female_characters_author_gender_differences(corpus,
-                                                to_pickle=False,
-                                                pickle_filename='dunning_female_chars_author_gender.pgz'):
+def female_characters_author_gender_differences(
+    corpus,
+    to_pickle=False,
+    pickle_filename='dunning_female_chars_author_gender.pgz'
+):
     """
     Between male-author and female-author subcorpora, tests distinctiveness of words associated
     with male characters
