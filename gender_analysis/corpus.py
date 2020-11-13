@@ -279,7 +279,10 @@ class Corpus:
         :return: Number of authors of the given gender
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
+        >>> from gender_analysis.testing.common import (
+        >>>     TEST_CORPUS_PATH as path,
+        >>>     LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> )
         >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
         >>> c.count_authors_by_gender('female')
         7
@@ -304,7 +307,10 @@ class Corpus:
         :return: Corpus object
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> from gender_analysis.testing.common import (
+        >>>     TEST_CORPUS_PATH as path,
+        >>>     LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> )
         >>> c = Corpus(path, csv_path=path_to_csv)
         >>> female_corpus = c.filter_by_gender('female')
         >>> len(female_corpus)
@@ -325,12 +331,16 @@ class Corpus:
 
     def get_wordcount_counter(self):
         """
-        This function returns a Counter object that stores how many times each word appears in the corpus.
+        This function returns a Counter object that stores
+        how many times each word appears in the corpus.
 
         :return: Python Counter object
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, SMALL_TEST_CORPUS_CSV as path_to_csv
+        >>> from gender_analysis.testing.common import (
+        >>>     TEST_CORPUS_PATH as path,
+        >>>     LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> )
         >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
         >>> word_count = c.get_wordcount_counter()
         >>> word_count['fire']
@@ -345,13 +355,17 @@ class Corpus:
 
     def get_field_vals(self, field):
         """
-        This function returns a sorted list of the values present in the corpus for a given metadata field.
+        This function returns a sorted list of the values present
+        in the corpus for a given metadata field.
 
         :param field: field to search for (i.e. 'location', 'author_gender', etc.)
         :return: list of strings
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> from gender_analysis.testing.common import (
+        >>>     TEST_CORPUS_PATH as path,
+        >>>     LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> )
         >>> c = Corpus(path, name='sample_novels', csv_path=path_to_csv)
         >>> c.get_field_vals('author_gender')
         ['both', 'female', 'male']
@@ -369,14 +383,18 @@ class Corpus:
 
     def subcorpus(self, metadata_field, field_value):
         """
-        Returns a new Corpus object that contains only documents with a given field_value for metadata_field
+        Returns a new Corpus object that contains only documents
+        with a given field_value for metadata_field
 
         :param metadata_field: metadata field to search
         :param field_value: search term
         :return: Corpus object
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> from gender_analysis.testing.common import (
+        >>>     TEST_CORPUS_PATH as path,
+        >>>     LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> )
         >>> corp = Corpus(path, csv_path=path_to_csv)
         >>> female_corpus = corp.subcorpus('author_gender','female')
         >>> len(female_corpus)
@@ -434,16 +452,18 @@ class Corpus:
 
     def multi_filter(self, characteristic_dict):
         """
-        Returns a copy of the corpus, but with only the documents that fulfill the metadata parameters passed in by
-        characteristic_dict. Multiple metadata keys can be searched at one time, provided that the metadata is
-        available for the documents in the corpus.
+        Returns a copy of the corpus, but with only the documents that fulfill the metadata
+        parameters passed in by characteristic_dict. Multiple metadata keys can be searched
+        at one time, provided that the metadata is available for the documents in the corpus.
 
-
-        :param characteristic_dict: Dictionary with metadata fields as keys and search terms as values
+        :param characteristic_dict: dict with metadata fields as keys and search terms as values
         :return: Corpus object
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> from gender_analysis.testing.common import (
+        >>>     TEST_CORPUS_PATH as path,
+        >>>     LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> )
         >>> c = Corpus(path, csv_path=path_to_csv)
         >>> corpus_filter = {'author_gender': 'male'}
         >>> len(c.multi_filter(corpus_filter))
@@ -468,7 +488,8 @@ class Corpus:
                     if this_document.date != int(characteristic_dict['date']):
                         add_document = False
                 else:
-                    if getattr(this_document, metadata_field) != characteristic_dict[metadata_field]:
+                    metadata_value = getattr(this_document, metadata_field)
+                    if metadata_value != characteristic_dict[metadata_field]:
                         add_document = False
             if add_document:
                 corpus_copy.documents.append(this_document)
@@ -495,7 +516,11 @@ class Corpus:
 
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.common import MissingMetadataError
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> from gender_analysis.testing.common import (
+        >>>     TEST_CORPUS_PATH as path,
+        >>>     LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> )
+
         >>> c = Corpus(path, csv_path=path_to_csv)
         >>> c.get_document("author", "Dickens, Charles")
         <Document (dickens_twocities)>
@@ -536,8 +561,11 @@ class Corpus:
         :return: List of passages as strings
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, LARGE_TEST_CORPUS_CSV as path_to_csv
-        >>> corpus = Corpus(path, csv_path = path_to_csv, ignore_warnings = True)
+        >>> from gender_analysis.testing.common import (
+        >>>     TEST_CORPUS_PATH as path,
+        >>>     LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> )
+        >>> corpus = Corpus(path, csv_path=path_to_csv, ignore_warnings=True)
         >>> results = corpus.get_sample_text_passages('he cried', 2)
         >>> 'he cried' in results[0][1]
         True
@@ -568,17 +596,23 @@ class Corpus:
 
     def get_document_multiple_fields(self, metadata_dict):
         """
-        Returns a specific Document object from the corpus that has metadata matching a given metadata dict.
+        Returns a specific Document object from the corpus that has metadata
+        matching a given metadata dict.
 
-        This method will only return the first document in the corpus.  It should only be used if you're certain
-        there is only one match in the Corpus or if you're not picky about which Document you get.  If you want
-        multiple documents, use **subcorpus**.
+        This method will only return the first document in the corpus.
+        It should only be used if you're certain there is only one match in the Corpus
+        or if you're not picky about which Document you get.
+
+        If you want multiple documents, use **subcorpus**.
 
         :param metadata_dict: Dictionary with metadata fields as keys and search terms as values
         :return: Document object
 
         >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH as path, LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> from gender_analysis.testing.common import (
+        >>>     TEST_CORPUS_PATH as path,
+        >>>     LARGE_TEST_CORPUS_CSV as path_to_csv
+        >>> )
         >>> c = Corpus(path, csv_path=path_to_csv)
         >>> c.get_document_multiple_fields({"author": "Dickens, Charles", "author_gender": "male"})
         <Document (dickens_twocities)>
@@ -618,7 +652,9 @@ class Corpus:
         if isinstance(new_metadata_path, str):
             new_metadata_path = Path(new_metadata_path)
         if not isinstance(new_metadata_path, Path):
-            raise ValueError(f'new_metadata_path must be str or Path object, not type {type(new_metadata_path)}')
+            raise ValueError(
+                f'new_metadata_path must be str or Path object, not type {type(new_metadata_path)}'
+            )
 
         try:
             csv_list = load_csv_to_list(new_metadata_path)

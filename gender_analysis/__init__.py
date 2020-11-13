@@ -1,4 +1,4 @@
-# pylint: disable=wildcard-import
+# pylint: disable=wildcard-import, import-self
 
 __all__ = [
     'common',

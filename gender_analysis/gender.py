@@ -34,7 +34,7 @@ class Gender:
         self.label = label
 
         # Allow the user to input a single PronounSeries if only one applies
-        if type(pronoun_series) == PronounSeries:
+        if isinstance(pronoun_series, PronounSeries):
             self.pronoun_series = {pronoun_series}
         else:
             self.pronoun_series = set(pronoun_series)

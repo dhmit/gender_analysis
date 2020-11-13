@@ -71,6 +71,7 @@ disable=
     consider-using-get,
     chained-comparison,
     unnecessary-pass,
+    missing-module-docstring,  # for now: we will reenable this later (RA: 2020-11-13)
 
 
 [REPORTS]
