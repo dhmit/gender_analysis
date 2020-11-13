@@ -1,8 +1,9 @@
 import csv
 import random
 import os
-from pathlib import Path
 from collections import Counter
+from copy import deepcopy
+from pathlib import Path
 
 from nltk import tokenize as nltk_tokenize
 
@@ -89,7 +90,8 @@ class Corpus:
                     'path_to_files must lead to a previously pickled corpus '
                     'or directory of .txt files'
                 )
-            elif ignored:
+
+            if ignored:
                 print(
                     'WARNING: '
                     + 'the following files were not loaded because they are not .txt files.\n'
@@ -108,13 +110,12 @@ class Corpus:
 
             try:
                 csv_list = load_csv_to_list(csv_path)
-            except FileNotFoundError:
-                err = (
+            except FileNotFoundError as err:
+                raise FileNotFoundError(
                     'Could not find the metadata csv file for the '
                     + f"'{self.name}' corpus in the expected location "
                     + f'({csv_path}).'
-                )
-                raise FileNotFoundError(err)
+                ) from err
             csv_reader = csv.DictReader(csv_list)
 
             loaded_document_filenames = []
@@ -266,7 +267,6 @@ class Corpus:
         True
 
         """
-        from copy import deepcopy
         return deepcopy(self)
 
     def count_authors_by_gender(self, gender):
@@ -583,15 +583,17 @@ class Corpus:
             if count >= no_passages:
                 break
             current_document = document.get_tokenized_text()
-            for index in range(len(current_document)):
-                if current_document[index] == phrase[0]:
-                    if current_document[index:index + len(phrase)] == phrase:
-                        passage = " ".join(current_document[index - 20:index + len(phrase) + 20])
+
+            for i, _ in enumerate(current_document):
+                if current_document[i] == phrase[0]:
+                    if current_document[i:i + len(phrase)] == phrase:
+                        passage = " ".join(current_document[i - 20:i + len(phrase) + 20])
                         output.append((document.filename, passage))
                         count += 1
 
         if len(output) <= no_passages:
             return output
+
         return output[:no_passages]
 
     def get_document_multiple_fields(self, metadata_dict):
@@ -658,10 +660,11 @@ class Corpus:
 
         try:
             csv_list = load_csv_to_list(new_metadata_path)
-        except FileNotFoundError:
-            err = "Could not find the metadata csv file for the "
-            err += f"corpus in the expected location ({self.csv_path})."
-            raise FileNotFoundError(err)
+        except FileNotFoundError as err:
+            raise FileNotFoundError(
+                "Could not find the metadata csv file for the "
+                f"corpus in the expected location ({self.csv_path})."
+            ) from err
         csv_reader = csv.DictReader(csv_list)
 
         for document_metadata in csv_reader:
@@ -669,8 +672,10 @@ class Corpus:
             metadata.update(list(document_metadata))
             try:
                 document = self.get_document('filename', document_metadata['filename'])
-            except ValueError:
-                raise ValueError(f"Document {document_metadata['filename']} not found in corpus")
+            except ValueError as err:
+                raise ValueError(
+                    f"Document {document_metadata['filename']} not found in corpus"
+                ) from err
 
             document.update_metadata(document_metadata)
 
