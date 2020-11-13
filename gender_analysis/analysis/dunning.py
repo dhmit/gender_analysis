@@ -510,8 +510,8 @@ def score_plot_to_show(results):
     opacity = 0.4
 
     colors = ['r' if entry >= 0 else 'b' for entry in dunning_score]
-    ax = sns.barplot(dunning_score, words, palette=colors, alpha=opacity)
-    sns.despine(ax=ax, bottom=True, left=True)
+    axis = sns.barplot(dunning_score, words, palette=colors, alpha=opacity)
+    sns.despine(ax=axis, bottom=True, left=True)
     plt.show()
 
 
@@ -538,8 +538,8 @@ def freq_plot_to_show(results):
     opacity = 0.4
 
     colors = ['b']
-    ax = sns.barplot(x=male_rel_freq, y=words, palette=colors, alpha=opacity)
-    sns.despine(ax=ax, bottom=True, left=True)
+    axis = sns.barplot(x=male_rel_freq, y=words, palette=colors, alpha=opacity)
+    sns.despine(ax=axis, bottom=True, left=True)
     plt.show()
 
 
