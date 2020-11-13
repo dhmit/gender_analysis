@@ -29,9 +29,17 @@ class TestDocumentInitialization:
         with pytest.raises(ValueError):
             d = Document({})
 
+    def test_document_initialization_metadata_file_with_wrong_extension(self):
+        with pytest.raises(ValueError):
+            with open(common.SMALL_TEST_CORPUS_CSV, newline='') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    row["filename"] = row["filename"].replace(".txt", "")
+                    d = Document(row)
+
     def test_document_initialization_disallowed_field_in_metadata(self):
         with pytest.raises(KeyError):
-            with open(common.LARGE_TEST_CORPUS_CSV, newline='') as csvfile:
+            with open(common.SMALL_TEST_CORPUS_CSV, newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     row["members"] = "member"
@@ -39,7 +47,7 @@ class TestDocumentInitialization:
 
     def test_document_initialization_incorrect_date(self):
         with pytest.raises(ValueError):
-            with open(common.LARGE_TEST_CORPUS_CSV, newline='') as csvfile:
+            with open(common.SMALL_TEST_CORPUS_CSV, newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     row["date"] = "738"
