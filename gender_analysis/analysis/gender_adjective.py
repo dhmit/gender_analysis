@@ -203,16 +203,16 @@ def merge_raw_results(full_results):
 
     return merged_results
 
+
 def get_overlapping_adjectives_raw_results(merged_results):
     """
     Looks through the gendered adjectives across the corpus and extracts adjectives that overlap
     that overlap across all genders and their occurrences.
     FORMAT - {'adjective': [gender1, gender2, ...]}
     :param merged_results: the results of merge_raw_results.
-    :return: dictionary in form {'adjective': ['gender1': occurrences, 'gender2': occurences, ... }}
+    :return: dict in form {'adjective': ['gender1': occurrences, 'gender2': occurrences, ... }}
 
     TODO: Consider adding a more granular function that gets all sub-intersections.
-
     """
 
     overlap_results = {}
@@ -235,59 +235,35 @@ def get_overlapping_adjectives_raw_results(merged_results):
 
 def results_by_author_gender(full_results):
     """
-    Takes in the full dictionary of results, returns a dictionary that maps 'male_author' and
-    'female_author' to a dictionary of adjectives and # occurrences across novels written by
-    an author of that gender.
+    Takes in a dictionary of results, and returns nested dictionary that maps author_gender to
+    adjective uses by gender.
 
     :param full_results: dictionary from result of run_adj_analysis
-    :return: dictionary in form {'gender_author': {'male': {adj:occurrences}, 'female':{adj:occurrences}}}
-
-    TODO: Break this binary
-    """
-    data = {'male_author': {'male': {}, 'female': {}}, "female_author": {'male': {}, 'female': {}}}
-
-    for novel in list(full_results.keys()):
-        author_gender = getattr(novel, 'author_gender', None)
-        if author_gender == "male":
-            data['male_author']['male'] = merge(full_results[novel]['male'], data['male_author']['male'])
-            data['male_author']['female'] = merge(full_results[novel]['female'], data['male_author']['female'])
-        elif author_gender == 'female':
-            data['female_author']['male'] = merge(full_results[novel]['male'], data['female_author']['male'])
-            data['female_author']['female'] = merge(full_results[novel]['female'], data['female_author']['female'])
-    return data
-
-
-def results_by_date(full_results, time_frame, bin_size):
-    """
-    Takes in a dictionary of results, returns a dictionary that maps time periods to a
-    dictionary mapping adjectives to number of occurrences across novels written in that time period
-
-    :param full_results: dictionary from result of run_adj_analysis
-    :param time_frame: tuple (int start year, int end year) for the range of dates to return
-    frequencies
-    :param bin_size: int for the number of years represented in each list of frequencies
-    :return: dictionary in form {date: {gender1: {adj:occurrences}, 'gender2': {adj:occurrences},
-     ...}}, where date is the first year in its bin
+    :return: dictionary in form {'author_gender': {'gender1': {adj:occurrences},\
+    'gender2':{adj:occurrences}, ...}}
 
     """
     data = {}
+
     result_key_list = list(full_results.keys())
     first_key = result_key_list[0]
     genders = list(full_results[first_key].keys())
+    gendered_output = {}
 
-    for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
-        output = {}
-        for gender in genders:
-            output[gender] = {}
-        data[bin_start_year] = output
+    for gender in genders:
+        gendered_output[gender] = {}
 
     for k in full_results.keys():
-        date = getattr(k, 'date', None)
-        if date is None:
+        author_gender = getattr(k, 'author_gender', None)
+        if author_gender is None:
             continue
-        bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
+
+        if author_gender not in data:
+            data[author_gender] = {}
+
         for gender in genders:
-            data[bin_year][gender] = merge(full_results[k][gender], data[bin_year][gender])
+            data[author_gender][gender] = {}
+            data[author_gender][gender] = merge(full_results[k][gender], data[author_gender][gender])
 
     return data
 
@@ -300,8 +276,8 @@ def results_by_location(full_results):
     :param full_results: dictionary from result of run_adj_analysis
     :return: dictionary in form {'location': {'gender1': {adj:occurrences},\
     'gender2':{adj:occurrences}, ...}}
-
     """
+
     data = {}
 
     result_key_list = list(full_results.keys())
@@ -318,24 +294,63 @@ def results_by_location(full_results):
             continue
 
         if location not in data:
-            data[location] = gendered_output
+            data[location] = {}
 
         for gender in genders:
+            data[location][gender] = {}
             data[location][gender] = merge(full_results[k][gender], data[location][gender])
 
     return data
 
 
-def get_top_adj(full_results, num, remove_swords = False):
+def results_by_date(full_results, time_frame, bin_size):
+    """
+    Takes in a dictionary of results, returns a dictionary that maps time periods to a
+    dictionary mapping adjectives to number of occurrences across novels written in that time period
+
+    :param full_results: dictionary from result of run_adj_analysis
+    :param time_frame: tuple (int start year, int end year) for the range of dates to return
+    frequencies
+    :param bin_size: int for the number of years represented in each list of frequencies
+    :return: dictionary in form {date: {gender1: {adj:occurrences}, 'gender2': {adj:occurrences},
+     ...}}, where date is the first year in its bin
+    """
+
+    data = {}
+    result_key_list = list(full_results.keys())
+    first_key = result_key_list[0]
+    genders = list(full_results[first_key].keys())
+
+    for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
+        output = {}
+        for gender in genders:
+            output[gender] = {}
+        data[bin_start_year] = output
+
+    for k in full_results.keys():
+        date = getattr(k, 'date', None)
+        if date is None:
+            continue
+        bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
+        data[bin_year] = {}
+        for gender in genders:
+            data[bin_year][gender] = {}
+            data[bin_year][gender] = merge(full_results[k][gender], data[bin_year][gender])
+
+    return data
+
+
+def get_top_adj(full_results, num, remove_swords=False):
     """
     Takes dictionary of results from run_adj_analysis and number of top results to return.
     Returns the top num adjectives associated with each gender.
 
     :param full_results: dictionary from result of run_adj_analysis
     :param num: number of top results to return per gender
-    :param remove_stopwords: Boolean that asks whether to remove English stopwords results
+    :param remove_swords: Boolean that asks whether to remove English stopwords results
     :return: dictionary of lists of top adjectives associated more with each gender than the others.
     """
+
     merged_results = merge_raw_results(full_results)
     genders = list(merged_results.keys())
 
@@ -364,23 +379,43 @@ def get_top_adj(full_results, num, remove_swords = False):
     return top
 
 
-def display_gender_adjectives(result_dict, num_to_return, remove_swords = False):
+def display_binned_results(metadata_binned_results, num_to_return, remove_swords=False):
+    """
+    Takes in the results of results_by_(metadata_field) and returns a reader-friendly set of dicts.
+
+    :param metadata_binned_results: The results of results_by_author_gender or location
+    :param num_to_return: Number of adjectives to return
+    :param remove_swords: Whether or not to remove English stopwords
+    :return: A formatted, sorted dictionary of results.
+    """
+
+    display_dict = {}
+
+    for metadata_bin, gender_results in metadata_binned_results.items():
+        display_dict[metadata_bin] = {}
+        for gender, results in gender_results.items():
+            display_dict[metadata_bin][gender] = display_gender_adjectives(results, num_to_return,
+                                                                           remove_swords)
+
+    return display_dict
+
+
+def display_gender_adjectives(result_dict, num_to_return, remove_swords=False):
     """
     takes the results of find_gender_adj and prints out to the user the top number_to_return
     adjectives associated with the gender searched for, sorted
 
-    result_dict:a dict of word-value frequency
-    num_to_return: top num of words to be returned to the user -> threshold, or the top?
-    return: tuples of sorted top num_to_return words with their freq
+    :param result_dict:a dict of word-value frequency
+    :param num_to_return: top num of words to be returned to the user -> threshold, or the top?
+    :return: tuples of sorted top num_to_return words with their freq
     """
 
     if remove_swords:
-        result_tup_list = [(key, result_dict[key]) for key in result_dict.keys() if key not in
+        result_tup_list = [(key, result_dict[key]) for key in result_dict if key not in
                            common.SWORDS_ENG]
     else:
-        result_tup_list = [(key,result_dict[key]) for key in result_dict]
+        result_tup_list = [(key, result_dict[key]) for key in result_dict]
 
     sorted_tuples = sorted(result_tup_list, key=lambda word:word[1], reverse=True)[:num_to_return]
 
     return sorted_tuples
-
