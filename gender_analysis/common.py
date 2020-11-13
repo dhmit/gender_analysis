@@ -349,7 +349,7 @@ def create_path_object_and_directories(output_dir, filename=None):
             path.mkdir(parents=True)
 
         if filename:
-            path = path.joinpath(filename)
+            path = path / filename
 
         return path
 

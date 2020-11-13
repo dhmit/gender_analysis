@@ -29,15 +29,18 @@ class TestMetadataVisualizations:
         default_save_name = 'date_of_pub_for_' + c.name.replace(' ', '_') + '.png'
         test_file_1_name = "testing_file1.png"
 
+        default_save_path = OUTPUT_DIRECTORY_PATH / default_save_name
+        test_file_save_path = OUTPUT_DIRECTORY_PATH / test_file_1_name
+
         test_file_paths = []
 
         plot_pubyears(c, OUTPUT_DIRECTORY_PATH)
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
-        test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
+        assert Path.is_file(default_save_path)
+        test_file_paths.append(default_save_path)
 
         plot_pubyears(c, OUTPUT_DIRECTORY_PATH, "testing file1")
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
-        test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
+        assert Path.is_file(test_file_save_path)
+        test_file_paths.append(test_file_save_path)
 
         for file_created1 in test_file_paths:
             for file_created2 in test_file_paths:
@@ -56,15 +59,18 @@ class TestMetadataVisualizations:
         default_save_name = 'country_of_pub_for_' + c.name.replace(' ', '_') + '.png'
         test_file_1_name = "testing_file1.png"
 
+        default_save_path = OUTPUT_DIRECTORY_PATH / default_save_name
+        test_file_save_path = OUTPUT_DIRECTORY_PATH / test_file_1_name
+
         test_file_paths = []
 
         plot_pubcountries(c, OUTPUT_DIRECTORY_PATH)
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
-        test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
+        assert Path.is_file(default_save_path)
+        test_file_paths.append(default_save_path)
 
         plot_pubcountries(c, OUTPUT_DIRECTORY_PATH, "testing file1")
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
-        test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
+        assert Path.is_file(test_file_save_path)
+        test_file_paths.append(test_file_save_path)
 
         for file_created1 in test_file_paths:
             for file_created2 in test_file_paths:
@@ -83,15 +89,18 @@ class TestMetadataVisualizations:
         default_save_name = 'gender_breakdown_for_' + c.name.replace(' ', '_') + '.png'
         test_file_1_name = "testing_file1.png"
 
+        default_save_path = OUTPUT_DIRECTORY_PATH / default_save_name
+        test_file_save_path = OUTPUT_DIRECTORY_PATH / test_file_1_name
+
         test_file_paths = []
 
         plot_gender_breakdown(c, OUTPUT_DIRECTORY_PATH)
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
-        test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
+        assert Path.is_file(default_save_path)
+        test_file_paths.append(default_save_path)
 
         plot_gender_breakdown(c, OUTPUT_DIRECTORY_PATH, "testing file1")
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
-        test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
+        assert Path.is_file(test_file_save_path)
+        test_file_paths.append(test_file_save_path)
 
         for file_created1 in test_file_paths:
             for file_created2 in test_file_paths:
@@ -110,15 +119,18 @@ class TestMetadataVisualizations:
         default_save_name = 'percentage_acquired_metadata_for_' + c.name.replace(' ', '_') + '.png'
         test_file_1_name = "testing_file1.png"
 
+        default_save_path = OUTPUT_DIRECTORY_PATH / default_save_name
+        test_file_save_path = OUTPUT_DIRECTORY_PATH / test_file_1_name
+
         test_file_paths = []
 
         plot_metadata_pie(c, OUTPUT_DIRECTORY_PATH)
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
-        test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(default_save_name))
+        assert Path.is_file(default_save_path)
+        test_file_paths.append(default_save_path)
 
         plot_metadata_pie(c, OUTPUT_DIRECTORY_PATH, "testing file1")
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
-        test_file_paths.append(OUTPUT_DIRECTORY_PATH.joinpath(test_file_1_name))
+        assert Path.is_file(test_file_save_path)
+        test_file_paths.append(test_file_save_path)
 
         for file_created1 in test_file_paths:
             for file_created2 in test_file_paths:
@@ -139,7 +151,7 @@ class TestMetadataVisualizations:
         default_pub_date = 'date_of_pub_for_corpus.png'
 
         create_corpus_summary_visualizations(c, OUTPUT_DIRECTORY_PATH)
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_gender_breakdown))
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_pub_date))
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_country_pub))
-        assert Path.is_file(OUTPUT_DIRECTORY_PATH.joinpath(default_metadata_pie))
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH / default_gender_breakdown)
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH / default_pub_date)
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH / default_country_pub)
+        assert Path.is_file(OUTPUT_DIRECTORY_PATH / default_metadata_pie)
