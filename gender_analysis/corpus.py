@@ -64,6 +64,7 @@ class Corpus:
         """
         Loads documents into the corpus with metadata from a csv file given at initialization.
         """
+        # pylint: disable=too-many-locals
 
         # load pickle if provided
         if path_to_files.suffix == '.pgz':
@@ -281,7 +282,7 @@ class Corpus:
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
-        ...     LARGE_TEST_CORPUS_CSV as path_to_csv
+        ...     SMALL_TEST_CORPUS_CSV as path_to_csv
         ... )
         >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
         >>> c.count_authors_by_gender('female')
@@ -293,8 +294,8 @@ class Corpus:
             try:
                 if document.author_gender.lower() == gender.lower():
                     count += 1
-            except AttributeError:
-                raise MissingMetadataError(['author_gender'])
+            except AttributeError as err:
+                raise MissingMetadataError(['author_gender']) from err
 
         return count
 
@@ -339,7 +340,7 @@ class Corpus:
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
-        ...     LARGE_TEST_CORPUS_CSV as path_to_csv
+        ...     SMALL_TEST_CORPUS_CSV as path_to_csv
         ... )
         >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
         >>> word_count = c.get_wordcount_counter()
