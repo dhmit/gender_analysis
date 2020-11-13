@@ -21,7 +21,9 @@ class Document:
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-    ...                      'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                      'filename': 'austen_persuasion.txt',
+    ...                      'filepath': Path(common.TEST_DATA_PATH,
+    ...                                       'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
@@ -44,7 +46,9 @@ class Document:
         for key in metadata_dict:
             if hasattr(self, str(key)):
                 raise KeyError(
-                    'Key name ', str(key), ' is reserved in the Document class. Please use another name'
+                    'Key name ',
+                    str(key),
+                    ' is reserved in the Document class. Please use another name.'
                 )
             setattr(self, str(key), metadata_dict[key])
 
@@ -74,7 +78,8 @@ class Document:
     @property
     def word_count(self):
         """
-        Lazy-loading for **Document.word_count** attribute. Returns the number of words in the document.
+        Lazy-loading for **Document.word_count** attribute.
+        Returns the number of words in the document.
         The word_count attribute is useful for the get_word_freq function.
         However, it is performance-wise costly, so it's only loaded when it's actually required.
 
@@ -84,7 +89,9 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                      'filename': 'austen_persuasion.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                       'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
         83285
@@ -105,7 +112,9 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                      'filename': 'austen_persuasion.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                       'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> document_string = str(austen)
         >>> document_string
@@ -126,7 +135,9 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                      'filename': 'austen_persuasion.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                       'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> repr(austen)
         '<Document (austen_persuasion)>'
@@ -137,14 +148,16 @@ class Document:
 
     def __eq__(self, other):
         """
-        Overload the equality operator to enable comparing and sorting documents. Returns True if the document filenames
-        and text are the same.
+        Overload the equality operator to enable comparing and sorting documents.
+        Returns True if the document filenames and text are the same.
 
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                    'filename': 'austen_persuasion.txt',
+        ...                    'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                     'texts', 'austen_persuasion.txt')}
         >>> austen = Document(austen_metadata)
         >>> austen2 = Document(austen_metadata)
         >>> austen == austen2
@@ -162,7 +175,9 @@ class Document:
 
         for attribute in attributes_required_to_be_equal:
             if not hasattr(other, attribute):
-                raise common.MissingMetadataError([attribute], f'{str(other)} lacks attribute {attribute}.')
+                raise common.MissingMetadataError(
+                    [attribute], f'{str(other)} lacks attribute {attribute}.'
+                )
             if getattr(self, attribute) != getattr(other, attribute):
                 return False
 
@@ -181,10 +196,14 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                    'filename': 'austen_persuasion.txt',
+        ...                    'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                     'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(austen_metadata)
-        >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
-        ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+        >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        ...                       'date': '1850', 'filename': 'hawthorne_scarlet.txt',
+        ...                       'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                        'texts', 'hawthorne_scarlet.txt')}
         >>> hawthorne = document.Document(hawthorne_metadata)
         >>> hawthorne < austen
         False
