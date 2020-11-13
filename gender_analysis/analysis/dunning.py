@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import nltk
 
-from gender_analysis.corpus import Corpus
 from gender_analysis.common import (
     load_graph_settings,
     MissingMetadataError,
@@ -81,12 +80,12 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, target_word):
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
     >>> from gender_analysis.testing.common import (
-    ...     TEST_CORPUS_PATH as filepath2,
-    ...     SMALL_TEST_CORPUS_CSV as path_to_csv
+    ...     TEST_CORPUS_PATH as FILEPATH2,
+    ...     SMALL_TEST_CORPUS_CSV as PATH_TO_CSV
     ... )
     >>> filepath1 = TEST_DATA_PATH / 'document_test_files'
     >>> corpus1 = Corpus(filepath1)
-    >>> corpus2 = Corpus(filepath2, csv_path = path_to_csv, ignore_warnings = True)
+    >>> corpus2 = Corpus(FILEPATH2, csv_path = PATH_TO_CSV, ignore_warnings = True)
     >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
     -332112.16673673474
 
