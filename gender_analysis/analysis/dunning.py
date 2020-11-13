@@ -142,7 +142,7 @@ def dunning_total(counter1, counter2, pickle_filepath=None):
     # get word total in respective counters
     for word1 in counter1:
         total_words_counter1 += counter1[word1]
-    for word2 in  counter2:
+    for word2 in counter2:
         total_words_counter2 += counter2[word2]
 
     # dictionary where results will be returned
@@ -155,8 +155,10 @@ def dunning_total(counter1, counter2, pickle_filepath=None):
             if counter1_wordcount + counter2_wordcount < 10:
                 continue
 
-            dunning_word = dunn_individual_word(total_words_counter1,  total_words_counter2,
-                                                counter1_wordcount,counter2_wordcount)
+            dunning_word = dunn_individual_word(total_words_counter1,
+                                                total_words_counter2,
+                                                counter1_wordcount,
+                                                counter2_wordcount)
 
             dunning_result[word] = {
                 'dunning': dunning_word,
@@ -403,10 +405,10 @@ def dunning_result_displayer(dunning_result, number_of_terms_to_display=10,
     """
 
     pos_names_to_tags = {
-        'adjectives':   ['JJ', 'JJR', 'JJS'],
-        'adverbs':      ['RB', 'RBR', 'RBS', 'WRB'],
-        'verbs':        ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'],
-        'pronouns':     ['PRP', 'PRP$', 'WP', 'WP$']
+        'adjectives': ['JJ', 'JJR', 'JJS'],
+        'adverbs': ['RB', 'RBR', 'RBS', 'WRB'],
+        'verbs': ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'],
+        'pronouns': ['PRP', 'PRP$', 'WP', 'WP$']
     }
     if part_of_speech_to_include in pos_names_to_tags:
         part_of_speech_to_include = pos_names_to_tags[part_of_speech_to_include]
@@ -505,8 +507,8 @@ def freq_plot_to_show(results):
 
     for term, data in results_dict.items():
         words.append(term)
-        female_rel_freq.append(data['freq_corp1']/data['freq_total'])
-        male_rel_freq.append(-1*data['freq_corp2']/data['freq_total'])
+        female_rel_freq.append(data['freq_corp1'] / data['freq_total'])
+        male_rel_freq.append(-1 * data['freq_corp2'] / data['freq_total'])
 
     opacity = 0.4
 
@@ -639,5 +641,3 @@ def masc_fem_associations_dunning(corpus,
                                                           to_pickle=True,
                                                           pickle_filename=pickle_filename)
     return compare_word_association_in_corpus_dunning(HE_SERIES, SHE_SERIES, corpus)
-
-

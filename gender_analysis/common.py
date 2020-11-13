@@ -25,6 +25,7 @@ NONBINARY = Gender('Nonbinary', THEY_SERIES)
 BINARY_GROUP = [FEMALE, MALE]
 TRINARY_GROUP = [FEMALE, MALE, NONBINARY]
 
+
 def load_csv_to_list(file_path):
     """
     Loads a csv file from the given filepath and returns its contents as a list of strings.
@@ -265,10 +266,15 @@ def load_graph_settings(show_grid_lines=True):
     show_grid_lines_string = str(show_grid_lines)
     palette = "colorblind"
     style_name = "white"
-    background_color = (252/255,245/255,233/255,0.4)
-    style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': show_grid_lines_string,
-                  'font.family': 'serif', 'axes.facecolor':background_color,
-                  'figure.facecolor':background_color}
+    background_color = (252/255, 245/255, 233/255, 0.4)
+    style_list = {
+        'axes.edgecolor': '.6',
+        'grid.color': '.9',
+        'axes.grid': show_grid_lines_string,
+        'font.family': 'serif',
+        'axes.facecolor':background_color,
+        'figure.facecolor':background_color
+    }
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
 
@@ -327,6 +333,7 @@ class MissingMetadataError(Exception):
             + 'with ' + ('these ' if is_plural else 'this ') + 'field' + ('s ' if is_plural else ' ')
             + 'and run Corpus.update_metadata().'
         )
+
 
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test

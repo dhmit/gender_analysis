@@ -7,10 +7,10 @@ from gender_analysis.common import MissingMetadataError
 
 def plot_pubyears(corpus, filename=None):
     """
-    Creates a histogram displaying the frequency of books that were published within a 20 year 
-    period.
+    Creates a histogram displaying the frequency of books that were published
+    within a 20 year period.
 
-    *NOTE:* Requires that corpus contains a 'date' metadata field.
+    Requires that corpus contains a 'date' metadata field.
 
     :param corpus: Corpus object
     :param filename: Name of file to save plot as; will not write a file if None
@@ -20,7 +20,7 @@ def plot_pubyears(corpus, filename=None):
 
     if 'date' not in corpus.metadata_fields:
         raise MissingMetadataError(['date'])
-      
+
     pub_years = []
     for doc in corpus.documents:
         if doc.date is None:
@@ -36,22 +36,26 @@ def plot_pubyears(corpus, filename=None):
     sns.color_palette('colorblind')
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     plt.figure(figsize=(10, 6))
-    bins = [num for num in range(min(pub_years), max(pub_years)+4, 5)]
+    bins = [num for num in range(min(pub_years), max(pub_years) + 4, 5)]
     plt.hist(pub_years, bins, histtype='bar', rwidth=.8, color='c')
     plt.xlabel('Year', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
-    plt.title('Publication Year Concentration for '+corpus_name.title(), size=18, weight='bold',
+    plt.title('Publication Year Concentration for ' + corpus_name.title(),
+              size=18,
+              weight='bold',
               color='k')
     plt.yticks(size=15, color='k')
     plt.xticks([i for i in range(min(pub_years), max(pub_years)+9, 10)], size=15, color='k')
+
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(60)
+
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_')+'.png')
+        plt.savefig(filename.replace(' ', '_') + '.png')
     else:
-        plt.savefig('date_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
+        plt.savefig('date_of_pub_for_'+corpus_name.replace(' ', '_') + '.png')
 
 
 def plot_pubcountries(corpus, filename=None):
@@ -106,16 +110,18 @@ def plot_pubcountries(corpus, filename=None):
     plt.bar(x, y, color='c')
     plt.xlabel('Countries', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
-    plt.title('Country of Publication for '+corpus_name.title(), size=18, color='k',
+    plt.title('Country of Publication for ' + corpus_name.title(),
+              size=18,
+              color='k',
               weight='bold')
     plt.xticks(color='k', size=15)
     plt.yticks(color='k', size=15)
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_')+'.png')
+        plt.savefig(filename.replace(' ', '_') + '.png')
     else:
-        plt.savefig('country_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
+        plt.savefig('country_of_pub_for_' + corpus_name.replace(' ', '_') + '.png')
 
 
 def plot_gender_breakdown(corpus, filename=None):
@@ -184,7 +190,7 @@ def plot_metadata_pie(corpus, filename=None):
     """
 
     if ('author_gender' not in corpus.metadata_fields
-        or 'country_publication' not in corpus.metadata_fields):
+            or 'country_publication' not in corpus.metadata_fields):
         raise MissingMetadataError(['author_gender', 'country_publication'])
 
     if corpus.name:
@@ -211,7 +217,9 @@ def plot_metadata_pie(corpus, filename=None):
     colors = ['c', 'b', 'g', 'w']
     plt.figure(figsize=(10, 6))
     plt.pie(counter.values(), colors=colors, labels=labels, textprops={'fontsize': 13})
-    plt.title('Percentage Acquired Metadata for ' + name.title(), size=18, color='k',
+    plt.title('Percentage Acquired Metadata for ' + name.title(),
+              size=18,
+              color='k',
               weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
@@ -226,7 +234,6 @@ def create_corpus_summary_visualizations(corpus):
     """
     Creates graphs and summarizes gender breakdowns, publishing years, countries of origin, and
     overall metadata completion of a given corpus.
-
 
     :param corpus: Corpus object
     :return: None

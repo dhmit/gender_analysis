@@ -558,7 +558,7 @@ class Corpus:
             for index in range(len(current_document)):
                 if current_document[index] == phrase[0]:
                     if current_document[index:index + len(phrase)] == phrase:
-                        passage = " ".join(current_document[index-20:index + len(phrase) + 20])
+                        passage = " ".join(current_document[index - 20:index + len(phrase) + 20])
                         output.append((document.filename, passage))
                         count += 1
 

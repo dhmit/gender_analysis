@@ -37,7 +37,7 @@ class Document:
 
         # Check that the essential attributes for the document exists.
         if 'filename' not in metadata_dict:
-            raise ValueError(str(metadata_dict)+f'metadata_dict must have an entry for filename')
+            raise ValueError(str(metadata_dict) + 'metadata_dict must have an entry for filename')
 
         self.members = list(metadata_dict.keys())
 
@@ -65,8 +65,8 @@ class Document:
 
         if not metadata_dict['filename'].endswith('.txt'):
             raise ValueError(
-                f'The document filename ', str(metadata_dict['filename']), 'does not end in .txt . Full metadata: '
-                f'{metadata_dict}.'
+                f"The document filename {metadata_dict['filename']}"
+                + f"does not end in .txt . Full metadata: '{metadata_dict}.'"
             )
 
         self.text = self._load_document_text()
@@ -272,7 +272,7 @@ class Document:
         except FileNotFoundError as original_err:
             err = (
                 f'The filename {self.filename} present in your metadata csv does not exist in your '
-               + 'files directory.\nPlease check that your metadata matches your dataset.'
+                + 'files directory.\nPlease check that your metadata matches your dataset.'
             )
             raise FileNotFoundError(err) from original_err
 
