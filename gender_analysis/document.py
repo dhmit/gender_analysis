@@ -263,7 +263,8 @@ class Document:
     def _gutenberg_cleaner(text):
 
         """
-        Checks to see if a given text is from Project Gutenberg. If it is, removes the header + footer.
+        Checks to see if a given text is from Project Gutenberg.
+        If it is, removes the header + footer.
 
         :param text: The string to reformat
         :return: A string that is idential to 'text' unless 'text' is from Gutenberg, in which case
@@ -467,6 +468,7 @@ class Document:
                 check = True
         return word_count
 
+    # pylint: disable=line-too-long
     def get_word_windows(self, search_terms, window_size=2):
         """
         Finds all instances of `word` and returns a counter of the words around it.
@@ -491,8 +493,7 @@ class Document:
         search_terms can be either a string...
 
         >>> scarlett.get_word_windows("his", window_size=2)
-        Counter({'he': 1, 'lit': 1, 'cigarette': 1, 'and': 1, 'then': 1,
-        ...      'began': 1, 'speech': 1, 'which': 1})
+        Counter({'he': 1, 'lit': 1, 'cigarette': 1, 'and': 1, 'then': 1, 'began': 1, 'speech': 1, 'which': 1})
 
         ... or a list of strings.
 
