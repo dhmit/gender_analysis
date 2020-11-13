@@ -8,6 +8,8 @@ ignore=
   E501,  # let pylint check line length
   E722,  # let pylint check bare except
   F401,  # let pylint check for imported but unused (wildcards and exports trigger)
+  F403,  # we use from gender_analysis import * in the base __init__
+  F405,  # __all__ is okay to get from wildcard.
   F821,  # let pylint check for undefined (del at end of module makes undefined)
   F841,  # let pylint check for unused
   W503,  # line break BEFORE binary operator

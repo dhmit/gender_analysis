@@ -80,7 +80,7 @@ class Corpus:
                     metadata_dict = {'filename': filename, 'filepath': path_to_files / filename}
                     documents.append(Document(metadata_dict))
                 elif filename.endswith('.csv'):
-                    continue # let's ignore csv files, they're probably metadata
+                    continue  # let's ignore csv files, they're probably metadata
                 else:
                     ignored.append(filename)
 
@@ -109,9 +109,11 @@ class Corpus:
             try:
                 csv_list = load_csv_to_list(csv_path)
             except FileNotFoundError:
-                err = ("Could not find the metadata csv file for the "
-                      + f"'{self.name}' corpus in the expected location "
-                      + f"({csv_path}).")
+                err = (
+                    'Could not find the metadata csv file for the '
+                    + f"'{self.name}' corpus in the expected location "
+                    + f'({csv_path}).'
+                )
                 raise FileNotFoundError(err)
             csv_reader = csv.DictReader(csv_list)
 
@@ -133,17 +135,19 @@ class Corpus:
                 # we don't need to handle the inverse case, because that
                 # will have broken the document init above
                 print(
-                    f'WARNING: The following .txt files were not loaded because they '
+                    'WARNING: The following .txt files were not loaded because they '
                     + 'are not your metadata csv:\n'
                     + str(list(set(all_txt_files) - set(loaded_document_filenames)))
                     + '\nYou may want to check that your metadata matches your files '
                     + 'to avoid incorrect results.'
-                    )
+                )
 
             return sorted(documents), list(metadata)
 
         else:
-            raise ValueError(f'path_to_files must lead to a previously pickled corpus or directory of .txt files')
+            raise ValueError(
+                'path_to_files must lead to a previously pickled corpus or directory of .txt files'
+            )
 
     def __len__(self):
         """
@@ -471,20 +475,19 @@ class Corpus:
 
         if not corpus_copy:
             # displays for possible errors in field.value
-            err = f'This corpus is empty. You may have mistyped something.'
-            raise AttributeError(err)
+            raise AttributeError('This corpus is empty. You may have mistyped something.')
 
         return corpus_copy
 
     def get_document(self, metadata_field, field_val):
         """
-        Returns a specific Document object from self.documents that has metadata matching field_val for
-        metadata_field.
+        Returns a specific Document object from self.documents that has metadata matching field_val
+        for metadata_field.
 
-        This function will only return the first document in self.documents. It should only be used if you're certain
-        there is only one match in the Corpus or if you're not picky about which Document you get.  If you want more
-        selectivity use **get_document_multiple_fields**, or if you want multiple documents,
-        use **subcorpus**.
+        This function will only return the first document in self.documents. It should only be used
+        if you're certain there is only one match in the Corpus or if you're not picky about which
+        Document you get.  If you want more selectivity use **get_document_multiple_fields**,
+        or if you want multiple documents, use **subcorpus**.
 
         :param metadata_field: metadata field to search
         :param field_val: search term
@@ -554,8 +557,8 @@ class Corpus:
             current_document = document.get_tokenized_text()
             for index in range(len(current_document)):
                 if current_document[index] == phrase[0]:
-                    if current_document[index:index+len(phrase)] == phrase:
-                        passage = " ".join(current_document[index-20:index+len(phrase)+20])
+                    if current_document[index:index + len(phrase)] == phrase:
+                        passage = " ".join(current_document[index-20:index + len(phrase) + 20])
                         output.append((document.filename, passage))
                         count += 1
 
