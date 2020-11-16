@@ -510,7 +510,7 @@ def score_plot_to_show(results):
     opacity = 0.4
 
     colors = ['r' if entry >= 0 else 'b' for entry in dunning_score]
-    axis = sns.barplot(dunning_score, words, palette=colors, alpha=opacity)
+    axis = sns.barplot(x=dunning_score, y=words, palette=colors, alpha=opacity)
     sns.despine(ax=axis, bottom=True, left=True)
     plt.show()
 
