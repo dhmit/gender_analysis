@@ -1,11 +1,16 @@
+from collections import Counter
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import seaborn as sns
-from collections import Counter
 
 from gender_analysis.common import MissingMetadataError
+from gender_analysis.common import create_path_object_and_directories
+
+DEFAULT_VISUALIZATION_OUTPUT_DIR = Path.cwd() / 'gender_analysis_visualizations'
 
 
-def plot_pubyears(corpus, filename=None):
+def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
     Creates a histogram displaying the frequency of books that were published
     within a 20 year period.
@@ -13,11 +18,10 @@ def plot_pubyears(corpus, filename=None):
     Requires that corpus contains a 'date' metadata field.
 
     :param corpus: Corpus object
+    :param output_dir: path for where to save the file
     :param filename: Name of file to save plot as; will not write a file if None
     :return: None
-
     """
-
     if 'date' not in corpus.metadata_fields:
         raise MissingMetadataError(['date'])
 
@@ -36,7 +40,7 @@ def plot_pubyears(corpus, filename=None):
     sns.color_palette('colorblind')
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     plt.figure(figsize=(10, 6))
-    bins = [num for num in range(min(pub_years), max(pub_years) + 4, 5)]
+    bins = list(range(min(pub_years), max(pub_years) + 4, 5))
     plt.hist(pub_years, bins, histtype='bar', rwidth=.8, color='c')
     plt.xlabel('Year', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
@@ -45,7 +49,9 @@ def plot_pubyears(corpus, filename=None):
               weight='bold',
               color='k')
     plt.yticks(size=15, color='k')
-    plt.xticks([i for i in range(min(pub_years), max(pub_years) + 9, 10)], size=15, color='k')
+    plt.xticks(list(range(min(pub_years), max(pub_years) + 9, 10)),
+               size=15,
+               color='k')
 
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(60)
@@ -53,18 +59,22 @@ def plot_pubyears(corpus, filename=None):
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_') + '.png')
+        filename = filename.replace(' ', '_') + '.png'
     else:
-        plt.savefig('date_of_pub_for_' + corpus_name.replace(' ', '_') + '.png')
+        filename = 'date_of_pub_for_' + corpus_name.replace(' ', '_') + '.png'
+
+    file_path = create_path_object_and_directories(output_dir, filename)
+    plt.savefig(file_path)
 
 
-def plot_pubcountries(corpus, filename=None):
+def plot_pubcountries(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
     Creates a bar graph displaying the frequency of books that were published in each country.
 
     *NOTE:* Requires that corpus contains a 'country_publication' metadata field.
 
     :param corpus: Corpus object
+    :param output_dir: Path of where to save the plot
     :param filename: Name of file to save plot as; will not write a file if None
     :return: None
 
@@ -103,11 +113,11 @@ def plot_pubcountries(corpus, filename=None):
         else:
             country_counter2['Other'] += country_counter[country]
     country_counter2 = sorted(country_counter2.items(), key=lambda kv: -kv[1])
-    x = [country[0] for country in country_counter2]
-    y = [country[1] for country in country_counter2]
+    x_values = [country[0] for country in country_counter2]
+    y_values = [country[1] for country in country_counter2]
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(15)
-    plt.bar(x, y, color='c')
+    plt.bar(x_values, y_values, color='c')
     plt.xlabel('Countries', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
     plt.title('Country of Publication for ' + corpus_name.title(),
@@ -119,18 +129,22 @@ def plot_pubcountries(corpus, filename=None):
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_') + '.png')
+        filename = filename.replace(' ', '_') + '.png'
     else:
-        plt.savefig('country_of_pub_for_' + corpus_name.replace(' ', '_') + '.png')
+        filename = 'country_of_pub_for_' + corpus_name.replace(' ', '_') + '.png'
+
+    file_path = create_path_object_and_directories(output_dir, filename)
+    plt.savefig(file_path)
 
 
-def plot_gender_breakdown(corpus, filename=None):
+def plot_gender_breakdown(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
     Creates a pie chart displaying the composition of male and female writers in the data.
 
     *NOTE:* Requires that corpus contains a 'author_gender' metadata field.
 
     :param corpus: Corpus object
+    :param output_dir: Path of where to save the plot
     :param filename: Name of file to save plot as; will not write a file if None
     :return: None
 
@@ -152,7 +166,7 @@ def plot_gender_breakdown(corpus, filename=None):
     sns.set_color_codes('colorblind')
     gendercount = {}
     for i in pub_gender:
-        if i == 'both' or i == 'unknown' or i == 'Both' or i == 'Unknown':
+        if i in ('both', 'unknown', 'Both', 'Unknown'):
             gendercount['Unknown'] = gendercount.setdefault('Unknown', 0) + 1
         else:
             gendercount[i] = gendercount.setdefault(i, 0) + 1
@@ -160,11 +174,10 @@ def plot_gender_breakdown(corpus, filename=None):
     for i in gendercount:
         total += gendercount[i]
     slices = [gendercount[i] / total for i in gendercount]
-    genders = [i for i in gendercount]
     labelgenders = []
-    for i in range(len(genders)):
+    for i, value in enumerate(gendercount):
         labelgenders.append(
-            (genders[i] + ': ' + str(int(round(slices[i], 2) * 100)) + '%').title()
+            (value + ': ' + str(int(round(slices[i], 2) * 100)) + '%').title()
         )
     colors = ['c', 'b', 'g']
     plt.figure(figsize=(10, 6))
@@ -174,18 +187,22 @@ def plot_gender_breakdown(corpus, filename=None):
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_') + '.png')
+        filename = filename.replace(' ', '_') + '.png'
     else:
-        plt.savefig('gender_breakdown_for_' + corpus_name.replace(' ', '_') + '.png')
+        filename = 'gender_breakdown_for_' + corpus_name.replace(' ', '_') + '.png'
+
+    file_path = create_path_object_and_directories(output_dir, filename)
+    plt.savefig(file_path)
 
 
-def plot_metadata_pie(corpus, filename=None):
+def plot_metadata_pie(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
     Creates a pie chart indicating the fraction of metadata that is filled in the corpus.
 
     *NOTE:* Requires that corpus contains 'author_gender' and 'country_publication' metadata fields.
 
     :param corpus: Corpus object
+    :param output_dir: Path of where to save the plot
     :param filename: Name of file to save plot as; will not write a file if None
     :return: None
 
@@ -227,21 +244,25 @@ def plot_metadata_pie(corpus, filename=None):
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_') + '.png')
+        filename = filename.replace(' ', '_') + '.png'
     else:
-        plt.savefig('percentage_acquired_metadata_for_' + name.replace(' ', '_') + '.png')
+        filename = 'percentage_acquired_metadata_for_' + name.replace(' ', '_') + '.png'
+
+    file_path = create_path_object_and_directories(output_dir, filename)
+    plt.savefig(file_path)
 
 
-def create_corpus_summary_visualizations(corpus):
+def create_corpus_summary_visualizations(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR):
     """
     Creates graphs and summarizes gender breakdowns, publishing years, countries of origin, and
     overall metadata completion of a given corpus.
 
     :param corpus: Corpus object
+    :param output_dir: Path of where to put the files
     :return: None
 
     """
-    plot_gender_breakdown(corpus)
-    plot_pubyears(corpus)
-    plot_pubcountries(corpus)
-    plot_metadata_pie(corpus)
+    plot_gender_breakdown(corpus, output_dir)
+    plot_pubyears(corpus, output_dir)
+    plot_pubcountries(corpus, output_dir)
+    plot_metadata_pie(corpus, output_dir)

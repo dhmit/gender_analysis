@@ -332,6 +332,30 @@ class MissingMetadataError(Exception):
         )
 
 
+def create_path_object_and_directories(output_dir, filename=None):
+    """
+    Creates a path object for the file with the absolute output_dir and with the
+    given filename (if provided). It will create the path to the output_dir if it is non-existent
+    """
+    try:
+        path = output_dir
+
+        if isinstance(output_dir, str):
+            path = Path(output_dir)
+
+        if not os.path.isdir(output_dir):
+            path.mkdir(parents=True)
+
+        if filename:
+            path = path / filename
+
+        return path
+
+    except OSError:
+        print("Could not create the correct file and path")
+
+
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test
+
     main_test(import_plus_relative=True)  # this allows for relative calls in the import.
