@@ -108,8 +108,8 @@ class PronounSeries:
         """
 
         return (
-            self.identifier == other.identifier and
-            self.pronouns == other.pronouns and
-            self.obj == other.obj and
-            self.subj == other.subj
+            self.identifier == other.identifier
+            and self.pronouns == other.pronouns
+            and self.obj == other.obj
+            and self.subj == other.subj
         )

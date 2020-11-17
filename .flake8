@@ -1,0 +1,27 @@
+[flake8]
+ignore=
+  E126,  # to match visual indentation...
+  E127,  # over indented
+  E128,  # under indented
+  E302,  # blank lines
+  E303,  # blank lines
+  E501,  # let pylint check line length
+  E722,  # let pylint check bare except
+  F401,  # let pylint check for imported but unused (wildcards and exports trigger)
+  F403,  # we use from gender_analysis import * in the base __init__
+  F405,  # __all__ is okay to get from wildcard.
+  F821,  # let pylint check for undefined (del at end of module makes undefined)
+  F841,  # let pylint check for unused
+  W503,  # line break BEFORE binary operator
+
+exclude=
+  .git,
+  __pycache__,
+  *.pyc,
+  ext,
+
+max-line-length=100
+
+# F403 = allow for wildcard import
+per-file-ignores =
+  artusi/assignments/sections/fieldTester.py:F403
