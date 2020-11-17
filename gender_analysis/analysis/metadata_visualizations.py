@@ -21,9 +21,7 @@ def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=
     :param output_dir: path for where to save the file
     :param filename: Name of file to save plot as; will not write a file if None
     :return: None
-
     """
-
     if 'date' not in corpus.metadata_fields:
         raise MissingMetadataError(['date'])
 
@@ -61,11 +59,12 @@ def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
     if filename:
-        plt.savefig(create_path_object_and_directories(output_dir,
-                                                       filename.replace(' ', '_') + '.png'))
+        filename = filename.replace(' ', '_') + '.png'
     else:
-        plt.savefig(create_path_object_and_directories(output_dir, 'date_of_pub_for_'
-                    + corpus_name.replace(' ', '_') + '.png'))
+        filename = 'date_of_pub_for_' + corpus_name.replace(' ', '_') + '.png'
+
+    file_path = create_path_object_and_directories(output_dir, filename)
+    plt.savefig(file_path)
 
 
 def plot_pubcountries(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
@@ -130,12 +129,12 @@ def plot_pubcountries(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filen
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
     if filename:
-        plt.savefig(create_path_object_and_directories(output_dir,
-                                                       filename.replace(' ', '_') + '.png'))
+        filename = filename.replace(' ', '_') + '.png'
     else:
-        plt.savefig(create_path_object_and_directories(output_dir,
-                                                       'country_of_pub_for_' +
-                                                       corpus_name.replace(' ', '_') + '.png'))
+        filename = 'country_of_pub_for_' + corpus_name.replace(' ', '_') + '.png'
+
+    file_path = create_path_object_and_directories(output_dir, filename)
+    plt.savefig(file_path)
 
 
 def plot_gender_breakdown(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
@@ -188,11 +187,12 @@ def plot_gender_breakdown(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, f
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
 
     if filename:
-        plt.savefig(create_path_object_and_directories(output_dir,
-                                                       filename.replace(' ', '_') + '.png'))
+        filename = filename.replace(' ', '_') + '.png'
     else:
-        plt.savefig(create_path_object_and_directories(output_dir, 'gender_breakdown_for_' +
-                    corpus_name.replace(' ', '_') + '.png'))
+        filename = 'gender_breakdown_for_' + corpus_name.replace(' ', '_') + '.png'
+
+    file_path = create_path_object_and_directories(output_dir, filename)
+    plt.savefig(file_path)
 
 
 def plot_metadata_pie(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
@@ -244,12 +244,12 @@ def plot_metadata_pie(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filen
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
 
     if filename:
-        plt.savefig(create_path_object_and_directories(output_dir,
-                                                       filename.replace(' ', '_') + '.png'))
+        filename = filename.replace(' ', '_') + '.png'
     else:
-        plt.savefig(create_path_object_and_directories(output_dir,
-                                                       'percentage_acquired_metadata_for_' +
-                                                       name.replace(' ', '_') + '.png'))
+        filename = 'percentage_acquired_metadata_for_' + name.replace(' ', '_') + '.png'
+
+    file_path = create_path_object_and_directories(output_dir, filename)
+    plt.savefig(file_path)
 
 
 def create_corpus_summary_visualizations(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR):
