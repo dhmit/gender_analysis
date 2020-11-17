@@ -48,7 +48,7 @@ class TestLoadCorpus:
             csv_path=common.SMALL_TEST_CORPUS_CSV,
             name='test_corpus',
             pickle_on_load=pickle_path,
-            ignore_warnings = True
+            ignore_warnings=True
         )
 
         # first make sure the small corpus is correct

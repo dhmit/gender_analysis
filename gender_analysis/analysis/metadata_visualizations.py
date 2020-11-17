@@ -7,10 +7,10 @@ from gender_analysis.common import MissingMetadataError
 
 def plot_pubyears(corpus, filename=None):
     """
-    Creates a histogram displaying the frequency of books that were published within a 20 year 
-    period.
+    Creates a histogram displaying the frequency of books that were published
+    within a 20 year period.
 
-    *NOTE:* Requires that corpus contains a 'date' metadata field.
+    Requires that corpus contains a 'date' metadata field.
 
     :param corpus: Corpus object
     :param filename: Name of file to save plot as; will not write a file if None
@@ -20,7 +20,7 @@ def plot_pubyears(corpus, filename=None):
 
     if 'date' not in corpus.metadata_fields:
         raise MissingMetadataError(['date'])
-      
+
     pub_years = []
     for doc in corpus.documents:
         if doc.date is None:
@@ -36,22 +36,26 @@ def plot_pubyears(corpus, filename=None):
     sns.color_palette('colorblind')
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     plt.figure(figsize=(10, 6))
-    bins = [num for num in range(min(pub_years), max(pub_years)+4, 5)]
+    bins = [num for num in range(min(pub_years), max(pub_years) + 4, 5)]
     plt.hist(pub_years, bins, histtype='bar', rwidth=.8, color='c')
     plt.xlabel('Year', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
-    plt.title('Publication Year Concentration for '+corpus_name.title(), size=18, weight='bold',
+    plt.title('Publication Year Concentration for ' + corpus_name.title(),
+              size=18,
+              weight='bold',
               color='k')
     plt.yticks(size=15, color='k')
-    plt.xticks([i for i in range(min(pub_years), max(pub_years)+9, 10)], size=15, color='k')
+    plt.xticks([i for i in range(min(pub_years), max(pub_years) + 9, 10)], size=15, color='k')
+
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(60)
+
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_')+'.png')
+        plt.savefig(filename.replace(' ', '_') + '.png')
     else:
-        plt.savefig('date_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
+        plt.savefig('date_of_pub_for_' + corpus_name.replace(' ', '_') + '.png')
 
 
 def plot_pubcountries(corpus, filename=None):
@@ -86,13 +90,13 @@ def plot_pubcountries(corpus, filename=None):
     country_counter = {}
     totalbooks = 0
     for country in pub_country:
-        country_counter[country] = country_counter.setdefault(country, 0)+1
+        country_counter[country] = country_counter.setdefault(country, 0) + 1
         totalbooks += 1
     country_counter2 = {'Other': 0}
     for country in country_counter:
         if country == '':
             pass
-        elif country_counter[country] > (.001*totalbooks):
+        elif country_counter[country] > (.001 * totalbooks):
             # must be higher than .1% of the total books to have its own country name,
             # otherwise it is classified under others
             country_counter2[country] = country_counter[country]
@@ -106,16 +110,18 @@ def plot_pubcountries(corpus, filename=None):
     plt.bar(x, y, color='c')
     plt.xlabel('Countries', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
-    plt.title('Country of Publication for '+corpus_name.title(), size=18, color='k',
+    plt.title('Country of Publication for ' + corpus_name.title(),
+              size=18,
+              color='k',
               weight='bold')
     plt.xticks(color='k', size=15)
     plt.yticks(color='k', size=15)
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_')+'.png')
+        plt.savefig(filename.replace(' ', '_') + '.png')
     else:
-        plt.savefig('country_of_pub_for_'+corpus_name.replace(' ', '_')+'.png')
+        plt.savefig('country_of_pub_for_' + corpus_name.replace(' ', '_') + '.png')
 
 
 def plot_gender_breakdown(corpus, filename=None):
@@ -147,28 +153,30 @@ def plot_gender_breakdown(corpus, filename=None):
     gendercount = {}
     for i in pub_gender:
         if i == 'both' or i == 'unknown' or i == 'Both' or i == 'Unknown':
-            gendercount['Unknown'] = gendercount.setdefault('Unknown', 0)+1
+            gendercount['Unknown'] = gendercount.setdefault('Unknown', 0) + 1
         else:
-            gendercount[i] = gendercount.setdefault(i, 0)+1
+            gendercount[i] = gendercount.setdefault(i, 0) + 1
     total = 0
     for i in gendercount:
         total += gendercount[i]
-    slices = [gendercount[i]/total for i in gendercount]
+    slices = [gendercount[i] / total for i in gendercount]
     genders = [i for i in gendercount]
     labelgenders = []
     for i in range(len(genders)):
-        labelgenders.append((genders[i]+': ' + str(int(round(slices[i], 2)*100))+'%').title())
+        labelgenders.append(
+            (genders[i] + ': ' + str(int(round(slices[i], 2) * 100)) + '%').title()
+        )
     colors = ['c', 'b', 'g']
     plt.figure(figsize=(10, 6))
     plt.pie(slices, colors=colors, labels=labelgenders, textprops={'fontsize': 15})
-    plt.title('Gender Breakdown for '+corpus_name.title(), size=18, color='k', weight='bold')
+    plt.title('Gender Breakdown for ' + corpus_name.title(), size=18, color='k', weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
 
     if filename:
-        plt.savefig(filename.replace(' ', '_')+'.png')
+        plt.savefig(filename.replace(' ', '_') + '.png')
     else:
-        plt.savefig('gender_breakdown_for_'+corpus_name.replace(' ', '_')+'.png')
+        plt.savefig('gender_breakdown_for_' + corpus_name.replace(' ', '_') + '.png')
 
 
 def plot_metadata_pie(corpus, filename=None):
@@ -184,7 +192,7 @@ def plot_metadata_pie(corpus, filename=None):
     """
 
     if ('author_gender' not in corpus.metadata_fields
-        or 'country_publication' not in corpus.metadata_fields):
+            or 'country_publication' not in corpus.metadata_fields):
         raise MissingMetadataError(['author_gender', 'country_publication'])
 
     if corpus.name:
@@ -206,12 +214,14 @@ def plot_metadata_pie(corpus, filename=None):
             counter['Neither'] += 1
     labels = []
     for label, number in counter.items():
-        labels.append(label + " " + str(int(round(number/num_documents, 2)*100)) + r"%")
+        labels.append(label + " " + str(int(round(number / num_documents, 2) * 100)) + "%")
     sns.set_color_codes('colorblind')
     colors = ['c', 'b', 'g', 'w']
     plt.figure(figsize=(10, 6))
     plt.pie(counter.values(), colors=colors, labels=labels, textprops={'fontsize': 13})
-    plt.title('Percentage Acquired Metadata for ' + name.title(), size=18, color='k',
+    plt.title('Percentage Acquired Metadata for ' + name.title(),
+              size=18,
+              color='k',
               weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
@@ -226,7 +236,6 @@ def create_corpus_summary_visualizations(corpus):
     """
     Creates graphs and summarizes gender breakdowns, publishing years, countries of origin, and
     overall metadata completion of a given corpus.
-
 
     :param corpus: Corpus object
     :return: None

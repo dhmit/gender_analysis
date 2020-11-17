@@ -1,6 +1,7 @@
 chardet
 clint
 dh_testers
+flake8
 gutenberg_cleaner
 matplotlib
 more-itertools

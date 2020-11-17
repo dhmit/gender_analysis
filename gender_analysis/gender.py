@@ -1,6 +1,5 @@
 from gender_analysis.pronouns import PronounSeries
 
-
 class Gender:
     """
     Defines a gender that will be operated on in analysis functions
@@ -35,7 +34,7 @@ class Gender:
         self.label = label
 
         # Allow the user to input a single PronounSeries if only one applies
-        if type(pronoun_series) == PronounSeries:
+        if isinstance(pronoun_series, PronounSeries):
             self.pronoun_series = {pronoun_series}
         else:
             self.pronoun_series = set(pronoun_series)
@@ -104,9 +103,9 @@ class Gender:
         """
 
         return (
-            self.label == other.label and
-            self.pronoun_series == other.pronoun_series and
-            self.names == other.names
+            self.label == other.label
+            and self.pronoun_series == other.pronoun_series
+            and self.names == other.names
         )
 
     @property
