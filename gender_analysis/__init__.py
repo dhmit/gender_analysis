@@ -1,3 +1,5 @@
+# pylint: disable=wildcard-import, import-self
+
 __all__ = [
     'common',
     'corpus',

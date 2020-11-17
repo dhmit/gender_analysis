@@ -12,10 +12,10 @@ DEFAULT_VISUALIZATION_OUTPUT_DIR = Path.cwd() / 'gender_analysis_visualizations'
 
 def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
-    Creates a histogram displaying the frequency of books that were published within a 20 year
-    period.
+    Creates a histogram displaying the frequency of books that were published
+    within a 20 year period.
 
-    *NOTE:* Requires that corpus contains a 'date' metadata field.
+    Requires that corpus contains a 'date' metadata field.
 
     :param corpus: Corpus object
     :param output_dir: path for where to save the file
@@ -46,12 +46,16 @@ def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=
     plt.hist(pub_years, bins, histtype='bar', rwidth=.8, color='c')
     plt.xlabel('Year', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
-    plt.title('Publication Year Concentration for ' + corpus_name.title(), size=18, weight='bold',
+    plt.title('Publication Year Concentration for ' + corpus_name.title(),
+              size=18,
+              weight='bold',
               color='k')
     plt.yticks(size=15, color='k')
     plt.xticks([i for i in range(min(pub_years), max(pub_years) + 9, 10)], size=15, color='k')
+
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(60)
+
     plt.subplots_adjust(left=.1, bottom=.18, right=.95, top=.9)
 
     if filename:
@@ -115,7 +119,9 @@ def plot_pubcountries(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filen
     plt.bar(x, y, color='c')
     plt.xlabel('Countries', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
-    plt.title('Country of Publication for ' + corpus_name.title(), size=18, color='k',
+    plt.title('Country of Publication for ' + corpus_name.title(),
+              size=18,
+              color='k',
               weight='bold')
     plt.xticks(color='k', size=15)
     plt.yticks(color='k', size=15)
@@ -171,7 +177,8 @@ def plot_gender_breakdown(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, f
     labelgenders = []
     for i in range(len(genders)):
         labelgenders.append(
-            (genders[i] + ': ' + str(int(round(slices[i], 2) * 100)) + '%').title())
+            (genders[i] + ': ' + str(int(round(slices[i], 2) * 100)) + '%').title()
+        )
     colors = ['c', 'b', 'g']
     plt.figure(figsize=(10, 6))
     plt.pie(slices, colors=colors, labels=labelgenders, textprops={'fontsize': 15})
@@ -223,12 +230,14 @@ def plot_metadata_pie(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filen
             counter['Neither'] += 1
     labels = []
     for label, number in counter.items():
-        labels.append(label + " " + str(int(round(number / num_documents, 2) * 100)) + r"%")
+        labels.append(label + " " + str(int(round(number / num_documents, 2) * 100)) + "%")
     sns.set_color_codes('colorblind')
     colors = ['c', 'b', 'g', 'w']
     plt.figure(figsize=(10, 6))
     plt.pie(counter.values(), colors=colors, labels=labels, textprops={'fontsize': 13})
-    plt.title('Percentage Acquired Metadata for ' + name.title(), size=18, color='k',
+    plt.title('Percentage Acquired Metadata for ' + name.title(),
+              size=18,
+              color='k',
               weight='bold')
     plt.legend()
     plt.subplots_adjust(left=.1, bottom=.1, right=.9, top=.9)
@@ -246,7 +255,6 @@ def create_corpus_summary_visualizations(corpus, output_dir=DEFAULT_VISUALIZATIO
     """
     Creates graphs and summarizes gender breakdowns, publishing years, countries of origin, and
     overall metadata completion of a given corpus.
-
 
     :param corpus: Corpus object
     :param output_dir: Path of where to put the files

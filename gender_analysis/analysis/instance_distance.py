@@ -388,7 +388,7 @@ def box_plots(inst_data, my_pal, title, x="N/A"):
         for el in v:
             if el[1] <= 60:
                 temp1.append(el[1])
-        temp2 = [k.replace("_", " ").capitalize()]*len(temp1)
+        temp2 = [k.replace("_", " ").capitalize()] * len(temp1)
         val.extend(temp1)
         groups.extend(temp2)
     df = pnds.DataFrame({x: groups, 'Median Female Instance Distance': val})
@@ -569,7 +569,7 @@ def run_dist_inst(corpus):
     documents = corpus.documents
     c = len(documents)
     # loops = c//10 + 1
-    loops = c//10 if c % 10 == 0 else c//10+1
+    loops = c // 10 if (c % 10 == 0) else (c // 10) + 1
 
     num = 0
 

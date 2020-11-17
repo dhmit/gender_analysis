@@ -1,10 +1,12 @@
 import gzip
 import os
 import pickle
+import sys
 from pathlib import Path
 
 import nltk
 import seaborn as sns
+from chardet.universaldetector import UniversalDetector
 
 from gender_analysis.pronouns import PronounSeries
 from gender_analysis.gender import Gender
@@ -48,14 +50,11 @@ def load_csv_to_list(file_path):
     file_type = file_path.suffix
 
     if file_type != '.csv':
-        raise Exception(
-            'Cannot load if current file type is not .csv'
-        )
-    else:
-        file = open(file_path, encoding='utf-8')
-        result = file.readlines()
+        raise Exception('Cannot load if current file type is not .csv')
 
-    file.close()
+    with open(file_path, encoding='utf-8') as csv_file:
+        result = csv_file.readlines()
+
     return result
 
 
@@ -80,18 +79,11 @@ def load_txt_to_string(file_path):
     file_type = file_path.suffix
 
     if file_type != '.txt':
-        raise Exception(
-            'Cannot load if current file type is not .txt'
-        )
-    else:
-        try:
-            file = open(file_path, encoding='utf-8')
-            result = file.read()
-        except UnicodeDecodeError as err:
-            print(f'Unicode file loading error {file_path}.')
-            raise err
+        raise Exception('Cannot load if current file type is not .txt')
 
-    file.close()
+    with open(file_path, encoding='utf-8') as txt_file:
+        result = txt_file.read()
+
     return result
 
 
@@ -186,7 +178,6 @@ def get_text_file_encoding(filepath):
     >>> os.remove(file_path)
 
     """
-    from chardet.universaldetector import UniversalDetector
     detector = UniversalDetector()
 
     with open(filepath, 'rb') as file:
@@ -267,9 +258,14 @@ def load_graph_settings(show_grid_lines=True):
     palette = "colorblind"
     style_name = "white"
     background_color = (252 / 255, 245 / 255, 233 / 255, 0.4)
-    style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': show_grid_lines_string,
-                  'font.family': 'serif', 'axes.facecolor': background_color,
-                  'figure.facecolor': background_color}
+    style_list = {
+        'axes.edgecolor': '.6',
+        'grid.color': '.9',
+        'axes.grid': show_grid_lines_string,
+        'font.family': 'serif',
+        'axes.facecolor': background_color,
+        'figure.facecolor': background_color,
+    }
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
 
@@ -293,10 +289,13 @@ def download_nltk_package_if_not_present(package_name):
         nltk.data.find(package_name)
     except LookupError:
         user_key = input(
-            f'This function requires the NLTK package {package_name}, which you do not have installed.\n'
-            + 'Press ENTER to download and install this package, or n then enter to cancel and exit.\n')
+            f'This function requires the NLTK package {package_name}, '
+            + 'which you do not have installed.\n'
+            + 'Press ENTER to download and install this package, '
+            + 'or n then enter to cancel and exit.\n'
+        )
         if user_key.strip() == 'n':
-            exit()
+            sys.exit()
 
         nltk.download(package_download_name)
         print('\n')
@@ -307,10 +306,10 @@ class MissingMetadataError(Exception):
     Raised when a function that assumes certain metadata is called on a corpus without that
     metadata
     """
-
-    def __init__(self, metadata_fields, message=None):
+    def __init__(self, metadata_fields, message=''):
+        super().__init__()
         self.metadata_fields = metadata_fields
-        self.message = message if message else ''
+        self.message = message
 
     def __str__(self):
         metadata_string = ''
@@ -323,13 +322,12 @@ class MissingMetadataError(Exception):
         is_plural = len(self.metadata_fields) > 1
 
         return (
-            'This Corpus is missing the following metadata field' + (
-            's' if is_plural else '') + ':\n'
-            + '    ' + metadata_string + '\n'
+            'This Corpus is missing the following metadata field' + ('s' if is_plural else '')
+            + ':\n' + '    ' + metadata_string + '\n'
             + self.message + ('\n' if self.message else '')
             + 'In order to run this function, you must create a new metadata csv\n'
-            + 'with ' + ('these ' if is_plural else 'this ') + 'field' + (
-                's ' if is_plural else ' ')
+            + 'with ' + ('these ' if is_plural else 'this ')
+            + 'field' + ('s ' if is_plural else ' ')
             + 'and run Corpus.update_metadata().'
         )
 
