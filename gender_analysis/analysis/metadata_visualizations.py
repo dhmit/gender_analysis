@@ -1,8 +1,8 @@
+from collections import Counter
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import seaborn as sns
-from collections import Counter
 
 from gender_analysis.common import MissingMetadataError
 from gender_analysis.common import create_path_object_and_directories
@@ -42,7 +42,7 @@ def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=
     sns.color_palette('colorblind')
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     plt.figure(figsize=(10, 6))
-    bins = [num for num in range(min(pub_years), max(pub_years) + 4, 5)]
+    bins = list(range(min(pub_years), max(pub_years) + 4, 5))
     plt.hist(pub_years, bins, histtype='bar', rwidth=.8, color='c')
     plt.xlabel('Year', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
@@ -51,7 +51,9 @@ def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=
               weight='bold',
               color='k')
     plt.yticks(size=15, color='k')
-    plt.xticks([i for i in range(min(pub_years), max(pub_years) + 9, 10)], size=15, color='k')
+    plt.xticks(list(range(min(pub_years), max(pub_years) + 9, 10)),
+               size=15,
+               color='k')
 
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(60)
@@ -112,11 +114,11 @@ def plot_pubcountries(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filen
         else:
             country_counter2['Other'] += country_counter[country]
     country_counter2 = sorted(country_counter2.items(), key=lambda kv: -kv[1])
-    x = [country[0] for country in country_counter2]
-    y = [country[1] for country in country_counter2]
+    x_values = [country[0] for country in country_counter2]
+    y_values = [country[1] for country in country_counter2]
     for label in ax1.xaxis.get_ticklabels():
         label.set_rotation(15)
-    plt.bar(x, y, color='c')
+    plt.bar(x_values, y_values, color='c')
     plt.xlabel('Countries', size=15, weight='bold', color='k')
     plt.ylabel('Frequency', size=15, weight='bold', color='k')
     plt.title('Country of Publication for ' + corpus_name.title(),
@@ -165,7 +167,7 @@ def plot_gender_breakdown(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, f
     sns.set_color_codes('colorblind')
     gendercount = {}
     for i in pub_gender:
-        if i == 'both' or i == 'unknown' or i == 'Both' or i == 'Unknown':
+        if i in ('both', 'unknown', 'Both', 'Unknown'):
             gendercount['Unknown'] = gendercount.setdefault('Unknown', 0) + 1
         else:
             gendercount[i] = gendercount.setdefault(i, 0) + 1
@@ -173,11 +175,10 @@ def plot_gender_breakdown(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, f
     for i in gendercount:
         total += gendercount[i]
     slices = [gendercount[i] / total for i in gendercount]
-    genders = [i for i in gendercount]
     labelgenders = []
-    for i in range(len(genders)):
+    for i, value in enumerate(gendercount):
         labelgenders.append(
-            (genders[i] + ': ' + str(int(round(slices[i], 2) * 100)) + '%').title()
+            (value + ': ' + str(int(round(slices[i], 2) * 100)) + '%').title()
         )
     colors = ['c', 'b', 'g']
     plt.figure(figsize=(10, 6))
