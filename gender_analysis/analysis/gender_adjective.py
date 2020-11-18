@@ -3,6 +3,7 @@ import nltk
 
 from gender_analysis import common
 
+
 def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=None):
     """
     Takes in a document and a Gender to look for, and returns a dictionary of adjectives that
@@ -12,13 +13,14 @@ def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=
     :param gender_to_find: Gender
     :param word_window: number of words to search for in either direction of a gender instance
     :param genders_to_exclude: list of Genders to exclude, or None
-    :return: dictionary of adjectives that appear around pronouns mapped to the number of occurrences
+    :return: dict of adjectives that appear around pronouns mapped to the number of occurrences
 
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-    ...                   'filename': 'test_text_7.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_7.txt')}
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': \
+    '1966', 'filename': 'test_text_7.txt', 'filepath': Path(common.TEST_DATA_PATH, \
+    'document_test_files', 'test_text_7.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> find_gender_adj(scarlett, common.MALE, genders_to_exclude=[common.FEMALE])
     {'handsome': 3, 'sad': 1}
@@ -26,6 +28,7 @@ def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=
     """
     output = {}
     text = document.get_tokenized_text()
+    adj_tags = ["JJ", "JJR", "JJS"]
 
     identifiers_to_find = gender_to_find.identifiers
 
@@ -49,7 +52,7 @@ def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=
 
         tags = nltk.pos_tag(words)
         for tag_index, tag in enumerate(tags):
-            if tags[tag_index][1] == "JJ" or tags[tag_index][1] == "JJR" or tags[tag_index][1] == "JJS":
+            if tags[tag_index][1] in adj_tags:
                 word = words[tag_index]
                 if word in output.keys():
                     output[word] += 1
@@ -70,8 +73,9 @@ def find_male_adj(document):
    >>> from gender_analysis import document
    >>> from pathlib import Path
    >>> from gender_analysis import common
-   >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-   ...                   'filename': 'test_text_8.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_8.txt')}
+   >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': \
+   '1966', 'filename': 'test_text_8.txt', 'filepath': Path(common.TEST_DATA_PATH, \
+   'document_test_files', 'test_text_8.txt')}
    >>> scarlett = document.Document(document_metadata)
    >>> find_male_adj(scarlett)
    {'handsome': 3, 'sad': 1}
@@ -87,32 +91,40 @@ def find_female_adj(document):
     words around each female pronoun.
 
     :param document: A Document object
-    :return: dictionary of adjectives that appear around female pronouns and the number of occurrences
+    :return: dict of adjectives that appear around female pronouns and the number of occurrences
 
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-    ...                   'filename': 'test_text_9.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_9.txt')}
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': \
+    '1966', 'filename': 'test_text_9.txt', 'filepath': Path(common.TEST_DATA_PATH, \
+    'document_test_files', 'test_text_9.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> find_female_adj(scarlett)
     {'beautiful': 3, 'sad': 1}
-
     """
 
     return find_gender_adj(document, common.FEMALE, genders_to_exclude=[common.MALE])
 
 
-def run_adj_analysis(corpus, gender_list = common.BINARY_GROUP):
+def run_adj_analysis(corpus, gender_list=common.BINARY_GROUP):
     """
     Takes in a corpus of novels. Return a dictionary with each novel mapped to n dictionaries, where
     n is the number of Genders in gender_list.
-    The dictionary contains adjectives:occurences for each gendered set of identifiers.
+    The dictionary contains adjectives:occurrences for each gendered set of identifiers.
 
     :param corpus: Corpus
-    :return: dictionary where each key is a novel and the value is 2 dictionaries: Adjectives and
-    number of occurrences associated with male or female pronouns
+    :param gender_list: a list of genders to run the adjective search for.
+    :return: dictionary where each key is a novel and the value is len(gender_list)
+    dictionaries: Adjectives and number of occurrences associated with gender pronouns
 
+    >>> from gender_analysis.corpus import Corpus
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from gender_analysis.analysis.gender_adjective import run_adj_analysis
+    >>> tiny_corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
+    >>> tiny_results = run_adj_analysis(tiny_corpus)
+    >>> tiny_results[[*tiny_results][0]]['Female']['invisible']
+    3
     """
     results = {}
 
@@ -128,9 +140,10 @@ def run_adj_analysis(corpus, gender_list = common.BINARY_GROUP):
                 # with other genders.
                 novel_result = find_gender_adj(novel, gender)
             if novel_result != "lower window bound less than 5":
-                results[novel].update({gender.label : novel_result})
+                results[novel].update({gender.label: novel_result})
 
     return results
+
 
 def store_raw_results(results, pickle_filepath='pronoun_adj_raw_analysis.pgz'):
     """
@@ -161,9 +174,9 @@ def merge(novel_adj_dict, full_adj_dict):
     :param full_adj_dict: dictionary of adjectives/#occurrences for multiple novels
     :return: full_results dictionary with novel_results merged in
 
-    >>> novel_adj_dict = {'hello': 5, 'hi': 7, 'hola': 9, 'bonjour': 2}
-    >>> full_adj_dict = {'hello': 15, 'bienvenue': 3, 'hi': 23}
-    >>> merge(novel_adj_dict, full_adj_dict)
+    >>> test_novel_adj_dict = {'hello': 5, 'hi': 7, 'hola': 9, 'bonjour': 2}
+    >>> test_full_adj_dict = {'hello': 15, 'bienvenue': 3, 'hi': 23}
+    >>> merge(test_novel_adj_dict, test_full_adj_dict)
     {'hello': 20, 'bienvenue': 3, 'hi': 30, 'hola': 9, 'bonjour': 2}
 
     """
@@ -182,7 +195,14 @@ def merge_raw_results(full_results):
 
     :param full_results: full corpus results from run_adj_analysis
     :return: dictionary in the form {'gender':{'adj': occurrences}}
-
+    >>> from gender_analysis.corpus import Corpus
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from gender_analysis.analysis.gender_adjective import run_adj_analysis
+    >>> tiny_corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
+    >>> tiny_results = run_adj_analysis(tiny_corpus)
+    >>> tiny_merged = merge_raw_results(tiny_results)
+    >>> tiny_merged['Male']['strong']
+    4
     """
 
     # First, we need to get the genders used in full_results. There's probably a better way to do
@@ -263,7 +283,8 @@ def results_by_author_gender(full_results):
 
         for gender in genders:
             data[author_gender][gender] = {}
-            data[author_gender][gender] = merge(full_results[k][gender], data[author_gender][gender])
+            data[author_gender][gender] = merge(full_results[k][gender],
+                                                data[author_gender][gender])
 
     return data
 
@@ -374,7 +395,8 @@ def get_top_adj(full_results, num, remove_swords=False):
             excluded_results[gender][adj] = new_count
 
         # Sorts (adj, count) lists by count.
-        top[gender] = sorted(excluded_results[gender].items(), reverse=True, key=lambda x:x[1])[0:num]
+        top[gender] = sorted(excluded_results[gender].items(),
+                             reverse=True, key=lambda x: x[1])[0:num]
 
     return top
 
@@ -383,7 +405,7 @@ def display_binned_results(metadata_binned_results, num_to_return, remove_swords
     """
     Takes in the results of results_by_(metadata_field) and returns a reader-friendly set of dicts.
 
-    :param metadata_binned_results: The results of results_by_author_gender or location
+    :param metadata_binned_results: The results of results_by_author_gender, location, or date.
     :param num_to_return: Number of adjectives to return
     :param remove_swords: Whether or not to remove English stopwords
     :return: A formatted, sorted dictionary of results.
@@ -400,13 +422,52 @@ def display_binned_results(metadata_binned_results, num_to_return, remove_swords
     return display_dict
 
 
-def display_gender_adjectives(result_dict, num_to_return, remove_swords=False):
+def difference_adjs(result_dict, num_to_return=10):
+    """
+    Given result dictionaries from find_gender_analysis, returns a pair of tuples with num_to_return
+    adjectives most strongly associated with each gender. This works especially well with
+    merged_results from a merge_raw_results function, but can also be used on individual locations
+    from result_by_location or individual date ranges from result_by_date_range.
+
+    :param result_dict: a dict of dicts in the form {word:count},
+    :param num_to_return: the number of top words to return
+    :return: a dict of dicts in the form of {"gender":{list of top words w/ differential counts.
+    """
+
+    output_dict = {}
+
+    for key in result_dict:
+        temp_dict = result_dict.copy()
+        current_dict = temp_dict.pop(key)
+        current_output = {}
+        for word, count in current_dict.items():
+            current_output[word] = count
+        for other_dict_key in temp_dict.keys():
+            other_dict = temp_dict[other_dict_key]
+            for word, count in other_dict.items():
+                if word not in current_output.keys():
+                    continue
+                else:
+                    current_output[word] -= count
+
+        swordless_words = [(key, current_output[key]) for key in current_output if key not in
+                           common.SWORDS_ENG]
+
+        current_sorted_tuples = sorted(swordless_words, key=lambda sort_word: sort_word[1],
+                                       reverse=True)[:num_to_return]
+        output_dict[key] = current_sorted_tuples
+
+    return output_dict
+
+
+def display_gender_adjectives(result_dict, num_to_return=10, remove_swords=True):
     """
     takes the results of find_gender_adj and prints out to the user the top number_to_return
     adjectives associated with the gender searched for, sorted
 
     :param result_dict:a dict of word-value frequency
     :param num_to_return: top num of words to be returned to the user -> threshold, or the top?
+    :param remove_swords: removes English stopwords
     :return: tuples of sorted top num_to_return words with their freq
     """
 
@@ -416,6 +477,6 @@ def display_gender_adjectives(result_dict, num_to_return, remove_swords=False):
     else:
         result_tup_list = [(key, result_dict[key]) for key in result_dict]
 
-    sorted_tuples = sorted(result_tup_list, key=lambda word:word[1], reverse=True)[:num_to_return]
+    sorted_tuples = sorted(result_tup_list, key=lambda word: word[1], reverse=True)[:num_to_return]
 
     return sorted_tuples
