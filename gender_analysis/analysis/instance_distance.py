@@ -1,10 +1,5 @@
 from statistics import median, mean
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pnds
-import seaborn as sns
-
 from gender_analysis import common
 
 
@@ -20,8 +15,9 @@ def instance_dist(document, word):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-    ...                   'filename': 'test_text_3.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_3.txt')}
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+    ... 'date': '1966', 'filename': 'test_text_3.txt',
+    ... 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_3.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
@@ -42,8 +38,9 @@ def words_instance_dist(document, words):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-    ...                   'filename': 'test_text_4.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_4.txt')}
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+    ... 'date': '1966', 'filename': 'test_text_4.txt',
+    ... 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_4.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
     [6, 5, 6, 6, 7]
@@ -78,8 +75,9 @@ def male_instance_dist(document):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-    ...                   'filename': 'test_text_5.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_5.txt')}
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+    ... 'date': '1966', 'filename': 'test_text_5.txt',
+    ... 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_5.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> male_instance_dist(scarlett)
     [6, 5, 6, 6, 7]
@@ -99,8 +97,9 @@ def female_instance_dist(document):
     >>> from gender_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1966',
-    ...                   'filename': 'test_text_6.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_6.txt')}
+    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+    ... 'date': '1966', 'filename': 'test_text_6.txt',
+    ... 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_6.txt')}
     >>> scarlett = document.Document(document_metadata)
     >>> female_instance_dist(scarlett)
     [6, 5, 6, 6, 7]

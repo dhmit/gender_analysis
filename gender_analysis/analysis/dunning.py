@@ -84,9 +84,9 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, target_word):
     ...     SMALL_TEST_CORPUS_CSV as PATH_TO_CSV
     ... )
     >>> filepath1 = TEST_DATA_PATH / 'document_test_files'
-    >>> corpus1 = Corpus(filepath1)
-    >>> corpus2 = Corpus(FILEPATH2, csv_path = PATH_TO_CSV, ignore_warnings = True)
-    >>> dunn_individual_word_by_corpus(corpus1, corpus2, 'sad')
+    >>> test_corpus1 = Corpus(filepath1)
+    >>> test_corpus2 = Corpus(FILEPATH2, csv_path = PATH_TO_CSV, ignore_warnings = True)
+    >>> dunn_individual_word_by_corpus(test_corpus1, test_corpus2, 'sad')
     -332112.16673673474
 
     """
@@ -201,14 +201,11 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
 
          >>> from gender_analysis.analysis.dunning import dunning_total_by_corpus
          >>> from gender_analysis.corpus import Corpus
-         >>> from gender_analysis.testing.common import (
-         ...     TEST_CORPUS_PATH as path,
-         ...     SMALL_TEST_CORPUS_CSV as path_to_csv
-         ... )
-         >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
-         >>> m_corpus = c.filter_by_gender('male')
-         >>> f_corpus = c.filter_by_gender('female')
-         >>> result = dunning_total_by_corpus(m_corpus, f_corpus)
+         >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
+         >>> c = Corpus(TEST_CORPUS_PATH, csv_path=SMALL_TEST_CORPUS_CSV, ignore_warnings = True)
+         >>> test_m_corpus = c.filter_by_gender('male')
+         >>> test_f_corpus = c.filter_by_gender('female')
+         >>> result = dunning_total_by_corpus(test_m_corpus, test_f_corpus)
          >>> print(result[0])
          ('mrs', (-675.5338738828469, 1, 2031))
          """
@@ -382,7 +379,7 @@ def dunning_result_to_dict(dunning_result,
     reverse = True
     for i in range(2):
         sorted_results = sorted(dunning_result.items(), key=lambda x: x[1]['dunning'],
-                                    reverse=reverse)
+                                reverse=reverse)
         count_displayed = 0
         for result in sorted_results:
             if count_displayed == number_of_terms_to_display:
@@ -451,8 +448,9 @@ def dunning_result_displayer(
         output += f'\nDunning Log-Likelihood results for {name}\n|'
 
         for heading in headings:
-            heading = heading.replace('_corp1', ' ' + corpus1_display_name).replace('_corp2',
-                                                                       ' ' + corpus2_display_name)
+            heading = heading.replace('_corp1', ' ' +
+                                      corpus1_display_name).replace('_corp2', ' ' +
+                                                                    corpus2_display_name)
             output += ' {:19s}|'.format(heading)
         output += '\n' + 8 * 21 * '_' + '\n'
 
@@ -551,7 +549,7 @@ def freq_plot_to_show(results):
 # based on whether author is male or female
 
 def male_characters_author_gender_differences(corpus, to_pickle=False,
-                                        pickle_filename='dunning_male_chars_author_gender.pgz'):
+                                              pickle_filename='dunning_male_chars_auth_gender.pgz'):
     """
     Between male-author and female-author subcorpora, tests distinctiveness of words associated
     with male characters

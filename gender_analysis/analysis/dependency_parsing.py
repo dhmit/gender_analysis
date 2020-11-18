@@ -27,19 +27,20 @@ def _get_parser_download_if_not_present():
     path_to_jar = parser_dir / parser_filename
     path_to_models_jar = parser_dir / models_filename
 
-
-    if (not os.path.isfile(path_to_jar) or
-        not os.path.isfile(path_to_models_jar)):
+    if not os.path.isfile(path_to_jar) or not os.path.isfile(path_to_models_jar):
         # The required jar files don't exist,
         # so we prompt the user
 
         user_key = input(f'This function requires us to download the Stanford Dependency Parser.\n'
-                         + 'This is a 612 MB download, which may take 10-20 minutes to download on an average 10 MBit/s connection.\n'
+                         + 'This is a 612 MB download, which may take 10-20 minutes to download on'
+                         + 'an average 10 MBit/s connection.\n'
                          + 'This only happens the first time you run this function.\n'
-                         + 'Press y then enter to download and install this package, or n then enter to cancel and exit.\n')
+                         + 'Press y then enter to download and install this package,'
+                         + 'or n then enter to cancel and exit.\n')
 
         while user_key.strip() not in ['y', 'n']:
-            user_key = input(f'Press y then enter to download and install this package, or n then enter to cancel and exit.\n')
+            user_key = input(f'Press y then enter to download and install this package,'
+                             + f'or n then enter to cancel and exit.\n')
 
         if user_key == 'n':
             print('Exiting.')
@@ -49,7 +50,7 @@ def _get_parser_download_if_not_present():
             # Download the Jar files
             print('Downloading... (Press CTRL+C to cancel at any time)')
             parser_url = 'https://nlp.stanford.edu/software/stanford-parser-full-2018-10-17.zip'
-            zip_path  = parser_dir / 'parser.zip'
+            zip_path = parser_dir / 'parser.zip'
 
             r = requests.get(parser_url, stream=True)
 
@@ -172,7 +173,8 @@ def get_pronoun_usages(tree, gender):
 
 def get_descriptive_adjectives(tree, gender):
     """
-    Returns a list of adjectives describing pronouns for the given gender in the given dependency tree.
+    Returns a list of adjectives
+    describing pronouns for the given gender in the given dependency tree.
 
     :param tree: dependency tree for a document, output of **generate_dependency_tree**
     :param gender: `Gender` to search for usages of
