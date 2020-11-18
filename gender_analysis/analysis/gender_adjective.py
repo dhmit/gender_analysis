@@ -424,7 +424,7 @@ def display_binned_results(metadata_binned_results, num_to_return, remove_swords
 
 def difference_adjs(result_dict, num_to_return=10):
     """
-    Given result dictionaries from find_gender_analysis, returns a pair of tuples with num_to_return
+    Given result dictionaries from find_gender_adjective, returns a dictionary with num_to_return
     adjectives most strongly associated with each gender. This works especially well with
     merged_results from a merge_raw_results function, but can also be used on individual locations
     from result_by_location or individual date ranges from result_by_date_range.
