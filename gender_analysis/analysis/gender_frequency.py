@@ -1,10 +1,10 @@
 from collections import Counter
-
+from pathlib import Path
 import numpy as np
+from gender_analysis import common
+
 import matplotlib.pyplot as plt
 import nltk
-from pathlib import Path
-from gender_analysis import common
 
 
 def get_count_words(document, words):
@@ -66,9 +66,9 @@ def get_comparative_word_freq(freqs):
     total_freq = sum(freqs.values())
     comp_freqs = {}
 
-    for k, v in freqs.items():
+    for k, ori_freq in freqs.items():
         try:
-            freq = v / total_freq
+            freq = ori_freq / total_freq
         except ZeroDivisionError:
             freq = 0
         comp_freqs[k] = freq
@@ -110,14 +110,15 @@ def get_counts_by_pos(freqs):
     return sorted_words
 
 
-def display_gender_freq(d, title):
+def display_gender_freq(freq_dic, title):
+    # pylint: disable=too-many-locals
     """
     Takes in a dictionary sorted by author and gender frequencies, and a title.
     Outputs the resulting graph to 'visualizations/title.pdf' AND 'visualizations/title.png'
 
     Will scale to allow inputs of larger dictionaries with non-binary values
 
-    :param d: dictionary in the format {"Author/Document": {'Gender.label : frequency, ...'} ...}
+    :param freq_dic: dictionary in the format {"Author/Document": {'Gender.label : frequency, ...'} ...}
     :param title: title of graph (right now, this is usually just a number)
     :return: None
 
@@ -127,9 +128,9 @@ def display_gender_freq(d, title):
     values = {}
     colors = ['b', 'r', 'g', 'c', 'm', 'y', 'k', 'w']
 
-    result_key_list = list(d.keys())
+    result_key_list = list(freq_dic.keys())
     first_key = result_key_list[0]
-    genders = list(d[first_key].keys())
+    genders = list(freq_dic[first_key].keys())
 
     # I can't work out how to do this better, but I don't love that we're relying on the order
     # of unlinked objects here (book_labels and the lists in values[gender]) to line up right.
@@ -138,34 +139,35 @@ def display_gender_freq(d, title):
     for gender in genders:
         values[gender] = []
 
-    for book in d:
+    for book in freq_dic:
         book_labels.append(book)
         for gender in genders:
             if not values[gender]:
-                values[gender] = [d[book][gender]]
+                values[gender] = [freq_dic[book][gender]]
             else:
-                values[gender].append(d[book][gender])
+                values[gender].append(freq_dic[book][gender])
 
-    fig, ax = plt.subplots()
+    fig, axis = plt.subplots()
     plt.ylim(0, 1)
 
-    index = np.arange(len(d.keys()))
+    index = np.arange(len(freq_dic.keys()))
     bar_width = .70/len(genders)
     opacity = .5
-
+    count = 0
     lines = {}
-    for x in range(0, len(genders)):
-        current_gender = genders[x]
-        lines[current_gender] = ax.bar(index + x*bar_width, values[genders[x]], bar_width,
-                                       alpha=opacity, color=colors[x], label=current_gender)
+    for gender in genders:
+        current_gender = gender
+        lines[current_gender] = axis.bar(index + count*bar_width, values[genders[count]], bar_width,
+                                       alpha=opacity, color=colors[count], label=current_gender)
+        count += 1
 
-    ax.set_xlabel('Documents')
-    ax.set_ylabel('Frequency')
-    ax.set_title('Gendered Identifiers by Author')
-    ax.set_xticks(index + bar_width*(len(genders)-1) / len(genders))
+    axis.set_xlabel('Documents')
+    axis.set_ylabel('Frequency')
+    axis.set_title('Gendered Identifiers by Author')
+    axis.set_xticks(index + bar_width*(len(genders)-1) / len(genders))
     plt.xticks(fontsize=8, rotation=90)
-    ax.set_xticklabels(book_labels)
-    ax.legend()
+    axis.set_xticklabels(book_labels)
+    axis.legend()
 
     fig.tight_layout()
     # TODO: Handle 'this file already exists' gracefully - right now, we don't have permissions to\
@@ -188,15 +190,15 @@ def run_gender_freq(corpus, genders):
 
     """
     documents = corpus.documents
-    c = len(documents)
-    loops = c//10 if c % 10 == 0 else c//10 + 1
+    num_documents = len(documents)
+    loops = num_documents//10 if num_documents % 10 == 0 else num_documents//10 + 1
 
     num = 0
 
     count = {}
     while num < loops:
         dictionary = {}
-        for doc in documents[num * 10: min(c, num * 10 + 9)]:
+        for doc in documents[num * 10: min(num_documents, num * 10 + 9)]:
             for gender in genders:
                 count[gender] = 0
                 for identifier in gender.identifiers:
@@ -320,7 +322,16 @@ def corpus_subject_object_freq(corp, genders, pickle_filepath=None):
 
 
 def document_subject_object_freq(document, genders):
+    """
+    Takes in a Document and genders to look for.
+    Returns a dictionary of dictionaries, one for each gender
+    Each dictionary maps each gender to the proportion of the pronouns
+    of the specified gender in that novel that are subject pronouns
 
+    :param document: Document object
+    :param genders: a list of Gender objects to compare
+    :return: dictionary of results, by gender.
+    """
     freq = {}
     relative_freq = {}
 
@@ -331,10 +342,10 @@ def document_subject_object_freq(document, genders):
         freq[gender]['obj'] = 0
         gender_subjects = gender.subj.copy()
         gender_objects = gender.obj.copy()
-        for x in range(0, len(gender_subjects)):
+        for _ in range(0, len(gender_subjects)):
             subject_pronoun = gender_subjects.pop()
             freq[gender]['subj'] += document.get_word_freq(subject_pronoun)
-        for x in range(0, len(gender_objects)):
+        for _ in range(0, len(gender_objects)):
             object_pronoun = gender_objects.pop()
             freq[gender]['obj'] += document.get_word_freq(object_pronoun)
 
@@ -413,7 +424,7 @@ def doc_subject_pronouns_gender_comparison(doc, gender_to_include, genders_to_ex
     subject_numerator = 0
     subjects_to_include = gender_to_include.subj.copy()
 
-    for x in range(0, len(subjects_to_include)):
+    for _ in range(0, len(subjects_to_include)):
         subject_to_include = subjects_to_include.pop()
         subject_numerator += doc.get_word_freq(subject_to_include)
 
@@ -421,7 +432,7 @@ def doc_subject_pronouns_gender_comparison(doc, gender_to_include, genders_to_ex
 
     for gender in genders_to_exclude:
         subjects_to_exclude = gender.subj.copy()
-        for x in range(0, len(subjects_to_exclude)):
+        for _ in range(0, len(subjects_to_exclude)):
             subject_to_exclude = subjects_to_exclude.pop()
             subject_denomenator += doc.get_word_freq(subject_to_exclude)
 
@@ -430,7 +441,7 @@ def doc_subject_pronouns_gender_comparison(doc, gender_to_include, genders_to_ex
     return relative_freq_sub
 
 
-def freq_by_author_gender(d, genders):
+def freq_by_author_gender(novel_dict, genders):
     """
     Takes in a dictionary of novel objects mapped to relative frequencies:
     (from **corpus_pronoun_freq**,**subject_vs_object_freqs**,
@@ -440,7 +451,7 @@ def freq_by_author_gender(d, genders):
 
     list names key:
 
-    :param d: dictionary
+    :param novel_dict: dictionary
     :param genders: a list of Gender objects
     :return: dictionary
 
@@ -466,15 +477,15 @@ def freq_by_author_gender(d, genders):
     for gender in genders:
         label = gender.label + " Authors"
         data[label] = []
-        for k, v in d.items():
+        for k, val in novel_dict.items():
             author_gender = getattr(k, 'author_gender', None)
             if author_gender == gender.label or author_gender == gender.label.lower():
-                data[label].append(v)
+                data[label].append(val)
 
     return data
 
 
-def freq_by_date(d, time_frame, bin_size):
+def freq_by_date(doc_dict, time_frame, bin_size):
     """
     Takes in a dictionary of Document objects mapped to relative pronoun frequencies, and
     returns a dictionary with frequencies binned by decades into lists
@@ -486,7 +497,7 @@ def freq_by_date(d, time_frame, bin_size):
     Example: date_1810_to_1819 - publication dates from 1810 to 1819
     date_1900_on - publication dates in 1900 and onward
 
-    :param d: dictionary
+    :param doc_dict: dictionary
     :param time_frame: tuple (int start year, int end year) for the range of dates to return freqs
     :param bin_size: int for the number of years represented in each list of frequencies
     :return: dictionary {bin_start_year:[frequencies for documents in this bin of years]
@@ -512,19 +523,19 @@ def freq_by_date(d, time_frame, bin_size):
     for bin_start_year in range(time_frame[0], time_frame[1]+bin_size, bin_size):
         data[bin_start_year] = []
 
-    for k, v in d.items():
+    for k, val in doc_dict.items():
         date = getattr(k, 'date', None)
         if date is None:
             continue
         bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
         if bin_year not in data.keys():
             continue
-        data[bin_year].append(v)
+        data[bin_year].append(val)
 
     return data
 
 
-def freq_by_location(d):
+def freq_by_location(novel_dict):
     """
     Takes in a dictionary of novel objects mapped to relative frequencies.
     Returns a dictionary with frequencies binned by publication location into lists
@@ -535,7 +546,7 @@ def freq_by_location(d):
     - *location_US* - published in the US
     - *location_other* - published somewhere other than the US and England
 
-    :param d: dictionary
+    :param novel_dict: dictionary
     :return: dictionary
 
     >>> from gender_analysis import document
@@ -557,14 +568,14 @@ def freq_by_location(d):
     """
     data = {}
 
-    for k, v in d.items():
+    for k, val in novel_dict.items():
         location = getattr(k, 'country_publication', None)
         if location is None:
             continue
 
         if location not in data:
             data[location] = []
-        data[location].append(v)
+        data[location].append(val)
 
     return data
 
@@ -582,10 +593,10 @@ def get_mean(data_dict):
     {'fives': 5.0, 'halfway': 0.5, 'nothing': 0.0}
     """
     mean_dict = {}
-    for k, v in data_dict.items():
+    for k, val in data_dict.items():
         try:
-            mean_dict[k] = np.mean(v)
-        except Exception:
+            mean_dict[k] = np.mean(val)
+        except ZeroDivisionError:
             mean_dict[k + "*"] = 0.5
     return mean_dict
 
@@ -616,7 +627,7 @@ def sort_every_year(frequency_dict):
     """
 
     every_year_dict = {}
-    for key, value in frequency_dict.items():
+    for key, _ in frequency_dict.items():
         # TODO: check if key (document?) has date attribute
         frequency_list = [frequency_dict[key]]
 
