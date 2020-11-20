@@ -1,4 +1,5 @@
 import os
+import sys
 import zipfile
 
 from clint import textui
@@ -10,6 +11,7 @@ from gender_analysis import common
 
 
 def _get_parser_download_if_not_present():
+    # pylint: disable=too-many-locals
     """
     Initializes and returns the NLTK wrapper for the Stanford Dependency Parser.
 
@@ -31,7 +33,7 @@ def _get_parser_download_if_not_present():
         # The required jar files don't exist,
         # so we prompt the user
 
-        user_key = input(f'This function requires us to download the Stanford Dependency Parser.\n'
+        user_key = input('This function requires us to download the Stanford Dependency Parser.\n'
                          + 'This is a 612 MB download, which may take 10-20 minutes to download on'
                          + 'an average 10 MBit/s connection.\n'
                          + 'This only happens the first time you run this function.\n'
@@ -39,12 +41,12 @@ def _get_parser_download_if_not_present():
                          + 'or n then enter to cancel and exit.\n')
 
         while user_key.strip() not in ['y', 'n']:
-            user_key = input(f'Press y then enter to download and install this package,'
-                             + f'or n then enter to cancel and exit.\n')
+            user_key = input('Press y then enter to download and install this package,'
+                             + 'or n then enter to cancel and exit.\n')
 
         if user_key == 'n':
             print('Exiting.')
-            exit()
+            sys.exit()
 
         elif user_key == 'y':
             # Download the Jar files
@@ -52,16 +54,16 @@ def _get_parser_download_if_not_present():
             parser_url = 'https://nlp.stanford.edu/software/stanford-parser-full-2018-10-17.zip'
             zip_path = parser_dir / 'parser.zip'
 
-            r = requests.get(parser_url, stream=True)
+            req = requests.get(parser_url, stream=True)
 
             # doing this chunk by chunk so we can make a progress bar
-            with open(zip_path, 'wb') as f:
-                total_length = int(r.headers.get('content-length'))
-                for chunk in textui.progress.bar(r.iter_content(chunk_size=1024),
-                                                 expected_size=(total_length/1024) + 1):
+            with open(zip_path, 'wb') as file:
+                total_length = int(req.headers.get('content-length'))
+                for chunk in textui.progress.bar(req.iter_content(chunk_size=1024),
+                                                 expected_size=(total_length / 1024) + 1):
                     if chunk:
-                        f.write(chunk)
-                        f.flush()
+                        file.write(chunk)
+                        file.flush()
 
             print('Unpacking files...')
 
@@ -89,6 +91,7 @@ def _get_parser_download_if_not_present():
 
 
 def generate_dependency_tree(document, genders=None, pickle_filepath=None):
+    # pylint: disable=too-many-locals
     """
     This function returns the dependency tree for a given document. This can optionally be reduced
     such that it will only analyze sentences that involve specified genders' subject/object
@@ -117,7 +120,7 @@ def generate_dependency_tree(document, genders=None, pickle_filepath=None):
         for sentence in sentences:
             add_sentence = True
 
-            words = [word for word in word_tokenize(sentence)]
+            words = list(word_tokenize(sentence))
             for word in words:
                 if word in pronoun_filter:
                     add_sentence = True
@@ -207,8 +210,8 @@ def get_descriptive_verbs(tree, gender):
 
     for sentence in tree:
         for triple in sentence:
-            if triple[1] == "nsubj" and (triple[0][1] == "VBD" or triple[0][1] == "VB" or
-                                         triple[0][1] == "VBP" or triple[0][1] == "VBZ"):
+            if triple[1] == "nsubj" and (triple[0][1] == "VBD" or triple[0][1] == "VB"
+                                         or triple[0][1] == "VBP" or triple[0][1] == "VBZ"):
                 if triple[2][0] in gender.identifiers:
                     verbs.append(triple[0][0])
 
