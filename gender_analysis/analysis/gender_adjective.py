@@ -5,6 +5,7 @@ from gender_analysis import common
 
 
 def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=None):
+    # pylint: disable=too-many-locals
     """
     Takes in a document and a Gender to look for, and returns a dictionary of adjectives that
     appear within a window of 5 words around each identifier
@@ -51,7 +52,7 @@ def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=
             words[index] = word.lower()
 
         tags = nltk.pos_tag(words)
-        for tag_index, tag in enumerate(tags):
+        for tag_index, _ in enumerate(tags):
             if tags[tag_index][1] in adj_tags:
                 word = words[tag_index]
                 if word in output.keys():
@@ -107,7 +108,7 @@ def find_female_adj(document):
     return find_gender_adj(document, common.FEMALE, genders_to_exclude=[common.MALE])
 
 
-def run_adj_analysis(corpus, gender_list=common.BINARY_GROUP):
+def run_adj_analysis(corpus, gender_list=None):
     """
     Takes in a corpus of novels.
     Return a dictionary with each novel mapped to n dictionaries,
@@ -128,6 +129,9 @@ def run_adj_analysis(corpus, gender_list=common.BINARY_GROUP):
     >>> tiny_results[[*tiny_results][0]]['Female']['invisible']
     3
     """
+    if gender_list is None:
+        gender_list = common.BINARY_GROUP
+
     results = {}
 
     for document in corpus:
@@ -136,7 +140,7 @@ def run_adj_analysis(corpus, gender_list=common.BINARY_GROUP):
     return results
 
 
-def run_adj_analysis_doc(document, gender_list=common.BINARY_GROUP):
+def run_adj_analysis_doc(document, gender_list=None):
     """
     Takes in a document and a list of genders to analyze,
     returns a dictionary with the find_gender_adj results for each gender in gender_list.
@@ -157,6 +161,9 @@ def run_adj_analysis_doc(document, gender_list=common.BINARY_GROUP):
     """
 
     results = {}
+
+    if gender_list is None:
+        gender_list = common.BINARY_GROUP
 
     for gender in gender_list:
         if gender.label == "Female":
@@ -184,8 +191,8 @@ def store_raw_results(results, pickle_filepath='pronoun_adj_raw_analysis.pgz'):
     """
     try:
         common.load_pickle(pickle_filepath)
-        x = input("results already stored. overwrite previous analysis? (y/n)")
-        if x == 'y':
+        user_inp = input("results already stored. overwrite previous analysis? (y/n)")
+        if user_inp == 'y':
             common.store_pickle(results, pickle_filepath)
         else:
             pass
@@ -390,6 +397,7 @@ def results_by_date(full_results, time_frame, bin_size):
 
 
 def get_top_adj(full_results, num, remove_swords=False):
+    # pylint: disable=too-many-nested-blocks
     """
     Takes dictionary of results from run_adj_analysis and number of top results to return.
     Returns the top num adjectives associated with each gender.
@@ -491,9 +499,7 @@ def difference_adjs(gender_adj_dict, num_to_return=10):
             other_gender_dict = temp_dict[other_gender]
 
             for word, count in other_gender_dict.items():
-                if word not in current_difference.keys():
-                    continue
-                else:
+                if word in current_difference.keys():
                     current_difference[word] -= count
 
         stopwordless_words = [
