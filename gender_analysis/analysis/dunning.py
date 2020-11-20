@@ -448,9 +448,9 @@ def dunning_result_displayer(
         output += f'\nDunning Log-Likelihood results for {name}\n|'
 
         for heading in headings:
-            heading = heading.replace('_corp1', ' ' +
-                                      corpus1_display_name).replace('_corp2', ' ' +
-                                                                    corpus2_display_name)
+            heading = heading.replace('_corp1', ' '
+                                      + corpus1_display_name).replace('_corp2', ' '
+                                                                      + corpus2_display_name)
             output += ' {:19s}|'.format(heading)
         output += '\n' + 8 * 21 * '_' + '\n'
 
