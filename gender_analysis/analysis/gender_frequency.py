@@ -1,10 +1,10 @@
 from collections import Counter
 from pathlib import Path
 import numpy as np
-from gender_analysis import common
 
 import matplotlib.pyplot as plt
 import nltk
+from gender_analysis import common
 
 
 def get_count_words(document, words):
@@ -118,7 +118,8 @@ def display_gender_freq(freq_dic, title):
 
     Will scale to allow inputs of larger dictionaries with non-binary values
 
-    :param freq_dic: dictionary in the format {"Author/Document": {'Gender.label : frequency, ...'} ...}
+    :param freq_dic: dictionary in the format {"Author/Document":
+                                                   {'Gender.label : frequency, ...'} ...}
     :param title: title of graph (right now, this is usually just a number)
     :return: None
 
@@ -151,20 +152,21 @@ def display_gender_freq(freq_dic, title):
     plt.ylim(0, 1)
 
     index = np.arange(len(freq_dic.keys()))
-    bar_width = .70/len(genders)
+    bar_width = .70 / len(genders)
     opacity = .5
     count = 0
     lines = {}
     for gender in genders:
         current_gender = gender
-        lines[current_gender] = axis.bar(index + count*bar_width, values[genders[count]], bar_width,
-                                       alpha=opacity, color=colors[count], label=current_gender)
+        lines[current_gender] = axis.bar(index + count * bar_width, values[genders[count]],
+                                         bar_width, alpha=opacity, color=colors[count],
+                                         label=current_gender)
         count += 1
 
     axis.set_xlabel('Documents')
     axis.set_ylabel('Frequency')
     axis.set_title('Gendered Identifiers by Author')
-    axis.set_xticks(index + bar_width*(len(genders)-1) / len(genders))
+    axis.set_xticks(index + bar_width * (len(genders) - 1) / len(genders))
     plt.xticks(fontsize=8, rotation=90)
     axis.set_xticklabels(book_labels)
     axis.legend()
@@ -191,7 +193,7 @@ def run_gender_freq(corpus, genders):
     """
     documents = corpus.documents
     num_documents = len(documents)
-    loops = num_documents//10 if num_documents % 10 == 0 else num_documents//10 + 1
+    loops = num_documents // 10 if num_documents % 10 == 0 else num_documents // 10 + 1
 
     num = 0
 
@@ -520,7 +522,7 @@ def freq_by_date(doc_dict, time_frame, bin_size):
     """
 
     data = {}
-    for bin_start_year in range(time_frame[0], time_frame[1]+bin_size, bin_size):
+    for bin_start_year in range(time_frame[0], time_frame[1] + bin_size, bin_size):
         data[bin_start_year] = []
 
     for k, val in doc_dict.items():
