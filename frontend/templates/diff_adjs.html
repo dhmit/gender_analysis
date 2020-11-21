@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<title> Differential Adjective Results</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<h1> Books! Adjectives! What a world. </h1>
+
+<a id="top"></a>
+{% for text in results.keys() %}
+        &nbsp;&nbsp;&nbsp;&nbsp;{{ resultDict[results].keys()|length }} results found in <a href = "#{{ text }}">{{ text }}</a>.<$
+{% endfor %}
+{% for text in resultDict.keys() %}
+        <hr class="text">
+        <h3> <a href="http://{{ urllist[loop.index0] }}" id="{{ text }}">{{ text }}</a> has {{ (resultDict[text].keys()|length$
+        {% for result in resultDict[text].keys() %}
+                <hr class="result">
+                <h4> Result # {{ result + 1 }}: </h4>
+                {% for line in resultDict[text][result] %}
+                        {{ line }}<br>
+                {% endfor %}
+        {% endfor %}
+        <hr class="result">
+        <a href="#top">return to top</a>
+{% endfor %}
+
+</body>
+</html>

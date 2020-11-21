@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html>
+<head>
+<title> GATK: Baseline Frontend Search </title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<h1>Welcome to the subsublibrarian.</h1>
+<h3>Do some gendered analysis!</h3>
+<form method="POST">
+
+        <p> Choose which corpus you want to use. </p>
+        <p><input type="radio" name="corpus" value="small" checked>
+                <label for="small">The Small Corpus</label></p>
+        <p><input type="radio" name="corpus" value="large">
+                <label for="large">The Large Corpus</label></p>
+        <p>More corpora coming soon!</p>
+
+        <p> What operation do you want to perform? </p>
+        <p><input type="radio" name="operation" value="diff_adj" checked>
+                <label for="diff_adj">Differential Adjective Magic</label></p>
+
+        <p> What genders / pronoun sets do you want to use?</p>
+        <p><input type="checkbox" name="gender" value="male">
+                <label for="male">Male (he/him/his)</label></p>
+        <p><input type="checkbox" name="gender" value="female">
+            <label for="female">Female (she/her/hers)</label></p>
+        <p><input type="checkbox" name="gender" value="they">
+            <label for="they">They (they/them/theirs)</label></p>
+
+        <p><input type= "submit"></p>
+</form>
+<hr>
+</body>
+
