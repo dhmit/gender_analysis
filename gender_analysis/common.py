@@ -5,11 +5,14 @@ import sys
 from pathlib import Path
 
 import nltk
+from nltk.corpus import stopwords
 import seaborn as sns
 from chardet.universaldetector import UniversalDetector
 
 from gender_analysis.pronouns import PronounSeries
 from gender_analysis.gender import Gender
+
+SWORDS_ENG = stopwords.words('english')
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
 TEST_DATA_PATH = Path(BASE_PATH, 'testing', 'test_data')
