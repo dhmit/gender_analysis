@@ -4,10 +4,12 @@ from gender_analysis.corpus import Document
 from gender_analysis.testing import common
 import csv
 
-class TestDocumentInitialization():
+
+class TestDocumentInitialization:
     """
     Tests that the `Document` class
     """
+
     def test_sample_novels_document_initialization(self):
         documents = []
         with open(common.LARGE_TEST_CORPUS_CSV, newline='') as csvfile:
@@ -24,15 +26,20 @@ class TestDocumentInitialization():
             d = Document([])
 
     def test_document_initialization_missing_filepath_in_metadata(self):
-        with pytest.raises(AttributeError):
-            with open(common.LARGE_TEST_CORPUS_CSV, newline='') as csvfile:
+        with pytest.raises(ValueError):
+            d = Document({})
+
+    def test_document_initialization_metadata_file_with_wrong_extension(self):
+        with pytest.raises(ValueError):
+            with open(common.SMALL_TEST_CORPUS_CSV, newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
+                    row["filename"] = row["filename"].replace(".txt", "")
                     d = Document(row)
 
     def test_document_initialization_disallowed_field_in_metadata(self):
         with pytest.raises(KeyError):
-            with open(common.LARGE_TEST_CORPUS_CSV, newline='') as csvfile:
+            with open(common.SMALL_TEST_CORPUS_CSV, newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     row["members"] = "member"
@@ -40,7 +47,7 @@ class TestDocumentInitialization():
 
     def test_document_initialization_incorrect_date(self):
         with pytest.raises(ValueError):
-            with open(common.LARGE_TEST_CORPUS_CSV, newline='') as csvfile:
+            with open(common.SMALL_TEST_CORPUS_CSV, newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     row["date"] = "738"

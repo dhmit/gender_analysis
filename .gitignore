@@ -132,3 +132,5 @@ gender_analysis/stanford_parser
 
 # vim
 *.swp
+*.png
+*.pdf

@@ -21,7 +21,9 @@ class Document:
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-    ...                      'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+    ...                      'filename': 'austen_persuasion.txt',
+    ...                      'filepath': Path(common.TEST_DATA_PATH,
+    ...                                       'sample_novels', 'texts', 'austen_persuasion.txt')}
     >>> austen = document.Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
@@ -37,14 +39,16 @@ class Document:
 
         # Check that the essential attributes for the document exists.
         if 'filename' not in metadata_dict:
-            raise ValueError(str(metadata_dict)+f'metadata_dict must have an entry for filename')
+            raise ValueError(str(metadata_dict) + 'metadata_dict must have an entry for filename')
 
         self.members = list(metadata_dict.keys())
 
         for key in metadata_dict:
             if hasattr(self, str(key)):
                 raise KeyError(
-                    'Key name ', str(key), ' is reserved in the Document class. Please use another name'
+                    'Key name ',
+                    str(key),
+                    ' is reserved in the Document class. Please use another name.'
                 )
             setattr(self, str(key), metadata_dict[key])
 
@@ -62,11 +66,12 @@ class Document:
 
         self._word_counts_counter = None
         self._word_count = None
+        self._tokenized_text = None
 
         if not metadata_dict['filename'].endswith('.txt'):
             raise ValueError(
-                f'The document filename ', str(metadata_dict['filename']), 'does not end in .txt . Full metadata: '
-                f'{metadata_dict}.'
+                f"The document filename {metadata_dict['filename']}"
+                + f"does not end in .txt . Full metadata: '{metadata_dict}.'"
             )
 
         self.text = self._load_document_text()
@@ -74,7 +79,8 @@ class Document:
     @property
     def word_count(self):
         """
-        Lazy-loading for **Document.word_count** attribute. Returns the number of words in the document.
+        Lazy-loading for **Document.word_count** attribute.
+        Returns the number of words in the document.
         The word_count attribute is useful for the get_word_freq function.
         However, it is performance-wise costly, so it's only loaded when it's actually required.
 
@@ -84,7 +90,9 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                      'filename': 'austen_persuasion.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                       'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> austen.word_count
         83285
@@ -105,7 +113,9 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                      'filename': 'austen_persuasion.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                       'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> document_string = str(austen)
         >>> document_string
@@ -126,7 +136,9 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                      'filename': 'austen_persuasion.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                       'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(document_metadata)
         >>> repr(austen)
         '<Document (austen_persuasion)>'
@@ -137,14 +149,16 @@ class Document:
 
     def __eq__(self, other):
         """
-        Overload the equality operator to enable comparing and sorting documents. Returns True if the document filenames
-        and text are the same.
+        Overload the equality operator to enable comparing and sorting documents.
+        Returns True if the document filenames and text are the same.
 
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                    'filename': 'austen_persuasion.txt',
+        ...                    'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                     'texts', 'austen_persuasion.txt')}
         >>> austen = Document(austen_metadata)
         >>> austen2 = Document(austen_metadata)
         >>> austen == austen2
@@ -162,7 +176,9 @@ class Document:
 
         for attribute in attributes_required_to_be_equal:
             if not hasattr(other, attribute):
-                raise common.MissingMetadataError([attribute], f'{str(other)} lacks attribute {attribute}.')
+                raise common.MissingMetadataError(
+                    [attribute], f'{str(other)} lacks attribute {attribute}.'
+                )
             if getattr(self, attribute) != getattr(other, attribute):
                 return False
 
@@ -175,16 +191,22 @@ class Document:
         """
         Overload less than operator to enable comparing and sorting documents.
 
-        Sorts first by author, title, and then date. If these are not available, it sorts by filenames.
+        Sorts first by author, title, and then date.
+
+        If these are not available, it sorts by filenames.
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'austen_persuasion.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')}
+        ...                    'filename': 'austen_persuasion.txt',
+        ...                    'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                     'texts', 'austen_persuasion.txt')}
         >>> austen = document.Document(austen_metadata)
-        >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1850',
-        ...                   'filename': 'hawthorne_scarlet.txt', 'filepath': Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')}
+        >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        ...                       'date': '1850', 'filename': 'hawthorne_scarlet.txt',
+        ...                       'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                        'texts', 'hawthorne_scarlet.txt')}
         >>> hawthorne = document.Document(hawthorne_metadata)
         >>> hawthorne < austen
         False
@@ -244,7 +266,8 @@ class Document:
     def _gutenberg_cleaner(text):
 
         """
-        Checks to see if a given text is from Project Gutenberg. If it is, removes the header + footer.
+        Checks to see if a given text is from Project Gutenberg.
+        If it is, removes the header + footer.
 
         :param text: The string to reformat
         :return: A string that is idential to 'text' unless 'text' is from Gutenberg, in which case
@@ -272,7 +295,7 @@ class Document:
         except FileNotFoundError as original_err:
             err = (
                 f'The filename {self.filename} present in your metadata csv does not exist in your '
-               + 'files directory.\nPlease check that your metadata matches your dataset.'
+                + 'files directory.\nPlease check that your metadata matches your dataset.'
             )
             raise FileNotFoundError(err) from original_err
 
@@ -292,7 +315,9 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
-        ...                   'filename': 'test_text_1.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_1.txt')}
+        ...                      'filename': 'test_text_1.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                                       'document_test_files', 'test_text_1.txt')}
         >>> austin = document.Document(document_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
@@ -301,14 +326,19 @@ class Document:
         """
 
         # Excluded characters: !"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~
-        excluded_characters = set(string.punctuation)
-        cleaned_text = ''
-        for character in self.text:
-            if character not in excluded_characters:
-                cleaned_text += character
+        if self._tokenized_text is None:
+            excluded_characters = set(string.punctuation)
+            cleaned_text = ''
+            for character in self.text:
+                if character not in excluded_characters:
+                    cleaned_text += character
 
-        tokenized_text = cleaned_text.lower().split()
-        return tokenized_text
+            tokenized_text = cleaned_text.lower().split()
+            self._tokenized_text = tokenized_text
+            return tokenized_text
+
+        else:
+            return self._tokenized_text
 
     def find_quoted_text(self):
         """
@@ -320,7 +350,9 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
-        ...                   'date': '1818', 'filename': 'test_text_0.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_0.txt')}
+        ...                      'date': '1818', 'filename': 'test_text_0.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                                       'document_test_files', 'test_text_0.txt')}
         >>> document_novel = document.Document(document_metadata)
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
@@ -355,7 +387,7 @@ class Document:
         """
         Returns the number of instances of a word in the text. Not case-sensitive.
 
-        If this is your first time running this method, it may take a moment to perform a count in the document.
+        If this is your first time running this method, this can be slow.
 
         :param word: word to be counted in text
         :return: Number of occurences of the word, as an int
@@ -364,7 +396,9 @@ class Document:
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
-        ...                   'date': '2018', 'filename': 'test_text_2.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
+        ...                      'date': '2018', 'filename': 'test_text_2.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                                       'document_test_files', 'test_text_2.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_count_of_word("sad")
         4
@@ -383,15 +417,17 @@ class Document:
         """
         Returns a counter object of all of the words in the text.
 
-        If this is your first time running this method, it may take a moment to perform a count in the document.
+        If this is your first time running this method, this can be slow.
 
         :return: Python Counter object
 
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
-        ...                   'filename': 'test_text_10.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_10.txt')}
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        ...                      'date': '2018', 'filename': 'test_text_10.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                                       'document_test_files', 'test_text_10.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
@@ -403,7 +439,7 @@ class Document:
             self._word_counts_counter = Counter(self.get_tokenized_text())
         return self._word_counts_counter
 
-    def words_associated(self, word):
+    def words_associated(self, target_word):
         """
         Returns a Counter of the words found after a given word.
 
@@ -418,26 +454,29 @@ class Document:
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
-        ...                   'filename': 'test_text_11.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_11.txt')}
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        ...                      'date': '2018', 'filename': 'test_text_11.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                                       'document_test_files', 'test_text_11.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
 
         """
-        word = word.lower()
+        target_word = target_word.lower()
         word_count = Counter()
         check = False
         text = self.get_tokenized_text()
 
-        for w in text:
+        for word in text:
             if check:
-                word_count[w] += 1
+                word_count[word] += 1
                 check = False
-            if w == word:
+            if word == target_word:
                 check = True
         return word_count
 
+    # pylint: disable=line-too-long
     def get_word_windows(self, search_terms, window_size=2):
         """
         Finds all instances of `word` and returns a counter of the words around it.
@@ -453,8 +492,10 @@ class Document:
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '2018',
-        ...                   'filename': 'test_text_12.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_12.txt')}
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        ...                      'date': '2018', 'filename': 'test_text_12.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                                       'document_test_files', 'test_text_12.txt')}
         >>> scarlett = Document(document_metadata)
 
         search_terms can be either a string...
@@ -494,8 +535,10 @@ class Document:
         >>> from gender_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-        ...                   'filename': 'test_text_2.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_2.txt')}
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        ...                      'date': '1900', 'filename': 'test_text_2.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                                       'document_test_files', 'test_text_2.txt')}
         >>> scarlett = document.Document(document_metadata)
         >>> frequency = scarlett.get_word_freq('sad')
         >>> frequency
@@ -518,8 +561,10 @@ class Document:
         >>> from gender_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common
-        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': '1900',
-        ...                   'filename': 'test_text_13.txt', 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_13.txt')}
+        >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
+        ...                      'date': '1900', 'filename': 'test_text_13.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                                       'document_test_files', 'test_text_13.txt')}
         >>> document = Document(document_metadata)
         >>> document.get_part_of_speech_tags()[:4]
         [('They', 'PRP'), ('refuse', 'VBP'), ('to', 'TO'), ('permit', 'VB')]
@@ -537,7 +582,9 @@ class Document:
 
     def update_metadata(self, new_metadata):
         """
-        Updates the metadata of the document without requiring a complete reloading of the text and other properties.
+        Updates the metadata of the document without requiring a complete reloading
+        of the text and other properties.
+
         'filename' cannot be updated with this method.
 
         :param new_metadata: dict of new metadata to apply to the document
@@ -566,16 +613,23 @@ class Document:
         """
 
         if not isinstance(new_metadata, dict):
-            raise ValueError(f'new_metadata must be a dictionary of metadata keys, not type {type(new_metadata)}')
+            raise ValueError(
+                f'new_metadata must be a dictionary of metadata keys, not type {type(new_metadata)}'
+            )
         if 'filename' in new_metadata and new_metadata['filename'] != self.filename:
-            raise KeyError(f'You cannot update the filename of a document; consider removing {str(self)} from the '
-                           f'Corpus object and adding the document again with the updated filename')
+            raise KeyError(
+                'You cannot update the filename of a document; '
+                f'consider removing {str(self)} from the Corpus object '
+                'and adding the document again with the updated filename'
+            )
 
         for key in new_metadata:
             if key == 'date':
                 try:
                     new_metadata[key] = int(new_metadata[key])
-                except ValueError:
-                    raise ValueError(f"the metadata field 'date' must be a number for document {self.filename}, not "
-                                     f"'{new_metadata['date']}'")
+                except ValueError as err:
+                    raise ValueError(
+                        f"the metadata field 'date' must be a number for document {self.filename},"
+                        f" not '{new_metadata['date']}'"
+                    ) from err
             setattr(self, key, new_metadata[key])
