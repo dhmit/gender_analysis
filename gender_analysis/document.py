@@ -66,6 +66,7 @@ class Document:
 
         self._word_counts_counter = None
         self._word_count = None
+        self._tokenized_text = None
 
         if not metadata_dict['filename'].endswith('.txt'):
             raise ValueError(
@@ -325,14 +326,19 @@ class Document:
         """
 
         # Excluded characters: !"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~
-        excluded_characters = set(string.punctuation)
-        cleaned_text = ''
-        for character in self.text:
-            if character not in excluded_characters:
-                cleaned_text += character
+        if self._tokenized_text is None:
+            excluded_characters = set(string.punctuation)
+            cleaned_text = ''
+            for character in self.text:
+                if character not in excluded_characters:
+                    cleaned_text += character
 
-        tokenized_text = cleaned_text.lower().split()
-        return tokenized_text
+            tokenized_text = cleaned_text.lower().split()
+            self._tokenized_text = tokenized_text
+            return tokenized_text
+
+        else:
+            return self._tokenized_text
 
     def find_quoted_text(self):
         """
