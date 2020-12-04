@@ -31,14 +31,14 @@ class Document:
     466887
     """
 
-    def __init__(self, metadata_dict):
+    def __init__(self, metadata_dict, has_text=True):
         if not isinstance(metadata_dict, dict):
             raise TypeError(
                 'metadata must be passed in as a dictionary value'
             )
 
         # Check that the essential attributes for the document exists.
-        if 'filename' not in metadata_dict:
+        if 'filename' not in metadata_dict and has_text:
             raise ValueError(str(metadata_dict) + 'metadata_dict must have an entry for filename')
 
         self.members = list(metadata_dict.keys())
@@ -68,7 +68,7 @@ class Document:
         self._word_count = None
         self._tokenized_text = None
 
-        if not metadata_dict['filename'].endswith('.txt'):
+        if has_text and not metadata_dict['filename'].endswith('.txt'):
             raise ValueError(
                 f"The document filename {metadata_dict['filename']}"
                 + f"does not end in .txt . Full metadata: '{metadata_dict}.'"
