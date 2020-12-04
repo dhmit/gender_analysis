@@ -5,7 +5,6 @@ from gender_analysis import common
 
 pos_dict = {'adj': common.ADJ_TAGS, 'adv': common.ADV_TAGS,
             'proper_noun': common.PROPER_NOUN_TAGS, "verb": common.VERB_TAGS}
-binary_group = common.BINARY_GROUP
 
 
 def find_gender_pos(document, pos_to_find, gender_to_find, word_window=5, genders_to_exclude=None):
@@ -119,7 +118,7 @@ def find_female_pos(document, pos_to_find):
     return find_gender_pos(document, pos_to_find, common.FEMALE, genders_to_exclude=[common.MALE])
 
 
-def run_pos_analysis(corpus, pos_to_find, gender_list=binary_group):
+def run_pos_analysis(corpus, pos_to_find, gender_list=None):
     """
     Takes in a corpus of novels.
     Return a dictionary with each novel mapped to n dictionaries,
@@ -142,6 +141,9 @@ def run_pos_analysis(corpus, pos_to_find, gender_list=binary_group):
     3
     """
 
+    if gender_list is None:
+        gender_list = common.BINARY_GROUP
+
     results = {}
 
     for document in corpus:
@@ -150,7 +152,7 @@ def run_pos_analysis(corpus, pos_to_find, gender_list=binary_group):
     return results
 
 
-def run_pos_analysis_doc(document, pos_to_find, gender_list=binary_group):
+def run_pos_analysis_doc(document, pos_to_find, gender_list=None):
     """
     Takes in a document, a pos tag, and a list of genders to analyze,
     returns a dictionary with the find_gender_pos results for each gender in gender_list.
@@ -170,6 +172,9 @@ def run_pos_analysis_doc(document, pos_to_find, gender_list=binary_group):
     3
 
     """
+
+    if gender_list is None:
+        gender_list = common.BINARY_GROUP
 
     results = {}
 

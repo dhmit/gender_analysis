@@ -77,7 +77,7 @@ def find_female_adj(document):
     return find_gender_adj(document, common.FEMALE, genders_to_exclude=[common.MALE])
 
 
-def run_adj_analysis(corpus, gender_list=binary_group):
+def run_adj_analysis(corpus, gender_list=None):
     """
     Takes in a corpus of novels.
     Return a dictionary with each novel mapped to n dictionaries,
@@ -99,6 +99,9 @@ def run_adj_analysis(corpus, gender_list=binary_group):
     3
     """
 
+    if gender_list is None:
+        gender_list = common.BINARY_GROUP
+
     results = {}
 
     for document in corpus:
@@ -107,7 +110,7 @@ def run_adj_analysis(corpus, gender_list=binary_group):
     return results
 
 
-def run_adj_analysis_doc(document, gender_list=binary_group):
+def run_adj_analysis_doc(document, gender_list=None):
     """
     Takes in a document and a list of genders to analyze,
     returns a dictionary with the find_gender_adj results for each gender in gender_list.
@@ -126,6 +129,9 @@ def run_adj_analysis_doc(document, gender_list=binary_group):
     3
 
     """
+
+    if gender_list is None:
+        gender_list = common.BINARY_GROUP
 
     return gender_pos.run_pos_analysis_doc(document, 'adj', gender_list)
 
