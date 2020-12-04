@@ -1,6 +1,8 @@
 from gender_analysis import common
 from gender_analysis.analysis import gender_pos
 
+binary_group = common.BINARY_GROUP
+
 
 def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=None):
     # pylint: disable=too-many-locals
@@ -75,7 +77,7 @@ def find_female_adj(document):
     return find_gender_adj(document, common.FEMALE, genders_to_exclude=[common.MALE])
 
 
-def run_adj_analysis(corpus, gender_list=None):
+def run_adj_analysis(corpus, gender_list=binary_group):
     """
     Takes in a corpus of novels.
     Return a dictionary with each novel mapped to n dictionaries,
@@ -96,8 +98,6 @@ def run_adj_analysis(corpus, gender_list=None):
     >>> tiny_results[[*tiny_results][0]]['Female']['invisible']
     3
     """
-    if gender_list is None:
-        gender_list = common.BINARY_GROUP
 
     results = {}
 
@@ -107,7 +107,7 @@ def run_adj_analysis(corpus, gender_list=None):
     return results
 
 
-def run_adj_analysis_doc(document, gender_list=common.BINARY_GROUP):
+def run_adj_analysis_doc(document, gender_list=binary_group):
     """
     Takes in a document and a list of genders to analyze,
     returns a dictionary with the find_gender_adj results for each gender in gender_list.
