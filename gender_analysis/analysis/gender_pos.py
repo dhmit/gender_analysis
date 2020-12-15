@@ -1,10 +1,13 @@
 from more_itertools import windowed
 import nltk
 
+from gender_analysis.common import ADJ_TAGS, ADV_TAGS, PROPER_NOUN_TAGS, VERB_TAGS
 from gender_analysis import common
 
-pos_dict = {'adj': common.ADJ_TAGS, 'adv': common.ADV_TAGS,
-            'proper_noun': common.PROPER_NOUN_TAGS, "verb": common.VERB_TAGS}
+# note: the POS tagger seems pretty dreadful at detecting proper nouns.
+
+pos_dict = {'adj': ADJ_TAGS, 'adv': ADV_TAGS,
+            'proper_noun': PROPER_NOUN_TAGS, "verb": VERB_TAGS}
 
 
 def find_gender_pos(document, pos_to_find, gender_to_find, word_window=5, genders_to_exclude=None):
