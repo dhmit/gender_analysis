@@ -49,7 +49,7 @@ class Gender:
         >>> from gender_analysis.gender import Gender
         >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
         >>> Gender('Female', fem_pronouns)
-        <Female: {<Fem: ['her', 'hers', 'she']>}>
+        <Female>
         """
 
         return f'<{self.label}>'
