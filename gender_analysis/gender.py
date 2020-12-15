@@ -52,7 +52,7 @@ class Gender:
         <Female: {<Fem: ['her', 'hers', 'she']>}>
         """
 
-        return f'<{self.label}: {self.pronoun_series}>'
+        return f'<{self.label}>'
 
     def __str__(self):
         """
