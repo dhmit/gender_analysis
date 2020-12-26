@@ -525,6 +525,64 @@ def difference_pos(gender_pos_dict, num_to_return=10):
     return difference_dict
 
 
+def difference_pos_freq(gender_pos_dict, num_to_return=10):
+    """
+    Given result dictionaries from find_gender_pos,
+    returns a dictionary with num_to_return pos_words
+    most strongly associated with each gender, normalized by gender frequency.
+
+    This works especially well with merged_results from a merge_raw_results function,
+    but can also be used on individual locations from individual documents, result_by_location,
+    or individual date ranges from result_by_date_range.
+
+    :param gender_pos_dict: a dict of dicts in the form {word:count},
+    :param num_to_return: the number of top words to return
+    :return: a dict of dicts in the form of {"gender":{list of top words w/ differential counts.
+
+    """
+
+    difference_dict = {}
+
+    for gender in gender_pos_dict:
+        temp_dict = gender_pos_dict.copy()
+        current_gender_dict = temp_dict.pop(gender)
+        current_difference = {}
+
+        current_gender_total_pos = 0
+
+        for word, count in current_gender_dict.items():
+            current_gender_total_pos += count
+
+        for word, count in current_gender_dict.items():
+            current_difference[word] = count / current_gender_total_pos
+
+        for other_gender in temp_dict.keys():
+            other_gender_dict = temp_dict[other_gender]
+
+            other_gender_total_pos = 0
+
+            for word, count in other_gender_dict.items():
+                other_gender_total_pos += count
+
+            for word, count in other_gender_dict.items():
+                if word in current_difference.keys():
+                    current_difference[word] -= count / other_gender_total_pos
+
+        stopwordless_words = [
+            (key, round(current_difference[key]*100, 3))
+            for key in current_difference
+            if key not in common.SWORDS_ENG
+        ]
+
+        current_sorted_tuples = sorted(
+            stopwordless_words, key=lambda sort_word: sort_word[1], reverse=True
+        )
+
+        difference_dict[gender] = current_sorted_tuples[:num_to_return]
+
+    return difference_dict
+
+
 def display_gender_pos(result_dict, num_to_return=10, remove_stopwords=True):
     """
     takes the results of find_gender_pos and prints out to the user the top number_to_return
@@ -545,3 +603,25 @@ def display_gender_pos(result_dict, num_to_return=10, remove_stopwords=True):
     sorted_tuples = sorted(result_tup_list, key=lambda word: word[1], reverse=True)
 
     return sorted_tuples[:num_to_return]
+
+
+def pos_analysis_on_corpus(corpus, pos_list, genders):
+    result_dict = {}
+
+    for pos in pos_list:
+        print("Analyzing ",pos)
+        result_dict[pos] = {}
+        result_dict[pos]['raw'] = run_pos_analysis(corpus, pos, genders)
+        result_dict[pos]['merged'] = merge_raw_results(result_dict[pos]['raw'])
+        result_dict[pos]['diff'] = difference_pos(result_dict[pos]['merged'])
+
+    return result_dict
+
+
+def display_pos_analysis(pos_analysis_results):
+    for pos in pos_analysis_results.keys():
+        print(pos)
+
+        for gender in pos_analysis_results[pos]['diff']:
+            print("--", gender)
+            print(pos_analysis_results[pos]['diff'][gender])
