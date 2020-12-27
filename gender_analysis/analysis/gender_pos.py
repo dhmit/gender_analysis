@@ -605,7 +605,17 @@ def display_gender_pos(result_dict, num_to_return=10, remove_stopwords=True):
     return sorted_tuples[:num_to_return]
 
 
-def pos_analysis_on_corpus(corpus, pos_list, genders):
+def pos_analysis_on_corpus(corpus, pos_list, genders, display = False):
+    """
+    Performs an overall part-of-speech analysis on a full corpus,
+    given a list of parts of speech to search for and a list of genders.
+
+    :param corpus: a Corpus of Documents.
+    :param pos_list: a list of part-of-speech tags ('adj', 'adv', 'verb')
+    :param genders: a list of Gender objects.
+    :param display: whether or not to print the results prettily.
+    :return: a dictionary of part-of-speech results.
+    """
     result_dict = {}
 
     for pos in pos_list:
@@ -615,10 +625,17 @@ def pos_analysis_on_corpus(corpus, pos_list, genders):
         result_dict[pos]['merged'] = merge_raw_results(result_dict[pos]['raw'])
         result_dict[pos]['diff'] = difference_pos(result_dict[pos]['merged'])
 
+    if display:
+        display_pos_analysis(result_dict)
+
     return result_dict
 
 
 def display_pos_analysis(pos_analysis_results):
+    """
+    Prints out the results of pos_analysis_on_corpus prettily.
+
+    """
     for pos in pos_analysis_results.keys():
         print(pos)
 

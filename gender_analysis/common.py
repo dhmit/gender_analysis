@@ -70,6 +70,8 @@ def load_txt_to_string(file_path):
     """
     Loads a txt file and returns a str representation of it.
 
+    If the text file doesn't exist, prints an error and returns "".
+
     :param file_path: str or Path object
     :return: The file's text as a string
 
@@ -89,8 +91,16 @@ def load_txt_to_string(file_path):
     if file_type != '.txt':
         raise Exception('Cannot load if current file type is not .txt')
 
-    with open(file_path, encoding='utf-8') as txt_file:
+    try:
+        txt_file = open(file_path, encoding="utf-8")
         result = txt_file.read()
+        txt_file.close()
+    except:
+        print("No file found at ", file_path)
+        result = ""
+
+#    with open(file_path, encoding='utf-8') as txt_file:
+#        result = txt_file.read()
 
     return result
 
