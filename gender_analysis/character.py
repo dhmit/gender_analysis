@@ -93,4 +93,4 @@ class Character:
 
     def get_char_adjectives(self): # don't know if this should be put to the analysis folder
         name = self.name
-        
+

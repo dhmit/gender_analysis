@@ -6,6 +6,8 @@ from pathlib import Path
 from gutenberg_cleaner import simple_cleaner
 from more_itertools import windowed
 import nltk
+from nltk.tokenize import word_tokenize
+from nltk.tag import pos_tag
 
 from gender_analysis import common
 
@@ -633,3 +635,30 @@ class Document:
                         f" not '{new_metadata['date']}'"
                     ) from err
             setattr(self, key, new_metadata[key])
+
+    def get_char_list(self):
+        '''given a document object, find a list of characters with their frequency in the novels
+            input: a document object
+            output: a list of tuples with character names in descending sorted order that occurs
+            more than 10 times in the document'''
+        labels_char = []
+        labels = 'FACILITY,GPE,GSP,LOCATION,ORGANIZATION,PERSON' #this could be changed later
+        document = self._load_document_text()
+        for sent in nltk.sent_tokenize(document):
+            for chunk in nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(sent))):
+                if hasattr(chunk, 'label'):
+                    # print(type(chunk.label()), chunk.label(), ' '.join(c[0] for c in chunk))
+                    labels_char.append((chunk.label(), ' '.join(c[0] for c in chunk)))
+        char_dict = {lab: {} for lab in labels.split(',')}
+        for ch in labels_char:
+            cat = char_dict[ch[0]]
+            cat[ch[1]] = cat.get(ch[1], 0) + 1
+        people = char_dict['PERSON']
+        people_sorted = [(p, people[p]) for p in people]
+        people_sorted = sorted(people_sorted, key=lambda p: p[1], reverse=True)
+        cutoff = len(people_sorted) # index for cutoff threshold of char names, customizable later?
+        for i in range(len(people_sorted)):
+            if people_sorted[i][1] < 10:
+                cutoff = i
+                break
+        return people_sorted[:cutoff]
