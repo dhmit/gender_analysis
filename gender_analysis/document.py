@@ -10,6 +10,8 @@ from nltk.tokenize import word_tokenize
 from nltk.tag import pos_tag
 
 from gender_analysis import common
+from gender_analysis import character
+from gender_analysis.character import Character
 
 
 class Document:
@@ -662,3 +664,16 @@ class Document:
                 cutoff = i
                 break
         return people_sorted[:cutoff]
+
+    def create_char_objects(self, char_list):
+        """a helper function used in joint with the above get_char_list function
+        given a list of tuples of char names and frequency in the document, create
+        a list of char objects using ML gender identification models"""
+        to_return = []
+        for char in char_list:
+            name = char[0]
+            # gender identification
+            new_char = Character(name)
+            to_return.append(new_char)
+
+        return to_return

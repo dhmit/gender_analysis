@@ -42,9 +42,9 @@ def find_gender_pos(document, pos_to_find, gender_to_find, word_window=5, gender
         pos_tags = pos_dict[pos_to_find]
     else:
         return "Invalid part of speech"
-
-    identifiers_to_find = gender_to_find.identifiers
-
+    # rewrite based on character class
+    identifiers_to_find = gender_to_find.identifiers # identifiers: names and nicknames
+    # this exclude section isn't necessary
     if genders_to_exclude is None:
         genders_to_exclude = list()
 
