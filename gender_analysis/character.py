@@ -8,9 +8,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
+# need to get nonbinary training data
+from gender_analysis.common import MALE as male, FEMALE as female, NONBINARY as nonbinary
 
 # load SVM classifier for gender detection
-loaded_model = pickle.load(open('gender_classifier.sav', 'rb'))
+# loaded_model = pickle.load(open('gender_classifier.sav', 'rb'))
+
 
 class Character:
     """
@@ -132,7 +135,7 @@ class Character:
         return np.array(ascii_list).mean()
 
     @property
-    def get_char_gender(self):
+    def get_char_gender(self): # just binary for now! Need to add more customizability!
         """Use ML model to predict the gender of a character based on name
         return: a string indicating the gender of the character (i.e. 'Female'). If gender has
         been defined, then return the original gender.
@@ -155,9 +158,9 @@ class Character:
         svc_op = loaded_model.predict(ndf.iloc[:, 1:].values)
         gender = svc_op[0]
         if gender == 'F': # currently only supports binary classes 'F' or 'M', need to add others
-            self.gender = 'Female'
+            self.gender = female
         else:
-            self.gender = 'Male'
+            self.gender = male
         return gender
 
     def get_char_adjectives(self): # don't know if this should be put to the analysis folder
