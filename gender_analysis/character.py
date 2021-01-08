@@ -25,8 +25,11 @@ class Character:
         :param nicknames: a list of strings of other references of that character, optional"""
         self.name = name
         self.document = document # change to an array of documents
-        self.gender = gender
         self.nicknames = nicknames
+        if gender:
+            self.gender = gender
+        self.gender = self.get_char_gender() # not sure if I could write like this
+
 
     def __str__(self):
         character = self.name + ' in ' + str(self.document)
