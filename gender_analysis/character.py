@@ -1,17 +1,12 @@
 import pickle
 import pandas as pd
-import sklearn
 import numpy as np
 # Libraries for building classifiers - do I need to import those?
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
 # need to get nonbinary training data
-from gender_analysis.common import MALE as male, FEMALE as female, NONBINARY as nonbinary
+from gender_analysis.common import MALE, FEMALE
 
 # load SVM classifier for gender detection
-# loaded_model = pickle.load(open('gender_classifier.sav', 'rb'))
+loaded_model = pickle.load(open('gender_analysis/gender_classifier.sav', 'rb'))
 
 
 class Character:
@@ -19,7 +14,7 @@ class Character:
     Defines a character that will be operated on in analysis functions
     """
 
-    def __init__(self, name, document, gender=None, nicknames=[]): # maybe need to try/except?
+    def __init__(self, name, document, gender=None, nicknames=[]):  # maybe need to try/except?
         """Initializes a character object which is associated with a document object
         :param name: a string of the name of the character
         :param document: a document object where the character exists
@@ -30,9 +25,7 @@ class Character:
         self.nicknames = nicknames
         self.gender = gender
         if not gender:
-            print("Test")
-            new_gender = self.get_char_gender()
-            print(new_gender)
+            self.gender = self.get_char_gender()
 
     def __str__(self):
         character = self.name + ' in ' + str(self.document)
@@ -72,7 +65,7 @@ class Character:
                 popularity += 1
         return popularity
 
-    def get_overall_popularity(self, document):
+    def get_overall_popularity(self):
         """return the count of all occurrences of the character name and nicknames throughout the
         document
         gives more flexibility compared with the other get_overall_popularity func to customize
@@ -81,9 +74,10 @@ class Character:
         # all_text = document.get_tokenized_text() this should be ideal but doesn't work with
         # current settings
         names = [self.name] + self.nicknames
+        lowered_names = [name.lower() for name in names]
         popularity = 0
-        for t in document:
-            if t in names:
+        for t in self.document.get_tokenized_text():
+            if t in lowered_names:
                 popularity += 1
         return popularity
 
@@ -146,6 +140,7 @@ class Character:
         """
         if self.gender is not None:
             return self.gender
+
         else:
             name_list = [self.name]
             ndf = pd.DataFrame([], columns=['name', 'ascii_value', 'name_len',
@@ -162,10 +157,10 @@ class Character:
             ndf['ascii_value'] = ndf['name'].apply(lambda x: self.ascii_mean(x).round(3))
             svc_op = loaded_model.predict(ndf.iloc[:, 1:].values)
             gender = svc_op[0]
-            if gender == 'F':  # currently only supports binary classes 'F' or 'M', need to add others
-                self.gender = female
+            if gender == 'F':  # currently only supports binary classes 'F' or 'M'
+                gender = FEMALE
             else:
-                self.gender = male
+                gender = MALE
             return gender
 
     def get_char_adjectives(self):  # don't know if this should be put to the analysis folder

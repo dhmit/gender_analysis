@@ -639,14 +639,18 @@ class Document:
             setattr(self, key, new_metadata[key])
 
     def get_char_list(self):
-        '''given a document object, find a list of characters with their frequency in the novels
-            input: a document object
-            output: a list of tuples with character names in descending sorted order that occurs
-            more than 10 times in the document'''
+        """
+        given a document object, find a list of characters with their frequency in the novels
+        input: a document object
+        output: a list of tuples with character names in descending sorted order that occurs
+        more than 10 times in the document
+        """
+
         labels_char = []
         labels = 'FACILITY,GPE,GSP,LOCATION,ORGANIZATION,PERSON' #this could be changed later
         document = self._load_document_text()
-        for sent in nltk.sent_tokenize(document):
+        sentences = nltk.sent_tokenize(document)
+        for sent in sentences:
             for chunk in nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(sent))):
                 if hasattr(chunk, 'label'):
                     # print(type(chunk.label()), chunk.label(), ' '.join(c[0] for c in chunk))
