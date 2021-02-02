@@ -1,4 +1,3 @@
-from gender_analysis import document
 import pickle
 import pandas as pd
 import sklearn
@@ -27,12 +26,13 @@ class Character:
         :param gender: a gender object which is optional
         :param nicknames: a list of strings of other references of that character, optional"""
         self.name = name
-        self.document = document # change to an array of documents
+        self.document = document  # change to an array of documents
         self.nicknames = nicknames
-        if gender:
-            self.gender = gender
-        self.gender = self.get_char_gender() # not sure if I could write like this
-
+        self.gender = gender
+        if not gender:
+            print("Test")
+            new_gender = self.get_char_gender()
+            print(new_gender)
 
     def __str__(self):
         character = self.name + ' in ' + str(self.document)
@@ -87,11 +87,13 @@ class Character:
                 popularity += 1
         return popularity
 
-    def get_staged_popularity(self, stage=10): # future work: make vis!
+    def get_staged_popularity(self, stage=10):
+        # future work: make vis!
         """return a list of length stage of the popularity of the character in that stage
         return: a list of counts of length stage, similar to get_overall_popularity"""
         all_text = self.document.get_tokenized_text()
-        splitted = self.split_list(all_text,num=stage) #not sure if I could do it with static method
+        splitted = self.split_list(all_text, num=stage)
+        # not sure if I could do it with static method
         staged = []
         for t in splitted:
             staged.append(self.get_overall_popularity(splitted))
@@ -134,36 +136,39 @@ class Character:
         ascii_list = [ord(x) for x in name]
         return np.array(ascii_list).mean()
 
-    @property
-    def get_char_gender(self): # just binary for now! Need to add more customizability!
-        """Use ML model to predict the gender of a character based on name
+    def get_char_gender(self):
+        # just binary for now! Need to add more customizability!
+        """
+        Use ML model to predict the gender of a character based on name
         return: a string indicating the gender of the character (i.e. 'Female'). If gender has
         been defined, then return the original gender.
-        Update Character object with a gender"""
-        if self.gender:
+        Update Character object with a gender
+        """
+        if self.gender is not None:
             return self.gender
-        name_list = [self.name]
-        ndf = pd.DataFrame([], columns=['name', 'ascii_value', 'name_len',
-                                        'num_vowels', 'num_consonents', 'last_letter_vowel',
-                                        ])
-        ndf['name'] = name_list
-        ndf['ascii_value'] = ndf['name'].apply(lambda x: self.ascii_mean(x).round(3))
-        ndf['name_len'] = ndf['name'].apply(lambda x: len(x))
-        ndf['num_vowels'] = ndf['name'].apply(lambda x: self.letter_class(x)[0])
-        ndf['num_consonents'] = ndf['name'].apply(lambda x: self.letter_class(x)[1])
-        ndf['last_letter_vowel'] = ndf['name'].apply(
-            lambda x: 1 if x[-1] in ['a', 'e', 'i', 'o', 'u'] else 0)
-        ndf['ends_with_a'] = ndf['name'].apply(lambda x: 1 if x[-1] == 'a' else 0)
-        ndf['ascii_value'] = ndf['name'].apply(lambda x: self.ascii_mean(x).round(3))
-        svc_op = loaded_model.predict(ndf.iloc[:, 1:].values)
-        gender = svc_op[0]
-        if gender == 'F': # currently only supports binary classes 'F' or 'M', need to add others
-            self.gender = female
         else:
-            self.gender = male
-        return gender
+            name_list = [self.name]
+            ndf = pd.DataFrame([], columns=['name', 'ascii_value', 'name_len',
+                                            'num_vowels', 'num_consonents', 'last_letter_vowel',
+                                            ])
+            ndf['name'] = name_list
+            ndf['ascii_value'] = ndf['name'].apply(lambda x: self.ascii_mean(x).round(3))
+            ndf['name_len'] = ndf['name'].apply(lambda x: len(x))
+            ndf['num_vowels'] = ndf['name'].apply(lambda x: self.letter_class(x)[0])
+            ndf['num_consonents'] = ndf['name'].apply(lambda x: self.letter_class(x)[1])
+            ndf['last_letter_vowel'] = ndf['name'].apply(
+                lambda x: 1 if x[-1] in ['a', 'e', 'i', 'o', 'u'] else 0)
+            ndf['ends_with_a'] = ndf['name'].apply(lambda x: 1 if x[-1] == 'a' else 0)
+            ndf['ascii_value'] = ndf['name'].apply(lambda x: self.ascii_mean(x).round(3))
+            svc_op = loaded_model.predict(ndf.iloc[:, 1:].values)
+            gender = svc_op[0]
+            if gender == 'F':  # currently only supports binary classes 'F' or 'M', need to add others
+                self.gender = female
+            else:
+                self.gender = male
+            return gender
 
-    def get_char_adjectives(self): # don't know if this should be put to the analysis folder
+    def get_char_adjectives(self):  # don't know if this should be put to the analysis folder
         name = self.name
         pass
 
