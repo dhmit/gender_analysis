@@ -11,7 +11,7 @@ from sklearn.svm import SVC
 from gender_analysis.common import MALE as male, FEMALE as female, NONBINARY as nonbinary
 
 # load SVM classifier for gender detection
-# loaded_model = pickle.load(open('gender_classifier.sav', 'rb'))
+loaded_model = pickle.load(open('gender_analysis/gender_classifier.sav', 'rb'))
 
 
 class Character:
@@ -81,6 +81,8 @@ class Character:
         # all_text = document.get_tokenized_text() this should be ideal but doesn't work with
         # current settings
         names = [self.name] + self.nicknames
+        for n in names:
+            n = n.lower()
         popularity = 0
         for t in document:
             if t in names:
