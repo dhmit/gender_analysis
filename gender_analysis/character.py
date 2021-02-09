@@ -1,7 +1,6 @@
 import pickle
 import pandas as pd
 import numpy as np
-# Libraries for building classifiers - do I need to import those?
 # need to get nonbinary training data
 from gender_analysis.common import MALE, FEMALE
 
