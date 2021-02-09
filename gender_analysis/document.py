@@ -829,12 +829,14 @@ class Document:
        char_list = self.char_name_disambiguation()
        for char in char_list:
            name = char[0][0]
-           if name in char_names: #duplicates
+           if name in char_names:
                continue
+           char_names.add(name)
            if len(char)>1:
                nicknames = [ch[0] for ch in char[1:]]
-               new_char = Character(name, self, icknames=nicknames)
-               # to_return.append(new_char)
+               for n in nicknames:
+                   char_names.add(n)
+               new_char = Character(name, self, nicknames=nicknames)
            else:
                new_char = Character(name, self)
            to_return.append(new_char)

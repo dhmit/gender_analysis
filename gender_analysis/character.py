@@ -27,7 +27,7 @@ class Character:
             self.gender = self.get_char_gender()
 
     def __str__(self):
-        character = self.name + ' in ' + str(self.document)
+        character = self.name + str(self.gender) + ' in ' + str(self.document) + 'with ' + 'nicknames:  ' + str(self.nicknames)
         return character
 
     def __repr__(self):
