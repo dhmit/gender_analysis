@@ -13,9 +13,22 @@ from gender_analysis import common
 from gender_analysis import character
 from gender_analysis.character import Character
 
-BINARY_HONORIFICS = ['Mr.', 'Mrs.', 'Ms.', 'Miss', 'Madam', 'Lord']
-NEUTRAL_HONORIFICS = ['Mx', 'Dr.']
-HONORIFICS = BINARY_HONORIFICS + NEUTRAL_HONORIFICS
+FEMALE_HONORIFICS = ["Miss", "Mrs", "Ms", "Mistress", "Madam", "Ma'am", "Dame",
+                     "Lady", "Her Honour", "Her Honor", "My Lady", "Your Ladyship",
+                     "Sr", "Sister", "Sayyidah"]
+MALE_HONORIFICS = ["Master", "Mr", "Sir", "Gentleman", "Sire", "Lord", "His Honour",
+                   "His Honor", "My Lord", "Your Lordship", "Master", "Esquire", "Esq",
+                   "His Holiness", "Pope", "His All Holiness", "His Beatitude", "The Reverend",
+                   "Rev", "Fr", "Father", "Pr", "Pastor", "Br", "Brother", "Rabbi", "Imam",
+                   "Mufti", "Sayyid"]
+# BINARY_HONORIFICS = ['Mr.', 'Mrs.', 'Ms.', 'Miss', 'Madam', 'Lord']
+NEUTRAL_HONORIFICS = ["Mx", "Excellency", "Excellence", "Your Honor", "The Honorable",
+                      "The Honourable", "The Hon", "Hon", "The Hon'ble", "The Right Honourable",
+                      "The Most Honourable", "Dr", "Doctor", "Professor", "QC", "Cl", "S Cl",
+                      "Counsel", "Senior Counsel", "Eur Ing", "Vice-Chancellor", "Principal",
+                      "President", "Warden", "Dean", "Regent", "Rector", "Provost", "Director",
+                      "Chief Executive", "Venerable", "Eminent"]
+HONORIFICS = FEMALE_HONORIFICS + MALE_HONORIFICS + NEUTRAL_HONORIFICS
 
 
 class Document:
@@ -821,12 +834,12 @@ class Document:
                         mnci = 1
         return mnci'''
 
-    def create_char_objects(self):
-       """Creates a list of char objects through calling
+    def create_char_objects(self, char_list):
+       """helper function to use alongside of the name disambiguation
+       Creates a list of char objects through calling
         char_name_disambiguation, filter out duplicates, and uses ML gender classification models"""
        to_return = []
        char_names = set()
-       char_list = self.char_name_disambiguation()
        for char in char_list:
            name = char[0][0]
            if name in char_names:

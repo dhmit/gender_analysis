@@ -4,6 +4,7 @@ import numpy as np
 # need to get nonbinary training data
 from gender_analysis.common import MALE, FEMALE
 
+from gender_analysis.document import FEMALE_HONORIFICS, MALE_HONORIFICS, HONORIFICS
 # load SVM classifier for gender detection
 loaded_model = pickle.load(open('gender_analysis/gender_classifier.sav', 'rb'))
 
@@ -141,25 +142,33 @@ class Character:
             return self.gender
 
         else:
-            name_list = [self.name]
-            ndf = pd.DataFrame([], columns=['name', 'ascii_value', 'name_len',
+            # check the gender based on honorifics first
+            name = self.name
+            name_split = name.split(' ')
+            if name_split[0] in FEMALE_HONORIFICS:
+                gender = FEMALE
+            elif name_split[0] in MALE_HONORIFICS:
+                gender = MALE
+            else:
+                name_list = [self.name]
+                ndf = pd.DataFrame([], columns=['name', 'ascii_value', 'name_len',
                                             'num_vowels', 'num_consonents', 'last_letter_vowel',
                                             ])
-            ndf['name'] = name_list
-            ndf['ascii_value'] = ndf['name'].apply(lambda x: self.ascii_mean(x).round(3))
-            ndf['name_len'] = ndf['name'].apply(lambda x: len(x))
-            ndf['num_vowels'] = ndf['name'].apply(lambda x: self.letter_class(x)[0])
-            ndf['num_consonents'] = ndf['name'].apply(lambda x: self.letter_class(x)[1])
-            ndf['last_letter_vowel'] = ndf['name'].apply(
+                ndf['name'] = name_list
+                ndf['ascii_value'] = ndf['name'].apply(lambda x: self.ascii_mean(x).round(3))
+                ndf['name_len'] = ndf['name'].apply(lambda x: len(x))
+                ndf['num_vowels'] = ndf['name'].apply(lambda x: self.letter_class(x)[0])
+                ndf['num_consonents'] = ndf['name'].apply(lambda x: self.letter_class(x)[1])
+                ndf['last_letter_vowel'] = ndf['name'].apply(
                 lambda x: 1 if x[-1] in ['a', 'e', 'i', 'o', 'u'] else 0)
-            ndf['ends_with_a'] = ndf['name'].apply(lambda x: 1 if x[-1] == 'a' else 0)
-            ndf['ascii_value'] = ndf['name'].apply(lambda x: self.ascii_mean(x).round(3))
-            svc_op = loaded_model.predict(ndf.iloc[:, 1:].values)
-            gender = svc_op[0]
-            if gender == 'F':  # currently only supports binary classes 'F' or 'M'
-                gender = FEMALE
-            else:
-                gender = MALE
+                ndf['ends_with_a'] = ndf['name'].apply(lambda x: 1 if x[-1] == 'a' else 0)
+                ndf['ascii_value'] = ndf['name'].apply(lambda x: self.ascii_mean(x).round(3))
+                svc_op = loaded_model.predict(ndf.iloc[:, 1:].values)
+                gender = svc_op[0]
+                if gender == 'F':  # currently only supports binary classes 'F' or 'M'
+                    gender = FEMALE
+                else:
+                    gender = MALE
             return gender
 
     def get_char_adjectives(self):  # don't know if this should be put to the analysis folder
