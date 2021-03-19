@@ -15,7 +15,7 @@ from gender_analysis.gender import Gender
 SWORDS_ENG = stopwords.words('english')
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
-TEST_DATA_PATH = Path(BASE_PATH, 'testing', 'test_data')
+TEST_DATA_PATH = Path(BASE_PATH, '../corpus_analysis/testing', 'test_data')
 
 # Common Pronoun Collections
 HE_SERIES = PronounSeries('Masc', {'he', 'his', 'him', 'himself'}, subj='he', obj='him')
@@ -40,7 +40,7 @@ def load_csv_to_list(file_path):
 
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.testing.common import LARGE_TEST_CORPUS_CSV
+    >>> from corpus_analysis.testing.common import LARGE_TEST_CORPUS_CSV
     >>> corpus_metadata_path = LARGE_TEST_CORPUS_CSV
     >>> corpus_metadata = load_csv_to_list(corpus_metadata_path)
     >>> type(corpus_metadata)
@@ -127,7 +127,7 @@ def load_pickle(filepath):
 
     >>> from gender_analysis import common
     >>> from pathlib import Path
-    >>> pickle_filepath = Path(common.BASE_PATH, 'testing', 'test_data',\
+    >>> pickle_filepath = Path(common.BASE_PATH, '../corpus_analysis/testing', 'test_data',\
                                'test_pickle.pgz')
     >>> loaded_object = common.load_pickle(pickle_filepath)
     >>> loaded_object

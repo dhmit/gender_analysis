@@ -1,5 +1,5 @@
-from gender_analysis.corpus import Corpus
-from gender_analysis.testing import common
+from corpus_analysis.corpus import Corpus
+from corpus_analysis.testing import common
 
 
 class TestLoadCorpus:

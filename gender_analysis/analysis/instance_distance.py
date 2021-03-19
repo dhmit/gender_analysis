@@ -12,7 +12,7 @@ def instance_dist(document, word):
     :param word: str, word to search text for distance between occurrences
     :return: list of distances between consecutive instances of word
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -35,7 +35,7 @@ def words_instance_dist(document, words):
     :param words: list of strings; words to search for in the document
     :return: list of distances between instances of any word in the supplied list
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -72,7 +72,7 @@ def male_instance_dist(document):
     :param: Document object
     :return: list of distances between instances of gendered words
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -94,7 +94,7 @@ def female_instance_dist(document):
     :param: Document object
     :return: list of distances between instances of gendered word
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',

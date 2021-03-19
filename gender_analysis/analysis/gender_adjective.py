@@ -16,7 +16,7 @@ def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=
     :param genders_to_exclude: list of Genders to exclude, or None
     :return: dict of adjectives that appear around pronouns mapped to the number of occurrences
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': \
@@ -71,7 +71,7 @@ def find_male_adj(document):
     :param: document
     :return: dictionary of adjectives that appear around male pronouns and the number of occurrences
 
-   >>> from gender_analysis import document
+   >>> from corpus_analysis import document
    >>> from pathlib import Path
    >>> from gender_analysis import common
    >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': \
@@ -94,7 +94,7 @@ def find_female_adj(document):
     :param document: A Document object
     :return: dict of adjectives that appear around female pronouns and the number of occurrences
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter', 'date': \
@@ -121,8 +121,8 @@ def run_adj_analysis(corpus, gender_list=None):
     :return: dictionary where each key is a novel and the value is len(gender_list)
     dictionaries: Adjectives and number of occurrences associated with gender pronouns
 
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> from gender_analysis.analysis.gender_adjective import run_adj_analysis
     >>> tiny_corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
     >>> tiny_results = run_adj_analysis(tiny_corpus)
@@ -149,8 +149,8 @@ def run_adj_analysis_doc(document, gender_list=None):
     :param gender_list: a list of genders to run the adjective search for.
     :return: a dictionary of find_gender_adj results for each gender in gender_list.
 
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> from gender_analysis.analysis.gender_adjective import run_adj_analysis_doc
     >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings = True)
     >>> flatland = corpus.get_document("title", "Flatland")
@@ -230,8 +230,8 @@ def merge_raw_results(full_results):
 
     :param full_results: full corpus results from run_adj_analysis
     :return: dictionary in the form {'gender':{'adj': occurrences}}
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> from gender_analysis.analysis.gender_adjective import run_adj_analysis
     >>> tiny_corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
     >>> tiny_results = run_adj_analysis(tiny_corpus)
@@ -475,8 +475,8 @@ def difference_adjs(gender_adj_dict, num_to_return=10):
     :param num_to_return: the number of top words to return
     :return: a dict of dicts in the form of {"gender":{list of top words w/ differential counts.
 
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> tiny_corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
     >>> flatland = tiny_corpus.get_document("title", "Flatland")
     >>> flatland_adjs = run_adj_analysis_doc(flatland)

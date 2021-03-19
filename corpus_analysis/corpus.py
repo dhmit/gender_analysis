@@ -10,7 +10,7 @@ from nltk import tokenize as nltk_tokenize
 from gender_analysis import common
 from gender_analysis.common import MissingMetadataError
 from gender_analysis.common import load_csv_to_list
-from gender_analysis.document import Document
+from corpus_analysis.document import Document
 
 
 class Corpus:
@@ -26,7 +26,7 @@ class Corpus:
     :param csv_path: Optional path to a csv metadata file
     :param pickle_on_load: Filepath to save a pickled copy of the corpus
 
-    >>> from gender_analysis.corpus import Corpus
+    >>> from corpus_analysis.corpus import Corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
     >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
     >>> c = Corpus(path)
