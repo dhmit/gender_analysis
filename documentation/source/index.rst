@@ -19,6 +19,7 @@ to jump into the `Reference Guide`_.
    :maxdepth: 2
 
    tutorial/tutorial
+   corpus_analysis
    gender_analysis
    gender_analysis.analysis
 

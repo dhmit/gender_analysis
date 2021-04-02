@@ -119,7 +119,7 @@ def run_adj_analysis(corpus, gender_list=None):
     :param corpus: Corpus
     :param gender_list: a list of genders to run the adjective search for.
     :return: dictionary where each key is a novel and the value is len(gender_list)
-    dictionaries: Adjectives and number of occurrences associated with gender pronouns
+        dictionaries: Adjectives and number of occurrences associated with gender pronouns
 
     >>> from corpus_analysis.corpus import Corpus
     >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
@@ -128,6 +128,7 @@ def run_adj_analysis(corpus, gender_list=None):
     >>> tiny_results = run_adj_analysis(tiny_corpus)
     >>> tiny_results[[*tiny_results][0]]['Female']['invisible']
     3
+
     """
     if gender_list is None:
         gender_list = common.BINARY_GROUP
@@ -230,6 +231,7 @@ def merge_raw_results(full_results):
 
     :param full_results: full corpus results from run_adj_analysis
     :return: dictionary in the form {'gender':{'adj': occurrences}}
+
     >>> from corpus_analysis.corpus import Corpus
     >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> from gender_analysis.analysis.gender_adjective import run_adj_analysis
@@ -238,6 +240,7 @@ def merge_raw_results(full_results):
     >>> tiny_merged = merge_raw_results(tiny_results)
     >>> tiny_merged['Male']['strong']
     4
+
     """
 
     # First, we need to get the genders used in full_results. There's probably a better way to do
@@ -366,10 +369,11 @@ def results_by_date(full_results, time_frame, bin_size):
 
     :param full_results: dictionary from result of run_adj_analysis
     :param time_frame: tuple (int start year, int end year) for the range of dates to return
-    frequencies
+        frequencies
     :param bin_size: int for the number of years represented in each list of frequencies
-    :return: dictionary in form {date: {gender1: {adj:occurrences}, 'gender2': {adj:occurrences},
-     ...}}, where date is the first year in its bin
+    :return: dictionary in form `{date: {gender1: {adj:occurrences}, 'gender2': {adj:occurrences},
+        ...}}`, where date is the first year in its bin
+
     """
 
     data = {}

@@ -32,19 +32,3 @@ gender\_analysis.analysis.instance\_distance module
    :members:
    :undoc-members:
    :show-inheritance:
-
-gender\_analysis.analysis.metadata\_visualizations module
----------------------------------------------------------
-
-.. automodule:: gender_analysis.analysis.metadata_visualizations
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-gender\_analysis.analysis.statistical module
---------------------------------------------
-
-.. automodule:: gender_analysis.analysis.statistical
-   :members:
-   :undoc-members:
-   :show-inheritance:

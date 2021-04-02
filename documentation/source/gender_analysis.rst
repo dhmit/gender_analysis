@@ -16,21 +16,18 @@ gender\_analysis.common module
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.corpus module
+gender\_analysis.gender module
 ------------------------------
 
-.. automodule:: gender_analysis.corpus
+.. automodule:: gender_analysis.gender
    :members:
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.document module
+gender\_analysis.pronouns module
 --------------------------------
 
-.. automodule:: gender_analysis.document
+.. automodule:: gender_analysis.pronouns
    :members:
    :undoc-members:
    :show-inheritance:
-
-
-
