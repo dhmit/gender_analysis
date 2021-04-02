@@ -29,6 +29,7 @@ author = 'MIT Digital Humanities'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosectionlabel',
 ]
 master_doc = 'index'
 
@@ -39,6 +40,9 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
+
+# Prefix auto-generated labels with the page it is from
+autosectionlabel_prefix_document = True
 
 
 # -- Options for HTML output -------------------------------------------------

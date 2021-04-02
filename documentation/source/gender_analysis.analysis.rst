@@ -1,7 +1,7 @@
 gender\_analysis.analysis package
 =================================
 
-gender\_analysis.analysis.dunning module
+dunning module
 ----------------------------------------
 
 .. automodule:: gender_analysis.analysis.dunning
@@ -9,7 +9,7 @@ gender\_analysis.analysis.dunning module
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.analysis.gender\_adjective module
+gender\_adjective module
 -----------------------------------------------------------
 
 .. automodule:: gender_analysis.analysis.gender_adjective
@@ -17,7 +17,7 @@ gender\_analysis.analysis.gender\_adjective module
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.analysis.gender\_frequency module
+gender\_frequency module
 ---------------------------------------------------
 
 .. automodule:: gender_analysis.analysis.gender_frequency
@@ -25,7 +25,7 @@ gender\_analysis.analysis.gender\_frequency module
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.analysis.instance\_distance module
+instance\_distance module
 ---------------------------------------------------
 
 .. automodule:: gender_analysis.analysis.instance_distance

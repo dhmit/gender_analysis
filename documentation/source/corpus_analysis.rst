@@ -1,7 +1,7 @@
 corpus\_analysis package
 ========================
 
-corpus\_analysis.corpus module
+corpus module
 ------------------------------
 
 .. automodule:: corpus_analysis.corpus
@@ -9,7 +9,7 @@ corpus\_analysis.corpus module
    :undoc-members:
    :show-inheritance:
 
-corpus\_analysis.document module
+document module
 --------------------------------
 
 .. automodule:: corpus_analysis.document
@@ -17,7 +17,7 @@ corpus\_analysis.document module
    :undoc-members:
    :show-inheritance:
 
-corpus\_analysis.metadata_visualizations module
+metadata_visualizations module
 -----------------------------------------------
 
 .. automodule:: corpus_analysis.metadata_visualizations

@@ -1,6 +1,6 @@
-==============
-User's Guide
-==============
+================
+Quickstart Guide
+================
 
 If you have not yet installed the package, make sure to look at the Installation instructions:
 
@@ -13,333 +13,142 @@ If you have not yet installed the package, make sure to look at the Installation
 .. note::
     This is a work in progress and will be updated as we prepare and expand tutorials. Check back soon!
 
-Document Class
+Initialization
 ==============
 
-The ``Document`` class is the base-level unit of data storage. It is responsible for keeping track of the metadata,
-text, and file location of a single document. Our toolkit will work best if your text is split into documents such
-that each document has its own author(s), publication date, etc. For example, a collection of Tweets should be split
-by individual Tweet.
+Let's start off by preparing to load up our sample Corpus, which includes 99 nineteenth-century novels written in
+English. We'll need to import the :ref:`Corpus <corpus_analysis:corpus module>` class and the path to a corpus:
 
-Initialization
---------------
+.. code-block:: python
 
-``Document`` initialization will typically be handled by the ``Corpus`` object, but, in case we want to create an
-individual Document, we call the ``Document.__init__`` function with a
-metadata dictionary:
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
 
-    >>> my_doc = Document({'filename': 'example.txt', 'filepath': 'path/to/example.txt',
-    ...                     'author': 'John Doe', 'date': 2019})
 
-Each key in the metadata dictionary becomes an attribute of the Document object. Only the ``'filename'`` attribute is
-required and its value must end in ``.txt``. However, the metadata should also have a ``'filepath'`` attribute that
-points to the file of the document's text, as ``Document`` loads the text from this location. Other metadata fields may
-be helpful for more powerful analyses if working with a corpus, but are not required.
+... and then we can generate our first :ref:`Corpus <corpus_analysis:corpus module>` object:
 
-Operations
-----------
+.. code-block:: python
 
-If we want to change the metadata of a document after initialization, we can call:
-    >>> my_doc.update_metadata({'author': 'Jane Doe', 'date': 2018})
+    >>> sample_corpus = Corpus(TEST_CORPUS_PATH)
+    >>> len(sample_corpus)
+    99
 
-With a Document object, you can perform a variety of analyses within a single document:
-    - Word count: ``my_doc.get_count_words()``
-    - Distance between occurrences of words: ``my_doc.words_instance_dist()``
-    - Adjectives associated with a certain gender: ``my_doc.find_male_adj()`` and ``my_doc.find_female_adj()``
+Now we have a ``Corpus`` object, ``sample_corpus``, made up of 99 ``Document``\ s. However, if we
+want to do serious analysis, we're going to want to add metadata like ``author``, ``date``, ``filepath``, and ``title``.
+Fortunately, our sample corpus comes bundled with a metadata file, ``sample_novels.csv``, so we just need to grab that and
+re-initialize our corpus with a second parameter, csv_path, that points to it:
 
+.. code-block:: python
 
-Corpus Class
-============
+    >>> from gender_analysis.testing.common import LARGE_TEST_CORPUS_CSV
+    >>> meta_corpus = Corpus(TEST_CORPUS_PATH, csv_path = LARGE_TEST_CORPUS_CSV)
+    >>> len(meta_corpus)
+    99
 
-A ``Corpus`` object is the primary tool of the Gender Analysis Toolkit, as it is responsible for aggregating the metadata
-and documents of a given collection.
+Now that we have a Corpus initialized, let's take a look at some of the different functions the Toolkit can perform.
+Start by making a Document object for one novel from the collection, Bram Stoker's `Dracula`. We'll do that by using the
+:ref:`Corpus.get_document <get-document>` function, which fetches a single document using two parameters, ``metadata_field``
+and ``field_argument``:
 
-Initialization
---------------
+.. code-block:: python
 
-Before creating the corpus, you should first create a folder consisting of all of your documents as .txt files.
+    >>> dracula = meta_corpus.get_document('title', 'Dracula')
+    >>> dracula.title
+    'Dracula'
+    >>> dracula.author
+    'Stoker, Bram'
 
-To create your own corpus to analyze, import ``Corpus`` from the toolkit:
+Analyzing a Document
+====================
 
-    >>> from gender_analysis import Corpus
+We can use the :ref:`Document <corpus_analysis:document module>` class's methods to perform a variety of simple analytic
+functions. Let's start by looking at how the word "sleep" shows up in the novel. We'll use
+:ref:`get_count_of_word <get-count-of-word>` to see how many times it occurs,
+:ref:`get_word_freq <get-word-freq>` to find the frequency with which it occurs compared to all
+words in the document, and :ref:`words_associated <words-associated>` to see what words come up immediately after it:
 
-After that, create a Corpus object by passing in a full path to a file consisting of all of the documents to be analyzed.
-This creates a list of Document objects within Corpus to keep track of the various .txt files:
+.. code-block:: python
 
-    >>> corpus = Corpus('path/to/file/directory')
+    >>> from gender_analysis import document
+    >>> dracula.get_count_of_word('sleep')
+    179
+    >>> dracula.get_word_freq('sleep')
+    0.0011139253109967453
+    >>> sleep_associations = dracula.words_associated('sleep')
+    >>> sleep_associations
+    Counter({'and': 18, 'i': 9, 'but': 8, 'for': 7, ...
 
-To allow for more powerful analysis, we can add metadata about each document to our Corpus object. First, create a .csv
-file with the first row as metadata fields, such as ``'filename'``, ``'author'``, ``'publication_country'``, and
-``'publication_date'`` separated by commas. Then add an additional row for every document in your corpus -- fill
-in each row with the corresponding metadata field values.
+This is a little messy, but since words_associated returns a ``Counter`` object, we can just get the top few results
+with the ``most_common`` method. Let’s look at the 10 most common words associated with “sleep” in `Dracula`:
 
-In addition to a directory of txt files, pass in a second parameter, ``csv_path``, which is a full path to the csv
-metadata file that you created.
+.. code-block:: python
 
-    >>> corpus = Corpus('path/to/file/directory',
-    ...                 csv_path='path/to/csv_file.csv')
+    >>> sleep_associations.most_common(10)
+    [('and', 18), ('i', 9), ('but', 8), ('for', 7), ('the', 6), ('in', 6), ('well', 5), ('as', 5), ('on', 5), ('so', 5)]
 
-This will automatically update all of the ``Document`` objects in the corpus object with the metadata provided in the
-csv file.
+Not terribly helpful, right? This is a common problem with natural language processing. What we have here is a list of
+"stopwords," which are common words like articles and prepositions. While those are sometimes useful, in an analysis
+like this the stopwords are mostly noise. Fortunately, we can get rid of them pretty easily. We'll start by grabbing a
+list of stopwords sourced from NLTK:
 
-To save some time, the ``Corpus`` class has an optional parameter, ``guess_author_genders``, that will attempt to guess
-the gender of the authors in your corpus when set to ``True``. This will automatically create an ``author_gender`` field
-in the internal metadata for all of your documents.
+.. code-block:: python
 
+    >>> from gender_analysis.common import SWORDS_ENG as swords_eng
+    >>> for word in list(sleep_associations):
+    >>> 	if word in swords_eng:
+    >>>		del sleep_associations[word]
+    >>> sleep_associations.most_common(10)
+    [('well', 5), ('tonight', 3), ('without', 2), ('comes', 1), ('yesterday', 1), ('unwisely', 1), ('brings', 1), ('wind', 1), ('moaning', 1), ('began', 1)]
 
-Visualizing Your Metadata
-=========================
+The :ref:`get_word_windows <get-word-windows>` method is a more powerful version of ``words_associated`` that looks for
+``window_size`` (in the example below, 4) words around the search term and returns a ``Counter``. Let’s look at the five
+most common words that appear around “sleep”
 
-Metadata is the cornerstone of the Gender Analysis Toolkit, with it being required for many of the toolkit's functions
-and aiding in the analysis of several more. Sometimes, it is helpful to get a broad look at some instances of your
-metadata. For instance, how many of the authors in your corpus are male? How many are female? What time periods are you
-looking at? The toolkit provides simple functions for you to visualize all of this, saved as .png files.
+.. code-block:: python
 
-To create a visualization of the distribution of author genders, simply use:
+    >>> sleep_windows = dracula.get_word_windows('sleep', 4)
+    >>> sleep_windows.most_common(5)
+    [('i', 58), ('to', 58), ('and', 58), ('the', 48), ('her', 37)]
 
-    >>> from gender_analysis.analysis.metadata_visualizations import *
-    >>> from gender_analysis import Corpus
-    >>> my_corpus = Corpus('path/to/files', csv_path='path/to/metadata')
-    >>> plot_gender_breakdown(my_corpus)
+And now we can write a loop that'll remove stopwords from our ``Counter``:
 
-Similarly, you can visualize the publication locations via:
+.. code-block:: python
 
-    >>> plot_pubcountries(my_corpus)
+    >>> for word in list(sleep_windows):
+    >>> 	if word in swords_eng:
+    >>>		del sleep_windows[word]
+    >>> sleep_windows.most_common(10)
+    [('go', 10), ('shall', 9), ('could', 9), ('tonight', 8), ('fear', 8), ('even', 7), ('still', 7), ('well', 6), ('though', 6), ('must', 6)]
 
-Or you can visualize publication years with:
+Most of these make a lot of sense - "go" and "tonight," for example - but "fear" is a bit of a surprise and worthy of
+further analysis!
 
-    >>> plot_pubyears(my_corpus)
+The ``Document`` class also includes a part-of-speech tagger, :ref:`get_part_of_speech_tags <get-pos>`, which returns a
+list of tuples in the form ``(term, speech_tag)``. This function can take awhile, especially if you’re using it on more
+than one ``Document`` at a time. Let's do this and grab a random sentence from the results to see what it looks like.
 
-If you want to visualize all three at once, simply call:
+.. code-block:: python
 
-    >>> create_corpus_visualizations_summary(my_corpus)
+    >>> dracula_pos = dracula.get_part_of_speech_tags()
+    >>> dracula_pos[500:510]
+    [('get', 'VB'), ('it', 'PRP'), ('anywhere', 'RB'), ('along', 'IN'), ('the', 'DT'), ('Carpathians', 'NNPS'), ('.', '.'), ('I', 'PRP'), ('found', 'VBD'), ('my', 'PRP$')]
 
-In order for these functions to work effectively, all relevant metadata must be present in the Corpus that you are
-trying to visualize.
+Of course, this is the **gender**\_analysis toolkit — so let’s do some gendered analysis!
 
+The Gender Analysis Toolkit uses a flexible object-oriented framework to represent genders as a collection of pronouns
+and other 'identifiers,' like character names. It comes pre-loaded with three Gender objects: ``MALE``, ``FEMALE``,
+and ``NONBINARY``. Let's start by taking a look at those.
 
-Adding Masculine and Feminine Words
-===================================
+.. code-block:: python
 
-The Gender Analysis Toolkit comes pre-loaded with several words that it identifies as "masculine" or "feminine", but
-sometimes there are words unique to a corpus that are generally not considered gendered in other contexts.
+    >>> from gender_analysis.common import MALE as male, FEMALE as female, NONBINARY as nonbinary
+    >>> female.pronouns
+    {'herself', 'hers', 'her', 'she'}
+    >>> nonbinary.pronouns
+    {'them', 'themself', 'they', 'theirs'}
 
-Gender Analysis comes with global constants ``MASC_WORDS`` and ``FEM_WORDS``, which are both sets consisting of
-masculine and feminine pronouns, respectively.
+A major feature of the Gender Analysis Toolkit is the ability to create your own gender objects. For more on that,
+see :ref:`tutorial/tutorial:Defining Pronouns and Genders`.
 
-If your corpus frequently references, for example, a woman named Alice, and you would like the toolkit to recognize
-the name Alex as female, then you can add 'Alex' to ``FEM_WORDS``:
-
-    >>> from gender_analysis.common import MASC_WORDS, FEM_WORDS
-    >>> FEM_WORDS.add('Alex')
-
-
-Dunning Analysis
-================
-
-Dunning analysis tests for word distinctiveness between two corpora. Given two corpora, any one word present in both
-has a Dunning log-likelihood value, which is a measure of how likely the frequency of the word in the first corpus is
-greater than the frequency of the word in the second corpus.
-
-Try it out with a single word between two corpora:
-
-    >>> from gender_analysis.analysis import dunning
-    >>> dunning.dunn_individual_word_by_corpus(corpus_1,
-    ...                                        corpus_2,
-    ...                                        my_word)
-
-No metadata is required from either corpora.
-
-Plot Dunning Values for Words Between Two Corpora
--------------------------------------------------
-
-First, we need to calculate the results to be plotted.
-
-    >>> from gender_analysis import Corpus
-    >>> from gender_analysis.analysis import dunning
-    >>> my_corpus1 = Corpus(filepath1)
-    >>> my_corpus2 = Corpus(filepath2)
-    >>> counter1 = my_corpus1.get_wordcount_counter()
-    >>> counter2 = my_corpus2.get_wordcount_counter()
-    >>> my_results = dunning.dunning_total(counter1, counter2)
-
-Alternatively, we can set my_results to the output of any of the following functions:
-
-    - ``dunning_words_by_author_gender``
-    - ``male_characters_author_gender_differences``
-    - ``female_characters_author_gender_differences``
-    - ``masc_fem_associations_dunning``
-    - ``compare_word_association_in_corpus_dunning``
-
-Then, to plot Dunning values, call:
-
-    >>> dunning.score_plot_to_show(my_results)
-
-For relative word frequency instead of Dunning values:
-
-    >>> dunning.freq_plot_to_show(my_results)
-
-To find the distinctiveness of all shared words between two corpora, call:
-
-    >>> dunning.dunning_total_by_corpus(my_corpus_1, my_corpus_2)
-
-Again, no metadata is required of your two corpora.
-
-Dunning analysis can also be used between corpora to compare associated words of a certain word. For example,
-``female_characters_author_gender_differences`` will identify differences between how female characters are described
-by male authors versus female authors. We also provide an equivalent function for words associated with male characters
-and can compare associations with any word or list of words with ``compare_word_association_between_corpus_dunning``.
-If we want to compare associations with the word 'money', we can call:
-
-    >>> male_corpus = corpus.filter_by_gender('male')
-    >>> female_corpus = corpus.filter_by_gender('female')
-    >>> dunning.compare_word_association_between_corpus_dunning(word='money', corpus1=male_corpus, corpus2=female_corpus)
-
-Or if we want to compare associations with several words relating to money, we can use:
-
-    >>> words = ['money', 'dollars', 'pounds', 'euros', 'dollar', 'pound', 'euro', 'wealth', 'income']
-    >>> dunning.compare_word_association_between_corpus_dunning(word=words, corpus1=male_corpus, corpus2=female_corpus)
-
-Within a single corpus, we can compare words associated with two different words with
-``compare_word_association_in_corpus_dunning``. A special case of this analysis is comparing words associated with
-male and female characters, which is handled by ``masc_fem_associations_dunning``.
-
-Gender Frequency Analysis
-=========================
-
-Gender frequency analysis tests for the frequencies of different genders in the documents given by the corpus.
-
-First, create a corpus to analyze:
-
-    >>> from gender_analysis import Corpus
-    >>> my_corpus = Corpus('path/to/documents')
-
-To get the relative frequency of female pronouns in each document in the corpus, call:
-
-    >>> from gender_analysis.analysis.gender_frequency import *
-    >>> document_pronoun_freq(my_corpus)
-
-To get the proportion of instances of male and female pronouns that are the subject of a sentence, call:
-
-    >>> subject_vs_object_pronoun_freqs(my_corpus)
-
-This will return a tuple of dictionaries in the form ``(male, female)``, with each document being a key and the proportion
-of pronouns that are the subject as the values.
-
-To determine what portion of subject pronouns in each document of the corpus is of a specified gender, call:
-
-    >>> subject_pronouns_gender_comparison(my_corpus,'female')
-
-You can also pass in ``'male'`` as a parameter in order to see the proportion of male pronouns.
-
-
-Instance Distance Analysis
-==========================
-
-When analyzing documents, it's often interesting to see not only how many times a word appears in a corpus, but also
-how far apart those instances of the word are.
-
-Document Analysis
------------------
-
-The first thing you need to do is create a document that you would like to analyze.
-
-    >>> from gender_analysis import Corpus
-    >>> my_corpus = Corpus(document_metadata)
-
-To get the distance between all of the occurrences of a certain word in a document, call:
-
-    >>> from gender_analysis.instance_distance import *
-    >>> document = my_corpus[0]  # Gets first document from corpus
-    >>> word = 'word'  # Can be anything
-    >>> instance_dist(document, word)
-
-Similarly, a list of words can be searched for by using ``words_instance_dist(document, words)``.
-
-To get the distances between male words in a document, you can call
-
-    >>> male_instance_dist(document)
-
-Similarly, you can find female distances with
-
-    >>> female_instance_dist(document)
-
-Corpus Analysis
----------------
-
-While seeing results for individual documents can be very interesting, it tends to be tedious when you are trying to
-iterate over hundreds or thousands of documents. These functions allow you to perform these checks on large corpora,
-and even graph the results.
-
-To get a dictionary mapping each document object to an array of 3 lists containing the median, mean, min, and max
-distances between male and female pronouns instances and another list containing the difference between the male
-and female values, call:
-
-    >>> results = run_distance_analysis(my_corpus)
-
-Because this function might take some time to run, you can save the results as a pickle with
-
-    >>> store_raw_results(results, 'path/to/pickle_file.pgz')
-
-To retrieve a particular result by author gender, call:
-
-    >>> results_by_author_gender(results, metric)
-
-Where ``metric`` is ``'mean'``, ``'median'``, or ``'mode'``.
-
-Additionally, you can retrieve a given number of the top instance distances with
-
-    >>> results_by_highest_distances(results, num)
-
-To create a bar-and-whisker graph of your results, all you need to call is:
-
-    >>> box_plots(results, 'pastel', x='N/A')
-
-.. note::
-    ``'pastel'`` can be replaced with any `seaborn palette <https://seaborn.pydata.org/tutorial/color_palettes.html>`_
-
-
-Gender Adjective Analysis
-=========================
-
-This module scans a document or corpus in order to find the most commonly used adjectives that are associated with each
-gender.
-
-Within a single document, we can find all adjectives associated with gendered words by calling:
-
-    >>> from gender_analysis import Document
-    >>> from gender_analysis.gender_adjective import *
-    >>> my_doc = Document(document_metadata) # You can also use a document from a previously-created Corpus
-    >>> find_male_adj(my_doc)
-
-You can similarly find adjectives associated with female pronouns by using ``find_female_adj``.
-
-If instead we wanted to search through an entire corpus, you could do so with:
-
-    >>> from gender_analysis import Corpus
-    >>> my_corpus = Corpus('path/to/files')
-    >>> my_results = run_adj_analysis(my_corpus)
-
-Note that this will return a dictionary of results based on each document. If we instead wish to get results for the
-corpus as a whole, we can call ``merge_raw_results`` on the output.
-
-    >>> results_by_corpus = merge_raw_results(my_results)
-
-Then, to see compare each adjective’s frequency between genders:
-
-    >>> results_by_adjective = get_overlapping_adjectives_raw_results(results_by_corpus)
-
-As long as the corpus stores the corresponding metadata, we can also bin the results by author gender, date, or
-location.
-
-For example, to bin adjectives from documents published between 1980 and 2020 in groups spanning 5 years:
-
-    >>> results_by_date = results_by_date(my_results, (1980, 2020), 5)
-
-If you would only like to see the top ``num`` associations in the corpus, you can do so by calling:
-
-    >>> top_results = get_top_adj(my_results, num)
-
-Finally, to pickle your results for later if desired:
-
-    >>> store_raw_results(my_results, 'path/to/pickle_file.pgz')
+Defining Pronouns and Genders
+=============================
