@@ -1,7 +1,8 @@
 chardet
 clint
 dh_testers
-gender-guesser==0.4.0
+flake8
+gutenberg_cleaner
 matplotlib
 more-itertools
 nltk
@@ -12,3 +13,5 @@ requests
 seaborn
 scipy
 wordcloud
+coverage==5.3
+pytest==6.0.2

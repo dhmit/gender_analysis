@@ -1,16 +1,34 @@
-import codecs
 import gzip
 import os
 import pickle
+import sys
 from pathlib import Path
 
 import nltk
+from nltk.corpus import stopwords
 import seaborn as sns
+from chardet.universaldetector import UniversalDetector
+
+from gender_analysis.pronouns import PronounSeries
+from gender_analysis.gender import Gender
+
+SWORDS_ENG = stopwords.words('english')
 
 BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
-TEST_DATA_PATH = Path(BASE_PATH, 'testing', 'test_data')
-MASC_WORDS = set(('he', 'his', 'him', 'himself'))
-FEM_WORDS = set(('she', 'her', 'hers', 'herself'))
+TEST_DATA_PATH = Path(BASE_PATH, '../corpus_analysis/testing', 'test_data')
+
+# Common Pronoun Collections
+HE_SERIES = PronounSeries('Masc', {'he', 'his', 'him', 'himself'}, subj='he', obj='him')
+SHE_SERIES = PronounSeries('Fem', {'she', 'her', 'hers', 'herself'}, subj='she', obj='her')
+THEY_SERIES = PronounSeries('Andy', {'they', 'them', 'theirs', 'themself'}, subj='they', obj='them')
+
+# Common Gender Collections
+MALE = Gender('Male', HE_SERIES)
+FEMALE = Gender('Female', SHE_SERIES)
+NONBINARY = Gender('Nonbinary', THEY_SERIES)
+
+BINARY_GROUP = [FEMALE, MALE]
+TRINARY_GROUP = [FEMALE, MALE, NONBINARY]
 
 
 def load_csv_to_list(file_path):
@@ -22,7 +40,8 @@ def load_csv_to_list(file_path):
 
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> corpus_metadata_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'sample_novels.csv')
+    >>> from corpus_analysis.testing.common import LARGE_TEST_CORPUS_CSV
+    >>> corpus_metadata_path = LARGE_TEST_CORPUS_CSV
     >>> corpus_metadata = load_csv_to_list(corpus_metadata_path)
     >>> type(corpus_metadata)
     <class 'list'>
@@ -34,14 +53,11 @@ def load_csv_to_list(file_path):
     file_type = file_path.suffix
 
     if file_type != '.csv':
-        raise Exception(
-            'Cannot load if current file type is not .csv'
-        )
-    else:
-        file = open(file_path, encoding='utf-8')
-        result = file.readlines()
+        raise Exception('Cannot load if current file type is not .csv')
 
-    file.close()
+    with open(file_path, encoding='utf-8') as csv_file:
+        result = csv_file.readlines()
+
     return result
 
 
@@ -57,7 +73,7 @@ def load_txt_to_string(file_path):
     >>> novel_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')
     >>> novel_text = load_txt_to_string(novel_path)
     >>> type(novel_text), len(novel_text)
-    (<class 'str'>, 486253)
+    (<class 'str'>, 466887)
 
     """
     if isinstance(file_path, str):
@@ -66,18 +82,11 @@ def load_txt_to_string(file_path):
     file_type = file_path.suffix
 
     if file_type != '.txt':
-        raise Exception(
-            'Cannot load if current file type is not .txt'
-        )
-    else:
-        try:
-            file = open(file_path, encoding='utf-8')
-            result = file.read()
-        except UnicodeDecodeError as err:
-            print(f'Unicode file loading error {file_path}.')
-            raise err
+        raise Exception('Cannot load if current file type is not .txt')
 
-    file.close()
+    with open(file_path, encoding='utf-8') as txt_file:
+        result = txt_file.read()
+
     return result
 
 
@@ -118,7 +127,7 @@ def load_pickle(filepath):
 
     >>> from gender_analysis import common
     >>> from pathlib import Path
-    >>> pickle_filepath = Path(common.BASE_PATH, 'testing', 'test_data',\
+    >>> pickle_filepath = Path(common.BASE_PATH, '../corpus_analysis/testing', 'test_data',\
                                'test_pickle.pgz')
     >>> loaded_object = common.load_pickle(pickle_filepath)
     >>> loaded_object
@@ -153,7 +162,7 @@ def get_text_file_encoding(filepath):
     >>> import os
     >>> path=Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')
     >>> common.get_text_file_encoding(path)
-    'UTF-8-SIG'
+    'ascii'
 
     Note: For files containing only ascii characters, this function will return 'ascii' even if
     the file was encoded with utf-8
@@ -163,8 +172,8 @@ def get_text_file_encoding(filepath):
     >>> from gender_analysis import common
     >>> text = 'here is an ascii text'
     >>> file_path = Path(common.BASE_PATH, 'example_file.txt')
-    >>> with codecs.open(file_path, 'w', 'utf-8') as source:
-    ...     source.write(text)
+    >>> with open(file_path, 'w', encoding='utf-8') as source:
+    ...     _ = source.write(text)
     ...     source.close()
     >>> common.get_text_file_encoding(file_path)
     'ascii'
@@ -172,7 +181,6 @@ def get_text_file_encoding(filepath):
     >>> os.remove(file_path)
 
     """
-    from chardet.universaldetector import UniversalDetector
     detector = UniversalDetector()
 
     with open(filepath, 'rb') as file:
@@ -199,8 +207,8 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
     >>> text = ' ¶¶¶¶ here is a test file'
     >>> source_path = Path(BASE_PATH, 'source_file.txt')
     >>> target_path = Path(BASE_PATH, 'target_file.txt')
-    >>> with codecs.open(source_path, 'w', 'iso-8859-1') as source:
-    ...     source.write(text)
+    >>> with open(source_path, 'w', encoding='iso-8859-1') as source:
+    ...     _ = source.write(text)
     >>> get_text_file_encoding(source_path)
     'ISO-8859-1'
     >>> convert_text_file_to_new_encoding(source_path, target_path, target_encoding='utf-8')
@@ -234,10 +242,10 @@ def convert_text_file_to_new_encoding(source_path, target_path, target_encoding)
         print(f"WARNING: Changing encoding to {target_encoding} on a file that does not end with "
               f".txt. Source: {source_path}. Target: {target_path}")
 
-    with codecs.open(source_path, 'rU', encoding=source_encoding) as source_file:
+    with open(source_path, 'r', encoding=source_encoding) as source_file:
         text = source_file.read()
-    with codecs.open(target_path, 'w', encoding=target_encoding) as target_file:
-        target_file.write(text)
+    with open(target_path, 'w', encoding=target_encoding) as target_file:
+        _ = target_file.write(text)
 
 
 def load_graph_settings(show_grid_lines=True):
@@ -252,10 +260,15 @@ def load_graph_settings(show_grid_lines=True):
     show_grid_lines_string = str(show_grid_lines)
     palette = "colorblind"
     style_name = "white"
-    background_color = (252/255,245/255,233/255,0.4)
-    style_list = {'axes.edgecolor': '.6', 'grid.color': '.9', 'axes.grid': show_grid_lines_string,
-                  'font.family': 'serif', 'axes.facecolor':background_color,
-                  'figure.facecolor':background_color}
+    background_color = (252 / 255, 245 / 255, 233 / 255, 0.4)
+    style_list = {
+        'axes.edgecolor': '.6',
+        'grid.color': '.9',
+        'axes.grid': show_grid_lines_string,
+        'font.family': 'serif',
+        'axes.facecolor': background_color,
+        'figure.facecolor': background_color,
+    }
     sns.set_color_codes(palette)
     sns.set_style(style_name, style_list)
 
@@ -278,10 +291,14 @@ def download_nltk_package_if_not_present(package_name):
     try:
         nltk.data.find(package_name)
     except LookupError:
-        user_key = input(f'This function requires the NLTK package {package_name}, which you do not have installed.\n'
-                         + 'Press ENTER to download and install this package, or n then enter to cancel and exit.\n')
+        user_key = input(
+            f'This function requires the NLTK package {package_name}, '
+            + 'which you do not have installed.\n'
+            + 'Press ENTER to download and install this package, '
+            + 'or n then enter to cancel and exit.\n'
+        )
         if user_key.strip() == 'n':
-            exit()
+            sys.exit()
 
         nltk.download(package_download_name)
         print('\n')
@@ -292,9 +309,10 @@ class MissingMetadataError(Exception):
     Raised when a function that assumes certain metadata is called on a corpus without that
     metadata
     """
-    def __init__(self, metadata_fields, message=None):
+    def __init__(self, metadata_fields, message=''):
+        super().__init__()
         self.metadata_fields = metadata_fields
-        self.message = message if message else ''
+        self.message = message
 
     def __str__(self):
         metadata_string = ''
@@ -307,14 +325,40 @@ class MissingMetadataError(Exception):
         is_plural = len(self.metadata_fields) > 1
 
         return (
-            'This Corpus is missing the following metadata field' + ('s' if is_plural else '') + ':\n'
-            + '    ' + metadata_string + '\n'
+            'This Corpus is missing the following metadata field' + ('s' if is_plural else '')
+            + ':\n' + '    ' + metadata_string + '\n'
             + self.message + ('\n' if self.message else '')
             + 'In order to run this function, you must create a new metadata csv\n'
-            + 'with ' + ('these ' if is_plural else 'this ') + 'field' + ('s ' if is_plural else ' ')
+            + 'with ' + ('these ' if is_plural else 'this ')
+            + 'field' + ('s ' if is_plural else ' ')
             + 'and run Corpus.update_metadata().'
         )
 
+
+def create_path_object_and_directories(output_dir, filename=None):
+    """
+    Creates a path object for the file with the absolute output_dir and with the
+    given filename (if provided). It will create the path to the output_dir if it is non-existent
+    """
+    try:
+        path = output_dir
+
+        if isinstance(output_dir, str):
+            path = Path(output_dir)
+
+        if not os.path.isdir(output_dir):
+            path.mkdir(parents=True)
+
+        if filename:
+            path = path / filename
+
+        return path
+
+    except OSError:
+        print("Could not create the correct file and path")
+
+
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test
+
     main_test(import_plus_relative=True)  # this allows for relative calls in the import.

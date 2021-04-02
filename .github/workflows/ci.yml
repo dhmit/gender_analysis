@@ -1,0 +1,63 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: CI Workflow
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test_coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        echo -e "import nltk\nnltk.download('punkt')" | python3
+        echo -e "import nltk\nnltk.download('averaged_perceptron_tagger')" | python3
+        echo -e "import nltk\nnltk.download('stopwords')" | python3
+
+    - name: Test with pytest
+      run: |
+        coverage run
+        coverage xml
+
+    - name: Upload Coverage Results
+      uses: codecov/codecov-action@v1
+      with:
+        file: coverage.xml
+        fail_ci_if_error: true
+
+  pylint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: pip install -r requirements.txt  # includes pylint
+      - name: Run pylint
+        run: pylint gender_analysis/
+
+  flake8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: pip install -r requirements.txt  # includes flake8
+      - name: Lint with flake8
+        run: flake8

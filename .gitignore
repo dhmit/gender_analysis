@@ -118,6 +118,9 @@ gender_analysis/scratch.py
 gender_analysis/apicache-py3/
 gender_analysis/throttle.ctrl
 
+# Test Corpora
+corpus_analysis/testing/test_data/r_starwars_data/
+
 # Stanford NLP Jar files
 gender_analysis/stanford_parser
 
@@ -129,3 +132,5 @@ gender_analysis/stanford_parser
 
 # vim
 *.swp
+*.png
+*.pdf

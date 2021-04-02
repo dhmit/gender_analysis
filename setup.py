@@ -6,11 +6,13 @@ import setuptools
 from setuptools.command.develop import develop
 from setuptools.command.install import install
 
+
 def download_nltk_packages():
     import nltk
     nltk.download('punkt')
     nltk.download('averaged_perceptron_tagger')
     nltk.download('stopwords')
+
 
 class PostDevelopCommand(develop):
     """ Post-installation for development mode. """
@@ -18,11 +20,13 @@ class PostDevelopCommand(develop):
         download_nltk_packages()
         develop.run(self)
 
+
 class PostInstallCommand(install):
     """ Post-installation for installation mode. """
     def run(self):
         download_nltk_packages()
         install.run(self)
+
 
 with open('requirements.txt') as f:
     REQUIRED_PACKAGES = f.read().strip().split('\n')
@@ -61,4 +65,3 @@ setuptools.setup(
         'install': PostInstallCommand,
     },
 )
-

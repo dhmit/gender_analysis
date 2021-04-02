@@ -1,7 +1,5 @@
-from pathlib import Path
-import csv
 import os
-import urllib
+import sys
 import zipfile
 
 from clint import textui
@@ -10,11 +8,10 @@ from nltk.parse.stanford import StanfordDependencyParser
 from nltk.tokenize import sent_tokenize, word_tokenize
 
 from gender_analysis import common
-from gender_analysis.corpus import Corpus
-from gender_analysis.document import Document
 
 
 def _get_parser_download_if_not_present():
+    # pylint: disable=too-many-locals
     """
     Initializes and returns the NLTK wrapper for the Stanford Dependency Parser.
 
@@ -32,40 +29,41 @@ def _get_parser_download_if_not_present():
     path_to_jar = parser_dir / parser_filename
     path_to_models_jar = parser_dir / models_filename
 
-        
-    if (not os.path.isfile(path_to_jar) or
-        not os.path.isfile(path_to_models_jar)):
+    if not os.path.isfile(path_to_jar) or not os.path.isfile(path_to_models_jar):
         # The required jar files don't exist,
         # so we prompt the user
 
-        user_key = input(f'This function requires us to download the Stanford Dependency Parser.\n'
-                         + 'This is a 612 MB download, which may take 10-20 minutes to download on an average 10 MBit/s connection.\n'
+        user_key = input('This function requires us to download the Stanford Dependency Parser.\n'
+                         + 'This is a 612 MB download, which may take 10-20 minutes to download on'
+                         + 'an average 10 MBit/s connection.\n'
                          + 'This only happens the first time you run this function.\n'
-                         + 'Press y then enter to download and install this package, or n then enter to cancel and exit.\n')
+                         + 'Press y then enter to download and install this package,'
+                         + 'or n then enter to cancel and exit.\n')
 
         while user_key.strip() not in ['y', 'n']:
-            user_key = input(f'Press y then enter to download and install this package, or n then enter to cancel and exit.\n')
+            user_key = input('Press y then enter to download and install this package,'
+                             + 'or n then enter to cancel and exit.\n')
 
         if user_key == 'n':
             print('Exiting.')
-            exit()
+            sys.exit()
 
         elif user_key == 'y':
             # Download the Jar files
             print('Downloading... (Press CTRL+C to cancel at any time)')
             parser_url = 'https://nlp.stanford.edu/software/stanford-parser-full-2018-10-17.zip'
-            zip_path  = parser_dir / 'parser.zip'
+            zip_path = parser_dir / 'parser.zip'
 
-            r = requests.get(parser_url, stream=True)
+            req = requests.get(parser_url, stream=True)
 
             # doing this chunk by chunk so we can make a progress bar
-            with open(zip_path, 'wb') as f:
-                total_length = int(r.headers.get('content-length'))
-                for chunk in textui.progress.bar(r.iter_content(chunk_size=1024),
-                                                 expected_size=(total_length/1024) + 1):
+            with open(zip_path, 'wb') as file:
+                total_length = int(req.headers.get('content-length'))
+                for chunk in textui.progress.bar(req.iter_content(chunk_size=1024),
+                                                 expected_size=(total_length / 1024) + 1):
                     if chunk:
-                        f.write(chunk)
-                        f.flush()
+                        file.write(chunk)
+                        file.flush()
 
             print('Unpacking files...')
 
@@ -92,11 +90,16 @@ def _get_parser_download_if_not_present():
     return parser
 
 
-def generate_dependency_tree(document, pickle_filepath=None):
+def generate_dependency_tree(document, genders=None, pickle_filepath=None):
+    # pylint: disable=too-many-locals
     """
-    This function returns the dependency tree for a given document.
+    This function returns the dependency tree for a given document. This can optionally be reduced
+    such that it will only analyze sentences that involve specified genders' subject/object
+    pronouns.
 
     :param document: Document we are interested in
+    :param genders: a collection of genders that will be used to filter out sentences that do not \
+        involve the provided genders. If set to `None`, all sentences are parsed (default).
     :param pickle_filepath: filepath to store pickled dependency tree, will not write a file if None
     :return: dependency tree, represented as a nested list
 
@@ -104,16 +107,27 @@ def generate_dependency_tree(document, pickle_filepath=None):
 
     parser = _get_parser_download_if_not_present()
     sentences = sent_tokenize(document.text.lower().replace("\n", " "))
-    he_she_sentences = []
-    for sentence in sentences:
-        add_sentence = False
-        words = [word for word in word_tokenize(sentence)]
-        for word in words:
-            if word == "he" or word == "she" or word == "him" or word == "her":
-                add_sentence = True
-        if add_sentence:
-            he_she_sentences.append(sentence)
-    sentences = he_she_sentences
+
+    # filter out sentences that are not relevant
+    if genders is not None:
+        filtered_sentences = list()
+
+        # Find all of the words to filter around
+        pronoun_filter = set()
+        for gender in genders:
+            pronoun_filter = pronoun_filter | gender.obj | gender.subj
+
+        for sentence in sentences:
+            add_sentence = True
+
+            words = list(word_tokenize(sentence))
+            for word in words:
+                if word in pronoun_filter:
+                    add_sentence = True
+            if add_sentence:
+                filtered_sentences.append(sentence)
+        sentences = filtered_sentences
+
     result = parser.raw_parse_sents(sentences)
 
     # dependency triples of the form ((head word, head tag), rel, (dep word, dep tag))
@@ -141,31 +155,20 @@ def get_pronoun_usages(tree, gender):
     subject and object of a sentence.
 
     :param tree: dependency tree for a document, output of **generate_dependency_tree**
-    :param gender: 'male' or 'female', defines which pronouns to search for
+    :param gender: `Gender` to check
     :return: Dictionary counting the times male pronouns are used as the subject and object,
         formatted as {'subject': <int>, 'object': <int>}
 
     """
-
-    if gender.lower() in ['male', 'female']:
-        if gender.lower() == 'male':
-            subj_pronoun = 'he'
-            obj_pronoun = 'him'
-        else:
-            subj_pronoun = 'she'
-            obj_pronoun = 'her'
-
-    else:
-        raise ValueError(f'get_pronoun_usages currently only supports "male" or "female", not {gender}')
 
     obj_count = 0
     subj_count = 0
 
     for sentence in tree:
         for triple in sentence:
-            if triple[1] == "nsubj" and triple[2][0] == subj_pronoun:
+            if triple[1] == "nsubj" and triple[2][0] in gender.subj:
                 subj_count += 1
-            if triple[1] == "dobj" and triple[2][0] == obj_pronoun:
+            if triple[1] == "dobj" and triple[2][0] in gender.obj:
                 obj_count += 1
 
     return {'subject': subj_count, 'object': obj_count}
@@ -173,28 +176,21 @@ def get_pronoun_usages(tree, gender):
 
 def get_descriptive_adjectives(tree, gender):
     """
-    Returns a list of adjectives describing pronouns for the given gender in the given dependency tree.
+    Returns a list of adjectives
+    describing pronouns for the given gender in the given dependency tree.
 
     :param tree: dependency tree for a document, output of **generate_dependency_tree**
-    :param gender: 'male' or 'female', defines which pronouns to search for
+    :param gender: `Gender` to search for usages of
     :return: List of adjectives as strings
 
     """
-
-    if gender.lower() in ['male', 'female']:
-        if gender.lower() == 'male':
-            pronoun = 'he'
-        else:
-            pronoun = 'she'
-    else:
-        raise ValueError(f'get_descriptive_adjectives currently only supports "male" or "female", not {gender}')
 
     adjectives = []
 
     for sentence in tree:
         for triple in sentence:
             if triple[1] == "nsubj" and triple[0][1] == "JJ":
-                if triple[2][0] == pronoun:
+                if triple[2][0] in gender.identifiers:
                     adjectives.append(triple[0][0])
 
     return adjectives
@@ -205,25 +201,18 @@ def get_descriptive_verbs(tree, gender):
     Returns a list of verbs describing pronouns of the given gender in the given dependency tree.
 
     :param tree: dependency tree for a document, output of **generate_dependency_tree**
-    :param gender: 'male' or 'female', defines which pronouns to search for
+    :param gender: `Gender` to search for usages of
     :return: List of verbs as strings
 
     """
-    if gender.lower() in ['male', 'female']:
-        if gender.lower() == 'male':
-            pronoun = 'he'
-        else:
-            pronoun = 'she'
-    else:
-        raise ValueError(f'get_descriptive_verbs get_descriptive_adjectives currently only supports "male" or "female", not {gender}')
 
     verbs = []
 
     for sentence in tree:
         for triple in sentence:
-            if triple[1] == "nsubj" and (triple[0][1] == "VBD" or triple[0][1] == "VB" or
-                                         triple[0][1] == "VBP" or triple[0][1] == "VBZ"):
-                if triple[2][0] == pronoun:
+            if triple[1] == "nsubj" and (triple[0][1] == "VBD" or triple[0][1] == "VB"
+                                         or triple[0][1] == "VBP" or triple[0][1] == "VBZ"):
+                if triple[2][0] in gender.identifiers:
                     verbs.append(triple[0][0])
 
     return verbs
