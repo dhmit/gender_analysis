@@ -1,0 +1,5 @@
+author,date,title,country_publication,author_gender,filename,notes
+"Control1, First1",2000,Control Title 1,United States,male,_control1_text1.txt,
+"Control2, First2",2005,Control Title 2,United States,female,_control2_text2.txt,
+"Control3, First3",2010,Control Title 3,Australia,female,_control3_text3.txt,
+"Control4, First4",2015,Control Title 4,Australia,male,_control4_text4.txt,
