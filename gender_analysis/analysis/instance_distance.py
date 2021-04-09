@@ -175,8 +175,8 @@ def _get_document_gender_metrics(document_results, metric):
 
     :param document_results: A dictionary mapping different fields to a dictionary of min/max/etc.
     :param metric: The metric to extract from results
-    :return: A dictionary mapping each gender from ``document_results`` to the value of the metric for
-        that field
+    :return: A dictionary mapping each gender from ``document_results`` to the value of the metric
+        for that field
     """
 
     metric_list = dict()
@@ -230,8 +230,8 @@ def results_by_author_gender(results, metric):
 
 def results_by_year(results, metric, time_frame, bin_size):
     """
-    Takes in a dictionary of results and a specified metric from ``run_distance_analysis``, returns a
-    dictionary in the following form:
+    Takes in a dictionary of results and a specified metric from ``run_distance_analysis``, returns
+    a dictionary in the following form:
 
     .. code-block:: python
 
