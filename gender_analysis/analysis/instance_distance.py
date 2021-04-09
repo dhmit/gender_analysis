@@ -312,7 +312,7 @@ def get_highest_distances(results, num):
     """
     Finds the documents with the largest median distances between each gender that was analyzed.
 
-    Returns a dictionary mapping genders to a list of tuples of the form (<Document>, median),
+    Returns a dictionary mapping genders to a list of tuples of the form (median, <Document>),
     where `Document`s with higher medians are listed first.
 
     :param results: dictionary of results from `run_distance_analysis`
@@ -325,7 +325,7 @@ def get_highest_distances(results, num):
 
     # Get all of the medians for the documents
     for document in results:
-        for gender in results['document']:
+        for gender in results[document]:
             if gender not in medians:
                 medians[gender] = list()
 
