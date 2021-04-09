@@ -9,7 +9,7 @@ dunning module
    :undoc-members:
    :show-inheritance:
 
-gender\_adjective module
+gender adjective module
 -----------------------------------------------------------
 
 .. automodule:: gender_analysis.analysis.gender_adjective
@@ -17,7 +17,7 @@ gender\_adjective module
    :undoc-members:
    :show-inheritance:
 
-gender\_frequency module
+gender frequency module
 ---------------------------------------------------
 
 .. automodule:: gender_analysis.analysis.gender_frequency
@@ -25,7 +25,7 @@ gender\_frequency module
    :undoc-members:
    :show-inheritance:
 
-instance\_distance module
+instance distance module
 ---------------------------------------------------
 
 .. automodule:: gender_analysis.analysis.instance_distance

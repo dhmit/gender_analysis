@@ -110,6 +110,8 @@ def find_female_adj(document):
 
 def run_adj_analysis(corpus, gender_list=None):
     """
+    .. _run_adj_analysis:
+
     Takes in a corpus of novels.
     Return a dictionary with each novel mapped to n dictionaries,
     where n is the number of Genders in gender_list.
@@ -143,6 +145,8 @@ def run_adj_analysis(corpus, gender_list=None):
 
 def run_adj_analysis_doc(document, gender_list=None):
     """
+    .. _run_adj_analysis_doc:
+
     Takes in a document and a list of genders to analyze,
     returns a dictionary with the find_gender_adj results for each gender in gender_list.
 
@@ -227,6 +231,8 @@ def merge(novel_adj_dict, full_adj_dict):
 
 def merge_raw_results(full_results):
     """
+    .. _merge_raw_results:
+
     Merges all adjectives across novels into dictionaries sorted by gender.
 
     :param full_results: full corpus results from run_adj_analysis
@@ -467,6 +473,8 @@ def display_binned_results(metadata_binned_results, num_to_return, remove_swords
 
 def difference_adjs(gender_adj_dict, num_to_return=10):
     """
+    .. _difference_adjs:
+
     Given result dictionaries from find_gender_adjective,
     returns a dictionary with num_to_return adjectives
     most strongly associated with each gender.
