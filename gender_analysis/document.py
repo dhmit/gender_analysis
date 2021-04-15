@@ -6,10 +6,14 @@ from pathlib import Path
 from gutenberg_cleaner import simple_cleaner
 from more_itertools import windowed
 import nltk
+from nltk.tokenize import word_tokenize
+from nltk.tag import pos_tag
 
 from gender_analysis import common
+from gender_analysis import character
 
-
+from gender_analysis.character import Character
+from gender_analysis.character import HONORIFICS
 class Document:
     """
     The Document class loads and holds the full text and
@@ -633,3 +637,203 @@ class Document:
                         f" not '{new_metadata['date']}'"
                     ) from err
             setattr(self, key, new_metadata[key])
+
+    def get_char_list(self):
+        """
+        given a document object, find a list of characters with their frequency in the novels
+        input: a document object
+        output: a list of tuples with character names in descending sorted order that occurs
+        more than 10 times in the document
+        """
+
+        labels_char = []
+        labels = 'FACILITY,GPE,GSP,LOCATION,ORGANIZATION,PERSON' #this could be changed later
+        document = self._load_document_text()
+        sentences = nltk.sent_tokenize(document)
+        for sent in sentences:
+            for chunk in nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(sent))):
+                if hasattr(chunk, 'label'):
+                    # print(type(chunk.label()), chunk.label(), ' '.join(c[0] for c in chunk))
+                    labels_char.append((chunk.label(), ' '.join(c[0] for c in chunk)))
+        char_dict = {lab: {} for lab in labels.split(',')}
+        for ch in labels_char:
+            cat = char_dict[ch[0]]
+            cat[ch[1]] = cat.get(ch[1], 0) + 1
+        people = char_dict['PERSON']
+        people_sorted = [(p, people[p]) for p in people if p not in HONORIFICS]
+        people_sorted = sorted(people_sorted, key=lambda p: p[1], reverse=True)
+        cutoff = len(people_sorted) # index for cutoff threshold of char names, customizable later?
+        for i in range(len(people_sorted)):
+            if people_sorted[i][1] < 10:
+                cutoff = i
+                break
+        return people_sorted[:cutoff]
+
+    @staticmethod
+    def filter_honr(name):
+        name = name.split(' ')
+        return [n for n in name if n not in HONORIFICS]
+
+    def char_name_disambiguation(self):
+        """given a list of char names in a document, group them by potential nicknames
+        :param a list of character as well as their freq from get_char_list
+        :return: a list of list of character names and freq where the first one is the name,
+        followed by nicknames"""
+        char_list = self.get_char_list()
+        to_return = []
+        for i in range(len(char_list)-1):
+            char_cluster = [char_list[i]]
+            for j in range(i+1, len(char_list)):
+                if set(self.filter_honr(char_list[i][0])).intersection(
+                set(self.filter_honr(char_list[j][0]))):
+                    char_cluster.append(char_list[j])
+            to_return.append(char_cluster)
+        return to_return
+
+    @staticmethod
+    def get_intersection_measure_index(name,potential_nickname):
+        '''use set intersections to calculate the similarity measure between the name & nickname'''
+        pass
+
+    ''''@staticmethod
+    def get_ngram_word_similarity_index(name, potential_nickname):
+        """
+        Takes a canonical name and a potential nickname, calculates how many ngrams within 'name' match within 'potential_nickname'.
+        Returns a number between 0 and 1.
+        """
+
+        nwsi = 0
+        name_ngrams = name.split(" ")
+        nickname_ngrams = potential_nickname.split(" ")
+
+        for ngram in name_ngrams:
+            if ngram in nickname_ngrams:
+                nwsi += 1
+
+        nwsi = nwsi / len(name_ngrams)
+
+        return nwsi'''
+
+    ''''@staticmethod
+    def get_similarity_index(name, potential_nickname):
+        """
+        Takes a canonical name and a potential nickname, calculates a few different similarit indices, conflates them, and returns
+        a confidence index that determines the likelihood of potential_nickname being a nickname for name.
+        """
+
+        total_similarity_index = 0
+    # Each of these indices should give a result between 0 and 1, with 0 meaning
+        # 'no chance of similarity' and 1 as 'exact match'.
+
+        ngram_word_similarity_index = get_ngram_word_similarity_index(name, potential_nickname)
+        #ngram_char_similarity_index = get_ngram_char_similarity_index(name, potential_nickname)
+        #manual_nickname_checker_index = get_manual_nickname_checker_index(name, potential_nickname)
+        #honorific_similarity_index = get_honorific_similarity_index(name, potential_nickname)
+        #total_similarity_index = (
+         #                        ngram_word_similarity_index + ngram_char_similarity_index + manual_nickname_checker_index + honorific_similarity_index) / 4
+        total_similarity_index = ngram_word_similarity_index
+        return total_similarity_index'''
+
+    '''def get_conflated_characters(self,char_list):
+
+    """
+    Takes in a list of characters and a document and runs through a human-computer collaboration
+    to determine which names are nicknames of one another. Creates a dictionary of Character objects.
+    """
+
+        similarity_dict = {}
+        conflated_characters = []
+
+        for name in char_list:
+            similarity_dict[name] = [
+            (potential_nickname, get_similarity_index(potential_nickname) for name in char_list]
+    most_likely_candidates = sorted(similarity_dict[name])[:5]
+
+        print("Select nicknames for ", name, " from the following candidates:")
+        for n in len(most_likely_candidates):
+            print(n, ": ", most_likely_candidates[n])
+            nickname_indices = input(
+        "Key in the numbers for nickname matches separated by spaces [e.g. '1 4 5'].").split(" ")
+
+        nicknames = [most_likely_candidates[index][0] for index in nickname_indices]
+        for n in len(nicknames):
+            print(n, ": ", nicknames[n])
+
+        canonical_name = nicknames[input(
+        "Choose the Canonical Name for this character. Ideally, canonical names should be Firstname Lastname with no titles.")]
+        gender = input("Select a gender for the character, or let the computer take its best guess.")
+    # Handle this.
+
+        new_character = Character(canonical_name, document, gender=gender_result, nicknames=[nicknames])
+        conflated_characters[canonical_name] = new_character
+    # We'll want to remove all selected names/nicknames from the character list before proceeding in the interest of efficiency.
+        return conflated_characters'''
+
+
+    '''def prepare_nickname_checker(path_to_nickname_list="gender_analysis/nickname_list.txt"):
+        """
+        Turns the nickname list into a set of checkers.
+        """
+        nickname_list_raw = open(path_to_nickname_list, "r")
+        nickname_list = [line for line in nickname_list_raw]
+        nickname_name_list = []
+        for name_pair in nickname_list:
+            pair = name_pair.split(" = ")
+            try:
+                tuple_pair = (pair[0].strip(), pair[1].strip())
+            except IndexError:
+                print(pair, " is an invalid pair.")
+            nickname_name_list.append(tuple_pair)
+            return nickname_name_list
+
+    def run_nickname_check(char_list):
+        char_list_dict = {}
+        nickname_list = prepare_nickname_checker()
+        for name in char_list:
+            char_list_dict[name] = []
+            for nickname in char_list:
+                if name != nickname:
+                    mnci = get_manual_nickname_checker_index(name, nickname, nickname_list)
+                    char_list_dict[name].append((nickname, mnci))
+                    print(name, "matches", nickname)
+        return char_list_dict'''
+
+    '''def get_manual_nickname_checker_index(name, potential_nickname, nickname_list):
+        """
+    Takes canonical name and potential nickname, uses handwritten nickname_list to check
+    for similarities.
+    """
+
+        mnci = 0
+        if name == potential_nickname:
+            print("Exact match. Not interesting. mnci = -1")
+            mnci = -1
+            return mnci
+        else:
+            for nick_pair in nickname_list:
+                if name in nick_pair:
+                    if potential_nickname in nick_pair:
+                        print("Match between ", name, " and ", potential_nickname)
+                        mnci = 1
+        return mnci'''
+
+    def create_char_objects(self, char_list):
+       """helper function to use alongside of the name disambiguation
+       Creates a list of char objects through calling
+        char_name_disambiguation, filter out duplicates, and uses ML gender classification models"""
+       to_return = []
+       char_names = set()
+       for char in char_list:
+           name = char[0][0]
+           if name in char_names:
+               continue
+           char_names.add(name)
+           if len(char)>1:
+               nicknames = [ch[0] for ch in char[1:]]
+               for n in nicknames:
+                   char_names.add(n)
+               new_char = Character(name, self, nicknames=nicknames)
+           else:
+               new_char = Character(name, self)
+           to_return.append(new_char)
+       return to_return

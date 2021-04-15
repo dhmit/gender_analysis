@@ -1,5 +1,7 @@
 from gender_analysis.pronouns import PronounSeries
 
+
+
 class Gender:
     """
     Defines a gender that will be operated on in analysis functions
