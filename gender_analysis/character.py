@@ -4,10 +4,26 @@ import numpy as np
 # need to get nonbinary training data
 from gender_analysis.common import MALE, FEMALE
 
-from gender_analysis.document import FEMALE_HONORIFICS, MALE_HONORIFICS, HONORIFICS
+#from gender_analysis.document import FEMALE_HONORIFICS, MALE_HONORIFICS, HONORIFICS
 # load SVM classifier for gender detection
 loaded_model = pickle.load(open('gender_analysis/gender_classifier.sav', 'rb'))
 
+FEMALE_HONORIFICS = ["Miss", "Mrs", "Ms", "Mistress", "Madam", "Ma'am", "Dame",
+                     "Lady", "Her Honour", "Her Honor", "My Lady", "Your Ladyship",
+                     "Sr", "Sister", "Sayyidah"]
+MALE_HONORIFICS = ["Master", "Mr", "Sir", "Gentleman", "Sire", "Lord", "His Honour",
+                   "His Honor", "My Lord", "Your Lordship", "Master", "Esquire", "Esq",
+                   "His Holiness", "Pope", "His All Holiness", "His Beatitude", "The Reverend",
+                   "Rev", "Fr", "Father", "Pr", "Pastor", "Br", "Brother", "Rabbi", "Imam",
+                   "Mufti", "Sayyid"]
+# BINARY_HONORIFICS = ['Mr.', 'Mrs.', 'Ms.', 'Miss', 'Madam', 'Lord']
+NEUTRAL_HONORIFICS = ["Mx", "Excellency", "Excellence", "Your Honor", "The Honorable",
+                      "The Honourable", "The Hon", "Hon", "The Hon'ble", "The Right Honourable",
+                      "The Most Honourable", "Dr", "Doctor", "Professor", "QC", "Cl", "S Cl",
+                      "Counsel", "Senior Counsel", "Eur Ing", "Vice-Chancellor", "Principal",
+                      "President", "Warden", "Dean", "Regent", "Rector", "Provost", "Director",
+                      "Chief Executive", "Venerable", "Eminent"]
+HONORIFICS = FEMALE_HONORIFICS + MALE_HONORIFICS + NEUTRAL_HONORIFICS
 
 class Character:
     """
