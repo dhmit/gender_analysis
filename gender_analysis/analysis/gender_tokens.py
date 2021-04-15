@@ -1,6 +1,6 @@
 from more_itertools import windowed
 import nltk
-from collections import Counter, UserDict, UserList
+from collections import Counter, UserDict
 
 from gender_analysis.corpus import Corpus
 from gender_analysis.document import Document
@@ -10,7 +10,7 @@ from gender_analysis.gender import Gender
 class GenderTokenAnalysis(UserDict):
     """
     The GenderTokenAnalysis instance is a dictionary of the shape:
-    { Document: { GENDER: { str: int } } }
+    { Document: { str(Gender.label): { str(token): int } } }
     """
 
     def __init__(self, dictionary, documents, genders, tokens):
@@ -28,14 +28,15 @@ class GenderTokenAnalysis(UserDict):
 
     def by_date(self, time_frame, bin_size, sort=False, limit=10, remove_swords=False):
         """
-        Return analysis in the format { date(int): { GENDER: { str: int } } }
+        Return analysis in the format { int(date): { str(Gender.label: { str(token): int } } }
 
         :param time_frame: a tuple of the format (start_date, end_date).
         :param bin_size: int for the number of years represented in each list of frequencies
         :param sort: return results in a sorted list.
         :param limit: if sort=True, restrict output to top occurrences sorted.
         :param remove_swords: if sort=True, remove stop words from results.
-        :return: a dictionary of the shape { Gender: { str: int } } or { Gender: [(str, int)] }
+        :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
+                 { str(Gender.label): [(str(token), int)] }
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, CONTROLLED_TEST_CORPUS_CSV
         >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=CONTROLLED_TEST_CORPUS_CSV, ignore_warnings=True)
@@ -92,18 +93,18 @@ class GenderTokenAnalysis(UserDict):
 
     def by_differences(self, limit=10, remove_swords=False):
         """
-        Merges all adjectives across texts into dictionaries sorted by gender.
+        TODO: write out a more accurate description for this.
 
-        :param limit: if sorted=True, restrict output to top occurrences sorted.
-        :param remove_swords: if sorted=True, remove stop words from results.
-        :return: a dictionary of the shape { Gender: [ ( str, int ) ] }
+        :param limit: if sort=True, restrict output to top occurrences sorted.
+        :param remove_swords: if sort=True, remove stop words from results.
+        :return: a dictionary of the shape { str(Gender.label): [ ( str(token), int ) ] }
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, CONTROLLED_TEST_CORPUS_CSV
         >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=CONTROLLED_TEST_CORPUS_CSV, ignore_warnings=True)
         >>> analysis = generate_analysis(corpus, ['NN'])
         >>> analysis.by_differences().keys() == analysis.keys()
         True
-        >>> analysis.by_differences()[corpus.documents[0]]['Male'][0]
+        >>> analysis.by_differences().get(corpus.documents[0]).get('Male')[0]
         ('stay', 1)
         """
 
@@ -131,18 +132,19 @@ class GenderTokenAnalysis(UserDict):
         Merges all adjectives across texts into dictionaries sorted by gender.
 
         :param sort: return results in a sorted list.
-        :param limit: if sorted=True, restrict output to top occurrences sorted.
-        :param remove_swords: if sorted=True, remove stop words from results.
-        :return: a dictionary of the shape { Gender: { str: int } } or { Gender: [(str, int)] }
+        :param limit: if sort=True, restrict output to top occurrences sorted.
+        :param remove_swords: if sort=True, remove stop words from results.
+        :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
+                 { str(Gender.label): [(str(token), int)] }
         >>> from gender_analysis.corpus import Corpus
         >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, CONTROLLED_TEST_CORPUS_CSV
         >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=CONTROLLED_TEST_CORPUS_CSV, ignore_warnings=True)
         >>> analysis = generate_analysis(corpus, ['NN'])
         >>> list(analysis.by_gender().keys()) == ['Female', 'Male']
         True
-        >>> analysis.by_gender()['Female']['time']
+        >>> analysis.by_gender().get('Female').get('time')
         2
-        >>> analysis.by_gender(sort=True)['Male'][0]
+        >>> analysis.by_gender(sort=True).get('Male')[0]
         ('road', 2)
         """
 
@@ -185,9 +187,9 @@ class GenderTokenAnalysis(UserDict):
         >>> analysis = generate_analysis(corpus, ['NN'])
         >>> list(analysis.by_metadata('author_gender').keys()) == ['male', 'female']
         True
-        >>> analysis.by_metadata('author_gender')['female']['Female']['time']
+        >>> analysis.by_metadata('author_gender').get('female').get('Female').get('time')
         2
-        >>> analysis.by_metadata('author_gender', sort=True)['female']['Female'][0]
+        >>> analysis.by_metadata('author_gender', sort=True).get('female').get('Female')[0]
         ('time', 2)
         """
 
@@ -240,7 +242,7 @@ class GenderTokenAnalysis(UserDict):
         >>> analysis = generate_analysis(corpus, ['NN'])
         >>> list(analysis.by_overlap().keys()) == ['i']
         True
-        >>> analysis.by_overlap()['i']
+        >>> analysis.by_overlap().get('i')
         [1, 1]
         """
 
@@ -278,7 +280,7 @@ class GenderTokenAnalysis(UserDict):
         >>> analysis = generate_analysis(corpus, ['NN'])
         >>> list(analysis.by_sorted().keys()) == corpus.documents
         True
-        >>> analysis.by_sorted()[corpus.documents[0]]['Male'][0]
+        >>> analysis.by_sorted()[corpus.documents[0]].get('Male')[0]
         ('stay', 1)
         """
 
@@ -300,6 +302,34 @@ class GenderTokenAnalysis(UserDict):
 
         self._by_sorted[hashed_arguments] = output
         return self._by_sorted[hashed_arguments]
+
+    def get_document(self, name, sort=False, limit=10, remove_swords=False):
+        """
+        Returns a dict of the shape { str: { str: int } }.
+
+        :param name: the name (filename minus extension) of the Document.
+        :param sort: return results in a sorted list.
+        :param limit: restrict output to top occurrences sorted.
+        :param remove_swords: remove stop words from results.
+        :return: a dictionary of the shape { Gender: { str: int } } or { Gender: [(str, int)] }
+        >>> from gender_analysis.corpus import Corpus
+        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, CONTROLLED_TEST_CORPUS_CSV
+        >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=CONTROLLED_TEST_CORPUS_CSV, ignore_warnings=True)
+        >>> analysis = generate_analysis(corpus, ['NN'])
+        >>> analysis.get_document('_control1_text1')
+        {'Female': {}, 'Male': {'stay': 1, 'road': 1, 'work': 1, 'abstraction': 1}}
+        """
+        for document in self.documents:
+            if document.filename[0:len(document.filename) - 4] == name:
+                if sort:
+                    output = {document: _sort_gender_token_frequencies(self[document],
+                                                                       limit=limit,
+                                                                       remove_swords=remove_swords)}
+                else:
+                    output = self[document]
+                return output
+
+        raise ValueError('name must be a valid Document name')
 
     def store(self, pickle_filepath='pronoun_adj_raw_analysis.pgz'):
         """
