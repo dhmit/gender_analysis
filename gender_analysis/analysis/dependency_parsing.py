@@ -7,7 +7,7 @@ import requests
 from nltk.parse.stanford import StanfordDependencyParser
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-from gender_analysis import common
+from corpus_analysis import common
 
 
 def _get_parser_download_if_not_present():

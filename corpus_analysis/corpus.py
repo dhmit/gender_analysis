@@ -7,9 +7,9 @@ from pathlib import Path
 
 from nltk import tokenize as nltk_tokenize
 
-from gender_analysis import common
-from gender_analysis.common import MissingMetadataError
-from gender_analysis.common import load_csv_to_list
+from corpus_analysis import common
+from corpus_analysis.common import MissingMetadataError
+from corpus_analysis.common import load_csv_to_list
 from corpus_analysis.document import Document
 
 
@@ -516,7 +516,7 @@ class Corpus:
         :return: Document Object
 
         >>> from corpus_analysis.corpus import Corpus
-        >>> from gender_analysis.common import MissingMetadataError
+        >>> from corpus_analysis.common import MissingMetadataError
         >>> from corpus_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
         ...     LARGE_TEST_CORPUS_CSV as path_to_csv

@@ -2,6 +2,7 @@ from more_itertools import windowed
 import nltk
 
 from gender_analysis import common
+from corpus_analysis.common import store_pickle, load_pickle
 
 
 def find_gender_adj(document, gender_to_find, word_window=5, genders_to_exclude=None):
@@ -190,14 +191,14 @@ def store_raw_results(results, pickle_filepath='pronoun_adj_raw_analysis.pgz'):
 
     """
     try:
-        common.load_pickle(pickle_filepath)
+        load_pickle(pickle_filepath)
         user_inp = input("results already stored. overwrite previous analysis? (y/n)")
         if user_inp == 'y':
-            common.store_pickle(results, pickle_filepath)
+            store_pickle(results, pickle_filepath)
         else:
             pass
     except IOError:
-        common.store_pickle(results, pickle_filepath)
+        store_pickle(results, pickle_filepath)
 
 
 def merge(novel_adj_dict, full_adj_dict):
