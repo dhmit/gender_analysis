@@ -1,15 +1,22 @@
 from pathlib import Path
 
+from sympy.utilities import pytest
+
 from corpus_analysis import Corpus, Document
 from gender_analysis import common
-from gender_analysis.analysis import run_distance_analysis, get_highest_distances
+from gender_analysis.analysis.instance_distance import run_distance_analysis, \
+    get_highest_distances, results_by_location, results_by_author_gender, results_by_year
 from gender_analysis.testing import common as test_common
 
 documents = []
 corpus = Corpus(test_common.DOCUMENT_TEST_PATH, csv_path=test_common.DOCUMENT_TEST_CSV)
 for i in range(14):
     name = "test_text_" + str(i) + ".txt"
-    documents.append(Document({"filename": name,
+    location = "USA" if i % 2 == 0 else "UK"
+    author_gender = "Male" if i % 3 == 0 else "Female"
+    date = i % 10 + 1950
+    documents.append(Document({"filename": name, "country_publication": location, "date": str(date),
+                               "author_gender": author_gender,
                      "filepath": Path(test_common.DOCUMENT_TEST_PATH, name)}))
 
 
@@ -83,3 +90,62 @@ class TestInstanceDistance:
         assert results == {common.MALE: [(6, documents[4]), (2, documents[11]), (0, documents[3])],
                            common.FEMALE: [(17.5, documents[11]), (6, documents[3]),
                                            (0, documents[4])]}
+
+    def test_results_by_location(self):
+        results = run_distance_analysis(corpus)
+
+        results = results_by_location(results, "median")
+
+        expected = dict()
+        expected["USA"] = {}
+        expected["UK"] = {}
+        expected["USA"][documents[4]] = {common.MALE: 6, common.FEMALE: 0}
+        expected["UK"][documents[11]] = {common.MALE: 2, common.FEMALE: 17.5}
+        expected["UK"][documents[3]] = {common.MALE: 0, common.FEMALE: 6}
+
+
+        assert results["UK"][documents[11]] == expected["UK"][documents[11]]
+        assert results["UK"][documents[3]] == expected["UK"][documents[3]]
+        assert results["USA"][documents[4]] == expected["USA"][documents[4]]
+
+    def test_results_by_author_gender(self):
+        results = run_distance_analysis(corpus)
+        results = results_by_author_gender(results, "median")
+
+        expected = dict()
+        expected["male"] = {}
+        expected["female"] = {}
+        expected["female"][documents[4]] = {common.MALE: 6, common.FEMALE: 0}
+        expected["female"][documents[11]] = {common.MALE: 2, common.FEMALE: 17.5}
+        expected["male"][documents[3]] = {common.MALE: 0, common.FEMALE: 6}
+
+
+        assert results["female"][documents[11]] == expected["female"][documents[11]]
+        assert results["male"][documents[3]] == expected["male"][documents[3]]
+        assert results["female"][documents[4]] == expected["female"][documents[4]]
+
+    def test_results_by_date(self):
+        results = run_distance_analysis(corpus)
+
+        results = results_by_year(results, "median", (1950, 1962), 1)
+        results[1953].pop(documents[13])
+
+        expected = dict()
+        expected[1953] = {}
+        expected[1954] = {}
+        expected[1954][documents[4]] = {common.MALE: 6, common.FEMALE: 0}
+        expected[1953][documents[3]] = {common.MALE: 0, common.FEMALE: 6}
+
+        assert results[1953] == expected[1953]
+        assert results[1954] == expected[1954]
+
+    def test_results_error_throwing(self):
+        results = run_distance_analysis(corpus)
+        with pytest.raises(ValueError):
+            results2 = results_by_year(results, "mode", (1950, 1962), 1)
+
+        with pytest.raises(ValueError):
+            results2 = results_by_location(results, "mode")
+
+        with pytest.raises(ValueError):
+            results2 = results_by_author_gender(results, "mode")
