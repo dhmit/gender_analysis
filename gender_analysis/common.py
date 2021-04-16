@@ -29,6 +29,7 @@ NONBINARY = Gender('Nonbinary', THEY_SERIES)
 BINARY_GROUP = [FEMALE, MALE]
 TRINARY_GROUP = [FEMALE, MALE, NONBINARY]
 
+
 def _get_parser_download_if_not_present():
     # pylint: disable=too-many-locals
     """
@@ -39,7 +40,7 @@ def _get_parser_download_if_not_present():
 
     """
 
-    parser_dir = common.BASE_PATH / 'stanford_parser'
+    parser_dir = BASE_PATH / 'stanford_parser'
     if not os.path.exists(parser_dir):
         os.mkdir(parser_dir)
 

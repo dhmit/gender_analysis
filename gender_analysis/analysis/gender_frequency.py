@@ -4,8 +4,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 import nltk
-from gender_analysis import common
-from corpus_analysis.common import download_nltk_package_if_not_present, store_pickle, load_pickle
+from corpus_analysis.common import download_nltk_package_if_not_present, store_pickle
 
 
 def get_count_words(document, words):
