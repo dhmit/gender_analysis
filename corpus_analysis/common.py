@@ -283,6 +283,7 @@ class MissingMetadataError(Exception):
             + 'and run Corpus.update_metadata().'
         )
 
+
 def download_nltk_package_if_not_present(package_name):
     """
     Checks to see whether the user already has a given nltk package,
@@ -336,6 +337,7 @@ def create_path_object_and_directories(output_dir, filename=None):
     except OSError:
         print("Could not create the correct file and path")
         return None
+
 
 if __name__ == '__main__':
     from dh_testers.testRunner import main_test
