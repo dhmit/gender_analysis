@@ -7,7 +7,7 @@ from gutenberg_cleaner import simple_cleaner
 from more_itertools import windowed
 import nltk
 
-from gender_analysis import common
+from corpus_analysis import common
 
 
 class Document:
