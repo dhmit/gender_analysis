@@ -23,7 +23,7 @@ English. We'll need to import the :ref:`Corpus <corpus_analysis:corpus module>` 
 .. code-block:: python
 
     >>> from corpus_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
 
 
 ... and then we can generate our first :ref:`Corpus <corpus_analysis:corpus module>` object:
