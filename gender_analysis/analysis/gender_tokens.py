@@ -49,9 +49,16 @@ class GenderTokenAnalysis(UserDict):
         >>> analysis.by_date((2000, 2040), 10, sort=True)[2010]['Female'][0]
         ('jet', 1)
         """
-        hashed_dates = f'{str(time_frame[0])}{str(time_frame[1])}{str(bin_size)}'
-        hashed_options = f'{str(sort)}{str(diff)}{str(limit)}{remove_swords}'
-        hashed_arguments = hashed_dates + hashed_options
+
+        hashed_arguments = ''.join([
+            str(time_frame[0]),
+            str(time_frame[1]),
+            str(bin_size),
+            str(sort),
+            str(diff),
+            str(limit),
+            str(remove_swords)
+        ])
 
         if self._by_date is None:
             self._by_date = {}
@@ -62,28 +69,19 @@ class GenderTokenAnalysis(UserDict):
         data = {}
 
         for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
-            output = {}
-            for gender_label in self.gender_labels:
-                output[gender_label] = {}
-            data[bin_start_year] = output
+            data[bin_start_year] = {label: {} for label in self.gender_labels}
 
-        for k in self.documents:
-            date = getattr(k, 'date', None)
+        for document in self.documents:
+            date = getattr(document, 'date', None)
             if date is None:
                 continue
             bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
             if bin_year not in data:
-                data[bin_year] = {}
-            merged_token_frequencies = {}
+                data[bin_year] = {label: {} for label in self.gender_labels}
             for gender_label in self.gender_labels:
-                if gender_label not in data[bin_year]:
-                    data[bin_year][gender_label] = {}
-                merged_token_frequencies[gender_label] = {}
-                merged_token_frequencies[gender_label] = _merge_token_frequencies(
-                    [self[k][gender_label], data[bin_year][gender_label]]
+                data[bin_year][gender_label] = _merge_token_frequencies(
+                    [self[document][gender_label], data[bin_year][gender_label]]
                 )
-
-            data[bin_year] = merged_token_frequencies
 
         if sort:
             for date, gender_token_frequencies in data.items():
