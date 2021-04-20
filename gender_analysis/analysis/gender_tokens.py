@@ -26,13 +26,14 @@ class GenderTokenAnalysis(UserDict):
         self._by_sorted = None
         super().__init__(dictionary)
 
-    def by_date(self, time_frame, bin_size, sort=False, limit=10, remove_swords=False):
+    def by_date(self, time_frame, bin_size, sort=False, diff=False, limit=10, remove_swords=False):
         """
         Return analysis in the format { int(date): { str(Gender.label: { str(token): int } } }
 
         :param time_frame: a tuple of the format (start_date, end_date).
         :param bin_size: int for the number of years represented in each list of frequencies
         :param sort: return results in a sorted list.
+        :param diff: return the differences between genders.
         :param limit: if sort=True, restrict output to top occurrences sorted.
         :param remove_swords: if sort=True, remove stop words from results.
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
@@ -49,7 +50,7 @@ class GenderTokenAnalysis(UserDict):
         ('jet', 1)
         """
         hashed_dates = f'{str(time_frame[0])}{str(time_frame[1])}{str(bin_size)}'
-        hashed_options = f'{str(sort)}{str(limit)}{remove_swords}'
+        hashed_options = f'{str(sort)}{str(diff)}{str(limit)}{remove_swords}'
         hashed_arguments = hashed_dates + hashed_options
 
         if self._by_date is None:
@@ -71,7 +72,8 @@ class GenderTokenAnalysis(UserDict):
             if date is None:
                 continue
             bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
-            data[bin_year] = {}
+            if bin_year not in data:
+                data[bin_year] = {}
             merged_token_frequencies = {}
             for gender_label in self.gender_labels:
                 if gender_label not in data[bin_year]:
@@ -81,12 +83,18 @@ class GenderTokenAnalysis(UserDict):
                     [self[k][gender_label], data[bin_year][gender_label]]
                 )
 
-            token_frequencies = merged_token_frequencies
-            if sort:
-                token_frequencies = _sort_gender_token_frequencies(token_frequencies,
-                                                                   limit=limit,
-                                                                   remove_swords=remove_swords)
-            data[bin_year] = token_frequencies
+            data[bin_year] = merged_token_frequencies
+
+        if sort:
+            for date, gender_token_frequencies in data.items():
+                data[date] = _sort_gender_token_frequencies(gender_token_frequencies,
+                                                            limit=limit,
+                                                            remove_swords=remove_swords)
+        elif diff:
+            for date, gender_token_frequencies in data.items():
+                data[date] = _diff_gender_token_frequencies(gender_token_frequencies,
+                                                            limit=limit,
+                                                            remove_swords=remove_swords)
 
         self._by_date[hashed_arguments] = data
         return self._by_date[hashed_arguments]
@@ -127,11 +135,12 @@ class GenderTokenAnalysis(UserDict):
         self._by_differences[hashed_arguments] = diff
         return self._by_differences[hashed_arguments]
 
-    def by_gender(self, sort=False, limit=10, remove_swords=False):
+    def by_gender(self, sort=False, diff=False, limit=10, remove_swords=False):
         """
         Merges all adjectives across texts into dictionaries sorted by gender.
 
         :param sort: return results in a sorted list.
+        :param diff: return the differences between genders.
         :param limit: if sort=True, restrict output to top occurrences sorted.
         :param remove_swords: if sort=True, remove stop words from results.
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
@@ -148,7 +157,7 @@ class GenderTokenAnalysis(UserDict):
         ('road', 2)
         """
 
-        hashed_arguments = f"{str(sort)}{str(limit)}{remove_swords}"
+        hashed_arguments = f"{str(sort)}{str(diff)}{str(limit)}{remove_swords}"
 
         if self._by_gender is None:
             self._by_gender = {}
@@ -168,16 +177,21 @@ class GenderTokenAnalysis(UserDict):
             output = _sort_gender_token_frequencies(output,
                                                     limit=limit,
                                                     remove_swords=remove_swords)
+        elif diff:
+            output = _diff_gender_token_frequencies(output,
+                                                    limit=limit,
+                                                    remove_swords=remove_swords)
 
         self._by_gender[hashed_arguments] = output
         return self._by_gender[hashed_arguments]
 
-    def by_metadata(self, metadata_key, sort=False, limit=10, remove_swords=False):
+    def by_metadata(self, metadata_key, sort=False, diff=False, limit=10, remove_swords=False):
         """
         Merges all adjectives across texts into dictionaries sorted by gender.
 
         :param metadata_key: a string
         :param sort: return results in a sorted list.
+        :param diff: return the differences between genders.
         :param limit: if sort=True, restrict output to top occurrences sorted.
         :param remove_swords: if sorted=True, remove stop words from results.
         :return: a dictionary of the shape { Gender: { str: int } } or { Gender: [(str, int)] }
@@ -193,7 +207,7 @@ class GenderTokenAnalysis(UserDict):
         ('time', 2)
         """
 
-        hashed_arguments = f"{str(metadata_key)}{str(sort)}{str(limit)}{remove_swords}"
+        hashed_arguments = f"{str(metadata_key)}{str(sort)}{str(diff)}{str(limit)}{remove_swords}"
 
         if self._by_metadata is None:
             self._by_metadata = {}
@@ -219,13 +233,14 @@ class GenderTokenAnalysis(UserDict):
         for key in data:
             for gender_label in self.gender_labels:
                 data[key][gender_label] = _merge_token_frequencies(data[key][gender_label])
-            token_frequencies = data[key]
             if sort:
-                data[key] = _sort_gender_token_frequencies(token_frequencies,
+                data[key] = _sort_gender_token_frequencies(data[key],
                                                            limit=limit,
                                                            remove_swords=remove_swords)
-            else:
-                data[key] = token_frequencies
+            elif diff:
+                data[key] = _diff_gender_token_frequencies(data[key],
+                                                           limit=limit,
+                                                           remove_swords=remove_swords)
 
         self._by_metadata[hashed_arguments] = data
         return self._by_metadata[hashed_arguments]
@@ -322,9 +337,9 @@ class GenderTokenAnalysis(UserDict):
         for document in self.documents:
             if document.filename[0:len(document.filename) - 4] == name:
                 if sort:
-                    output = {document: _sort_gender_token_frequencies(self[document],
-                                                                       limit=limit,
-                                                                       remove_swords=remove_swords)}
+                    output = _sort_gender_token_frequencies(self[document],
+                                                            limit=limit,
+                                                            remove_swords=remove_swords)
                 else:
                     output = self[document]
                 return output
@@ -550,9 +565,9 @@ def _sort_gender_token_frequencies(gender_token_frequencies, limit=10, remove_sw
     [('baz', 3), ('foo', 2)]
     """
     output = {}
-    for gender, token_frequency in gender_token_frequencies.items():
+    for gender, token_frequencies in gender_token_frequencies.items():
         output[gender] = {}
-        output[gender] = _sort_token_frequencies(token_frequency,
+        output[gender] = _sort_token_frequencies(token_frequencies,
                                                  limit=limit,
                                                  remove_swords=remove_swords)
     return output
