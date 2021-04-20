@@ -375,6 +375,7 @@ def create_path_object_and_directories(output_dir, filename=None):
 
     except OSError:
         print("Could not create the correct file and path")
+        return None
 
 
 if __name__ == '__main__':
