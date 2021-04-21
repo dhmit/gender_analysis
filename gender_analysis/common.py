@@ -20,11 +20,30 @@ TEST_DATA_PATH = Path(BASE_PATH, '../corpus_analysis/testing', 'test_data')
 HE_SERIES = PronounSeries('Masc', {'he', 'his', 'him', 'himself'}, subj='he', obj='him')
 SHE_SERIES = PronounSeries('Fem', {'she', 'her', 'hers', 'herself'}, subj='she', obj='her')
 THEY_SERIES = PronounSeries('Andy', {'they', 'them', 'theirs', 'themself'}, subj='they', obj='them')
+IT_SERIES = PronounSeries('It', {'it', 'itself'}, subj='it', obj='it')
+XE_SERIES = PronounSeries('Xe', {'xe', 'xem', 'xyr', 'xyrs', 'xemself'}, subj='xe', obj='xem')
+AE_SERIES = PronounSeries('Ae', {'ae', 'aer', 'aers', 'aerself'}, subj='ae', obj='aer')
+FAE_SERIES = PronounSeries('Fae', {'fae', 'faer', 'faers', 'faerself'}, subj='fae', obj='faer')
+EY_SERIES = PronounSeries('Ey', {'ey', 'em', 'eir', 'eirs', 'eirself'}, subj='ey', obj='em')
+VE_SERIES = PronounSeries('Ve', {'ve', 'ver', 'vis', 'verself'}, subj='ve', obj='ver')
+PER_SERIES = PronounSeries('Per', {'per', 'pers', 'perself'}, subj='per', obj='per')
+ZE_HIR_SERIES = PronounSeries('Ze', {'ze', 'hir', 'hirs', 'hirself'}, subj='ze', obj='hir')
 
 # Common Gender Collections
 MALE = Gender('Male', HE_SERIES)
 FEMALE = Gender('Female', SHE_SERIES)
 NONBINARY = Gender('Nonbinary', THEY_SERIES)
+
+# Using `Gender` class as a way of tracking neopronouns defined above
+NEOGENDERS = Gender('Neo', [
+    XE_SERIES,
+    AE_SERIES,
+    FAE_SERIES,
+    EY_SERIES,
+    VE_SERIES,
+    PER_SERIES,
+    ZE_HIR_SERIES,
+])
 
 BINARY_GROUP = [FEMALE, MALE]
 TRINARY_GROUP = [FEMALE, MALE, NONBINARY]
