@@ -75,7 +75,7 @@ def _generate_token_occurrences(document,
     return output
 
 
-def _generate_gender_token_occurrences(document, genders, tokens, word_window=5):
+def _generate_gender_token_occurrences(document, genders, tokens, word_window):
     """
     A private helper function for generating gender_token_frequencies, a dictionary of the
     shape {Gender.label: {str: int, ...}, ...} that is used throughout this module.
@@ -91,8 +91,8 @@ def _generate_gender_token_occurrences(document, genders, tokens, word_window=5)
     >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
     >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
     >>> doc = corpus.documents[-1]
-    >>> test_1 = _generate_gender_token_occurrences(doc, BINARY_GROUP, ['NN'])
-    >>> test_2 = _generate_gender_token_occurrences(doc, BINARY_GROUP, ['NN'], word_window=10)
+    >>> test_1 = _generate_gender_token_occurrences(doc, BINARY_GROUP, ['NN'], 5)
+    >>> test_2 = _generate_gender_token_occurrences(doc, BINARY_GROUP, ['NN'], 10)
     >>> list(test_1.keys()) == ['Female', 'Male']
     True
     >>> test_1.get('Female')
@@ -289,7 +289,7 @@ class GenderTokenAnalysis(UserDict):
     gendered pronouns.
     """
 
-    def __init__(self, texts, tokens=None, genders=None):
+    def __init__(self, texts, tokens=None, genders=None, word_window=5):
         """
         Initializes a GenderTokenAnalysis object that can be used for retrieving
         analyses concerning the number of occurrences of specific words within a window of
@@ -298,6 +298,7 @@ class GenderTokenAnalysis(UserDict):
         :param texts: a Corpus, Document, or list of Documents.
         :param tokens: a list of NLTK token strings, defaulting to adjectives.
         :param genders: a list of Gender instances.
+        :param word_window: number of words to search for in either direction of a Gender instance.
 
         >>> from corpus_analysis.corpus import Corpus
         >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
@@ -341,6 +342,7 @@ class GenderTokenAnalysis(UserDict):
         self.genders = genders
         self.gender_labels = [gender.label for gender in genders]
         self.tokens = tokens
+        self.word_window = word_window
         self._by_date = None
         self._by_differences = None
         self._by_gender = None
@@ -348,14 +350,15 @@ class GenderTokenAnalysis(UserDict):
         self._by_overlap = None
         self._by_sorted = None
 
-        analysis_dictionary = {}
+        analysis = {}
 
         for document in self.documents:
-            analysis_dictionary[document] = _generate_gender_token_occurrences(document,
-                                                                               genders,
-                                                                               tokens)
+            analysis[document] = _generate_gender_token_occurrences(document,
+                                                                    genders,
+                                                                    tokens,
+                                                                    word_window=word_window)
 
-        super().__init__(analysis_dictionary)
+        super().__init__(analysis)
 
     def by_date(self, time_frame, bin_size, sort=False, diff=False, limit=10, remove_swords=False):
         """
