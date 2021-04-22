@@ -4,7 +4,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 import nltk
-from gender_analysis import common
+from corpus_analysis.common import download_nltk_package_if_not_present, store_pickle
 
 
 def get_count_words(document, words):
@@ -19,7 +19,7 @@ def get_count_words(document, words):
     :param words: a list of words to be counted in text
     :return: a dictionary where the key is the word and the value is the count
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from gender_analysis import common
     >>> from pathlib import Path
     >>> document_metadata = {'filename': 'test_text_2.txt',
@@ -44,7 +44,7 @@ def get_comparative_word_freq(freqs):
     :param freqs: dictionary in the form {'identifier(s)':overall_frequency}
     :return: dictionary in the form {'identifier(s)':relative_frequency}
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'filename': 'hawthorne_scarlet.txt',
@@ -92,7 +92,7 @@ def get_counts_by_pos(freqs):
     {'RB': Counter({'quietly': 42, 'usually': 7})}
 
     """
-    common.download_nltk_package_if_not_present('corpora/stopwords')
+    download_nltk_package_if_not_present('corpora/stopwords')
 
     sorted_words = {}
     # for each word in the counter
@@ -238,10 +238,10 @@ def corpus_pronoun_freq(corp, genders, pickle_filepath=None):
     :param pickle_filepath: Filepath to save the pickled results.
     :return: dictionary with data organized by Document
 
-    >>> from gender_analysis.corpus import Corpus
+    >>> from corpus_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.gender_frequency import corpus_pronoun_freq
     >>> from gender_analysis.common import BINARY_GROUP
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
     >>> c = Corpus(TEST_CORPUS_PATH, csv_path=SMALL_TEST_CORPUS_CSV, ignore_warnings = True)
     >>> pronoun_freq_dict = corpus_pronoun_freq(c, BINARY_GROUP)
     >>> flatland = c.get_document('title', 'Flatland')
@@ -258,7 +258,7 @@ def corpus_pronoun_freq(corp, genders, pickle_filepath=None):
         relative_freqs[doc] = comp_freq_dict
 
     if pickle_filepath:
-        common.store_pickle(relative_freqs, pickle_filepath)
+        store_pickle(relative_freqs, pickle_filepath)
 
     return relative_freqs
 
@@ -300,10 +300,10 @@ def corpus_subject_object_freq(corp, genders, pickle_filepath=None):
     :param pickle_filepath: Location to store results; will not write a file if None
     :return: dictionary of results, by document and then by gender.
 
-    >>> from gender_analysis.corpus import Corpus
+    >>> from corpus_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.gender_frequency import corpus_subject_object_freq
     >>> from gender_analysis.common import MALE, FEMALE, BINARY_GROUP
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
     >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=SMALL_TEST_CORPUS_CSV, ignore_warnings = True)
     >>> pronoun_freqs = corpus_subject_object_freq(corpus, BINARY_GROUP)
     >>> result = pronoun_freqs.popitem()
@@ -318,7 +318,7 @@ def corpus_subject_object_freq(corp, genders, pickle_filepath=None):
     if pickle_filepath:
         for gender in genders:
             gender_path = Path.join(pickle_filepath, gender.label)
-            common.store_pickle(relative_freq, gender_path)
+            store_pickle(relative_freq, gender_path)
 
     return relative_freq
 
@@ -371,10 +371,10 @@ def corpus_sub_pronouns_gender_comparison(corp, gender_to_include, genders_to_ex
     :param genders_to_exclude: A list of Gender objects to compare against
     :return: dictionary
 
-    >>> from gender_analysis.corpus import Corpus
+    >>> from corpus_analysis.corpus import Corpus
     >>> from gender_analysis.common import MALE, FEMALE
     >>> from gender_analysis.analysis.gender_frequency import corpus_sub_pronouns_gender_comparison
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
     >>> c = Corpus(TEST_CORPUS_PATH, csv_path=SMALL_TEST_CORPUS_CSV, ignore_warnings = True)
     >>>
     """
@@ -414,10 +414,10 @@ def doc_subject_pronouns_gender_comparison(doc, gender_to_include, genders_to_ex
     :param genders_to_exclude: A list of Gender objects to compare against
     :return: A float
 
-    >>> from gender_analysis.corpus import Corpus
+    >>> from corpus_analysis.corpus import Corpus
     >>> from gender_analysis.common import MALE, FEMALE
     >>> from gender_analysis.analysis.gender_frequency import doc_subject_pronouns_gender_comparison
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
     >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=SMALL_TEST_CORPUS_CSV, ignore_warnings = True)
     >>> emma = corpus.get_document('title', 'Emma')
     >>> doc_subject_pronouns_gender_comparison(emma, FEMALE, [MALE])
@@ -457,10 +457,10 @@ def freq_by_author_gender(novel_dict, genders):
     :param genders: a list of Gender objects
     :return: dictionary
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
     >>> from gender_analysis.common import MALE, FEMALE
     >>> novel_metadata = {'filename': 'bronte_wildfell.txt', 'author_gender': 'female',
     ...    'filepath': Path(TEST_CORPUS_PATH, 'bronte_wildfell.txt')}
@@ -504,10 +504,10 @@ def freq_by_date(doc_dict, time_frame, bin_size):
     :param bin_size: int for the number of years represented in each list of frequencies
     :return: dictionary {bin_start_year:[frequencies for documents in this bin of years]
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
     >>> from gender_analysis.analysis.gender_frequency import freq_by_date
     >>> novel_metadata = {'date': '1818', 'filename': 'austen_persuasion.txt',
     ...                   'filepath': Path(TEST_CORPUS_PATH, 'austen_persuasion.txt')}
@@ -551,10 +551,10 @@ def freq_by_location(novel_dict):
     :param novel_dict: dictionary
     :return: dictionary
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
     >>> from gender_analysis.analysis.gender_frequency import freq_by_location
     >>> novel_metadata = {'country_publication': 'United Kingdom',
     ...                   'filename': 'austen_persuasion.txt',
@@ -611,10 +611,10 @@ def sort_every_year(frequency_dict):
     :param frequency_dict: dictionary of documents mapped to pronoun frequencies
     :return: dictionary of years mapped to lists of pronoun frequencies
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
     >>> novel_metadata = {'date': '1818', 'filename': 'austen_persuasion.txt',
     ...                   'filepath': Path(TEST_CORPUS_PATH, 'austen_persuasion.txt')}
     >>> austen = document.Document(novel_metadata)

@@ -6,14 +6,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import nltk
 
-from gender_analysis.common import (
+from corpus_analysis.common import (
     load_graph_settings,
     MissingMetadataError,
     store_pickle,
     load_pickle,
-    HE_SERIES,
-    SHE_SERIES
 )
+from gender_analysis.common import HE_SERIES, SHE_SERIES
 
 
 ################################################################################
@@ -76,10 +75,10 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, target_word):
     :param corpus2: Corpus object
     :return: log likelihoods and p value
 
-    >>> from gender_analysis.corpus import Corpus
+    >>> from corpus_analysis.corpus import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
-    >>> from gender_analysis.testing.common import (
+    >>> from corpus_analysis.testing.common import (
     ...     TEST_CORPUS_PATH as FILEPATH2,
     ...     SMALL_TEST_CORPUS_CSV as PATH_TO_CSV
     ... )
@@ -200,8 +199,8 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
     :return: list of tuples (common word, (dunning value, m_corpus_count, f_corpus_count))
 
          >>> from gender_analysis.analysis.dunning import dunning_total_by_corpus
-         >>> from gender_analysis.corpus import Corpus
-         >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
+         >>> from corpus_analysis.corpus import Corpus
+         >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
          >>> c = Corpus(TEST_CORPUS_PATH, csv_path=SMALL_TEST_CORPUS_CSV, ignore_warnings = True)
          >>> test_m_corpus = c.filter_by_gender('male')
          >>> test_f_corpus = c.filter_by_gender('female')
