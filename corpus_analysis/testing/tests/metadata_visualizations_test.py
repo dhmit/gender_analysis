@@ -1,5 +1,5 @@
 import shutil
-from gender_analysis.analysis.metadata_visualizations import *
+from corpus_analysis.metadata_visualizations import *
 from corpus_analysis.corpus import Corpus
 from corpus_analysis.testing import common
 import filecmp

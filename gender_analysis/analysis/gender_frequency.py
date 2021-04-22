@@ -4,7 +4,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 import nltk
-from gender_analysis import common
+from corpus_analysis.common import download_nltk_package_if_not_present, store_pickle
 
 
 def get_count_words(document, words):
@@ -92,7 +92,7 @@ def get_counts_by_pos(freqs):
     {'RB': Counter({'quietly': 42, 'usually': 7})}
 
     """
-    common.download_nltk_package_if_not_present('corpora/stopwords')
+    download_nltk_package_if_not_present('corpora/stopwords')
 
     sorted_words = {}
     # for each word in the counter
@@ -258,7 +258,7 @@ def corpus_pronoun_freq(corp, genders, pickle_filepath=None):
         relative_freqs[doc] = comp_freq_dict
 
     if pickle_filepath:
-        common.store_pickle(relative_freqs, pickle_filepath)
+        store_pickle(relative_freqs, pickle_filepath)
 
     return relative_freqs
 
@@ -318,7 +318,7 @@ def corpus_subject_object_freq(corp, genders, pickle_filepath=None):
     if pickle_filepath:
         for gender in genders:
             gender_path = Path.join(pickle_filepath, gender.label)
-            common.store_pickle(relative_freq, gender_path)
+            store_pickle(relative_freq, gender_path)
 
     return relative_freq
 
