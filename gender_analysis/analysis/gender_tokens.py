@@ -2,9 +2,10 @@ from collections import Counter, UserDict
 from more_itertools import windowed
 import nltk
 
-from gender_analysis.corpus import Corpus
-from gender_analysis.document import Document
-from gender_analysis.common import load_pickle, store_pickle, MALE, FEMALE, BINARY_GROUP, SWORDS_ENG
+from corpus_analysis.corpus import Corpus
+from corpus_analysis.document import Document
+from corpus_analysis.common import load_pickle, store_pickle
+from gender_analysis.common import MALE, FEMALE, BINARY_GROUP, SWORDS_ENG
 from gender_analysis.gender import Gender
 
 
@@ -39,8 +40,8 @@ class GenderTokenAnalysis(UserDict):
         :param remove_swords: if sort=True, remove stop words from results.
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
                  { str(Gender.label): [(str(token), int)] }
-        >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from corpus_analysis.corpus import Corpus
+        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analysis = generate_adjective_analysis(corpus)
         >>> list(analysis.by_date((2000, 2008), 2).keys()) == [2000, 2002, 2004, 2006]
@@ -105,8 +106,8 @@ class GenderTokenAnalysis(UserDict):
         :param limit: if sort=True, restrict output to top occurrences sorted.
         :param remove_swords: if sort=True, remove stop words from results.
         :return: a dictionary of the shape { str(Gender.label): [ ( str(token), int ) ] }
-        >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from corpus_analysis.corpus import Corpus
+        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analysis = generate_adjective_analysis(corpus)
         >>> analysis.by_differences().keys() == analysis.keys()
@@ -144,8 +145,8 @@ class GenderTokenAnalysis(UserDict):
         :param remove_swords: if sort=True, remove stop words from results.
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
                  { str(Gender.label): [(str(token), int)] }
-        >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from corpus_analysis.corpus import Corpus
+        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analysis = generate_adjective_analysis(corpus)
         >>> list(analysis.by_gender().keys()) == ['Female', 'Male']
@@ -196,8 +197,8 @@ class GenderTokenAnalysis(UserDict):
         :param limit: if sort=True, restrict output to top occurrences sorted.
         :param remove_swords: if sorted=True, remove stop words from results.
         :return: a dictionary of the shape { Gender: { str: int } } or { Gender: [(str, int)] }
-        >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from corpus_analysis.corpus import Corpus
+        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analysis = generate_adjective_analysis(corpus)
         >>> list(analysis.by_metadata('author_gender').keys()) == ['male', 'female']
@@ -252,8 +253,8 @@ class GenderTokenAnalysis(UserDict):
         across all genders and their occurrences sorted.
 
         :return: { str: [gender1, gender2, ...] }
-        >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from corpus_analysis.corpus import Corpus
+        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analysis = generate_adjective_analysis(corpus)
         >>> list(analysis.by_overlap().keys()) == ['sad']
@@ -290,8 +291,8 @@ class GenderTokenAnalysis(UserDict):
         :param limit: restrict output to top occurrences sorted.
         :param remove_swords: remove stop words from results.
         :return: a dictionary of the shape { Gender: { str: int } } or { Gender: [(str, int)] }
-        >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from corpus_analysis.corpus import Corpus
+        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analysis = generate_adjective_analysis(corpus)
         >>> list(analysis.by_sorted().keys()) == corpus.documents
@@ -328,8 +329,8 @@ class GenderTokenAnalysis(UserDict):
         :param limit: restrict output to top occurrences sorted.
         :param remove_swords: remove stop words from results.
         :return: a dictionary of the shape { Gender: { str: int } } or { Gender: [(str, int)] }
-        >>> from gender_analysis.corpus import Corpus
-        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from corpus_analysis.corpus import Corpus
+        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analysis = generate_adjective_analysis(corpus)
         >>> analysis.get_document('test_text_9')
@@ -381,8 +382,8 @@ def _generate_token_frequencies(document,
     :param genders_to_exclude: a list containing instances of the Gender class
     :return: an instance of a dict of the shape { str: int }
 
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> from gender_analysis.common import MALE, FEMALE
     >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
     >>> doc = corpus.documents[0]
@@ -435,8 +436,8 @@ def _generate_gender_token_frequencies(document, genders, tokens, word_window=5)
     :param word_window: number of words to search for in either direction of a Gender instance
     :return: an instance of a dict of the shape { GENDER: { str: int } }
 
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> from gender_analysis.common import BINARY_GROUP
     >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
     >>> doc = corpus.documents[0]
@@ -587,8 +588,8 @@ def generate_analysis(texts, tokens, genders=None):
     :param genders: list of Gender instances.
     :return: a dict of subclass GenderTokenAnalysis
 
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
     >>> doc = corpus.documents[0]
     >>> analysis1 = generate_analysis(corpus, ['NN'])
@@ -660,8 +661,8 @@ def generate_adjective_analysis(texts, genders=None):
     :param genders: list of Gender instances.
     :return: a dict of subclass GenderTokenAnalysis
 
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
     >>> analysis = generate_adjective_analysis(corpus)
     >>> isinstance(analysis, GenderTokenAnalysis)
@@ -680,8 +681,8 @@ def generate_noun_analysis(texts, genders=None):
     :param genders: list of Gender instances.
     :return: a dict of subclass GenderTokenAnalysis
 
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
+    >>> from corpus_analysis.corpus import Corpus
+    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, TINY_TEST_CORPUS_CSV
     >>> corpus = Corpus(TEST_CORPUS_PATH, csv_path=TINY_TEST_CORPUS_CSV, ignore_warnings=True)
     >>> analysis = generate_noun_analysis(corpus)
     >>> isinstance(analysis, GenderTokenAnalysis)
