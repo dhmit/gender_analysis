@@ -1,7 +1,7 @@
 import shutil
-from gender_analysis.analysis.metadata_visualizations import *
-from gender_analysis.corpus import Corpus
-from gender_analysis.testing import common
+from corpus_analysis.metadata_visualizations import *
+from corpus_analysis.corpus import Corpus
+from corpus_analysis.testing import common
 import filecmp
 
 OUTPUT_DIRECTORY_PATH = common.BASE_PATH / "testing" / "test_files" / "visualizations_test_dir"

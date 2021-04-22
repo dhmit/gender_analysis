@@ -1,7 +1,7 @@
 import pytest
 
-from gender_analysis.corpus import Document
-from gender_analysis.testing import common
+from corpus_analysis.document import Document
+from corpus_analysis.testing import common
 import csv
 
 

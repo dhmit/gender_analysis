@@ -7,7 +7,7 @@ from gutenberg_cleaner import simple_cleaner
 from more_itertools import windowed
 import nltk
 
-from gender_analysis import common
+from corpus_analysis import common
 
 
 class Document:
@@ -17,7 +17,7 @@ class Document:
 
     :param metadata_dict: Dictionary with metadata fields as keys and data as values
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis import document
     >>> from pathlib import Path
     >>> from gender_analysis import common
     >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
@@ -86,7 +86,7 @@ class Document:
 
         :return: Number of words in the document's text as an int
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
@@ -109,7 +109,7 @@ class Document:
         Returns the filename without the extension - author and title word
         :return: str
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
@@ -132,7 +132,7 @@ class Document:
 
         :return: string
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
@@ -152,7 +152,7 @@ class Document:
         Overload the equality operator to enable comparing and sorting documents.
         Returns True if the document filenames and text are the same.
 
-        >>> from gender_analysis.document import Document
+        >>> from corpus_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
@@ -195,7 +195,7 @@ class Document:
 
         If these are not available, it sorts by filenames.
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
@@ -238,7 +238,7 @@ class Document:
         Scans through the text and replaces all of the smart quotes and apostrophes with their
         "normal" ASCII variants
 
-        >>> from gender_analysis.document import Document
+        >>> from corpus_analysis.document import Document
         >>> smart_text = 'This is a “smart” phrase'
         >>> Document._clean_quotes(smart_text)
         'This is a "smart" phrase'
@@ -311,7 +311,7 @@ class Document:
 
         :return: List of each word in the Document
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
@@ -346,7 +346,7 @@ class Document:
 
         :return: List of strings enclosed in double-quotations
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
@@ -392,7 +392,7 @@ class Document:
         :param word: word to be counted in text
         :return: Number of occurences of the word, as an int
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -421,7 +421,7 @@ class Document:
 
         :return: Python Counter object
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -451,7 +451,7 @@ class Document:
         :param word: Single word to search for in the document's text
         :return: a Python Counter() object with {associated_word: occurrences}
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -489,7 +489,7 @@ class Document:
         :param window_size: integer representing number of words to search for in either direction
         :return: Python Counter object
 
-        >>> from gender_analysis.document import Document
+        >>> from corpus_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -532,7 +532,7 @@ class Document:
         :param word: str to search for in document
         :return: float representing the portion of words in the text that are the parameter word
 
-        >>> from gender_analysis import document
+        >>> from corpus_analysis import document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -558,7 +558,7 @@ class Document:
 
         :return: List of tuples (term, speech_tag)
 
-        >>> from gender_analysis.document import Document
+        >>> from corpus_analysis.document import Document
         >>> from pathlib import Path
         >>> from gender_analysis import common
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
@@ -592,8 +592,8 @@ class Document:
 
         This can be used to correct mistakes in the metadata:
 
-        >>> from gender_analysis.document import Document
-        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
+        >>> from corpus_analysis.document import Document
+        >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
         >>> from pathlib import Path
         >>> metadata = {'filename': 'aanrud_longfrock.txt',
         ...             'filepath': Path(TEST_CORPUS_PATH, 'aanrud_longfrock.txt'),

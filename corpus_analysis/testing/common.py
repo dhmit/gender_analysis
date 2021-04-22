@@ -1,5 +1,5 @@
 from pathlib import Path
-from gender_analysis.common import BASE_PATH
+from corpus_analysis.common import BASE_PATH
 
 TEST_DATA_DIR = Path(BASE_PATH, 'testing', 'test_data')
 
