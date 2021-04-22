@@ -50,5 +50,5 @@ class TestDocumentInitialization:
             with open(common.SMALL_TEST_CORPUS_CSV, newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
-                    row["date"] = "738"
+                    row["date"] = "foobar"
                     d = Document(row)
