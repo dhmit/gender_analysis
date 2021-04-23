@@ -41,7 +41,7 @@ re-initialize our corpus with a second parameter, csv_path, that points to it:
 
 .. code-block:: python
 
-    >>> from gender_analysis.testing.common import LARGE_TEST_CORPUS_CSV
+    >>> from corpus_analysis.testing.common import LARGE_TEST_CORPUS_CSV
     >>> meta_corpus = Corpus(TEST_CORPUS_PATH, csv_path = LARGE_TEST_CORPUS_CSV)
     >>> len(meta_corpus)
     99
@@ -71,7 +71,7 @@ words in the document, and :ref:`words_associated <words-associated>` to see wha
 
 .. code-block:: python
 
-    >>> from gender_analysis import document
+    >>> from corpus_analysis.document import Document
     >>> dracula.get_count_of_word('sleep')
     179
     >>> dracula.get_word_freq('sleep')
@@ -284,7 +284,7 @@ These dictionaries are a bit hard to handle, but we can print out some reasonabl
 .. code-block:: python
 
     >>> for gender in merged_results:
-    >>> 	print(gender, ":", display_gender_adjectives(merged_results[gender])
+    >>> 	print(gender, ":", display_gender_adjectives(merged_results[gender]))
     Male : [('little', 480), ('good', 336), ('much', 240), ('great', 211), ('old', 193), ('young', 156), ('best', 150), ('first', 145), ('last', 136), ('many', 125)]
     Female : [('little', 673), ('good', 302), ('much', 284), ('great', 203), ('first', 201), ('old', 172), ('last', 171), ('young', 144), ('happy', 142), ('many', 137)]
 
@@ -379,6 +379,7 @@ Here's an example using the Xe series:
 
 .. code-block:: python
 
+    >>> from gender_analysis.pronouns import PronounSeries
     >>> xe_pronouns = {'xe', 'xem', 'xyr', 'xyrs', 'xemself'}
     >>> xe_series = PronounSeries('Xe', xe_pronouns, 'xe', 'xem')
 
@@ -448,6 +449,7 @@ We can create a new agender ``Gender`` object as follows, using the ``xe_series`
 
 .. code-block:: python
 
+    >>> from gender_analysis.gender import Gender
     >>> agender = Gender('Agender', xe_series)
 
 And that’s it! You’ve now defined a new ``Gender`` object, and you can plug this into any of the functions just as you
@@ -461,7 +463,7 @@ could do so as follows:
 
 .. code-block:: python
 
-    >>> agneder_names = ['Taylor', 'Alex', 'Jessie']
+    >>> agender_names = ['Taylor', 'Alex', 'Jessie']
     >>> agender = Gender('Agender', xe_series, agender_names)
 
 An additional thing of note is that not all people that identify as agender use the “xe” pronoun series. Some use
