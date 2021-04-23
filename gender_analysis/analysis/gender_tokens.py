@@ -487,9 +487,10 @@ class GenderTokenAnalysis(UserDict):
 
         if len(diff) == 1:
             sole_document = list(diff)[0]
-            return diff[sole_document]
-        else:
-            return diff
+            diff = diff[sole_document]
+
+        self._by_differences[hashed_arguments] = diff
+        return diff
 
     def by_gender(self, sort=False, diff=False, limit=10, remove_swords=False):
         """
@@ -698,9 +699,10 @@ class GenderTokenAnalysis(UserDict):
 
         if len(output) == 1:
             sole_document = list(output)[0]
-            return output[sole_document]
-        else:
-            return output
+            output = output[sole_document]
+
+        self._by_sorted[hashed_arguments] = output
+        return output
 
     def store(self, pickle_filepath='gender_tokens_analysis.pgz'):
         """
