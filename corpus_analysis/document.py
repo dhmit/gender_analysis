@@ -53,10 +53,10 @@ class Document:
             setattr(self, str(key), metadata_dict[key])
 
         # optional attributes
-        # Check that the date is a year (4 consecutive integers)
+        # Check that the date is a year (where negative represent the BCE year)
         if 'date' in metadata_dict:
-            if not re.match(r'^\d{4}$', metadata_dict['date']):
-                raise ValueError('The document date should be a year (4 integers), not',
+            if not re.match(r'^[-]?\d+$', metadata_dict['date']):
+                raise ValueError('The document date should be a year, not',
                                  f'{metadata_dict["date"]}. Full metadata: {metadata_dict}')
 
         try:
