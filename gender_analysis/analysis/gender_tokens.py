@@ -303,11 +303,17 @@ class GenderTokenAnalysis(UserDict):
         >>> from corpus_analysis.corpus import Corpus
         >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> document = corpus.documents[-1]
-        >>> analysis = GenderTokenAnalysis(corpus)
-        >>> list(analysis.keys()) == corpus.documents
+        >>> doc = corpus.documents[-1]
+        >>> analysis_1 = GenderTokenAnalysis(corpus)
+        >>> analysis_2 = GenderTokenAnalysis(doc)
+        >>> analysis_3 = GenderTokenAnalysis([doc])
+        >>> list(analysis_1.keys()) == corpus.documents
         True
-        >>> analysis.get(document).get('Female').get('beautiful')
+        >>> analysis_1.get(doc).get('Female').get('beautiful')
+        3
+        >>> analysis_2.get(doc).get('Female').get('beautiful')
+        3
+        >>> analysis_3.get(doc).get('Female').get('beautiful')
         3
         """
 
@@ -382,6 +388,8 @@ class GenderTokenAnalysis(UserDict):
         7
         >>> analysis.by_date((2000, 2010), 2, sort=True).get(2002).get('Female')[0]
         ('sad', 7)
+        >>> analysis.by_date((2000, 2010), 2, diff=True).get(2002).get('Female')
+        {'sad': 7, 'died': 1}
         """
 
         hashed_arguments = ''.join([
@@ -553,8 +561,12 @@ class GenderTokenAnalysis(UserDict):
         True
         >>> analysis.by_metadata('author_gender').get('female').get('Female').get('sad')
         7
-        >>> analysis.by_metadata('author_gender', sort=True).get('female').get('Female')[0]
-        ('sad', 7)
+        >>> analysis.by_metadata('author_gender', sort=True).get('female').get('Female')
+        [('sad', 7)]
+        >>> analysis.by_metadata('author_gender', sort=True).get('female').get('Male')
+        [('sad', 12), ('deep', 1)]
+        >>> analysis.by_metadata('author_gender', diff=True).get('female').get('Female')
+        {'sad': -5}
         """
 
         hashed_arguments = f"{str(metadata_key)}{str(sort)}{str(diff)}{str(limit)}{remove_swords}"
@@ -688,10 +700,20 @@ class GenderTokenAnalysis(UserDict):
         >>> from corpus_analysis.corpus import Corpus
         >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> doc = corpus.documents[-1]
-        >>> analysis = GenderTokenAnalysis(corpus)
-        >>> analysis.get_document(doc)
-        {'Female': {'beautiful': 3, 'sad': 1}, 'Male': {}}
+        >>> doc = corpus.documents[4]
+        >>> analysis = GenderTokenAnalysis(doc, tokens=['NN'], word_window=6)
+        >>> analysis.get_document(doc).get('Male')
+        {'purse': 1, 'cigarette': 3, 'drag': 2, 'speech': 1, 'proposal': 1}
+        >>> analysis.get_document(doc, sort=True).get('Male')
+        [('cigarette', 3), ('drag', 2), ('purse', 1), ('speech', 1), ('proposal', 1)]
+        >>> analysis.get_document(doc, sort=True).get('Female')
+        [('lighter', 1), ('purse', 1)]
+        >>> analysis.get_document(doc, diff=True).get('Female')
+        {'lighter': 1, 'purse': 0}
+        >>> analysis.get_document(doc, diff=True).get('Male')
+        {'purse': 0, 'cigarette': 3, 'drag': 2, 'speech': 1, 'proposal': 1}
+        >>> analysis.get_document(doc, diff=True, sort=True).get('Male')
+        [('cigarette', 3), ('drag', 2), ('speech', 1), ('proposal', 1), ('purse', 0)]
         """
 
         if document in self:
