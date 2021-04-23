@@ -455,12 +455,15 @@ class GenderTokenAnalysis(UserDict):
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> document = corpus.documents[-1]
         >>> analysis = GenderTokenAnalysis(corpus)
+        >>> doc_analysis = GenderTokenAnalysis(corpus.documents[4])
         >>> analysis.by_differences().keys() == analysis.keys()
         True
         >>> analysis.by_differences().get(document).get('Female')
         {'beautiful': 3, 'sad': 1}
         >>> analysis.by_differences(sort=True).get(document).get('Female')
         [('beautiful', 3), ('sad', 1)]
+        >>> doc_analysis.by_differences()
+        {'Female': {}, 'Male': {'deep': 1}}
         """
 
         hashed_arguments = f"{str(sort)}{str(limit)}{remove_swords}"
@@ -481,7 +484,12 @@ class GenderTokenAnalysis(UserDict):
                                                             remove_swords=remove_swords)
 
         self._by_differences[hashed_arguments] = diff
-        return self._by_differences[hashed_arguments]
+
+        if len(diff) == 1:
+            sole_document = list(diff)[0]
+            return diff[sole_document]
+        else:
+            return diff
 
     def by_gender(self, sort=False, diff=False, limit=10, remove_swords=False):
         """
@@ -659,12 +667,15 @@ class GenderTokenAnalysis(UserDict):
         >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> doc = corpus.documents[-1]
         >>> analysis = GenderTokenAnalysis(corpus)
+        >>> doc_analysis = GenderTokenAnalysis(corpus.documents[4])
         >>> list(analysis.by_sorted().keys()) == corpus.documents
         True
         >>> analysis.by_sorted().get(doc).get('Female')
         [('beautiful', 3), ('sad', 1)]
         >>> analysis.by_sorted(limit=1).get(doc).get('Female')
         [('beautiful', 3)]
+        >>> doc_analysis.by_differences()
+        {'Female': {}, 'Male': {'deep': 1}}
         """
 
         hashed_arguments = f"{str(limit)}{remove_swords}"
@@ -684,52 +695,12 @@ class GenderTokenAnalysis(UserDict):
                                                               remove_swords=remove_swords)
 
         self._by_sorted[hashed_arguments] = output
-        return self._by_sorted[hashed_arguments]
 
-    def get_document(self, document, sort=False, diff=False, limit=10, remove_swords=False):
-        """
-        Returns a dict of the shape {Gender.label: {str: int, ...}, ...}.
-
-        :param document: an instance of the Document class.
-        :param sort: boolean, return results in a sorted list.
-        :param diff: boolean, return the differences between tokens between Genders.
-        :param limit: integer, number of occurrences to return if sorted.
-        :param remove_swords: boolean, remove stop words.
-        :return: a dictionary of the shape {Gender.label: {str: int, ...}, ...}.
-
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> doc = corpus.documents[4]
-        >>> analysis = GenderTokenAnalysis(doc, tokens=['NN'], word_window=6)
-        >>> analysis.get_document(doc).get('Male')
-        {'purse': 1, 'cigarette': 3, 'drag': 2, 'speech': 1, 'proposal': 1}
-        >>> analysis.get_document(doc, sort=True).get('Male')
-        [('cigarette', 3), ('drag', 2), ('purse', 1), ('speech', 1), ('proposal', 1)]
-        >>> analysis.get_document(doc, sort=True).get('Female')
-        [('lighter', 1), ('purse', 1)]
-        >>> analysis.get_document(doc, diff=True).get('Female')
-        {'lighter': 1, 'purse': 0}
-        >>> analysis.get_document(doc, diff=True).get('Male')
-        {'purse': 0, 'cigarette': 3, 'drag': 2, 'speech': 1, 'proposal': 1}
-        >>> analysis.get_document(doc, diff=True, sort=True).get('Male')
-        [('cigarette', 3), ('drag', 2), ('speech', 1), ('proposal', 1), ('purse', 0)]
-        """
-
-        if document in self:
-            output = self.get(document)
-            if diff:
-                output = _diff_gender_token_occurrences(output,
-                                                        limit=limit,
-                                                        sort=sort,
-                                                        remove_swords=remove_swords)
-            elif sort:
-                output = _sort_gender_token_occurrences(output,
-                                                        limit=limit,
-                                                        remove_swords=remove_swords)
-            return output
+        if len(output) == 1:
+            sole_document = list(output)[0]
+            return output[sole_document]
         else:
-            raise ValueError('Document not found')
+            return output
 
     def store(self, pickle_filepath='gender_tokens_analysis.pgz'):
         """
