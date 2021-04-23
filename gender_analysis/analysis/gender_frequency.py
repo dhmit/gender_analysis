@@ -227,6 +227,8 @@ def run_gender_freq(corpus, genders):
 
 def corpus_pronoun_freq(corp, genders, pickle_filepath=None):
     """
+    .. _corpus_pronoun_freq:
+
     Counts gendered identifiers for every document in a given corpus,
     and finds their relative frequencies
 
@@ -290,6 +292,8 @@ def doc_pronoun_freq(document, genders):
 
 def corpus_subject_object_freq(corp, genders, pickle_filepath=None):
     """
+    .. _corpus_subject_object_freq:
+
     Takes in a Corpus of novels and genders to look for.
     Returns a dictionary of dictionaries, one for each gender
     Each dictionary maps each Document in the corpus to the proportion of the pronouns
@@ -325,6 +329,8 @@ def corpus_subject_object_freq(corp, genders, pickle_filepath=None):
 
 def document_subject_object_freq(document, genders):
     """
+    .. _document_subject_object_freq:
+
     Takes in a Document and genders to look for.
     Returns a dictionary of dictionaries, one for each gender
     Each dictionary maps each gender to the proportion of the pronouns
@@ -360,6 +366,8 @@ def document_subject_object_freq(document, genders):
 
 def corpus_sub_pronouns_gender_comparison(corp, gender_to_include, genders_to_exclude):
     """
+    .. _corpus_sub_pronouns_gender_comparison:
+
     Takes in a Corpus of novels and a gender.
     The gender determines whether the male frequency or female frequency will be returned.
 

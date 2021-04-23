@@ -12,6 +12,8 @@ DEFAULT_VISUALIZATION_OUTPUT_DIR = Path.cwd() / 'gender_analysis_visualizations'
 
 def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
+    .. _plot_pubyears:
+
     Creates a histogram displaying the frequency of books that were published
     within a 20 year period.
 
@@ -69,6 +71,8 @@ def plot_pubyears(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=
 
 def plot_pubcountries(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
+    .. _plot_pubcountries:
+
     Creates a bar graph displaying the frequency of books that were published in each country.
 
     *NOTE:* Requires that corpus contains a 'country_publication' metadata field.
@@ -139,6 +143,8 @@ def plot_pubcountries(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filen
 
 def plot_gender_breakdown(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
+    .. _plot_gender_breakdown:
+
     Creates a pie chart displaying the composition of male and female writers in the data.
 
     *NOTE:* Requires that corpus contains a 'author_gender' metadata field.
@@ -197,6 +203,8 @@ def plot_gender_breakdown(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, f
 
 def plot_metadata_pie(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filename=None):
     """
+    .. _plot_metadata_pie:
+
     Creates a pie chart indicating the fraction of metadata that is filled in the corpus.
 
     *NOTE:* Requires that corpus contains 'author_gender' and 'country_publication' metadata fields.
@@ -254,6 +262,8 @@ def plot_metadata_pie(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR, filen
 
 def create_corpus_summary_visualizations(corpus, output_dir=DEFAULT_VISUALIZATION_OUTPUT_DIR):
     """
+    .. _create_corpus_summary_visualizations:
+
     Creates graphs and summarizes gender breakdowns, publishing years, countries of origin, and
     overall metadata completion of a given corpus.
 
