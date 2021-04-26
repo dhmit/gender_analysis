@@ -4,7 +4,9 @@ import nltk
 
 from corpus_analysis.corpus import Corpus
 from corpus_analysis.document import Document
+from corpus_analysis.analyzer import Analyzer
 from corpus_analysis.common import load_pickle, store_pickle
+
 from gender_analysis.common import MALE, FEMALE, BINARY_GROUP, SWORDS_ENG
 from gender_analysis.gender import Gender
 
@@ -281,7 +283,7 @@ def _sort_gender_token_occurrences(gender_token_frequencies, limit=10, remove_sw
     return output
 
 
-class GenderTokenAnalyzer:
+class GenderTokenAnalyzer(Analyzer):
     """
     # TODO: update this and other doctstrings as needed
     The GenderTokenAnalysis instance is a dictionary of the shape
@@ -324,17 +326,6 @@ class GenderTokenAnalyzer:
         if tokens is None:
             tokens = NLTK_ADJECTIVE_TOKENS
 
-        if isinstance(texts, Corpus):
-            sanitized_documents = texts.documents
-        elif isinstance(texts, Document):
-            sanitized_documents = [texts]
-        elif isinstance(texts, list):
-            if all(isinstance(item, Document) for item in texts):
-                sanitized_documents = texts
-            else:
-                raise ValueError('all items in list texts must be of type Document')
-        else:
-            raise ValueError('texts must be of type Document, Corpus, or a list of Documents')
 
         if not isinstance(tokens, list):
             raise ValueError('tokens must be a list of NLTK token strings')

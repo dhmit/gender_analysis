@@ -24,7 +24,7 @@ class Corpus:
                           or an already-pickled corpus
     :param name: Optional name of the corpus, for ease of use and readability
     :param csv_path: Optional path to a csv metadata file
-    :param pickle_on_load: Filepath to save a pickled copy of the corpus
+    :param pickle_path: Filepath to save a pickled copy of the corpus
 
     >>> from corpus_analysis.corpus import Corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
@@ -40,7 +40,7 @@ class Corpus:
         path_to_files,
         name=None,
         csv_path=None,
-        pickle_on_load=None,
+        pickle_path=None,
         ignore_warnings=False
     ):
         if isinstance(path_to_files, str):
@@ -57,8 +57,8 @@ class Corpus:
                                               csv_path,
                                               ignore_warnings=ignore_warnings)
 
-        if pickle_on_load is not None:
-            common.store_pickle(self, pickle_on_load)
+        if pickle_path is not None:
+            common.store_pickle(self, pickle_path)
 
     def _load_documents_and_metadata(self, path_to_files, csv_path, ignore_warnings=False):
         """
