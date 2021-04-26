@@ -281,8 +281,9 @@ def _sort_gender_token_occurrences(gender_token_frequencies, limit=10, remove_sw
     return output
 
 
-class GenderTokenAnalysis(UserDict):
+class GenderTokenAnalyzer:
     """
+    # TODO: update this and other doctstrings as needed
     The GenderTokenAnalysis instance is a dictionary of the shape
     {Document: {Gender.label: {str(token): int, ...}, ...}, ...},
     with custom helper methods for analyzing occurrences of specific words in a window around
@@ -351,20 +352,22 @@ class GenderTokenAnalysis(UserDict):
         self.word_window = word_window
         self._by_date = None
         self._by_differences = None
+        self._by_document = None
         self._by_gender = None
         self._by_metadata = None
         self._by_overlap = None
         self._by_sorted = None
 
-        analysis = {}
+        results = {}
 
         for document in self.documents:
-            analysis[document] = _generate_gender_token_occurrences(document,
-                                                                    genders,
-                                                                    tokens,
+            results[document] = _generate_gender_token_occurrences(document,
+                                                                   genders,
+                                                                   tokens,
                                                                     word_window=word_window)
 
-        super().__init__(analysis)
+        self._results = results
+        # super.__init__()
 
     def by_date(self, time_frame, bin_size, sort=False, diff=False, limit=10, remove_swords=False):
         """
@@ -422,7 +425,7 @@ class GenderTokenAnalysis(UserDict):
                 continue
             for gender_label in self.gender_labels:
                 data[bin_year][gender_label] = _merge_token_occurrences(
-                    [self[document][gender_label], data[bin_year][gender_label]]
+                    [self._results[document][gender_label], data[bin_year][gender_label]]
                 )
 
         if diff:
@@ -440,57 +443,46 @@ class GenderTokenAnalysis(UserDict):
         self._by_date[hashed_arguments] = data
         return self._by_date[hashed_arguments]
 
-    def by_differences(self, sort=False, limit=10, remove_swords=False):
-        """
-        Return results indicating the difference of token occurrences
-        across multiple Genders.
+    def by_document(self, sort=False, diff=False, limit=10, remove_swords=False):
+        hashed_arguments = ''.join([
+            str(sort),
+            str(diff),
+            str(limit),
+            str(remove_swords)
+        ])
 
-        :param sort: if True, return differences in a sorted list
-        :param limit: if sort=True, restrict output to top occurrences sorted.
-        :param remove_swords: if sort=True, remove stop words from results.
-        :return: a dictionary of the shape {Gender.label: {str: int, ...}, ...}
+        if self._by_document is None:
+            self._by_document = {}
+            self._by_document[hashed_arguments] = None
+        elif hashed_arguments in self._by_document:
+            return self._by_document[hashed_arguments]
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> document = corpus.documents[-1]
-        >>> analysis = GenderTokenAnalysis(corpus)
-        >>> doc_analysis = GenderTokenAnalysis(corpus.documents[4])
-        >>> analysis.by_differences().keys() == analysis.keys()
-        True
-        >>> analysis.by_differences().get(document).get('Female')
-        {'beautiful': 3, 'sad': 1}
-        >>> analysis.by_differences(sort=True).get(document).get('Female')
-        [('beautiful', 3), ('sad', 1)]
-        >>> doc_analysis.by_differences()
-        {'Female': {}, 'Male': {'deep': 1}}
-        """
+        output = {}
 
-        hashed_arguments = f"{str(sort)}{str(limit)}{remove_swords}"
+        if diff:
+            for document in self._results:
+                output[document] = {}
+                output[document] = _diff_gender_token_occurrences(self._results[document],
+                                                                  limit=limit,
+                                                                  sort=sort,
+                                                                  remove_swords=remove_swords)
+        elif sort:
+            output = {}
+            for document in self._results:
+                token_frequencies = self._results[document]
+                output[document] = {}
+                output[document] = _sort_gender_token_occurrences(token_frequencies,
+                                                                  limit=limit,
+                                                                  remove_swords=remove_swords)
+        else:
+            output = self._results
 
-        if self._by_differences is None:
-            self._by_differences = {}
-            self._by_differences[hashed_arguments] = None
-        elif hashed_arguments in self._by_differences:
-            return self._by_differences[hashed_arguments]
+        if len(output) == 1:
+            sole_document = list(output)[0]
+            output = output[sole_document]
 
-        diff = {}
-
-        for document in self:
-            diff[document] = {}
-            diff[document] = _diff_gender_token_occurrences(self[document],
-                                                            limit=limit,
-                                                            sort=sort,
-                                                            remove_swords=remove_swords)
-
-        self._by_differences[hashed_arguments] = diff
-
-        if len(diff) == 1:
-            sole_document = list(diff)[0]
-            diff = diff[sole_document]
-
-        self._by_differences[hashed_arguments] = diff
-        return diff
+        self._by_document[hashed_arguments] = output
+        return output
 
     def by_gender(self, sort=False, diff=False, limit=10, remove_swords=False):
         """
@@ -532,7 +524,7 @@ class GenderTokenAnalysis(UserDict):
 
         merged_results = {}
         for gender_label in self.gender_labels:
-            new_gender_token_frequencies = [self[document][gender_label] for document in self]
+            new_gender_token_frequencies = [self._results[document][gender_label] for document in self._results]
             merged_results[gender_label] = {}
             merged_results[gender_label] = _merge_token_occurrences(new_gender_token_frequencies)
 
@@ -599,7 +591,7 @@ class GenderTokenAnalysis(UserDict):
             for gender_label in self.gender_labels:
                 if gender_label not in data[metadata_attribute]:
                     data[metadata_attribute][gender_label] = []
-                data[metadata_attribute][gender_label].append(self[document][gender_label])
+                data[metadata_attribute][gender_label].append(self._results[document][gender_label])
 
         for key in data:
             for gender_label in self.gender_labels:
@@ -653,56 +645,6 @@ class GenderTokenAnalysis(UserDict):
 
         self._by_overlap = overlap_results
         return self._by_overlap
-
-    def by_sorted(self, limit=10, remove_swords=False):
-        # pylint: disable=too-many-nested-blocks
-        """
-        Returns a copy of self with token frequencies sorted.
-
-        :param limit: restrict output to top occurrences sorted.
-        :param remove_swords: remove stop words from results.
-        :return: a dictionary of the shape {Gender.label: {str: int, ...}, ...}.
-
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> doc = corpus.documents[-1]
-        >>> analysis = GenderTokenAnalysis(corpus)
-        >>> doc_analysis = GenderTokenAnalysis(corpus.documents[4])
-        >>> list(analysis.by_sorted().keys()) == corpus.documents
-        True
-        >>> analysis.by_sorted().get(doc).get('Female')
-        [('beautiful', 3), ('sad', 1)]
-        >>> analysis.by_sorted(limit=1).get(doc).get('Female')
-        [('beautiful', 3)]
-        >>> doc_analysis.by_differences()
-        {'Female': {}, 'Male': {'deep': 1}}
-        """
-
-        hashed_arguments = f"{str(limit)}{remove_swords}"
-
-        if self._by_sorted is None:
-            self._by_sorted = {}
-            self._by_sorted[hashed_arguments] = None
-        elif hashed_arguments in self._by_sorted:
-            return self._by_sorted[hashed_arguments]
-
-        output = {}
-        for document in self:
-            token_frequencies = self[document]
-            output[document] = {}
-            output[document] = _sort_gender_token_occurrences(token_frequencies,
-                                                              limit=limit,
-                                                              remove_swords=remove_swords)
-
-        self._by_sorted[hashed_arguments] = output
-
-        if len(output) == 1:
-            sole_document = list(output)[0]
-            output = output[sole_document]
-
-        self._by_sorted[hashed_arguments] = output
-        return output
 
     def store(self, pickle_filepath='gender_tokens_analysis.pgz'):
         """
