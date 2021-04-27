@@ -432,7 +432,7 @@ class GenderTokenAnalyzer(Analyzer):
                     sort: Optional[bool] = False,
                     diff: Optional[bool] = False,
                     limit: Optional[int] = 10,
-                    remove_swords: Optional[bool] = False) -> Dict[Document, GenderTokenResponse]:
+                    remove_swords: Optional[bool] = False) -> Dict[str, GenderTokenResponse]:
 
         """
         Return analysis organized by Document.
@@ -469,25 +469,19 @@ class GenderTokenAnalyzer(Analyzer):
 
         if diff:
             for document in self._results:
-                output[document] = {}
-                output[document] = _diff_gender_token_counters(self._results[document],
-                                                               limit=limit,
-                                                               sort=sort,
-                                                               remove_swords=remove_swords)
+                output[document.label] = _diff_gender_token_counters(self._results[document],
+                                                                     limit=limit,
+                                                                     sort=sort,
+                                                                     remove_swords=remove_swords)
         elif sort:
-            output = {}
             for document in self._results:
                 token_frequencies = self._results[document]
-                output[document] = {}
-                output[document] = _sort_gender_token_counters(token_frequencies,
-                                                               limit=limit,
-                                                               remove_swords=remove_swords)
+                output[document.label] = _sort_gender_token_counters(token_frequencies,
+                                                                     limit=limit,
+                                                                     remove_swords=remove_swords)
         else:
-            output = self._results
-
-        if len(output) == 1:
-            sole_document = list(output)[0]
-            output = output[sole_document]
+            for document in self._results:
+                output[document.label] = self._results[document]
 
         self._by_document[hashed_arguments] = output
         return output
@@ -650,51 +644,6 @@ class GenderTokenAnalyzer(Analyzer):
 
         self._by_overlap = overlap_results
         return self._by_overlap
-
-    def get_document(self,
-                     metadata_field_key,
-                     metadata_field_value,
-                     sort: Optional[bool] = False,
-                     diff: Optional[bool] = False,
-                     limit: Optional[int] = 10,
-                     remove_swords: Optional[bool] = False) -> GenderTokenResponse:
-
-        """
-        Retrieve a specific Document's analysis from the GenderTokenAnalyzer results,
-        with optional formatting arguments.
-
-        :param metadata_field_key: a string.
-        :param metadata_field_value: a string.
-        :param sort: Optional[bool], return Dict[str, Sequence[Tuple[str, int]]]
-        :param diff: return the differences between genders.
-        :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
-        :param remove_swords: Optional[bool], remove stop words from return
-        :return: a dictionary of the shape {Gender.label: {str: int , ...}, ...}.
-
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> analyzer = GenderTokenAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer.get_document('title', 'Title 7')
-        {'Female': Counter(), 'Male': Counter({'handsome': 3, 'sad': 1})}
-        """
-
-        document = self.corpus.get_document(metadata_field_key, metadata_field_value)
-
-        if document is not None:
-            gender_token_counters = self.by_document().get(document)
-            if gender_token_counters is not None:
-                if diff:
-                    return _diff_gender_token_counters(gender_token_counters,
-                                                       limit=limit,
-                                                       sort=sort,
-                                                       remove_swords=remove_swords)
-                elif sort:
-                    return _sort_gender_token_counters(gender_token_counters,
-                                                       limit=limit,
-                                                       remove_swords=remove_swords)
-                else:
-                    return gender_token_counters
-
-        return None
 
     def store(self, pickle_filepath: Optional[str] = 'gender_tokens_analysis.pgz') -> None:
         """
