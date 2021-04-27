@@ -1,6 +1,8 @@
 from typing import Optional
+from collections import Counter
 from .corpus import Corpus
 
+from gender_analysis.common import SWORDS_ENG
 
 class Analyzer:
     """
@@ -33,3 +35,31 @@ class Analyzer:
                 pickle_path=pickle_path,
                 ignore_warnings=ignore_warnings,
             )
+
+    def get_word_count(self, remove_swords: bool = False) -> Counter:
+        """
+        This function returns a Counter object that stores
+        how many times each word appears in the corpus.
+
+        :return: Python Counter object
+
+        >>> from corpus_analysis.corpus import Corpus
+        >>> from corpus_analysis.testing.common import (
+        ...     TEST_CORPUS_PATH as path,
+        ...     SMALL_TEST_CORPUS_CSV as path_to_csv
+        ... )
+        >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
+        >>> word_count = c.get_wordcount_counter()
+        >>> word_count['fire']
+        157
+
+        """
+        corpus_counter = Counter()
+        for document in self.corpus:
+            document_counter = document.get_wordcount_counter()
+            corpus_counter += document_counter
+        if remove_swords:
+            for word in list(corpus_counter):
+                if word in SWORDS_ENG:
+                    del corpus_counter[word]
+        return corpus_counter

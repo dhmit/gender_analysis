@@ -330,30 +330,6 @@ class Corpus:
 
         return self.subcorpus('author_gender', gender)
 
-    def get_wordcount_counter(self):
-        """
-        This function returns a Counter object that stores
-        how many times each word appears in the corpus.
-
-        :return: Python Counter object
-
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
-        ...     TEST_CORPUS_PATH as path,
-        ...     SMALL_TEST_CORPUS_CSV as path_to_csv
-        ... )
-        >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
-        >>> word_count = c.get_wordcount_counter()
-        >>> word_count['fire']
-        157
-
-        """
-        corpus_counter = Counter()
-        for current_document in self.documents:
-            document_counter = current_document.get_wordcount_counter()
-            corpus_counter += document_counter
-        return corpus_counter
-
     def get_field_vals(self, field):
         """
         This function returns a sorted list of the values present
