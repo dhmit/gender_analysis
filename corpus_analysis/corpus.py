@@ -24,7 +24,7 @@ class Corpus:
                           or an already-pickled corpus
     :param name: Optional name of the corpus, for ease of use and readability
     :param csv_path: Optional path to a csv metadata file
-    :param pickle_on_load: Filepath to save a pickled copy of the corpus
+    :param pickle_path: Filepath to save a pickled copy of the corpus
 
     >>> from corpus_analysis.corpus import Corpus
     >>> from gender_analysis.common import TEST_DATA_PATH
@@ -40,7 +40,7 @@ class Corpus:
         path_to_files,
         name=None,
         csv_path=None,
-        pickle_on_load=None,
+        pickle_path=None,
         ignore_warnings=False
     ):
         if isinstance(path_to_files, str):
@@ -57,8 +57,8 @@ class Corpus:
                                               csv_path,
                                               ignore_warnings=ignore_warnings)
 
-        if pickle_on_load is not None:
-            common.store_pickle(self, pickle_on_load)
+        if pickle_path is not None:
+            common.store_pickle(self, pickle_path)
 
     def _load_documents_and_metadata(self, path_to_files, csv_path, ignore_warnings=False):
         """
@@ -329,30 +329,6 @@ class Corpus:
         """
 
         return self.subcorpus('author_gender', gender)
-
-    def get_wordcount_counter(self):
-        """
-        This function returns a Counter object that stores
-        how many times each word appears in the corpus.
-
-        :return: Python Counter object
-
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
-        ...     TEST_CORPUS_PATH as path,
-        ...     SMALL_TEST_CORPUS_CSV as path_to_csv
-        ... )
-        >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
-        >>> word_count = c.get_wordcount_counter()
-        >>> word_count['fire']
-        157
-
-        """
-        corpus_counter = Counter()
-        for current_document in self.documents:
-            document_counter = current_document.get_wordcount_counter()
-            corpus_counter += document_counter
-        return corpus_counter
 
     def get_field_vals(self, field):
         """
