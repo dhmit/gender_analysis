@@ -11,7 +11,6 @@ from corpus_analysis.common import load_pickle, store_pickle, NLTK_TAGS, NLTK_TA
 from gender_analysis.common import MALE, FEMALE, BINARY_GROUP, SWORDS_ENG
 from gender_analysis.gender import Gender
 
-
 GenderTokenCounters = Dict[str, Counter]
 GenderTokenSequence = Dict[str, Sequence[Tuple[str, int]]]
 GenderTokenResponse = Union[GenderTokenCounters, GenderTokenSequence]
@@ -123,20 +122,19 @@ def _generate_token_counter(document: Document,
             identifiers_to_exclude.append(identifier)
 
     for words in windowed(text, 2 * word_window + 1):
-        if not words[word_window].lower() in identifiers_to_find:
-            continue
-        if bool(set(words) & set(identifiers_to_exclude)):
-            continue
+        if words[word_window].lower() in identifiers_to_find:
+            if bool(set(words) & set(identifiers_to_exclude)):
+                continue
 
-        words = list(words)
-        for index, word in enumerate(words):
-            words[index] = word.lower()
+            words = list(words)
+            for index, word in enumerate(words):
+                words[index] = word.lower()
 
-        tagged_tokens = nltk.pos_tag(words)
-        for tag_index, _ in enumerate(tagged_tokens):
-            if tagged_tokens[tag_index][1] in tags:
-                word = words[tag_index]
-                output[word] += 1
+            tagged_tokens = nltk.pos_tag(words)
+            for tag_index, _ in enumerate(tagged_tokens):
+                if tagged_tokens[tag_index][1] in tags:
+                    word = words[tag_index]
+                    output[word] += 1
 
     return output
 
@@ -200,7 +198,7 @@ def _merge_token_counters(token_counters: Sequence[Counter]) -> Counter:
     A private helper function for combining multiple dictionaries of the shape token_frequency
     into a single token_frequency.
 
-    :param token_frequencies: a list of the shape [{str: int, ...}, ...]
+    :param token_counters: a list of the shape [{str: int, ...}, ...]
     :return: a dictionary of the same shape as the above, with all key: value pairs merged.
 
     >>> test_1 = Counter({'good': 1, 'bad': 1, 'ugly': 1})
@@ -216,7 +214,7 @@ def _merge_token_counters(token_counters: Sequence[Counter]) -> Counter:
 
 def _sort_gender_token_counters(gender_token_counters: GenderTokenCounters,
                                 limit: int = 10,
-                                remove_swords: bool = False) -> GenderTokenCounters:
+                                remove_swords: bool = False) -> GenderTokenSequence:
     """
     A private helper function for transforming a dictionary of token instances keyed by
     Gender.label into a sorted list of tuples.
@@ -251,7 +249,7 @@ def _sort_gender_token_counters(gender_token_counters: GenderTokenCounters,
 
 def _sort_token_counter(token_counter: Counter,
                         limit: Optional[int] = None,
-                        remove_swords: bool = False) -> Counter:
+                        remove_swords: bool = False) -> Sequence[Tuple[str, int]]:
     """
     A private helper function for grabbing the most common occurrences in a Counter
     with stop words optionally removed.
@@ -282,7 +280,7 @@ def _sort_token_counter(token_counter: Counter,
 
 def find_in_document_gender(document: Document,
                             gender: Gender,
-                            tags: Sequence[str] = NLTK_TAGS_ADJECTIVES,
+                            tags: Sequence[str] = None,
                             word_window: int = 5,
                             genders_to_exclude: Optional[Sequence[Gender]] = None) -> Counter:
     """
@@ -305,6 +303,9 @@ def find_in_document_gender(document: Document,
     Counter({'sad': 1})
     """
 
+    if tags is None:
+        tags = NLTK_TAGS_ADJECTIVES
+
     return _generate_token_counter(document,
                                    gender,
                                    word_window,
@@ -313,7 +314,7 @@ def find_in_document_gender(document: Document,
 
 
 def find_in_document_female(document: Document,
-                            tags: Sequence[str] = NLTK_TAGS_ADJECTIVES,
+                            tags: Sequence[str] = None,
                             word_window: int = 5) -> Counter:
     """
     Returns a Counter of words and occurrences found within a window of FEMALE identifiers.
@@ -331,6 +332,10 @@ def find_in_document_female(document: Document,
     >>> find_in_document_female(doc)
     Counter({'sad': 1})
     """
+
+    if tags is None:
+        tags = NLTK_TAGS_ADJECTIVES
+
     return _generate_token_counter(document,
                                    FEMALE,
                                    word_window,
@@ -339,7 +344,7 @@ def find_in_document_female(document: Document,
 
 
 def find_in_document_male(document: Document,
-                          tags: Sequence[str] = NLTK_TAGS_ADJECTIVES,
+                          tags: Sequence[str] = None,
                           word_window: int = 5) -> Counter:
     """
     Returns a Counter of words and occurrences found within a window of MALE identifiers.
@@ -357,6 +362,9 @@ def find_in_document_male(document: Document,
     >>> find_in_document_male(doc)
     Counter({'deep': 1})
     """
+
+    if tags is None:
+        tags = NLTK_TAGS_ADJECTIVES
 
     return _generate_token_counter(document,
                                    MALE,
@@ -449,7 +457,8 @@ class GenderProximityAnalyzer:
         :return: None
         """
 
-        [print(f'{tag}: {definition}') for tag, definition in NLTK_TAGS.items()]
+        for tag, definition in NLTK_TAGS.items():
+            print(f'{tag}: {definition}')
 
     def by_date(self,
                 time_frame: Tuple[int, int],
@@ -465,7 +474,7 @@ class GenderProximityAnalyzer:
         :param bin_size: int for the number of years represented in each list of frequencies
         :param sort: Optional[bool], return Dict[int, Sequence[Tuple[str, int]]]
         :param diff: return the differences between genders.
-        :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
+        :param limit: Optional[int], if sort=True, return n=limit number of items in desc order.
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
                  { str(Gender.label): [(str(token), int)] }
@@ -525,7 +534,7 @@ class GenderProximityAnalyzer:
 
         :param sort: Optional[bool], return Dict[int, Sequence[Tuple[str, int]]]
         :param diff: return the differences between genders.
-        :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
+        :param limit: Optional[int], if sort=True, return n=limit number of items in desc order.
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
                  { str(Gender.label): [(str(token), int)] }
@@ -535,7 +544,7 @@ class GenderProximityAnalyzer:
         >>> analyzer = GenderProximityAnalyzer(corpus)
         >>> doc = analyzer.documents[7]
         >>> analyzer_document_labels = list(analyzer.by_document().keys())
-        >>> document_labels = list(map(lambda doc: doc.label, analyzer.documents))
+        >>> document_labels = list(map(lambda d: d.label, analyzer.documents))
         >>> analyzer_document_labels == document_labels
         True
         >>> analyzer.by_document().get(doc.label)
@@ -573,7 +582,7 @@ class GenderProximityAnalyzer:
 
         :param sort: Optional[bool], return Dict[str, Sequence[Tuple[str, int]]]
         :param diff: return the differences between genders.
-        :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
+        :param limit: Optional[int], if sort=True, return n=limit number of items in desc order.
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape {Gender.label: {str: int, ...}, ...}
 
@@ -596,8 +605,7 @@ class GenderProximityAnalyzer:
         hashed_arguments = f"{str(sort)}{str(diff)}{str(limit)}{remove_swords}"
 
         if self._by_gender is None:
-            self._by_gender = {}
-            self._by_gender[hashed_arguments] = None
+            self._by_gender = {hashed_arguments: None}
         elif hashed_arguments in self._by_gender:
             return self._by_gender[hashed_arguments]
 
@@ -637,7 +645,7 @@ class GenderProximityAnalyzer:
         :param metadata_key: a string.
         :param sort: Optional[bool], return Dict[str, Sequence[Tuple[str, int]]]
         :param diff: return the differences between genders.
-        :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
+        :param limit: Optional[int], if sort=True, return n=limit number of items in desc order.
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape {Gender.label: {str: int , ...}, ...}.
 
@@ -663,11 +671,9 @@ class GenderProximityAnalyzer:
                 continue
 
             if matching_key not in output:
-                output[matching_key] = {}
+                output[matching_key] = {gender_label: [] for gender_label in self.gender_labels}
 
             for gender_label in self.gender_labels:
-                if gender_label not in output[matching_key]:
-                    output[matching_key][gender_label] = []
                 output[matching_key][gender_label].append(self._results[document][gender_label])
 
         for key in output:

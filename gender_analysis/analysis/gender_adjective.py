@@ -1,5 +1,3 @@
-# pylint: skip-file
-
 from more_itertools import windowed
 import nltk
 
