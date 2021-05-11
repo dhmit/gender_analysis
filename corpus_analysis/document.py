@@ -74,6 +74,10 @@ class Document:
                 + f"does not end in .txt . Full metadata: '{metadata_dict}.'"
             )
 
+
+        if 'label' not in metadata_dict:
+            self.label = self.filename[0:len(self.filename) - 4]
+
         self.text = self._load_document_text()
 
     @property
