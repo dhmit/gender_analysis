@@ -18,8 +18,7 @@ GenderTokenResponse = Union[GenderTokenCounters, GenderTokenSequence]
 
 def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters,
                                 sort: bool = False,
-                                limit: int = 10,
-                                remove_swords: bool = False) -> GenderTokenResponse:
+                                limit: int = 10) -> GenderTokenResponse:
     """
     A private helper function that determines the difference of token occurrences
     across multiple Genders.
@@ -27,21 +26,16 @@ def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters,
     :param gender_token_counters: Dict[str, Counter]
     :param sort: Optional[bool], return Dict[str, Sequence[Tuple[str, int]]]
     :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
-    :param remove_swords: Optional[bool], remove stop words from return
 
-    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'own': 4})
-    >>> token_frequency_2 = Counter({'foo': 2, 'baz': 3, 'own': 2})
+    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'baz': 4})
+    >>> token_frequency_2 = Counter({'foo': 2, 'baz': 3, 'baz': 2})
     >>> test = {'Male': token_frequency_1, 'Female': token_frequency_2}
     >>> _diff_gender_token_counters(test).get('Male')
-    Counter({'bar': 2, 'own': 2, 'foo': -1})
+    Counter({'bar': 2, 'baz': 2, 'foo': -1})
     >>> _diff_gender_token_counters(test, sort=True).get('Male')
-    [('bar', 2), ('own', 2), ('foo', -1)]
+    [('bar', 2), ('baz', 2), ('foo', -1)]
     >>> _diff_gender_token_counters(test, sort=True, limit=2).get('Male')
-    [('bar', 2), ('own', 2)]
-    >>> _diff_gender_token_counters(test, remove_swords=True).get('Male')
-    Counter({'bar': 2, 'foo': -1})
-    >>> _diff_gender_token_counters(test, sort=True, limit=2, remove_swords=True).get('Male')
-    [('bar', 2), ('foo', -1)]
+    [('bar', 2), ('baz', 2)]
     """
 
     if not isinstance(limit, int):
@@ -67,15 +61,8 @@ def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters,
         difference_dict[gender] = current_difference
 
     if sort:
-        return _sort_gender_token_counters(difference_dict,
-                                           limit=limit,
-                                           remove_swords=remove_swords)
+        return _sort_gender_token_counters(difference_dict, limit=limit)
     else:
-        if remove_swords:
-            for gender in difference_dict:
-                for word in list(difference_dict[gender]):
-                    if word in SWORDS_ENG:
-                        del difference_dict[gender][word]
         return difference_dict
 
 
@@ -212,70 +199,58 @@ def _merge_token_counters(token_counters: Sequence[Counter]) -> Counter:
     return reduce(lambda token_counter, total: token_counter + total, token_counters)
 
 
+def _remove_swords(gender_token_counters: GenderTokenCounters) -> GenderTokenCounters:
+    """
+    A private helper function for removing stop words from a GenderTokenCounters dictionary.
+
+    :param gender_token_counters: Dict[str, Counter].
+    :return: GenderTokenCounters.
+
+    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'bat': 4})
+    >>> token_frequency_2 = Counter({'foo': 2, 'baz': 3, 'own': 2})
+    >>> test = {'Male': token_frequency_1, 'Female': token_frequency_2}
+    >>> _remove_swords(test).get('Male').get('own') is None
+    True
+    """
+    output = {}
+    swords_eng_set = set(SWORDS_ENG)
+    for gender_label, token_counter in gender_token_counters.items():
+        sanitized_counter = Counter()
+        for token, count in token_counter.items():
+            if token in swords_eng_set:
+                continue
+            sanitized_counter[token] = count
+        output[gender_label] = sanitized_counter
+    return output
+
+
 def _sort_gender_token_counters(gender_token_counters: GenderTokenCounters,
-                                limit: int = 10,
-                                remove_swords: bool = False) -> GenderTokenSequence:
+                                limit: int = 10) -> GenderTokenSequence:
     """
     A private helper function for transforming a dictionary of token instances keyed by
     Gender.label into a sorted list of tuples.
 
     :param gender_token_counters: Dict[str, Counter].
     :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
-    :param remove_swords: Optional[bool], remove stop words from return
     :return: Dict[str, Sequence[Tuple[str, int]]]
 
-    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'bat': 4, 'own': 3})
+    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'bat': 4})
     >>> token_frequency_2 = Counter({'foo': 2, 'baz': 3})
     >>> test = {'Male': token_frequency_1, 'Female': token_frequency_2}
     >>> _sort_gender_token_counters(test).get('Male')
-    [('bat', 4), ('own', 3), ('bar', 2), ('foo', 1)]
+    [('bat', 4), ('bar', 2), ('foo', 1)]
     >>> _sort_gender_token_counters(test).get('Female')
     [('baz', 3), ('foo', 2)]
     >>> _sort_gender_token_counters(test, limit=1).get('Male')
     [('bat', 4)]
-    >>> _sort_gender_token_counters(test, remove_swords=True).get('Male')
-    [('bat', 4), ('bar', 2), ('foo', 1)]
-    >>> _sort_gender_token_counters(test, limit=2, remove_swords=True).get('Male')
+    >>> _sort_gender_token_counters(test, limit=2).get('Male')
     [('bat', 4), ('bar', 2)]
     """
     output_gender_token_counters = {}
     for gender, token_counter in gender_token_counters.items():
         output_gender_token_counters[gender] = {}
-        output_gender_token_counters[gender] = _sort_token_counter(token_counter,
-                                                                   limit=limit,
-                                                                   remove_swords=remove_swords)
+        output_gender_token_counters[gender] = token_counter.most_common(limit)
     return output_gender_token_counters
-
-
-def _sort_token_counter(token_counter: Counter,
-                        limit: Optional[int] = None,
-                        remove_swords: bool = False) -> Sequence[Tuple[str, int]]:
-    """
-    A private helper function for grabbing the most common occurrences in a Counter
-    with stop words optionally removed.
-
-    :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
-    :param remove_swords: Optional[bool], remove stop words from return
-    :return: Sequence[Tuple[str, int]]
-
-    >>> example = Counter({'foo': 1, 'bar': 3, 'bat': 4, 'own': 5})
-    >>> _sort_token_counter(example)
-    [('own', 5), ('bat', 4), ('bar', 3), ('foo', 1)]
-    >>> _sort_token_counter(example, limit=2)
-    [('own', 5), ('bat', 4)]
-    >>> _sort_token_counter(example, remove_swords=True)
-    [('bat', 4), ('bar', 3), ('foo', 1)]
-    >>> _sort_token_counter(example, limit=2, remove_swords=True)
-    [('bat', 4), ('bar', 3)]
-    """
-    output_token_counter = token_counter.copy()
-
-    if remove_swords:
-        for word in list(output_token_counter):
-            if word in SWORDS_ENG:
-                del output_token_counter[word]
-
-    return output_token_counter.most_common(limit)
 
 
 def find_in_document_gender(document: Document,
@@ -466,7 +441,7 @@ class GenderProximityAnalyzer:
                 sort: bool = False,
                 diff: bool = False,
                 limit: int = 10,
-                remove_swords: bool = False) -> Dict[int, GenderTokenResponse]:
+                remove_swords: bool = True) -> Dict[int, GenderTokenResponse]:
         """
         Return analysis organized by date (as determined by Document metadata).
 
@@ -509,17 +484,16 @@ class GenderProximityAnalyzer:
                     [self._results[document][gender_label], output[bin_year][gender_label]]
                 )
 
-        if diff:
-            for date, gender_token_frequencies in output.items():
+        for date, gender_token_frequencies in output.items():
+            if remove_swords:
+                output[date] = _remove_swords(output[date])
+
+            if diff:
                 output[date] = _diff_gender_token_counters(gender_token_frequencies,
                                                            limit=limit,
-                                                           sort=sort,
-                                                           remove_swords=remove_swords)
-        elif sort:
-            for date, gender_token_frequencies in output.items():
-                output[date] = _sort_gender_token_counters(gender_token_frequencies,
-                                                           limit=limit,
-                                                           remove_swords=remove_swords)
+                                                           sort=sort)
+            elif sort:
+                output[date] = _sort_gender_token_counters(gender_token_frequencies, limit=limit)
 
         return output
 
@@ -527,7 +501,7 @@ class GenderProximityAnalyzer:
                     sort: bool = False,
                     diff: bool = False,
                     limit: int = 10,
-                    remove_swords: bool = False) -> Dict[str, GenderTokenResponse]:
+                    remove_swords: bool = True) -> Dict[str, GenderTokenResponse]:
 
         """
         Return analysis organized by Document.
@@ -553,21 +527,19 @@ class GenderProximityAnalyzer:
 
         output = {}
 
-        if diff:
-            for document in self._results:
-                output[document.label] = _diff_gender_token_counters(self._results[document],
+        for document in self._results:
+            output[document.label] = self._results[document]
+
+            if remove_swords:
+                output[document.label] = _remove_swords(output[document.label])
+
+            if diff:
+                output[document.label] = _diff_gender_token_counters(output[document.label],
                                                                      limit=limit,
-                                                                     sort=sort,
-                                                                     remove_swords=remove_swords)
-        elif sort:
-            for document in self._results:
-                token_frequencies = self._results[document]
-                output[document.label] = _sort_gender_token_counters(token_frequencies,
-                                                                     limit=limit,
-                                                                     remove_swords=remove_swords)
-        else:
-            for document in self._results:
-                output[document.label] = self._results[document]
+                                                                     sort=sort)
+            elif sort:
+                output[document.label] = _sort_gender_token_counters(output[document.label],
+                                                                     limit=limit)
 
         return output
 
@@ -575,7 +547,7 @@ class GenderProximityAnalyzer:
                   sort: bool = False,
                   diff: bool = False,
                   limit: int = 10,
-                  remove_swords: bool = False) -> Dict[str, GenderTokenResponse]:
+                  remove_swords: bool = True) -> Dict[str, GenderTokenResponse]:
         """
         Return analysis organized by Document. Merges all words across texts
         into dictionaries sorted by gender.
@@ -619,15 +591,13 @@ class GenderProximityAnalyzer:
 
         output = merged_results
 
+        if remove_swords:
+            output = _remove_swords(output)
+
         if diff:
-            output = _diff_gender_token_counters(output,
-                                                 limit=limit,
-                                                 sort=sort,
-                                                 remove_swords=remove_swords)
+            output = _diff_gender_token_counters(output, limit=limit, sort=sort)
         elif sort:
-            output = _sort_gender_token_counters(output,
-                                                 limit=limit,
-                                                 remove_swords=remove_swords)
+            output = _sort_gender_token_counters(output, limit=limit)
 
         self._by_gender[hashed_arguments] = output
         return output
@@ -637,7 +607,7 @@ class GenderProximityAnalyzer:
                     sort: bool = False,
                     diff: bool = False,
                     limit: int = 10,
-                    remove_swords: bool = False) -> Dict[str, GenderTokenResponse]:
+                    remove_swords: bool = True) -> Dict[str, GenderTokenResponse]:
         """
         Return analysis organized by Document metadata. Merges all words across texts
         into dictionaries sorted by provided metadata_key.
@@ -679,15 +649,12 @@ class GenderProximityAnalyzer:
         for key in output:
             for gender_label in self.gender_labels:
                 output[key][gender_label] = _merge_token_counters(output[key][gender_label])
+            if remove_swords:
+                output[key] = _remove_swords(output[key])
             if diff:
-                output[key] = _diff_gender_token_counters(output[key],
-                                                          limit=limit,
-                                                          sort=sort,
-                                                          remove_swords=remove_swords)
+                output[key] = _diff_gender_token_counters(output[key], limit=limit, sort=sort)
             elif sort:
-                output[key] = _sort_gender_token_counters(output[key],
-                                                          limit=limit,
-                                                          remove_swords=remove_swords)
+                output[key] = _sort_gender_token_counters(output[key], limit=limit)
 
         return output
 
