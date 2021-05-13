@@ -24,7 +24,7 @@ def _apply_kwargs(key_gender_token_counters: Dict[Union[str, int], GenderTokenCo
                   remove_swords: bool) -> KeyGenderTokenResponse:
     """
     A private helper function for applying optional keyword arguments to the output of
-    GenderProximityAnalysis, allowing the user to sort, diff, limit, and remove stopwords
+    GenderProximityAnalysis methods, allowing the user to sort, diff, limit, and remove stopwords
     from the output. These transformations do not mutate the input.
 
     :param key_gender_token_counters: a dictionary shaped Dict[Union[str, int], GenderTokenCounters]
@@ -56,37 +56,27 @@ def _apply_kwargs(key_gender_token_counters: Dict[Union[str, int], GenderTokenCo
             output[key] = gender_token_counters
 
         if diff:
-            output[key] = _diff_gender_token_counters(output[key], limit=limit, sort=sort)
-        elif sort:
+            output[key] = _diff_gender_token_counters(output[key])
+
+        if sort:
             output[key] = _sort_gender_token_counters(output[key], limit=limit)
 
     return output
 
 
-def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters,
-                                sort: bool = False,
-                                limit: int = 10) -> GenderTokenResponse:
+def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters) -> GenderTokenCounters:
     """
     A private helper function that determines the difference of token occurrences
     across multiple Genders.
 
     :param gender_token_counters: Dict[str, Counter]
-    :param sort: Optional[bool], return Dict[str, Sequence[Tuple[str, int]]]
-    :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
 
     >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'baz': 4})
     >>> token_frequency_2 = Counter({'foo': 2, 'bar': 3, 'baz': 2})
     >>> test = {'Male': token_frequency_1, 'Female': token_frequency_2}
     >>> _diff_gender_token_counters(test).get('Male')
     Counter({'baz': 2, 'foo': -1, 'bar': -1})
-    >>> _diff_gender_token_counters(test, sort=True).get('Male')
-    [('baz', 2), ('foo', -1), ('bar', -1)]
-    >>> _diff_gender_token_counters(test, sort=True, limit=2).get('Male')
-    [('baz', 2), ('foo', -1)]
     """
-
-    if not isinstance(limit, int):
-        raise ValueError('limit must be of type int')
 
     difference_dict = {}
 
@@ -107,10 +97,7 @@ def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters,
 
         difference_dict[gender] = current_difference
 
-    if sort:
-        return _sort_gender_token_counters(difference_dict, limit=limit)
-    else:
-        return difference_dict
+    return difference_dict
 
 
 def _generate_token_counter(document: Document,
@@ -525,8 +512,9 @@ class GenderProximityAnalyzer:
             output = _remove_swords(output)
 
         if diff:
-            output = _diff_gender_token_counters(output, limit=limit, sort=sort)
-        elif sort:
+            output = _diff_gender_token_counters(output)
+
+        if sort:
             output = _sort_gender_token_counters(output, limit=limit)
 
         self._by_gender[hashed_arguments] = output
