@@ -100,7 +100,4 @@ class Character:
         if self.gender:
             return self.gender
         else:
-            unknown_gender_pronouns = PronounSeries('Unknown', {' '},
-                                                    subj='unk', obj='unk')
-            unknown_gender = Gender('Unknown', unknown_gender_pronouns, names=['unk'])
-            return unknown_gender
+            return None
