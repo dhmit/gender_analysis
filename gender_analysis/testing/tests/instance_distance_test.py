@@ -1,7 +1,5 @@
 from pathlib import Path
-
-from sympy.utilities import pytest
-
+import pytest
 from corpus_analysis import Corpus, Document
 from gender_analysis import common
 from gender_analysis.analysis.instance_distance import run_distance_analysis, \
