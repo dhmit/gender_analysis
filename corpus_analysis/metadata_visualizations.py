@@ -4,8 +4,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from gender_analysis.common import MissingMetadataError
-from gender_analysis.common import create_path_object_and_directories
+from corpus_analysis.common import MissingMetadataError
+from corpus_analysis.common import create_path_object_and_directories
 
 DEFAULT_VISUALIZATION_OUTPUT_DIR = Path.cwd() / 'gender_analysis_visualizations'
 

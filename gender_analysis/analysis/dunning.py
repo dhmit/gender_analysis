@@ -6,14 +6,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import nltk
 
-from gender_analysis.common import (
+from corpus_analysis.common import (
     load_graph_settings,
     MissingMetadataError,
     store_pickle,
     load_pickle,
-    HE_SERIES,
-    SHE_SERIES
 )
+from gender_analysis.common import HE_SERIES, SHE_SERIES
 
 
 ################################################################################

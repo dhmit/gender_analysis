@@ -1,5 +1,6 @@
 from gender_analysis.pronouns import PronounSeries
 
+
 class Gender:
     """
     Defines a gender that will be operated on in analysis functions
@@ -49,10 +50,10 @@ class Gender:
         >>> from gender_analysis.gender import Gender
         >>> fem_pronouns = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
         >>> Gender('Female', fem_pronouns)
-        <Female: {<Fem: ['her', 'hers', 'she']>}>
+        <Female>
         """
 
-        return f'<{self.label}: {self.pronoun_series}>'
+        return f'<{self.label}>'
 
     def __str__(self):
         """
