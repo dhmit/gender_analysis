@@ -1,5 +1,3 @@
-from corpus_analysis import common
-from gender_analysis import common
 from gender_analysis.pronouns import PronounSeries
 from gender_analysis.gender import Gender
 
@@ -54,7 +52,7 @@ class Character:
         >>> emma = Character(emma_name, emma_gender, emma_mentions)
         >>> emma_string = str(emma)
         >>> emma_string
-        "Emma, Femalewith mentions:  ['Emma Woodhouse', 'Emma', 'Miss Woodhouse']"
+        "Emma,  Female, with mentions:  ['Emma Woodhouse', 'Emma', 'Miss Woodhouse']"
         """
         character = self.name + ', ' + ' ' + str(self.gender) + ', ' + 'with mentions:  ' + \
                     str(self.mentions)
@@ -106,6 +104,3 @@ class Character:
                                                     subj='unk', obj='unk')
             unknown_gender = Gender('Unknown', unknown_gender_pronouns, names=['unk'])
             return unknown_gender
-
-
-
