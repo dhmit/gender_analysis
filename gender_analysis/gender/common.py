@@ -1,7 +1,6 @@
 import os
 import sys
 import zipfile
-from pathlib import Path
 
 from clint import textui
 import requests
