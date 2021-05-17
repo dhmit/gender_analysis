@@ -6,8 +6,8 @@ __all__ = [
     'proximity',
 ]
 
-from gender_analysis.analysis.dependency_parsing import *
-from gender_analysis.analysis.dunning import *
-from gender_analysis.analysis.gender_frequency import *
-from gender_analysis.analysis.instance_distance import *
-from gender_analysis.analysis.proximity import *
+from .dependency_parsing import *
+from .dunning import *
+from .gender_frequency import *
+from .instance_distance import *
+from .proximity import GenderProximityAnalyzer

@@ -32,7 +32,7 @@ class PronounSeries:
         """
         Checks to see if the given pronoun exists in this group. This check is case-insensitive
 
-        >>> from gender_analysis.pronouns import PronounSeries
+        >>> from gender_analysis import PronounSeries
         >>> pronouns = {'They', 'Them', 'Theirs', 'Themself'}
         >>> pronoun_group = PronounSeries('Andy', pronouns, 'they', 'them')
         >>> 'they' in pronoun_group
@@ -51,7 +51,7 @@ class PronounSeries:
         Allows the user to iterate over all of the pronouns in this group. Pronouns
         are returned in lowercase and order is not guaranteed.
 
-        >>> from gender_analysis.pronouns import PronounSeries
+        >>> from gender_analysis import PronounSeries
         >>> pronouns = {'She', 'Her', 'hers', 'herself'}
         >>> pronoun_group = PronounSeries('Fem', pronouns, subj='she', obj='her')
         >>> sorted(pronoun_group)
@@ -62,7 +62,7 @@ class PronounSeries:
 
     def __repr__(self):
         """
-        >>> from gender_analysis.pronouns import PronounSeries
+        >>> from gender_analysis import PronounSeries
         >>> PronounSeries('Masc', {'he', 'himself', 'his'}, subj='he', obj='him')
         <Masc: ['he', 'him', 'himself', 'his']>
 
@@ -73,7 +73,7 @@ class PronounSeries:
 
     def __str__(self):
         """
-        >>> from gender_analysis.pronouns import PronounSeries
+        >>> from gender_analysis import PronounSeries
         >>> str(PronounSeries('Andy', {'Xe', 'Xis', 'Xem'}, subj='xe', obj='xem'))
         'Andy-series'
 
@@ -94,7 +94,7 @@ class PronounSeries:
         Determines whether two `PronounSeries` are equal. Note that they are only equal if
         they have the same identifier and the exact same set of pronouns.
 
-        >>> from gender_analysis.pronouns import PronounSeries
+        >>> from gender_analysis import PronounSeries
         >>> fem_series = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
         >>> second_fem_series = PronounSeries('Fem', {'she', 'her', 'hers'}, subj='she', obj='her')
         >>> fem_series == second_fem_series

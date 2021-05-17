@@ -4,12 +4,12 @@ from functools import reduce
 from more_itertools import windowed
 import nltk
 
-from corpus_analysis.corpus import Corpus
-from corpus_analysis.document import Document
-from corpus_analysis.common import load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES
+from gender_analysis.text.corpus import Corpus
+from gender_analysis.text.document import Document
+from gender_analysis.text.common import load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES
 
-from gender_analysis.common import MALE, FEMALE, BINARY_GROUP, SWORDS_ENG
-from gender_analysis.gender import Gender
+from gender_analysis.gender.common import MALE, FEMALE, BINARY_GROUP, SWORDS_ENG
+from gender_analysis.gender.gender import Gender
 
 GenderTokenCounters = Dict[str, Counter]
 GenderTokenSequence = Dict[str, Sequence[Tuple[str, int]]]
@@ -96,9 +96,9 @@ def _generate_token_counter(document: Document,
     :param genders_to_exclude: a list containing instances of the Gender class.
     :return: a Counter instance pairing token words with occurrences.
 
-    >>> from gender_analysis.common import MALE, FEMALE
-    >>> from corpus_analysis.corpus import Corpus
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+    >>> from gender_analysis.gender.common import MALE, FEMALE
+    >>> from gender_analysis import Corpus
+    >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
     >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
     >>> doc = corpus.documents[-1]
     >>> test = _generate_token_counter(doc, FEMALE, 5, ['NN'], genders_to_exclude=[MALE])
@@ -153,9 +153,9 @@ def _generate_gender_token_counters(document: Document,
     :param word_window: number of words to search for in either direction of a Gender instance.
     :return: Dict[str, Counter], with top-level keys being Gender.label.
 
-    >>> from gender_analysis.common import BINARY_GROUP
-    >>> from corpus_analysis.corpus import Corpus
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+    >>> from gender_analysis.gender.common import BINARY_GROUP
+    >>> from gender_analysis import Corpus
+    >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
     >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
     >>> doc = corpus.documents[-1]
     >>> test_1 = _generate_gender_token_counters(doc, BINARY_GROUP, ['NN'], 5)
@@ -293,13 +293,13 @@ def find_in_document_gender(document: Document,
     :param genders_to_exclude: a list containing instances of the Gender class.
     :return: a Counter instance pairing token words with occurrences.
 
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-    >>> from corpus_analysis import corpus
-    >>> from gender_analysis import common
-    >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+    >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+    >>> from gender_analysis.gender.common import FEMALE, MALE
+    >>> from gender_analysis import Corpus
+    >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
     >>> analyzer = GenderProximityAnalyzer(corpus)
     >>> doc = analyzer.documents[6]
-    >>> find_in_document_gender(doc, common.FEMALE, genders_to_exclude=[common.MALE])
+    >>> find_in_document_gender(doc, FEMALE, genders_to_exclude=[MALE])
     Counter({'sad': 1})
     """
 
@@ -324,9 +324,9 @@ def find_in_document_female(document: Document,
     :param tags: a list containing NLTK token strings.
     :return: a Counter instance pairing token words with occurrences.
 
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-    >>> from corpus_analysis import corpus
-    >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+    >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+    >>> from gender_analysis import Corpus
+    >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
     >>> analyzer = GenderProximityAnalyzer(corpus)
     >>> doc = analyzer.documents[6]
     >>> find_in_document_female(doc)
@@ -354,9 +354,9 @@ def find_in_document_male(document: Document,
     :param tags: a list containing NLTK token strings.
     :return: a Counter instance pairing token words with occurrences.
 
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-    >>> from corpus_analysis import corpus
-    >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+    >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+    >>> from gender_analysis import Corpus
+    >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
     >>> analyzer = GenderProximityAnalyzer(corpus)
     >>> doc = analyzer.documents[3]
     >>> find_in_document_male(doc)
@@ -478,9 +478,9 @@ class GenderProximityAnalyzer:
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
                  { str(Gender.label): [(str(token), int)] }
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer = GenderProximityAnalyzer(corpus)
         >>> analyzer.by_date((2000, 2008), 2).keys()
         dict_keys([2000, 2002, 2004, 2006])
@@ -538,9 +538,9 @@ class GenderProximityAnalyzer:
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
                  { str(Gender.label): [(str(token), int)] }
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer = GenderProximityAnalyzer(corpus)
         >>> doc = analyzer.documents[7]
         >>> analyzer_document_labels = list(analyzer.by_document().keys())
@@ -586,9 +586,9 @@ class GenderProximityAnalyzer:
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape {Gender.label: {str: int, ...}, ...}
 
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer = GenderProximityAnalyzer(corpus)
         >>> analyzer.by_gender().keys()
         dict_keys(['Female', 'Male'])
@@ -649,9 +649,9 @@ class GenderProximityAnalyzer:
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape {Gender.label: {str: int , ...}, ...}.
 
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer = GenderProximityAnalyzer(corpus)
         >>> analyzer.by_metadata('author_gender').keys()
         dict_keys(['male', 'female'])
@@ -698,9 +698,9 @@ class GenderProximityAnalyzer:
 
         :return: {str: [gender1, gender2, ...], ...}
 
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer = GenderProximityAnalyzer(corpus)
         >>> analyzer.by_overlap()
         {'sad': {'Female': 14, 'Male': 14}}

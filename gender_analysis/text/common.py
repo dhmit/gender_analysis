@@ -8,8 +8,6 @@ import nltk
 import seaborn as sns
 from chardet.universaldetector import UniversalDetector
 
-BASE_PATH = Path(os.path.abspath(os.path.dirname(__file__)))
-TEST_DATA_PATH = Path(BASE_PATH, 'testing', 'test_data')
 
 NLTK_TAGS = {
     'CC': 'conjunction, coordinating',
@@ -45,7 +43,9 @@ NLTK_TAGS = {
     'WP': 'WH-pronoun',
     'WRB': 'Wh-adverb',
 }
+
 NLTK_TAGS_ADJECTIVES = ["JJ", "JJR", "JJS"]
+
 
 def load_csv_to_list(file_path):
     """
@@ -55,8 +55,7 @@ def load_csv_to_list(file_path):
     :return: a list of strings
 
     >>> from pathlib import Path
-    >>> from gender_analysis import common
-    >>> from corpus_analysis.testing.common import LARGE_TEST_CORPUS_CSV
+    >>> from gender_analysis.testing.common import LARGE_TEST_CORPUS_CSV
     >>> corpus_metadata_path = LARGE_TEST_CORPUS_CSV
     >>> corpus_metadata = load_csv_to_list(corpus_metadata_path)
     >>> type(corpus_metadata)
@@ -85,8 +84,8 @@ def load_txt_to_string(file_path):
     :return: The file's text as a string
 
     >>> from pathlib import Path
-    >>> from gender_analysis import common
-    >>> novel_path = Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'austen_persuasion.txt')
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
+    >>> novel_path = Path(TEST_DATA_DIR, 'sample_novels', 'texts', 'austen_persuasion.txt')
     >>> novel_text = load_txt_to_string(novel_path)
     >>> type(novel_text), len(novel_text)
     (<class 'str'>, 466887)
@@ -141,11 +140,11 @@ def load_pickle(filepath):
     :param filepath: str or Path object
     :return: Previously-pickled object
 
-    >>> from corpus_analysis import common
+    >>> from gender_analysis.common import BASE_PATH
     >>> from pathlib import Path
-    >>> pickle_filepath = Path(common.BASE_PATH, '../corpus_analysis/testing', 'test_data',\
-                               'test_pickle.pgz')
-    >>> loaded_object = common.load_pickle(pickle_filepath)
+    >>> from gender_analysis.text.common import load_pickle
+    >>> pickle_filepath = Path(BASE_PATH, 'testing', 'test_data','test_pickle.pgz')
+    >>> loaded_object = load_pickle(pickle_filepath)
     >>> loaded_object
     {'a': 4, 'b': 5, 'c': [1, 2, 3]}
 
@@ -173,11 +172,11 @@ def get_text_file_encoding(filepath):
     :param filepath: str or Path object
     :return: Name of encoding scheme as a string
 
-    >>> from corpus_analysis import common
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
     >>> from pathlib import Path
     >>> import os
-    >>> path=Path(common.TEST_DATA_PATH, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')
-    >>> common.get_text_file_encoding(path)
+    >>> path=Path(TEST_DATA_DIR, 'sample_novels', 'texts', 'hawthorne_scarlet.txt')
+    >>> get_text_file_encoding(path)
     'ascii'
 
     Note: For files containing only ascii characters, this function will return 'ascii' even if
@@ -185,13 +184,13 @@ def get_text_file_encoding(filepath):
 
     >>> import os
     >>> from pathlib import Path
-    >>> from corpus_analysis import common
+    >>> from gender_analysis.common import BASE_PATH
     >>> text = 'here is an ascii text'
-    >>> file_path = Path(common.BASE_PATH, 'example_file.txt')
+    >>> file_path = Path(BASE_PATH, 'example_file.txt')
     >>> with open(file_path, 'w', encoding='utf-8') as source:
     ...     _ = source.write(text)
     ...     source.close()
-    >>> common.get_text_file_encoding(file_path)
+    >>> get_text_file_encoding(file_path)
     'ascii'
     >>> os.remove(file_path)
 

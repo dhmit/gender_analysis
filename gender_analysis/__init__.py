@@ -1,10 +1,6 @@
-# pylint: disable=wildcard-import, import-self
-
-__all__ = [
-    'common',
-    'analysis',
-    'pronouns',
-]
-
-from gender_analysis import *
-from gender_analysis.pronouns import PronounSeries
+from .text.character import Character
+from .text.corpus import Corpus
+from .text.document import Document
+from .gender.gender import Gender
+from .gender.pronouns import PronounSeries
+from .text.metadata_visualizations import *
