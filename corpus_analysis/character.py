@@ -1,6 +1,21 @@
 from gender_analysis.pronouns import PronounSeries
 from gender_analysis.gender import Gender
 
+FEMALE_HONORIFICS = ["Miss", "Mrs", "Ms", "Mistress", "Madam", "Ma'am", "Dame",
+                     "Lady", "Her Honour", "Her Honor", "My Lady", "Your Ladyship",
+                     "Sr", "Sister", "Sayyidah"]
+MALE_HONORIFICS = ["Master", "Mr", "Sir", "Gentleman", "Sire", "Lord", "His Honour",
+                   "His Honor", "My Lord", "Your Lordship", "Master", "Esquire", "Esq",
+                   "His Holiness", "Pope", "His All Holiness", "His Beatitude", "The Reverend",
+                   "Rev", "Fr", "Father", "Pr", "Pastor", "Br", "Brother", "Rabbi", "Imam",
+                   "Mufti", "Sayyid"]
+NEUTRAL_HONORIFICS = ["Mx", "Excellency", "Excellence", "Your Honor", "The Honorable",
+                      "The Honourable", "The Hon", "Hon", "The Hon'ble", "The Right Honourable",
+                      "The Most Honourable", "Dr", "Doctor", "Professor", "QC", "Cl", "S Cl",
+                      "Counsel", "Senior Counsel", "Eur Ing", "Vice-Chancellor", "Principal",
+                      "President", "Warden", "Dean", "Regent", "Rector", "Provost", "Director",
+                      "Chief Executive", "Venerable", "Eminent"]
+HONORIFICS = FEMALE_HONORIFICS + MALE_HONORIFICS + NEUTRAL_HONORIFICS
 
 class Character:
     """

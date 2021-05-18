@@ -4,7 +4,7 @@ from functools import reduce
 from more_itertools import windowed
 import nltk
 
-from corpus_analysis.corpus import Corpus
+#from corpus_analysis.corpus import Corpus
 from corpus_analysis.document import Document
 from corpus_analysis.common import load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES
 
@@ -79,7 +79,7 @@ def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters,
         return difference_dict
 
 
-def _generate_token_counter(document: Document,
+def _generate_token_counter(document,
                             gender_to_find: Gender,
                             word_window: int,
                             tags: Sequence[str],
@@ -139,7 +139,7 @@ def _generate_token_counter(document: Document,
     return output
 
 
-def _generate_gender_token_counters(document: Document,
+def _generate_gender_token_counters(document,
                                     genders: Sequence[Gender],
                                     tags: Sequence[str],
                                     word_window: int) -> GenderTokenCounters:
@@ -278,7 +278,7 @@ def _sort_token_counter(token_counter: Counter,
     return output_token_counter.most_common(limit)
 
 
-def find_in_document_gender(document: Document,
+def find_in_document_gender(document,
                             gender: Gender,
                             tags: Sequence[str] = None,
                             word_window: int = 5,
@@ -313,7 +313,7 @@ def find_in_document_gender(document: Document,
                                    genders_to_exclude=genders_to_exclude)
 
 
-def find_in_document_female(document: Document,
+def find_in_document_female(document,
                             tags: Sequence[str] = None,
                             word_window: int = 5) -> Counter:
     """
@@ -391,7 +391,7 @@ class GenderProximityAnalyzer:
     """
 
     def __init__(self,
-                 texts: Union[Document, Corpus, Sequence[Document]],
+                 texts,
                  tags: Optional[Sequence[str]] = None,
                  genders: Optional[Sequence[Gender]] = None,
                  word_window: int = 5) -> None:
@@ -412,8 +412,8 @@ class GenderProximityAnalyzer:
         if tags is None:
             tags = NLTK_TAGS_ADJECTIVES
 
-        if isinstance(texts, Corpus):
-            documents = texts.documents
+        #if isinstance(texts, Corpus):
+            #documents = texts.documents
         elif isinstance(texts, Document):
             documents = [texts]
         elif isinstance(texts, list):
