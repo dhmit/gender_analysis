@@ -8,10 +8,7 @@ Subpackages
 
    gender_analysis.analysis
 
-Submodules
-----------
-
-gender\_analysis.common module
+common module
 ------------------------------
 
 .. automodule:: gender_analysis.common
@@ -19,27 +16,20 @@ gender\_analysis.common module
    :undoc-members:
    :show-inheritance:
 
-gender\_analysis.corpus module
+gender module
 ------------------------------
 
-.. automodule:: gender_analysis.corpus
+.. automodule:: gender_analysis.gender
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__, __eq__
 
-gender\_analysis.document module
+pronouns module
 --------------------------------
 
-.. automodule:: gender_analysis.document
+.. automodule:: gender_analysis.pronouns
    :members:
    :undoc-members:
    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: gender_analysis
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :special-members: __init__, __eq__

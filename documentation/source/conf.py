@@ -29,7 +29,9 @@ author = 'MIT Digital Humanities'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosectionlabel',
 ]
+master_doc = 'index'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -39,6 +41,9 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# Prefix auto-generated labels with the page it is from
+autosectionlabel_prefix_document = True
+
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -46,6 +51,8 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
+
+html_title = 'Gender Analysis Toolkit'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

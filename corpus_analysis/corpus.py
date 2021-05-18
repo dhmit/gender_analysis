@@ -503,6 +503,8 @@ class Corpus:
 
     def get_document(self, metadata_field, field_val):
         """
+        .. _get-document:
+
         Returns a specific Document object from self.documents that has metadata matching field_val
         for metadata_field.
 

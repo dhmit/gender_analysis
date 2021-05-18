@@ -389,6 +389,8 @@ class Document:
 
     def get_count_of_word(self, word):
         """
+        .. _get-count-of-word:
+
         Returns the number of instances of a word in the text. Not case-sensitive.
 
         If this is your first time running this method, this can be slow.
@@ -445,6 +447,8 @@ class Document:
 
     def words_associated(self, target_word):
         """
+        .. _words-associated:
+
         Returns a Counter of the words found after a given word.
 
         In the case of double/repeated words, the counter would include the word itself and the next
@@ -483,6 +487,8 @@ class Document:
     # pylint: disable=line-too-long
     def get_word_windows(self, search_terms, window_size=2):
         """
+        .. _get-word-windows:
+
         Finds all instances of `word` and returns a counter of the words around it.
         window_size is the number of words before and after to return, so the total window is
         2*window_size + 1.
@@ -531,6 +537,8 @@ class Document:
 
     def get_word_freq(self, word):
         """
+        .. _get-word-freq:
+
         Returns the frequency of appearance of a word in the document
 
         :param word: str to search for in document
@@ -554,6 +562,8 @@ class Document:
 
     def get_part_of_speech_tags(self):
         """
+        .. _get-pos:
+
         Returns the part of speech tags as a list of tuples. The first part of each tuple is the
         term, the second one the part of speech tag.
 
