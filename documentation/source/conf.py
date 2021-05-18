@@ -29,7 +29,7 @@ author = 'MIT Digital Humanities'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosectionlabel',
+    # 'sphinx.ext.autosectionlabel',
 ]
 master_doc = 'index'
 
