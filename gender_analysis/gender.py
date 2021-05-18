@@ -77,8 +77,8 @@ class Gender:
 
     def __eq__(self, other):
         """
-        Performs a check to see whether two `Gender`s are equivalent. This is true if and only
-        if the `Gender`s' identifiers, pronoun series, and names are identical.
+        Performs a check to see whether two `Gender` objects are equivalent. This is true if and
+        only if the `Gender` identifiers, pronoun series, and names are identical.
 
         Note that this comparison works:
         >>> from gender_analysis.pronouns import PronounSeries
