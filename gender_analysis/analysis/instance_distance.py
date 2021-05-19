@@ -112,22 +112,24 @@ def run_distance_analysis(corpus, genders=None):
     """
     Takes in a corpus of documents. Return a dictionary with each document mapped in the following
     form:
-    ```
-    {
-        <Document object>: {
-            <Gender object>: {
-                'median': float,
-                'mean: float,
-                'min': float,
-                'max': float
+
+    .. code-block:: python
+
+        {
+            <Document object>: {
+                <Gender object>: {
+                    'median': float,
+                    'mean: float,
+                    'min': float,
+                    'max': float
+                }
             }
         }
-    }
-    ```
 
     :param corpus: Corpus object
     :param genders: A collection of genders to perform analyses on. If `None`, defaults to an \
-        analysis on `common.MALE` and `common.FEMALE`
+        analysis on ``common.MALE`` and ``common.FEMALE``
+
     :return: Nested dictionary, first mapping documents and next mapping genders to their stats.
 
     """
@@ -166,15 +168,15 @@ def _get_stats(distance_results):
 
 def _get_document_gender_metrics(document_results, metric):
     """
-    This is a helper function for `results_by` functions.
+    This is a helper function for ``results_by`` functions.
 
     Pulls out the given metric from a document's min/max/etc. dictionary and maps each gender
     as a key.
 
     :param document_results: A dictionary mapping different fields to a dictionary of min/max/etc.
     :param metric: The metric to extract from results
-    :return: A dictionary mapping each gender from `document_results` to the value of the metric for
-        that field
+    :return: A dictionary mapping each gender from ``document_results`` to the value of the metric
+        for that field
     """
 
     metric_list = dict()
@@ -186,21 +188,23 @@ def _get_document_gender_metrics(document_results, metric):
 
 def results_by_author_gender(results, metric):
     """
-    Takes in a dictionary of results and a specified metric from **run_distance_analysis**, returns
+    Takes in a dictionary of results and a specified metric from ``run_distance_analysis``, returns
     a dictionary in the following form:
 
-    ```
-    {
-        'author_gender': {
-            <Document Object>: {
-                <Gender Object>: metric_result
+    .. code-block:: python
+
+        {
+            'author_gender': {
+                <Document Object>: {
+                    <Gender Object>: metric_result
+                }
             }
         }
-    }
-    ```
+
 
     :param results: dictionary from **run_distance_analysis**
     :param metric: one of ('median', 'mean', 'min', 'max')
+
     :return: dictionary
 
     """
@@ -226,24 +230,25 @@ def results_by_author_gender(results, metric):
 
 def results_by_year(results, metric, time_frame, bin_size):
     """
-    Takes in a dictionary of results and a specified metric from run_distance_analysis, returns a
-    dictionary in the following form:
+    Takes in a dictionary of results and a specified metric from ``run_distance_analysis``, returns
+    a dictionary in the following form:
 
-    ```
-    {
-        year: {
-            <Document Object>: {
-                <Gender Object>: metric_result
+    .. code-block:: python
+
+        {
+            year: {
+                <Document Object>: {
+                    <Gender Object>: metric_result
+                }
             }
         }
-    }
-    ```
 
     :param results: dictionary
     :param metric: ('median', 'mean', 'min', 'max')
     :param time_frame: tuple (int start year, int end year) for the range of dates to return
         frequencies
     :param bin_size: int for the number of years represented in each document dictionary
+
     :return: nested dictionary, mapping integer years->`Document`s->`Gender`s->float results
 
     """
@@ -270,21 +275,22 @@ def results_by_year(results, metric, time_frame, bin_size):
 
 def results_by_location(results, metric):
     """
-    Takes in a dictionary of results and a specified metric from **run_distance_analysis**, returns
+    Takes in a dictionary of results and a specified metric from ``run_distance_analysis``, returns
     a dictionary of the following form:
 
-    ```
-    {
-        'location': {
-            <Document Object>: {
-                <Gender Object>: metric_result
+    .. code-block:: python
+
+        {
+            'location': {
+                <Document Object>: {
+                    <Gender Object>: metric_result
+                }
             }
         }
-    }
-    ```
 
     :param results: dictionary
     :param metric: ('median', 'mean', 'min', 'max')
+
     :return: dictionary
 
     """
@@ -315,8 +321,9 @@ def get_highest_distances(results, num):
     Returns a dictionary mapping genders to a list of tuples of the form (median, <Document>),
     where `Document`s with higher medians are listed first.
 
-    :param results: dictionary of results from `run_distance_analysis`
+    :param results: dictionary of results from ``run_distance_analysis``
     :param num: number of top distances to return
+
     :return: Dictionary of lists of tuples.
 
     """
