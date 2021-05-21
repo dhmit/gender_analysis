@@ -644,8 +644,8 @@ class Document:
     def get_char_list(self, cutoff_num=10):
         """
         given a document object, find a list of characters with their frequency in the novels
-        param: cutoff_num defaults to 10 for the thredshold for cutoffs based on named frequency
-        return: a list of tuples with character names in descending sorted order that occurs
+        :param cutoff_num: cutoff_num defaults to 10 for the thredshold for cutoffs based on named frequency
+        :return: a list of tuples with character names in descending sorted order that occurs
         more than the cutoff_num times in the document
         >>> from corpus_analysis import document
         >>> from pathlib import Path
@@ -664,16 +664,23 @@ class Document:
 
         labels_char = []
         labels = 'FACILITY,GPE,GSP,LOCATION,ORGANIZATION,PERSON'
-        document = self._load_document_text()
+        document = self.text
         sentences = nltk.sent_tokenize(document)
         for sent in sentences:
-            for chunk in nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(sent))):
-                if hasattr(chunk, 'label'):
+            sentence_tokens = nltk.word_tokenize(sent)
+            sentence_pos_tags = nltk.pos_tag(sentence_tokens)
+            sentence_chunks = nltk.ne_chunk(sentence_pos_tags)
+            for chunk in sentence_chunks:
+                #if hasattr(chunk, 'label'):
+                if isinstance(chunk, nltk.tree.Tree):
                     labels_char.append((chunk.label(), ' '.join(c[0] for c in chunk)))
         char_dict = {lab: {} for lab in labels.split(',')}
-        for ch in labels_char:
-            cat = char_dict[ch[0]]
-            cat[ch[1]] = cat.get(ch[1], 0) + 1
+        for character in labels_char:
+            label, name = character
+            char_dict[label][name] = char_dict[label].get(name, 0) + 1
+        #for ch in labels_char:
+            #cat = char_dict[ch[0]]
+            #cat[ch[1]] = cat.get(ch[1], 0) + 1
         people = char_dict['PERSON']
         people_sorted = [(p, people[p]) for p in people if p not in HONORIFICS]
         people_sorted = sorted(people_sorted, key=lambda p: p[1], reverse=True)
@@ -693,7 +700,7 @@ class Document:
 
     def char_name_disambiguation(self, char_list):
         """given a list of char names in a document, group them by potential nicknames
-        :param: a list of character as well as their freq from get_char_list
+        :param char_list: a list of character as well as their freq from get_char_list
         :return: a list of list of character names and freq where the first one is the name,
         followed by nicknames
         >>> from corpus_analysis import document
@@ -707,7 +714,7 @@ class Document:
         >>> persuasion_chars = persuasion.get_char_list(20)
         >>> disamb = persuasion.char_name_disambiguation(persuasion_chars)
         >>> disamb
-        [[('Anne', 425)], [('Captain Wentworth', 119), ('Captain Benwick', 32), ('Wentworth', 31), ('Captain Harville', 21)], [('Lady Russell', 116)], [('Charles', 115), ('Charles Hayter', 29)], [('Mary', 113)], [('Sir Walter', 95)], [('Elizabeth', 82)], [('Elliot', 76), ('Miss Elliot', 32)], [('Louisa', 66)], [('Henrietta', 65)], [('Mrs Musgrove', 40), ('Musgrove', 24)], [('Mrs Smith', 36)], [('Mrs Clay', 33)], [('Miss Elliot', 32)], [('Captain Benwick', 32), ('Benwick', 26), ('Captain Harville', 21)], [('Wentworth', 31)], [('Charles Hayter', 29)], [('Mrs Croft', 27)], [('Benwick', 26)], [('Musgrove', 24)], [('Uppercross', 23)], [('Lady Dalrymple', 22)]]
+        [[('Anne', 425)], [('Captain Wentworth', 119), ('Wentworth', 31)], [('Lady Russell', 116)], [('Charles', 115), ('Charles Hayter', 29)], [('Mary', 113)], [('Sir Walter', 95)], [('Elizabeth', 82)], [('Elliot', 76), ('Miss Elliot', 32)], [('Louisa', 66)], [('Henrietta', 65)], [('Mrs Musgrove', 40), ('Musgrove', 24)], [('Mrs Smith', 36)], [('Mrs Clay', 33)], [('Miss Elliot', 32)], [('Captain Benwick', 32), ('Benwick', 26)], [('Wentworth', 31)], [('Charles Hayter', 29)], [('Mrs Croft', 27)], [('Benwick', 26)], [('Musgrove', 24)], [('Uppercross', 23)], [('Lady Dalrymple', 22)]]
         >>> len(disamb)
         22
         """
@@ -720,3 +727,13 @@ class Document:
                     char_cluster.append(char_list[j])
             to_return.append(char_cluster)
         return to_return
+
+
+    '''def char_disamb_rev(self,char_list):
+        output = {}
+        for name in char_list:
+            filtered_name = remove_honorifics(name)
+            if filtered_name not in output:
+                output[filtered_name] = Counter({name: 1})
+            else:
+                output[filtered_name] + {name: 1}'''

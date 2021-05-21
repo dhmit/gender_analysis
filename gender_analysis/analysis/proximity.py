@@ -4,7 +4,7 @@ from functools import reduce
 from more_itertools import windowed
 import nltk
 
-#from corpus_analysis.corpus import Corpus
+from corpus_analysis.corpus import Corpus
 from corpus_analysis.document import Document
 from corpus_analysis.common import load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES
 
@@ -412,8 +412,8 @@ class GenderProximityAnalyzer:
         if tags is None:
             tags = NLTK_TAGS_ADJECTIVES
 
-        #if isinstance(texts, Corpus):
-            #documents = texts.documents
+        if isinstance(texts, Corpus):
+            documents = texts.documents
         elif isinstance(texts, Document):
             documents = [texts]
         elif isinstance(texts, list):

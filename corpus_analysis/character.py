@@ -8,7 +8,7 @@ MALE_HONORIFICS = ["Master", "Mr", "Sir", "Gentleman", "Sire", "Lord", "His Hono
                    "His Honor", "My Lord", "Your Lordship", "Master", "Esquire", "Esq",
                    "His Holiness", "Pope", "His All Holiness", "His Beatitude", "The Reverend",
                    "Rev", "Fr", "Father", "Pr", "Pastor", "Br", "Brother", "Rabbi", "Imam",
-                   "Mufti", "Sayyid"]
+                   "Mufti", "Sayyid", "Captain"]
 NEUTRAL_HONORIFICS = ["Mx", "Excellency", "Excellence", "Your Honor", "The Honorable",
                       "The Honourable", "The Hon", "Hon", "The Hon'ble", "The Right Honourable",
                       "The Most Honourable", "Dr", "Doctor", "Professor", "QC", "Cl", "S Cl",
