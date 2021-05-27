@@ -17,11 +17,11 @@ GenderTokenResponse = Union[GenderTokenCounters, GenderTokenSequence]
 KeyGenderTokenResponse = Dict[Union[str, int], GenderTokenResponse]
 
 
-def _apply_kwargs(key_gender_token_counters: Dict[Union[str, int], GenderTokenCounters],
-                  diff: bool,
-                  sort: bool,
-                  limit: int,
-                  remove_swords: bool) -> KeyGenderTokenResponse:
+def _apply_result_filters(key_gender_token_counters: Dict[Union[str, int], GenderTokenCounters],
+                          diff: bool,
+                          sort: bool,
+                          limit: int,
+                          remove_swords: bool) -> KeyGenderTokenResponse:
     """
     A private helper function for applying optional keyword arguments to the output of
     GenderProximityAnalysis methods, allowing the user to sort, diff, limit, and remove stopwords
@@ -36,14 +36,14 @@ def _apply_kwargs(key_gender_token_counters: Dict[Union[str, int], GenderTokenCo
 
     >>> test_counter_1 = Counter({'foo': 1, 'bar': 2, 'own': 2})
     >>> test_counter_2 = Counter({'foo': 5, 'baz': 2})
-    >>> test_input = {'doc': {'Male': test_counter_1, 'Female': test_counter_2}}
-    >>> _apply_kwargs(test_input, diff=True, sort=False, limit=10, remove_swords=False).get('doc')
+    >>> test = {'doc': {'Male': test_counter_1, 'Female': test_counter_2}}
+    >>> _apply_result_filters(test, diff=True, sort=False, limit=10, remove_swords=False).get('doc')
     {'Male': Counter({'bar': 2, 'own': 2, 'foo': -4}), 'Female': Counter({'foo': 4, 'baz': 2})}
-    >>> _apply_kwargs(test_input, diff=False, sort=True, limit=10, remove_swords=False).get('doc')
+    >>> _apply_result_filters(test, diff=False, sort=True, limit=10, remove_swords=False).get('doc')
     {'Male': [('bar', 2), ('own', 2), ('foo', 1)], 'Female': [('foo', 5), ('baz', 2)]}
-    >>> _apply_kwargs(test_input, diff=False, sort=False, limit=10, remove_swords=True).get('doc')
+    >>> _apply_result_filters(test, diff=False, sort=False, limit=10, remove_swords=True).get('doc')
     {'Male': Counter({'bar': 2, 'foo': 1}), 'Female': Counter({'foo': 5, 'baz': 2})}
-    >>> _apply_kwargs(test_input, diff=True, sort=True, limit=10, remove_swords=False).get('doc')
+    >>> _apply_result_filters(test, diff=True, sort=True, limit=10, remove_swords=False).get('doc')
     {'Male': [('bar', 2), ('own', 2), ('foo', -4)], 'Female': [('foo', 4), ('baz', 2)]}
     """
 
@@ -423,7 +423,11 @@ class GenderProximityAnalyzer:
                     [self._results[document][gender_label], output[bin_year][gender_label]]
                 )
 
-        return _apply_kwargs(output, sort=sort, diff=diff, limit=limit, remove_swords=remove_swords)
+        return _apply_result_filters(output,
+                                     sort=sort,
+                                     diff=diff,
+                                     limit=limit,
+                                     remove_swords=remove_swords)
 
     def by_document(self,
                     sort: bool = False,
@@ -458,7 +462,11 @@ class GenderProximityAnalyzer:
         for document in self._results:
             output[document.label] = self._results[document]
 
-        return _apply_kwargs(output, sort=sort, diff=diff, limit=limit, remove_swords=remove_swords)
+        return _apply_result_filters(output,
+                                     sort=sort,
+                                     diff=diff,
+                                     limit=limit,
+                                     remove_swords=remove_swords)
 
     def by_gender(self,
                   sort: bool = False,
@@ -569,7 +577,11 @@ class GenderProximityAnalyzer:
                     output[matching_key][gender_label]
                 ])
 
-        return _apply_kwargs(output, sort=sort, diff=diff, limit=limit, remove_swords=remove_swords)
+        return _apply_result_filters(output,
+                                     sort=sort,
+                                     diff=diff,
+                                     limit=limit,
+                                     remove_swords=remove_swords)
 
     def by_overlap(self) -> Dict[str, Sequence[int]]:
         """
