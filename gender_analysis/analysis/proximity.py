@@ -4,7 +4,6 @@ from functools import reduce
 from more_itertools import windowed
 import nltk
 
-from gender_analysis.text.corpus import Corpus
 from gender_analysis.text.document import Document
 from gender_analysis.text.common import (
     load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES, SWORDS_ENG
@@ -386,7 +385,8 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
                  { str(Gender.label): [(str(token), int)] }
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_date((2000, 2008), 2).keys()
         dict_keys([2000, 2002, 2004, 2006])
         >>> analyzer.by_date((2000, 2010), 2).get(2002)
@@ -437,7 +437,8 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
                  { str(Gender.label): [(str(token), int)] }
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
         >>> doc = analyzer.corpus.documents[7]
         >>> analyzer_document_labels = list(analyzer.by_document().keys())
         >>> document_labels = list(map(lambda d: d.label, analyzer.corpus.documents))
@@ -475,7 +476,8 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
 
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_gender().keys()
         dict_keys(['Female', 'Male'])
         >>> analyzer.by_gender().get('Female')
@@ -536,7 +538,8 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
 
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_metadata('author_gender').keys()
         dict_keys(['male', 'female'])
         >>> analyzer.by_metadata('author_gender').get('female')
@@ -580,7 +583,8 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
 
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_overlap()
         {'sad': {'Female': 14, 'Male': 14}}
         """

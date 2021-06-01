@@ -1,7 +1,6 @@
 import csv
 import random
 import os
-from collections import Counter
 from copy import deepcopy
 from pathlib import Path
 
