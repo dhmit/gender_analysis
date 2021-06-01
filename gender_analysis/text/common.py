@@ -5,9 +5,11 @@ import pickle
 from pathlib import Path
 
 import nltk
+from nltk.corpus import stopwords
 import seaborn as sns
 from chardet.universaldetector import UniversalDetector
 
+SWORDS_ENG = stopwords.words('english')
 
 NLTK_TAGS = {
     'CC': 'conjunction, coordinating',

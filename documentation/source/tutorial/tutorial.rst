@@ -95,7 +95,7 @@ list of stopwords sourced from NLTK:
 
 .. code-block:: python
 
-    >>> from gender_analysis.common import SWORDS_ENG as swords_eng
+    >>> from gender_analysis.text.common import SWORDS_ENG as swords_eng
     >>> for word in list(sleep_associations):
     >>> 	if word in swords_eng:
     >>>		del sleep_associations[word]

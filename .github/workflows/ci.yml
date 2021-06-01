@@ -7,7 +7,7 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, summer-urop-21-refactor ]
 
 jobs:
   test_coverage:

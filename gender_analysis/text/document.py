@@ -125,8 +125,7 @@ class Document:
         >>> document_string
         'austen_persuasion'
         """
-        name = self.filename[0:len(self.filename) - 4]
-        return name
+        return self.label
 
     def __repr__(self):
         '''
@@ -147,9 +146,7 @@ class Document:
         >>> repr(austen)
         '<Document (austen_persuasion)>'
         '''
-
-        name = self.filename[0:len(self.filename) - 4]
-        return f'<Document ({name})>'
+        return f'<Document ({self.label})>'
 
     def __eq__(self, other):
         """

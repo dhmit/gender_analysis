@@ -6,13 +6,38 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import nltk
 
+from gender_analysis.gender.common import HE_SERIES, SHE_SERIES
 from gender_analysis.text.common import (
     load_graph_settings,
     MissingMetadataError,
     store_pickle,
     load_pickle,
 )
-from gender_analysis.gender.common import HE_SERIES, SHE_SERIES
+from gender_analysis.text.corpus import Corpus
+
+
+# temporary helper functions, to be removed when corpus refactor is complete
+def _get_wordcount_counter(corpus: Corpus):
+    """
+    This function returns a Counter object that stores
+    how many times each word appears in the corpus.
+    :return: Python Counter object
+    >>> from gender_analysis.text import Corpus
+    >>> from gender_analysis.testing.common import (
+    ...     TEST_CORPUS_PATH as path,
+    ...     SMALL_TEST_CORPUS_CSV as path_to_csv
+    ... )
+    >>> from gender_analysis.analysis.dunning import _get_wordcount_counter
+    >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
+    >>> word_count = _get_wordcount_counter(c)
+    >>> word_count['fire']
+    157
+    """
+    corpus_counter = Counter()
+    for current_document in corpus:
+        document_counter = current_document.get_wordcount_counter()
+        corpus_counter += document_counter
+    return corpus_counter
 
 
 ################################################################################
@@ -90,8 +115,8 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, target_word):
     -332112.16673673474
 
     """
-    counter1 = corpus1.get_wordcount_counter()
-    counter2 = corpus2.get_wordcount_counter()
+    counter1 = _get_wordcount_counter(corpus1)
+    counter2 = _get_wordcount_counter(corpus2)
 
     word_count_1 = counter1[target_word]
     word_count_2 = counter2[target_word]
@@ -209,8 +234,9 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
          >>> print(result[0])
          ('mrs', (-675.5338738828469, 1, 2031))
          """
-    wordcounter_male = m_corpus.get_wordcount_counter()
-    wordcounter_female = f_corpus.get_wordcount_counter()
+
+    wordcounter_male = _get_wordcount_counter(m_corpus)
+    wordcounter_female = _get_wordcount_counter(f_corpus)
 
     totalmale_words = 0
     totalfemale_words = 0
@@ -629,11 +655,11 @@ def dunning_words_by_author_gender(corpus, display_results=False, to_pickle=Fals
     try:
         results = load_pickle(pickle_filename)
     except IOError:
-
         m_corpus = corpus.filter_by_gender('male')
         f_corpus = corpus.filter_by_gender('female')
-        wordcounter_male = m_corpus.get_wordcount_counter()
-        wordcounter_female = f_corpus.get_wordcount_counter()
+        wordcounter_male = _get_wordcount_counter(m_corpus)
+        wordcounter_female = _get_wordcount_counter(f_corpus)
+
         if to_pickle:
             results = dunning_total(wordcounter_female,
                                     wordcounter_male,
