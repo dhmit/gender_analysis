@@ -3,7 +3,10 @@ __all__ = [
     'common',
     'corpus',
     'document',
-    'metadata_visualizations',
 ]
 
-from gender_analysis.text.metadata_visualizations import *
+from .common import *
+from .character import Character
+from .corpus import Corpus
+from .document import Document
+

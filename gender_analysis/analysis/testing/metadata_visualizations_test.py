@@ -4,15 +4,17 @@ import shutil
 import filecmp
 from pathlib import Path
 from gender_analysis.text.common import create_path_object_and_directories
-from gender_analysis.text.metadata_visualizations import (
+from gender_analysis.text.corpus import Corpus
+from gender_analysis.testing import common
+
+
+from ..metadata_visualizations import (
     plot_pubyears,
     plot_pubcountries,
     plot_gender_breakdown,
     plot_metadata_pie,
     create_corpus_summary_visualizations
 )
-from gender_analysis.text.corpus import Corpus
-from gender_analysis.testing import common
 
 OUTPUT_DIRECTORY_PATH = common.BASE_PATH / "testing" / "test_files" / "visualizations_test_dir"
 
