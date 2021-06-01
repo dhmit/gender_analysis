@@ -1,6 +1,6 @@
 from statistics import median, mean
 
-from gender_analysis import common
+from gender_analysis.gender import common
 
 
 def instance_dist(document, word):
@@ -12,13 +12,13 @@ def instance_dist(document, word):
     :param word: str, word to search text for distance between occurrences
     :return: list of distances between consecutive instances of word
 
-    >>> from corpus_analysis import document
+    >>> from gender_analysis import Document
     >>> from pathlib import Path
-    >>> from gender_analysis import common
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ... 'date': '1966', 'filename': 'test_text_3.txt',
-    ... 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_3.txt')}
-    >>> scarlett = document.Document(document_metadata)
+    ... 'filepath': Path(TEST_DATA_DIR, 'document_test_files', 'test_text_3.txt')}
+    >>> scarlett = Document(document_metadata)
     >>> instance_dist(scarlett, "her")
     [6, 5, 6, 7, 7]
 
@@ -35,13 +35,13 @@ def words_instance_dist(document, words):
     :param words: list of strings; words to search for in the document
     :return: list of distances between instances of any word in the supplied list
 
-    >>> from corpus_analysis import document
+    >>> from gender_analysis import Document
     >>> from pathlib import Path
-    >>> from gender_analysis import common
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ... 'date': '1966', 'filename': 'test_text_4.txt',
-    ... 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_4.txt')}
-    >>> scarlett = document.Document(document_metadata)
+    ... 'filepath': Path(TEST_DATA_DIR, 'document_test_files', 'test_text_4.txt')}
+    >>> scarlett = Document(document_metadata)
     >>> words_instance_dist(scarlett, ["his", "him", "he", "himself"])
     [6, 5, 6, 6, 7]
 
@@ -72,13 +72,13 @@ def male_instance_dist(document):
     :param: Document object
     :return: list of distances between instances of gendered words
 
-    >>> from corpus_analysis import document
+    >>> from gender_analysis import Document
     >>> from pathlib import Path
-    >>> from gender_analysis import common
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ... 'date': '1966', 'filename': 'test_text_5.txt',
-    ... 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_5.txt')}
-    >>> scarlett = document.Document(document_metadata)
+    ... 'filepath': Path(TEST_DATA_DIR, 'document_test_files', 'test_text_5.txt')}
+    >>> scarlett = Document(document_metadata)
     >>> male_instance_dist(scarlett)
     [6, 5, 6, 6, 7]
 
@@ -94,13 +94,13 @@ def female_instance_dist(document):
     :param: Document object
     :return: list of distances between instances of gendered word
 
-    >>> from corpus_analysis import document
+    >>> from gender_analysis import Document
     >>> from pathlib import Path
-    >>> from gender_analysis import common
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
     >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
     ... 'date': '1966', 'filename': 'test_text_6.txt',
-    ... 'filepath': Path(common.TEST_DATA_PATH, 'document_test_files', 'test_text_6.txt')}
-    >>> scarlett = document.Document(document_metadata)
+    ... 'filepath': Path(TEST_DATA_DIR, 'document_test_files', 'test_text_6.txt')}
+    >>> scarlett = Document(document_metadata)
     >>> female_instance_dist(scarlett)
     [6, 5, 6, 6, 7]
 

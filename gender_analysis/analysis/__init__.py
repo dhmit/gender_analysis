@@ -4,10 +4,12 @@ __all__ = [
     'gender_frequency',
     'instance_distance',
     'proximity',
+    'metadata_visualizations',
 ]
 
-from gender_analysis.analysis.dependency_parsing import *
-from gender_analysis.analysis.dunning import *
-from gender_analysis.analysis.gender_frequency import *
-from gender_analysis.analysis.instance_distance import *
-from gender_analysis.analysis.proximity import *
+from .metadata_visualizations import *
+from .dependency_parsing import *
+from .dunning import *
+from .gender_frequency import *
+from .instance_distance import *
+from .proximity import GenderProximityAnalyzer

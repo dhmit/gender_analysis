@@ -6,13 +6,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import nltk
 
-from corpus_analysis.common import (
+from gender_analysis.text.common import (
     load_graph_settings,
     MissingMetadataError,
     store_pickle,
     load_pickle,
 )
-from gender_analysis.common import HE_SERIES, SHE_SERIES
+from gender_analysis.gender.common import HE_SERIES, SHE_SERIES
 
 
 ################################################################################
@@ -75,14 +75,15 @@ def dunn_individual_word_by_corpus(corpus1, corpus2, target_word):
     :param corpus2: Corpus object
     :return: log likelihoods and p value
 
-    >>> from corpus_analysis.corpus import Corpus
+    >>> from gender_analysis import Corpus
     >>> from gender_analysis.analysis.dunning import dunn_individual_word_by_corpus
-    >>> from gender_analysis.common import TEST_DATA_PATH
-    >>> from corpus_analysis.testing.common import (
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
+
+    >>> from gender_analysis.testing.common import (
     ...     TEST_CORPUS_PATH as FILEPATH2,
     ...     SMALL_TEST_CORPUS_CSV as PATH_TO_CSV
     ... )
-    >>> filepath1 = TEST_DATA_PATH / 'document_test_files'
+    >>> filepath1 = TEST_DATA_DIR / 'document_test_files'
     >>> test_corpus1 = Corpus(filepath1)
     >>> test_corpus2 = Corpus(FILEPATH2, csv_path = PATH_TO_CSV, ignore_warnings = True)
     >>> dunn_individual_word_by_corpus(test_corpus1, test_corpus2, 'sad')
@@ -199,8 +200,8 @@ def dunning_total_by_corpus(m_corpus, f_corpus):
     :return: list of tuples (common word, (dunning value, m_corpus_count, f_corpus_count))
 
          >>> from gender_analysis.analysis.dunning import dunning_total_by_corpus
-         >>> from corpus_analysis.corpus import Corpus
-         >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
+         >>> from gender_analysis import Corpus
+         >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
          >>> c = Corpus(TEST_CORPUS_PATH, csv_path=SMALL_TEST_CORPUS_CSV, ignore_warnings = True)
          >>> test_m_corpus = c.filter_by_gender('male')
          >>> test_f_corpus = c.filter_by_gender('female')

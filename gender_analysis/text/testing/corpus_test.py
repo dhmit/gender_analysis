@@ -1,5 +1,5 @@
-from corpus_analysis.corpus import Corpus
-from corpus_analysis.testing import common
+from gender_analysis.text.corpus import Corpus
+from gender_analysis.testing import common
 
 
 class TestLoadCorpus:
@@ -13,24 +13,24 @@ class TestLoadCorpus:
         Tests that the corpus properly loads when not provided metadata
         """
 
-        c = Corpus(common.TEST_CORPUS_PATH)
-        assert len(c) == 99
-        assert type(c.documents) == list
-        assert c.name is None
+        corpus = Corpus(common.TEST_CORPUS_PATH)
+        assert len(corpus) == 99
+        assert isinstance(corpus.documents, list)
+        assert corpus.name is None
 
     def test_load_with_csv(self):
         """
         Test that the corpus properly loads when provided a metadata csv
         """
 
-        c = Corpus(
+        corpus = Corpus(
             common.TEST_CORPUS_PATH,
             csv_path=common.LARGE_TEST_CORPUS_CSV,
             name='test_corpus',
         )
-        assert len(c) == 99
-        assert type(c.documents) == list
-        assert c.name == 'test_corpus'
+        assert len(corpus) == 99
+        assert isinstance(corpus.documents, list)
+        assert corpus.name == 'test_corpus'
 
     def test_load_pickle(self, tmp_path):
         """
@@ -53,13 +53,13 @@ class TestLoadCorpus:
 
         # first make sure the small corpus is correct
         assert len(original_corpus) == 10
-        assert type(original_corpus.documents) == list
+        assert isinstance(original_corpus.documents, list)
         assert original_corpus.name == 'test_corpus'
 
         # next load the pickle file to make sure data was copied correctly
         pickle_corpus = Corpus(pickle_path, name='test_corpus')
         assert len(pickle_corpus) == 10
-        assert type(original_corpus.documents) == list
+        assert isinstance(original_corpus.documents, list)
         assert pickle_corpus.name == 'test_corpus'
 
         # Make sure the corpora are equal
