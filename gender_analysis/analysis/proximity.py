@@ -302,7 +302,7 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
 
     Instance methods:
         by_date()
-        by_document(
+        by_document()
         by_gender()
         by_metadata()
         by_overlap()
