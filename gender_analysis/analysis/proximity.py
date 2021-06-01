@@ -13,6 +13,8 @@ from gender_analysis.text.common import (
 from gender_analysis.gender.common import MALE, FEMALE, BINARY_GROUP
 from gender_analysis.gender.gender import Gender
 
+from gender_analysis.analysis.base_analyzers import CorpusAnalyzer
+
 GenderTokenCounters = Dict[str, Counter]
 GenderTokenSequence = Dict[str, Sequence[Tuple[str, int]]]
 GenderTokenResponse = Union[GenderTokenCounters, GenderTokenSequence]
@@ -289,7 +291,7 @@ def _sort_gender_token_counters(gender_token_counters: GenderTokenCounters,
     return output_gender_token_counters
 
 
-class GenderProximityAnalyzer:
+class GenderProximityAnalyzer(CorpusAnalyzer):
     """
     The GenderProximityAnalyzer instance finds word occurrences within a window around
     gendered pronouns. Helper methods are provided to organize and analyze those occurrences
@@ -300,17 +302,17 @@ class GenderProximityAnalyzer:
 
     Instance methods:
         by_date()
-        by_document()
+        by_document(
         by_gender()
         by_metadata()
         by_overlap()
     """
 
     def __init__(self,
-                 texts: Union[Document, Corpus, Sequence[Document]],
                  tags: Optional[Sequence[str]] = None,
                  genders: Optional[Sequence[Gender]] = None,
-                 word_window: int = 5) -> None:
+                 word_window: int = 5,
+                 **kwargs) -> None:
         """
         Initializes a GenderProximityAnalyzer object that can be used for retrieving
         analyses concerning the number of occurrences of specific words within a window of
@@ -321,6 +323,7 @@ class GenderProximityAnalyzer:
         :param genders: a list of Gender instances.
         :param word_window: number of words to search for in either direction of a Gender instance.
         """
+        super().__init__(**kwargs)
 
         if genders is None:
             genders = BINARY_GROUP
@@ -328,25 +331,12 @@ class GenderProximityAnalyzer:
         if tags is None:
             tags = NLTK_TAGS_ADJECTIVES
 
-        if isinstance(texts, Corpus):
-            documents = texts.documents
-        elif isinstance(texts, Document):
-            documents = [texts]
-        elif isinstance(texts, list):
-            if all(isinstance(item, Document) for item in texts):
-                documents = texts
-            else:
-                raise ValueError('all items in list texts must be of type Document')
-        else:
-            raise ValueError('texts must be of type Document, Corpus, or a list of Documents')
-
         if not all(isinstance(item, str) for item in tags):
             raise ValueError('all items in list tags must be of type str')
 
         if not all(isinstance(item, Gender) for item in genders):
             raise ValueError('all items in list genders must be of type Gender')
 
-        self.documents = documents
         self.genders = genders
         self.gender_labels = [gender.label for gender in genders]
         self.tags = tags
@@ -357,7 +347,7 @@ class GenderProximityAnalyzer:
 
         results = {}
 
-        for document in self.documents:
+        for document in self.corpus:
             results[document] = _generate_gender_token_counters(document,
                                                                 genders,
                                                                 tags,
@@ -396,8 +386,7 @@ class GenderProximityAnalyzer:
                  { str(Gender.label): [(str(token), int)] }
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_date((2000, 2008), 2).keys()
         dict_keys([2000, 2002, 2004, 2006])
         >>> analyzer.by_date((2000, 2010), 2).get(2002)
@@ -413,7 +402,7 @@ class GenderProximityAnalyzer:
         for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
             output[bin_start_year] = {label: Counter() for label in self.gender_labels}
 
-        for document in self.documents:
+        for document in self.corpus:
             date = getattr(document, 'date', None)
             if date is None:
                 continue
@@ -448,11 +437,10 @@ class GenderProximityAnalyzer:
                  { str(Gender.label): [(str(token), int)] }
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
-        >>> doc = analyzer.documents[7]
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
+        >>> doc = analyzer.corpus.documents[7]
         >>> analyzer_document_labels = list(analyzer.by_document().keys())
-        >>> document_labels = list(map(lambda d: d.label, analyzer.documents))
+        >>> document_labels = list(map(lambda d: d.label, analyzer.corpus.documents))
         >>> analyzer_document_labels == document_labels
         True
         >>> analyzer.by_document().get(doc.label)
@@ -487,8 +475,7 @@ class GenderProximityAnalyzer:
 
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_gender().keys()
         dict_keys(['Female', 'Male'])
         >>> analyzer.by_gender().get('Female')
@@ -549,8 +536,7 @@ class GenderProximityAnalyzer:
 
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_metadata('author_gender').keys()
         dict_keys(['male', 'female'])
         >>> analyzer.by_metadata('author_gender').get('female')
@@ -594,8 +580,7 @@ class GenderProximityAnalyzer:
 
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis import Corpus
-        >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_overlap()
         {'sad': {'Female': 14, 'Male': 14}}
         """

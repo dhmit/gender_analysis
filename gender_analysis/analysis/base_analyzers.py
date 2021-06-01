@@ -12,11 +12,25 @@ class CorpusAnalyzer:
 
     Intended for topic-specific subclassing.
 
+    CorpusAnalyzers can be initialized with the path to a directory of text files
+    and, optionally, associated metadata. In this case, CorpusAnalyzer
+    creates and manages a Corpus object for you.
     >>> from gender_analysis.analysis import CorpusAnalyzer
     >>> from gender_analysis.testing.common import TEST_DATA_DIR
     >>> file_path = TEST_DATA_DIR / 'document_test_files'
     >>> metadata_csv_path = TEST_DATA_DIR / 'document_test_files' / 'document_test_files.csv'
     >>> analyzer = CorpusAnalyzer(file_path=file_path, csv_path=metadata_csv_path)
+    >>> type(analyzer.corpus), len(analyzer.corpus)
+    (<class 'gender_analysis.text.corpus.Corpus'>, 14)
+
+    Alternatively, you can initialize a CorpusAnalyzer using an existing Corpus object.
+    >>> from gender_analysis.analysis import CorpusAnalyzer
+    >>> from gender_analysis.text import Corpus
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
+    >>> file_path = TEST_DATA_DIR / 'document_test_files'
+    >>> metadata_csv_path = TEST_DATA_DIR / 'document_test_files' / 'document_test_files.csv'
+    >>> corpus = Corpus(file_path, csv_path=metadata_csv_path)
+    >>> analyzer = CorpusAnalyzer(corpus=corpus)
     >>> type(analyzer.corpus), len(analyzer.corpus)
     (<class 'gender_analysis.text.corpus.Corpus'>, 14)
     """
@@ -28,15 +42,16 @@ class CorpusAnalyzer:
         csv_path: str = None,
         name: str = None,
         pickle_path: str = None,
-        ignore_warnings: bool = False,
-    ):
+        ignore_warnings: bool = False
+    ) -> None:
+        """
+        Initializes a CorpusAnalyzer.
+        Subclasses are expected to extend the initialization routine to perform any initial
+        analysis that can be run at init time and be cached for later access.
+        """
         if corpus:
             self.corpus = corpus
-        else:
-            if not (file_path and csv_path):
-                # TODO(ra): real exception type, better message
-                raise Exception('You must pass a file_path and csv_path')
-
+        elif file_path:
             # Create a new corpus
             self.corpus = Corpus(
                 file_path,
@@ -45,6 +60,12 @@ class CorpusAnalyzer:
                 pickle_on_load=pickle_path,
                 ignore_warnings=ignore_warnings,
             )
+        else:
+            raise ValueError(
+                'You must initialize a CorpusAnalyzer with an existing corpus, '
+                'or with the file_path argument pointing to your data directory.'
+            )
+
 
     def get_word_counts(self, remove_swords: bool = False) -> Counter:
         """
