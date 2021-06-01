@@ -6,9 +6,11 @@ import nltk
 
 from gender_analysis.text.corpus import Corpus
 from gender_analysis.text.document import Document
-from gender_analysis.text.common import load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES
+from gender_analysis.text.common import (
+    load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES, SWORDS_ENG
+)
 
-from gender_analysis.gender.common import MALE, FEMALE, BINARY_GROUP, SWORDS_ENG
+from gender_analysis.gender.common import MALE, FEMALE, BINARY_GROUP
 from gender_analysis.gender.gender import Gender
 
 GenderTokenCounters = Dict[str, Counter]

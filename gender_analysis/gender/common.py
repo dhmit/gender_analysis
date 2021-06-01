@@ -5,14 +5,12 @@ import zipfile
 from clint import textui
 import requests
 from nltk.parse.stanford import StanfordDependencyParser
-from nltk.corpus import stopwords
 
 from gender_analysis.common import BASE_PATH
 
 from gender_analysis.gender.pronouns import PronounSeries
 from gender_analysis.gender.gender import Gender
 
-SWORDS_ENG = stopwords.words('english')
 
 # Common Pronoun Collections
 HE_SERIES = PronounSeries('Masc', {'he', 'his', 'him', 'himself'}, subj='he', obj='him')
