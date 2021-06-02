@@ -1,10 +1,9 @@
-from typing import Optional, Sequence, Dict
+from typing import Optional, Sequence, Dict, List, Union
 from statistics import median, mean
 
-from gender_analysis.gender import common, Gender
+from gender_analysis.gender import BINARY_GROUP, Gender
 from gender_analysis.text import Document
 from gender_analysis.analysis.base_analyzers import CorpusAnalyzer
-
 
 def instance_dist(document, word):
     """
@@ -271,7 +270,44 @@ def get_highest_distances(results, num):
 
 
 class GenderWordDistanceAnalyzer(CorpusAnalyzer):
-    def __init__(self, genders: Optional[Sequence[Gender]] = None):
+    """
+    The GenderWordDistanceAnalyzer finds the distance between occurances of sets of gendered
+    pronouns. It can be used to compute the distance between,e.g., mentions of
+    feminine vs. masculine pronouns in a corpus.
+
+    Helper methods are provided to organize and analyze these distances using various averages
+    and result filters based on document-specific metadata including the gender of a document's
+    author, where the document was written, and in which year the document was written.
+
+    For a small dataset, like our instance_distance test corpus, the raw results are usable.
+    Here we see that some of our documents have no masculine pronouns in them,
+    and we can eyeball that feminine pronouns occur with less distance between them.
+    >>> from gender_analysis.analysis import GenderWordDistanceAnalyzer
+    >>> from pathlib import Path
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
+    >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
+    >>> analyzer = GenderWordDistanceAnalyzer(file_path=data_dir)
+    >>> analyzer.get_results()
+    {<Document (words_instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}, <Document (instance_dist_masc)>: {<Female>: [], <Male>: [2, 3, 5, 7]}, <Document (instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}}
+
+    These results are much easier to see by getting statistics across the corpus. Here we see
+    what we suspected from the raw results: on average, feminine pronouns occur more densely in this
+    corpus than masculine pronouns.
+    >>> analyzer.get_stats()
+    {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
+
+    We can also look at stats for every document:
+    >>> analyzer.get_stats_by_document()
+    {<Document (words_instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, <Document (instance_dist_masc)>: {<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, <Document (instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
+
+    Or a particular document:
+    >>> analyzer.get_stats_by_document(analyzer.corpus.documents[0])
+    {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}
+    """
+
+    def __init__(self,
+                 genders: Optional[Sequence[Gender]] = None,
+                 **kwargs) -> None:
         super().__init__(**kwargs)
 
         if genders is None:
@@ -280,10 +316,37 @@ class GenderWordDistanceAnalyzer(CorpusAnalyzer):
 
         self._results = self.run_analysis()
 
-    def get_results(self) -> Dict[Document, Dict[Gender, Dict[str, float]]]:
+    def get_results(self):
         return self._results
 
-    def run_analysis() -> Dict[Document, Dict[Gender, Dict[str, float]]]:
+    def run_analysis(self) -> Dict[Document, Dict[Gender, List[int]]]:
+        results = {}
+
+        for document in self.corpus:
+            results[document] = {}
+            for gender in self.genders:
+                gender_results = words_instance_dist(document, gender.identifiers)
+                results[document][gender] = gender_results
+
+        return results
+
+    def get_stats(self) -> Dict[Gender, Dict[str, float]]:
+        corpus_results_by_gender = {gender: [] for gender in self.genders}
+
+        for document, document_results_by_gender in self._results.items():
+            for gender, distances in document_results_by_gender.items():
+                corpus_results_by_gender[gender].extend(distances)
+
+        corpus_stats = {}
+        for gender, results_by_gender in corpus_results_by_gender.items():
+            corpus_stats[gender] = _get_stats(results_by_gender)
+
+        return corpus_stats
+
+    def get_stats_by_document(self,
+                              specific_document: Document = None
+                              ) -> Union[Dict[Document, Dict[Gender, Dict[str, float]]],
+                                         Dict[Gender, Dict[str, float]]]:
         """
         Returns a dictionary with each document in the Analyzer's corpus
         mapped in the following form:
@@ -300,7 +363,7 @@ class GenderWordDistanceAnalyzer(CorpusAnalyzer):
                     }
                 }
             }
-
+        :param specific_document: get stats for just one document
         :return: Nested dictionary, first mapping documents and next mapping genders to their stats.
         """
         results = {}
@@ -314,7 +377,10 @@ class GenderWordDistanceAnalyzer(CorpusAnalyzer):
 
             results[document] = document_stats
 
-        return results
+        if specific_document:
+            return results[specific_document]
+        else:
+            return results
 
     def store(self, pickle_filepath: str = 'gendered_token_distance_analysis.pgz') -> None:
         """
