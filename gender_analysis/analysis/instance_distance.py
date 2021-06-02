@@ -108,8 +108,6 @@ def _get_document_gender_metrics(document_results, metric):
     return metric_list
 
 
-
-
 def results_by_year(results, metric, time_frame, bin_size):
     """
     Takes in a dictionary of results and a specified metric from ``run_distance_analysis``, returns

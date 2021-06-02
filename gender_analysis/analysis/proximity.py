@@ -352,9 +352,9 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
         results = {}
         for document in self.corpus:
             results[document] = _generate_gender_token_counters(document,
-                                                                genders,
-                                                                tags,
-                                                                word_window=word_window)
+                                                                self.genders,
+                                                                self.tags,
+                                                                word_window=self.word_window)
         return results
 
     @classmethod
