@@ -94,3 +94,21 @@ class CorpusAnalyzer:
                 if word in SWORDS_ENG:
                     del corpus_counter[word]
         return corpus_counter
+
+    def store(self, pickle_filepath: str = 'corpus_analysis.pgz') -> None:
+        """
+        Saves self to a pickle file.
+
+        :param pickle_filepath: filepath to save the output.
+        :return: None, saves results as pickled file with name 'corpus_analysis'
+        """
+
+        try:
+            load_pickle(pickle_filepath)
+            user_inp = input("results already stored. overwrite previous analysis? (y/n)")
+            if user_inp == 'y':
+                store_pickle(self, pickle_filepath)
+            else:
+                pass
+        except IOError:
+            store_pickle(self, pickle_filepath)

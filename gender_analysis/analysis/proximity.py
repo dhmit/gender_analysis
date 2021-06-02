@@ -612,13 +612,4 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
         :param pickle_filepath: filepath to save the output.
         :return: None, saves results as pickled file with name 'gender_tokens_analysis'
         """
-
-        try:
-            load_pickle(pickle_filepath)
-            user_inp = input("results already stored. overwrite previous analysis? (y/n)")
-            if user_inp == 'y':
-                store_pickle(self, pickle_filepath)
-            else:
-                pass
-        except IOError:
-            store_pickle(self, pickle_filepath)
+        super().store(pickle_filepath=pickle_filepath)
