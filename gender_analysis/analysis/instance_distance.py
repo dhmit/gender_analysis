@@ -5,7 +5,8 @@ from gender_analysis.gender import BINARY_GROUP, Gender
 from gender_analysis.text import Document
 from gender_analysis.analysis.base_analyzers import CorpusAnalyzer
 
-def instance_dist(document, word):
+
+def instance_dist(document: Document, word: str):
     """
     Takes in a word and returns a list of distances between each instance of that word in
     the document, where distance means 'number of words' between occurences of the target word.
@@ -29,7 +30,7 @@ def instance_dist(document, word):
     return words_instance_dist(document, [word])
 
 
-def words_instance_dist(document, target_words):
+def words_instance_dist(document: Document, target_words: List[str]):
     """
     Takes in a document and list of words (e.g. gendered pronouns), returns a list of distances
     between each instance of any of the words in that document,
@@ -107,47 +108,6 @@ def _get_document_gender_metrics(document_results, metric):
     return metric_list
 
 
-def results_by_author_gender(results, metric):
-    """
-    Takes in a dictionary of results and a specified metric from ``run_distance_analysis``, returns
-    a dictionary in the following form:
-
-    .. code-block:: python
-
-        {
-            'author_gender': {
-                <Document Object>: {
-                    <Gender Object>: metric_result
-                }
-            }
-        }
-
-
-    :param results: dictionary from **run_distance_analysis**
-    :param metric: one of ('median', 'mean', 'min', 'max')
-
-    :return: dictionary
-
-    """
-    data = dict()
-    if metric not in {'median', 'mean', 'min', 'max'}:
-        raise ValueError(
-            f"{metric} is not valid metric name. Valid names: 'median', 'mean', 'min', 'max'"
-        )
-
-    for document in results:
-
-        # Skip the document if it doesn't have a defined author gender
-        author_gender = getattr(document, 'author_gender', None)
-        if author_gender is None:
-            continue
-
-        if author_gender not in data:
-            data[author_gender] = dict()
-
-        data[author_gender][document] = _get_document_gender_metrics(results[document], metric)
-
-    return data
 
 
 def results_by_year(results, metric, time_frame, bin_size):
@@ -286,23 +246,33 @@ class GenderWordDistanceAnalyzer(CorpusAnalyzer):
     >>> from pathlib import Path
     >>> from gender_analysis.testing.common import TEST_DATA_DIR
     >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
-    >>> analyzer = GenderWordDistanceAnalyzer(file_path=data_dir)
+    >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+    >>> analyzer = GenderWordDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
     >>> analyzer.get_results()
-    {<Document (words_instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}, <Document (instance_dist_masc)>: {<Female>: [], <Male>: [2, 3, 5, 7]}, <Document (instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}}
+    {<Document (instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}, <Document (instance_dist_masc)>: {<Female>: [], <Male>: [2, 3, 5, 7]}, <Document (words_instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}}
 
-    These results are much easier to see by getting statistics across the corpus. Here we see
-    what we suspected from the raw results: on average, feminine pronouns occur more densely in this
-    corpus than masculine pronouns.
+    We might want to aggregate these results across the whole corpus:
+    >>> analyzer.get_corpus_distances_by_gender()
+    {<Female>: [1, 1, 2, 2, 3, 3, 4, 4], <Male>: [2, 3, 5, 7]}
+
+    Or take a look at corpus-wide statistics. Here we see what we suspected from the raw results:
+    on average, feminine pronouns occur more densely in this corpus than masculine pronouns.
     >>> analyzer.get_stats()
     {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
 
     We can also look at stats for every document:
     >>> analyzer.get_stats_by_document()
-    {<Document (words_instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, <Document (instance_dist_masc)>: {<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, <Document (instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
+    {<Document (instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, <Document (instance_dist_masc)>: {<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, <Document (words_instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
 
     Or a particular document:
     >>> analyzer.get_stats_by_document(analyzer.corpus.documents[0])
     {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}
+
+    Several filters are available. For example, here we filter the results by the author's gender,
+    to see whether there is a difference between the density of masculine and feminine pronouns
+    depending on the author's gender.
+    >>> analyzer.get_stats_by_author_gender()
+    {'female': {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, 'male': {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
     """
 
     def __init__(self,
@@ -331,17 +301,25 @@ class GenderWordDistanceAnalyzer(CorpusAnalyzer):
         return results
 
     def get_stats(self) -> Dict[Gender, Dict[str, float]]:
-        corpus_results_by_gender = {gender: [] for gender in self.genders}
-
-        for document, document_results_by_gender in self._results.items():
-            for gender, distances in document_results_by_gender.items():
-                corpus_results_by_gender[gender].extend(distances)
+        corpus_distances_by_gender = self.get_corpus_distances_by_gender()
 
         corpus_stats = {}
-        for gender, results_by_gender in corpus_results_by_gender.items():
+        for gender, results_by_gender in corpus_distances_by_gender.items():
             corpus_stats[gender] = _get_stats(results_by_gender)
 
         return corpus_stats
+
+    def get_corpus_distances_by_gender(self):
+        corpus_distances_by_gender = {gender: [] for gender in self.genders}
+
+        for document, document_results_by_gender in self._results.items():
+            for gender, distances in document_results_by_gender.items():
+                corpus_distances_by_gender[gender].extend(distances)
+
+        for distances in corpus_distances_by_gender.values():
+            distances.sort()
+
+        return corpus_distances_by_gender
 
     def get_stats_by_document(self,
                               specific_document: Document = None
@@ -363,7 +341,7 @@ class GenderWordDistanceAnalyzer(CorpusAnalyzer):
                     }
                 }
             }
-        :param specific_document: get stats for just one document
+        :param specific_document: a specific document to get stats for
         :return: Nested dictionary, first mapping documents and next mapping genders to their stats.
         """
         results = {}
@@ -381,6 +359,49 @@ class GenderWordDistanceAnalyzer(CorpusAnalyzer):
             return results[specific_document]
         else:
             return results
+
+    def get_stats_by_author_gender(self, specific_gender: Gender = None):
+        """
+        Takes the raw analysis results and returns a dictionary in the following form:
+
+        .. code-block:: python
+            {
+                'author_gender': {
+                    <Gender object>: {
+                        'median': float,
+                        'mean: float,
+                        'min': float,
+                        'max': float
+                    }
+                }
+            }
+        """
+        distances_by_author_gender = {}
+
+        for document, document_results_by_gender in self._results.items():
+            # Skip the document if it doesn't have a defined author gender
+            author_gender = getattr(document, 'author_gender', None)
+            if author_gender is None:
+                continue
+
+            # Init dict if author's gender is not already in the results dict
+            if author_gender not in distances_by_author_gender:
+                distances_by_author_gender[author_gender] = {
+                    gender: [] for gender in self.genders
+                }
+
+            for gender, distances in document_results_by_gender.items():
+                distances_by_author_gender[author_gender][gender].extend(distances)
+
+        stats_by_author_gender = {
+            author_gender: {} for author_gender in distances_by_author_gender
+        }
+        for author_gender, distances_by_gender in distances_by_author_gender.items():
+            for gender, distances in distances_by_gender.items():
+                stats_by_author_gender[author_gender][gender] = _get_stats(distances)
+
+        return stats_by_author_gender
+
 
     def store(self, pickle_filepath: str = 'gendered_token_distance_analysis.pgz') -> None:
         """

@@ -1,0 +1,4 @@
+author,date,title,country_publication,author_gender,filename
+"Author 0",1900,Title 0,United States,female,instance_dist.txt,
+"Author 1",1950,Title 1,United States,female,instance_dist_masc.txt,
+"Author 2",2000,Title 2,Canada,male,words_instance_dist.txt,
