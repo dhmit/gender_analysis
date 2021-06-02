@@ -78,6 +78,9 @@ class Document:
         if 'label' not in metadata_dict:
             self.label = self.filename[0:len(self.filename) - 4]
 
+        # memoization
+        self._part_of_speech_tags = None
+
         self.text = self._load_document_text()
 
     @property
@@ -416,6 +419,25 @@ class Document:
 
         return self._word_counts_counter[word]
 
+    def get_count_of_words(self, words):
+        """
+        A helper method for retrieving the number of occurrences of a given set of words within
+        a Document.
+
+        :param words: a list of strings.
+        :return: a Counter with each word in words keyed to its number of occurrences.
+
+        >>> from gender_analysis.text.document import Document
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> document_filepath = Path(TEST_DATA_DIR, 'document_test_files', 'test_text_9.txt')
+        >>> document_metadata = {'filename': 'test_text_2.txt', 'filepath': document_filepath}
+        >>> test_document = Document(document_metadata)
+        >>> test_document.get_count_of_words(['sad', 'was', 'sadness', 'very'])
+        Counter({'was': 5, 'sad': 1, 'very': 1, 'sadness': 0})
+        """
+        return Counter({word: self.get_count_of_word(word) for word in words})
+
     def get_wordcount_counter(self):
         """
         Returns a counter object of all of the words in the text.
@@ -557,6 +579,26 @@ class Document:
         word_frequency = self.get_count_of_word(word) / self.word_count
         return word_frequency
 
+    def get_word_frequencies(self, words):
+        """
+        A helper method for retreiving the frequencies of a given set of words within a Document.
+
+        :param words: a list of strings.
+        :return: a dictionary of words keyed to float frequencies.
+
+        >>> from gender_analysis.text.document import Document
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> document_filepath = Path(TEST_DATA_DIR, 'document_test_files', 'test_text_9.txt')
+        >>> document_metadata = {'filename': 'test_text_2.txt', 'filepath': document_filepath}
+        >>> test_document = Document(document_metadata)
+        >>> test_document.get_word_frequencies(['peace', 'died', 'foobar'])
+        {'peace': 0.02702702702702703, 'died': 0.02702702702702703, 'foobar': 0.0}
+        """
+        word_frequencies = {word: self.get_count_of_word(word) / self.word_count for word in words}
+
+        return word_frequencies
+
     def get_part_of_speech_tags(self):
         """
         .. _get-pos:
@@ -584,12 +626,54 @@ class Document:
 
         """
 
+        if self._part_of_speech_tags is not None:
+            return self._part_of_speech_tags
+
         common.download_nltk_package_if_not_present('tokenizers/punkt')
         common.download_nltk_package_if_not_present('taggers/averaged_perceptron_tagger')
 
         text = nltk.word_tokenize(self.text)
         pos_tags = nltk.pos_tag(text)
+
+        self._part_of_speech_tags = pos_tags
         return pos_tags
+
+    def get_part_of_speech_words(self, words, remove_swords=True):
+        """
+        A helper method for retrieving the number of occurrences of input words keyed to their
+        NLTK tag values (i.e., 'NN' for noun).
+
+        :param words: a list of strings.
+        :param remove_swords: optional boolean, remove stop words from return.
+        :return: a dictionary keying NLTK tag strings to Counter instances.
+
+        >>> from gender_analysis.text.document import Document
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> document_filepath = Path(TEST_DATA_DIR, 'document_test_files', 'test_text_9.txt')
+        >>> document_metadata = {'filename': 'test_text_2.txt', 'filepath': document_filepath}
+        >>> test_document = Document(document_metadata)
+        >>> test_document.get_part_of_speech_words(['peace', 'died', 'beautiful', 'foobar'])
+        {'JJ': Counter({'beautiful': 3}), 'VBD': Counter({'died': 1}), 'NN': Counter({'peace': 1})}
+        """
+
+        common.download_nltk_package_if_not_present('corpora/stopwords')
+        stop_words = set(nltk.corpus.stopwords.words('english'))
+        document_pos_tags = self.get_part_of_speech_tags()
+        words_set = {word.lower() for word in words}
+        output = {}
+
+        for token, tag in document_pos_tags:
+            lowered_token = token.lower()
+            if remove_swords is True and token in stop_words:
+                continue
+            if token not in words_set:
+                continue
+            if tag not in output:
+                output[tag] = Counter()
+            output[tag][lowered_token] += 1
+
+        return output
 
     def update_metadata(self, new_metadata):
         """
