@@ -1,7 +1,7 @@
 __all__ = [
     'dependency_parsing',
     'dunning',
-    'gender_frequency',
+    'frequency',
     'instance_distance',
     'metadata_visualizations',
     'proximity',
@@ -10,7 +10,7 @@ __all__ = [
 
 from .dependency_parsing import *
 from .dunning import *
-from .gender_frequency import *
+from .frequency import GenderFrequencyAnalyzer
 from .instance_distance import *
 from .metadata_visualizations import *
 from .proximity import GenderProximityAnalyzer
