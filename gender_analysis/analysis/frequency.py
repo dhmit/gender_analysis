@@ -177,7 +177,19 @@ class GenderFrequencyAnalyzer(CorpusAnalyzer):
         Initializes a GenderFrequencyAnalyzer object that can be used for retrieving
         analyses concerning the number of occurrences of gendered pronouns.
 
-        :param texts: a Corpus, Document, or list of Documents.
+        GenderFrequencyAnalyzer is a subclass of BaseAnalyzer and so accepts additional arguments
+        from that class.
+
+        BaseAnalyzer params:
+        :param corpus: an optional instance of the Corpus class.
+        :param file_path: a filepath to .txt files for creating a Corpus instance.
+        :param csv_path: a filepath to a .csv file containing metadata for .txt files.
+        :param name: a string name to be passed to the Corpus instance.
+        :param pickle_path: a filepath for writing the Corpus pickle file.
+        :param ignore_warnings: a boolean value indicating whether or not warnings during Corpus
+                                initialization should be displayed.
+
+        GenderFrequencyAnalyzer params:
         :param genders: a list of Gender instances.
         """
 
@@ -190,6 +202,57 @@ class GenderFrequencyAnalyzer(CorpusAnalyzer):
             raise ValueError('all items in list genders must be of type Gender')
 
         self.genders = genders
+
+        count, frequencies, relatives = self._run_analysis()
+
+        # memoized properties
+        self._results_by_count = count
+        self._results_by_frequencies = frequencies
+        self._results_by_frequencies_relative = relatives
+        self._by_gender = None
+
+    def _run_analysis(self):
+        """
+        A private helper method for running the primary analysis of GenderFrequencyAnalyzer.
+        This method generates three dictionaries: one (count) keying Document instances
+        to Gender instances to Counter instances representing the total number of instances
+        of each Gender's identifiers in a given Document; one (frequency) keying Document instances
+        to Gender instances to dictionaries of the shape {str:float} representing the total number
+        of instances of each Gender's identifiers over the total word count of that Document; and
+        one (relative) keying Document instances to Gender instances to dicationaries of the shape
+        {str:float} representing the relative percentage of Gender identifiers across all Gender
+        instances in a given Document instance.
+
+        :return: a tuple containing three dictionaries.
+
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis.text.corpus import Corpus
+        >>> analyzer = GenderFrequencyAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
+        >>> analysis = analyzer._run_analysis()
+        >>> test_document = analyzer.corpus.documents[0]
+        >>> test_gender = analyzer.genders[0]
+        >>> len(analysis) == 3
+        True
+        >>> list(analysis[0].keys()) == analyzer.corpus.documents
+        True
+        >>> list(analysis[1].keys()) == analyzer.corpus.documents
+        True
+        >>> list(analysis[2].keys()) == analyzer.corpus.documents
+        True
+        >>> list(analysis[0][test_document].keys()) == analyzer.genders
+        True
+        >>> list(analysis[1][test_document].keys()) == analyzer.genders
+        True
+        >>> list(analysis[2][test_document].keys()) == analyzer.genders
+        True
+        >>> isinstance(analysis[0][test_document][test_gender], Counter)
+        True
+        >>> isinstance(analysis[1][test_document][test_gender], dict)
+        True
+        >>> isinstance(analysis[2][test_document][test_gender], dict)
+        True
+        """
 
         count = {}
         frequencies = {}
@@ -204,12 +267,7 @@ class GenderFrequencyAnalyzer(CorpusAnalyzer):
                 frequencies[document][gender] = document.get_word_frequencies(gender.identifiers)
             relatives[document] = _get_gender_word_frequencies_relative(count[document])
 
-        # memoized properties
-        self._by_gender = None
-
-        self._results_by_count = count
-        self._results_by_frequencies = frequencies
-        self._results_by_frequencies_relative = relatives
+        return count, frequencies, relatives
 
     def by_date(self,
                 time_frame: Tuple[int, int],
