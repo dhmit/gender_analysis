@@ -195,16 +195,10 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
 
         return results
 
-    def corpus_stats(self) -> GenderDistanceStats:
-        corpus_distances_by_gender = self.corpus_results()
-
-        corpus_stats = {}
-        for gender, results_by_gender in corpus_distances_by_gender.items():
-            corpus_stats[gender] = _get_stats_from_distances(results_by_gender)
-
-        return corpus_stats
-
     def corpus_results(self) -> GenderDistances:
+        """
+        Aggregates distance results across the whole corpus
+        """
         corpus_distances_by_gender = {gender: [] for gender in self.genders}
 
         for document_results_by_gender in self._results.values():
@@ -215,6 +209,18 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
             distances.sort()
 
         return corpus_distances_by_gender
+
+    def corpus_stats(self) -> GenderDistanceStats:
+        """
+        Aggregates stats across the whole corpus
+        """
+        corpus_distances_by_gender = self.corpus_results()
+
+        corpus_stats = {}
+        for gender, results_by_gender in corpus_distances_by_gender.items():
+            corpus_stats[gender] = _get_stats_from_distances(results_by_gender)
+
+        return corpus_stats
 
     def by_document(self):
         return self._results
@@ -229,13 +235,9 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
 
     def by_metadata(self, metadata_key: str) -> Dict[any, GenderDistances]:
         """
-        Return GenderDistances organized by the values of a column from the Document metadata.
-        Optionally, returns a single GenderDistances for a specific lookup value in that column.
+        Aggregates GenderDistances based on the values of a specified Document metadata field.
 
         :param metadata_key: a string corresponding to one of the columns in the input metadata csv.
-
-        Returns a dictionary mapping authors' genders to GenderDistances for documents
-        they wrote, or a single GenderDistances for a specified author gender.
         """
         distances_by_metadata_value = {}
         for document, document_results_by_gender in self._results.items():
@@ -260,66 +262,82 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         metadata_key: str,
     ) -> Dict[any, GenderDistanceStats]:
         """
-        Return GenderDistanceStats organized by the values of a column from the Document metadata.
-        Optionally, returns a single GenderDistanceStats for a specific lookup value in that column.
+        Aggregates GenderDistancesStats based on the values of a specified Document metadata field.
 
         :param metadata_key: a string corresponding to one of the columns in the input metadata csv.
-
-        Returns a dictionary mapping authors' genders to GenderDistanceStats for documents
-        they wrote, or a single GenderDistanceStats for a specified author gender.
         """
         distances_by_metadata_value = self.by_metadata(metadata_key=metadata_key)
         return _get_stats_from_distances_by_metadata_value(distances_by_metadata_value)
 
     def by_author_gender(self) -> Dict[Gender, GenderDistances]:
         """
-        Returns a dictionary mapping author_gender metadata to GenderDistances.
+        Organizes results by the 'author_gender' metadata on each Document.
         This is a convenience method wrapper for by_metadata.
         """
         return self.by_metadata(metadata_key='author_gender')
 
     def stats_by_author_gender(self) -> Dict[Gender, GenderDistanceStats]:
         """
-        Returns a dictionary mapping author_gender metadata to GenderDistanceStats.
+        Organizes results by the 'author_gender' metadata on each Document.
         This is a convenience method wrapper for stats_by_metadata.
         """
         return self.stats_by_metadata(metadata_key='author_gender')
 
     def by_date(self,
-                time_frame: Optional[Tuple[int, int]] = (-10000, 10000),
+                time_frame: Optional[Tuple[int, int]] = None,
                 bin_size: int = 1,
                 ) -> Dict[int, GenderDistances]:
         """
-        Organizes results by year.
-        Optionally, can constrain those results to a given year range,
-        and can bin results.
+        Organizes results by the 'date' metadata on each Document.
+        Optionally, can constrain those results to a given year range and can bin results.
+
+        >>> from gender_analysis.analysis import GenderDistanceAnalyzer
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
+        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
+        >>> analyzer.by_date()
+        {1900: {<Female>: [1, 2, 3, 4], <Male>: []}, 1901: {<Female>: [], <Male>: [2, 3, 5, 7]}, 1910: {<Female>: [1, 2, 3, 4], <Male>: []}}
+        >>> analyzer.by_date(time_frame=(1900, 1920), bin_size=10)
+        {1900: {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}, 1910: {<Female>: [1, 2, 3, 4], <Male>: []}}
         """
 
-        # n.b. we implement everything with bin and time_frame, but the defaults are set
-        # so that you get results by year
-        start_year, end_year = time_frame
+        if bin_size != 1 and time_frame is None:
+            raise ValueError('Bin sizes greater than 1 require a time_frame to be set')
+        if bin_size < 1:
+            raise ValueError('Bin size must be at least 1.')
+
         distances_by_year = self.by_metadata('date')
-
-        distances_by_bin = {
-            bin_start_year: {
-                gender: [] for gender in self.genders
-            }
-            for bin_start_year in range(start_year, end_year, bin_size)
-        }
-
+        distances_by_bin = {}
         for year, distances_by_gender in distances_by_year.items():
-            if start_year <= year < end_year:
-                bin_start_year = compute_bin_year(year, start_year, end_year, bin_size)
-                for gender in self.genders:
-                    distances_by_bin[bin_start_year][gender].extend(distances_by_gender[gender])
+            if time_frame and not (time_frame[0] <= year < time_frame[1]):
+                # this year is not within the timeframe
+                continue
+
+            if bin_size == 1:
+                bin_start_year = year
+            else:
+                bin_start_year = compute_bin_year(year, time_frame[0], time_frame[1], bin_size)
+
+            if bin_start_year not in distances_by_bin:
+                distances_by_bin[bin_start_year] = {
+                    gender: [] for gender in self.genders
+                }
+
+            for gender in self.genders:
+                distances_by_bin[bin_start_year][gender].extend(distances_by_gender[gender])
 
         return distances_by_bin
 
     def stats_by_date(self,
-                      time_frame: Optional[Tuple[int, int]] = (-10000, 10000),
+                      time_frame: Optional[Tuple[int, int]] = None,
                       bin_size: int = 1,
                       ) -> Dict[int, GenderDistanceStats]:
-
+        """
+        Organizes stats by the 'date' metadata on each Document.
+        Optionally, can constrain those results to a given year range and can bin results.
+        """
         distances_by_bin = self.by_date(time_frame=time_frame, bin_size=bin_size)
         return _get_stats_from_distances_by_metadata_value(distances_by_bin)
 
