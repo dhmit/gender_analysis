@@ -316,7 +316,19 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
         analyses concerning the number of occurrences of specific words within a window of
         gendered pronouns.
 
-        :param texts: a Corpus, Document, or list of Documents.
+        GenderFrequencyAnalyzer is a subclass of BaseAnalyzer and so accepts additional arguments
+        from that class.
+
+        BaseAnalyzer params:
+        :param corpus: an optional instance of the Corpus class.
+        :param file_path: a filepath to .txt files for creating a Corpus instance.
+        :param csv_path: a filepath to a .csv file containing metadata for .txt files.
+        :param name: a string name to be passed to the Corpus instance.
+        :param pickle_path: a filepath for writing the Corpus pickle file.
+        :param ignore_warnings: a boolean value indicating whether or not warnings during Corpus
+                                initialization should be displayed.
+
+        GenderProximityAnalyzer params:
         :param tags: a list of NLTK token strings, defaulting to adjectives.
         :param genders: a list of Gender instances.
         :param word_window: number of words to search for in either direction of a Gender instance.
