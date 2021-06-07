@@ -2,7 +2,8 @@ from typing import Optional
 from collections import Counter
 
 from ..text.corpus import Corpus
-from ..text.common import SWORDS_ENG
+from ..text.common import SWORDS_ENG, load_pickle, store_pickle
+
 
 class CorpusAnalyzer:
     """
@@ -65,7 +66,6 @@ class CorpusAnalyzer:
                 'You must initialize a CorpusAnalyzer with an existing corpus, '
                 'or with the file_path argument pointing to your data directory.'
             )
-
 
     def get_word_counts(self, remove_swords: bool = False) -> Counter:
         """

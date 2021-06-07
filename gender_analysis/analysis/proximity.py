@@ -5,14 +5,13 @@ from more_itertools import windowed
 import nltk
 
 from gender_analysis.text.document import Document
-from gender_analysis.text.common import (
-    load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES, SWORDS_ENG
-)
+from gender_analysis.text.common import NLTK_TAGS, NLTK_TAGS_ADJECTIVES, SWORDS_ENG
 
 from gender_analysis.gender.common import MALE, FEMALE, BINARY_GROUP
 from gender_analysis.gender.gender import Gender
 
 from gender_analysis.analysis.base_analyzers import CorpusAnalyzer
+from gender_analysis.analysis.common import compute_bin_year
 
 GenderTokenCounters = Dict[str, Counter]
 GenderTokenSequence = Dict[str, Sequence[Tuple[str, int]]]
@@ -409,7 +408,7 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
             date = getattr(document, 'date', None)
             if date is None:
                 continue
-            bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
+            bin_year = compute_bin_year(date, time_frame[0], time_frame[1], bin_size)
             if bin_year not in output:
                 continue
             for gender_label in self.gender_labels:
