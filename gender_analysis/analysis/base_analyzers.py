@@ -2,7 +2,8 @@ from typing import Optional
 from collections import Counter
 
 from ..text.corpus import Corpus
-from ..text.common import SWORDS_ENG
+from ..text.common import SWORDS_ENG, load_pickle, store_pickle
+
 
 class CorpusAnalyzer:
     """
@@ -66,7 +67,6 @@ class CorpusAnalyzer:
                 'or with the file_path argument pointing to your data directory.'
             )
 
-
     def get_word_counts(self, remove_swords: bool = False) -> Counter:
         """
         This function returns a Counter object that stores
@@ -94,3 +94,21 @@ class CorpusAnalyzer:
                 if word in SWORDS_ENG:
                     del corpus_counter[word]
         return corpus_counter
+
+    def store(self, pickle_filepath: str = 'corpus_analysis.pgz') -> None:
+        """
+        Saves self to a pickle file.
+
+        :param pickle_filepath: filepath to save the output.
+        :return: None, saves results as pickled file with name 'corpus_analysis'
+        """
+
+        try:
+            load_pickle(pickle_filepath)
+            user_inp = input("results already stored. overwrite previous analysis? (y/n)")
+            if user_inp == 'y':
+                store_pickle(self, pickle_filepath)
+            else:
+                pass
+        except IOError:
+            store_pickle(self, pickle_filepath)
