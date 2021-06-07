@@ -404,7 +404,7 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
             if bin_size == 1:
                 bin_start_year = year
             else:
-                bin_start_year = compute_bin_year(year, time_frame[0], time_frame[1], bin_size)
+                bin_start_year = compute_bin_year(year, time_frame[0], bin_size)
 
             if bin_start_year not in distances_by_bin:
                 distances_by_bin[bin_start_year] = {

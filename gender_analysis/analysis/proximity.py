@@ -420,7 +420,7 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
             date = getattr(document, 'date', None)
             if date is None:
                 continue
-            bin_year = compute_bin_year(date, time_frame[0], time_frame[1], bin_size)
+            bin_year = compute_bin_year(date, time_frame[0], bin_size)
             if bin_year not in output:
                 continue
             for gender_label in self.gender_labels:
