@@ -1,17 +1,10 @@
-gender\_analysis package
+gender\_analysis.gender package
 ========================
-
-Subpackages
------------
-
-.. toctree::
-
-   gender_analysis.analysis
 
 common module
 ------------------------------
 
-.. automodule:: gender_analysis.common
+.. automodule:: gender_analysis.gender.common
    :members:
    :undoc-members:
    :show-inheritance:
@@ -19,7 +12,7 @@ common module
 gender module
 ------------------------------
 
-.. automodule:: gender_analysis.gender
+.. automodule:: gender_analysis.gender.gender
    :members:
    :undoc-members:
    :show-inheritance:
@@ -28,7 +21,7 @@ gender module
 pronouns module
 --------------------------------
 
-.. automodule:: gender_analysis.pronouns
+.. automodule:: gender_analysis.gender.pronouns
    :members:
    :undoc-members:
    :show-inheritance:

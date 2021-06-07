@@ -18,15 +18,15 @@ Initialization
 **************
 
 Let's start off by preparing to load up our sample Corpus, which includes 99 nineteenth-century novels written in
-English. We'll need to import the :ref:`Corpus <corpus_analysis:corpus module>` class and the path to a corpus:
+English. We'll need to import the :ref:`Corpus <gender_analysis.text:corpus module>` class and the path to a corpus:
 
 .. code-block:: python
 
-    >>> from corpus_analysis.corpus import Corpus
-    >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
+    >>> from gender_analysis.text.corpus import Corpus
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
 
 
-... and then we can generate our first :ref:`Corpus <corpus_analysis:corpus module>` object:
+... and then we can generate our first :ref:`Corpus <gender_analysis.text:corpus module>` object:
 
 .. code-block:: python
 
@@ -41,7 +41,7 @@ re-initialize our corpus with a second parameter, csv_path, that points to it:
 
 .. code-block:: python
 
-    >>> from corpus_analysis.testing.common import LARGE_TEST_CORPUS_CSV
+    >>> from gender_analysis.testing.common import LARGE_TEST_CORPUS_CSV
     >>> meta_corpus = Corpus(TEST_CORPUS_PATH, csv_path = LARGE_TEST_CORPUS_CSV)
     >>> len(meta_corpus)
     99
@@ -63,7 +63,7 @@ and ``field_argument``:
 Analyzing a Document
 ********************
 
-We can use the :ref:`Document <corpus_analysis:document module>` class's methods to perform a variety of simple analytic
+We can use the :ref:`Document <gender_analysis.text:document module>` class's methods to perform a variety of simple analytic
 functions. Let's start by looking at how the word "sleep" shows up in the novel. We'll use
 :ref:`get_count_of_word <get-count-of-word>` to see how many times it occurs,
 :ref:`get_word_freq <get-word-freq>` to find the frequency with which it occurs compared to all
@@ -71,7 +71,7 @@ words in the document, and :ref:`words_associated <words-associated>` to see wha
 
 .. code-block:: python
 
-    >>> from corpus_analysis.document import Document
+    >>> from gender_analysis.text.document import Document
     >>> dracula.get_count_of_word('sleep')
     179
     >>> dracula.get_word_freq('sleep')
@@ -95,7 +95,7 @@ list of stopwords sourced from NLTK:
 
 .. code-block:: python
 
-    >>> from gender_analysis.common import SWORDS_ENG as swords_eng
+    >>> from gender_analysis.text.common import SWORDS_ENG as swords_eng
     >>> for word in list(sleep_associations):
     >>> 	if word in swords_eng:
     >>>		del sleep_associations[word]
@@ -143,7 +143,7 @@ and ``NONBINARY``. Let's start by taking a look at those.
 
 .. code-block:: python
 
-    >>> from gender_analysis.common import MALE as male, FEMALE as female, NONBINARY as nonbinary
+    >>> from gender_analysis.gender.common import MALE as male, FEMALE as female, NONBINARY as nonbinary
     >>> female.pronouns
     {'herself', 'hers', 'her', 'she'}
     >>> nonbinary.pronouns
@@ -152,33 +152,35 @@ and ``NONBINARY``. Let's start by taking a look at those.
 A major feature of the Gender Analysis Toolkit is the ability to create your own gender objects. For more on that,
 see :ref:`tutorial/tutorial:Defining Pronouns and Genders`.
 
-Part of Speech Analysis
+Proximity Analysis
 =======================
 
-We can use the methods in :ref:`gender_adjective <gender_analysis.analysis:gender adjective module>` to see what
-adjectives are associated with different gendered word sets. Let's use the
-:ref:`run_adj_analysis_doc <run_adj_analysis_doc>` method, which needs a document and a gender to look for.
+We can use the class ``GenderProximityAnalyzer`` in :ref:`gender_adjective <gender_analysis.analysis:proximity module>` to see what
+words are associated with different gendered word sets. Let's use the
+``by_gender`` method, which needs a document and a gender to look for. This analyzer accepts either a ``Corpus`` instance or the filepaths to relevant texts and metadata.
 
 .. code-block:: python
 
-    >>> from gender_analysis.analysis.gender_adjective import run_adj_analysis_doc
-    >>> adjectives = run_adj_analysis_doc(dracula, [female, male, nonbinary])
-    >>> adjectives['Male']['dead']
+    >>> from gender_analysis.analysis.proximity import GenderProximityAnalyzer
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, TUTORIAL_TEST_CORPUS_CSV
+    >>> analyzer = GenderProximityAnalyzer(file_path=TEST_CORPUS_PATH, csv_path=TUTORIAL_TEST_CORPUS_CSV, genders=[female, male, nonbinary])
+    >>> analyzer.by_gender().get('Male').get('dead')
     7
 
 This function returns a dictionary of three gender dictionaries, each of which contains a list of every adjective that
 shows up around the gender and how often it shows up. It's challenging to extract information in its current form,
-though, so we'll import and use the :ref:`difference_adjs <difference_adjs>` function, which figures out which words
+though, so we'll pass in the optional flags `diff=True` and `sort=True`, which figure out which words
 are disproportionately associated with a specific gender.
 
 .. code-block:: python
 
-    >>> from gender_analysis.analysis.gender_adjective import difference_adjs
-    >>> diff_adjs = difference_adjs(adjectives)
-    >>> diff_adjs
-    {'Female': [('dead', 8), ('beautiful', 8), ('sweet', 8), ('sleep', 8), ('asleep', 7), ('hypnotic', 6), ('anæmic', 5), ('unconscious', 5), ('whilst', 5), ('cold', 4)],
-    'Male': [('good', 34), ('first', 29), ('old', 24), ('great', 22), ('poor', 21), ('new', 18), ('strong', 16), ('much', 15), ('last', 14), ('right', 12)],
-    'Nonbinary': [('clumsy', 3), ('fash', 2), ('warnt', 2), ('afeared', 2), ('difficult', 2), ('proper', 2), ('former', 2), ('thirsty', 2), ('patient', 2), ('eleventh', 1)]}
+    >>> analyzer.by_gender(diff=True)
+    {
+        'Female': [('dead', 8), ('beautiful', 8), ('sweet', 8), ('sleep', 8), ('asleep', 7), ('hypnotic', 6), ('anæmic', 5), ('unconscious', 5), ('whilst', 5), ('cold', 4)],
+        'Male': [('good', 34), ('first', 29), ('old', 24), ('great', 22), ('poor', 21), ('new', 18), ('strong', 16), ('much', 15), ('last', 14), ('right', 12)],
+        'Nonbinary': [('clumsy', 3), ('fash', 2), ('warnt', 2), ('afeared', 2), ('difficult', 2), ('proper', 2), ('former', 2), ('thirsty', 2), ('patient', 2), ('eleventh', 1)]
+    }
+
 
 The results here are ``(word, count)`` pairs, where the count is the number of times the word occurs near a given
 gender's pronoun minus the how often the word occurs near every other gender's pronoun. So, "dead," for example, occurs
@@ -194,22 +196,8 @@ This sort of data has a clear thrust to it and can be used as evidence to suppor
 question, or as the grounds of a new hypothesis. One might investigate further by opening the text file and looking up
 words of particular interest, like "hypnotic."
 
-The ``find_gender_pos`` function works similarly to the ``find_gender_adjective`` function, except it works on
-adjectives, adverbs, proper nouns, and verbs. Just add the appropriate part-of-speech tag -
-``['adj', 'adv', 'proper_noun', 'verb']`` as the second argument of the function and you're good to go!
-
-.. code-block:: python
-
-    >>> from gender_analysis.analysis.gender_pos import find_gender_pos
-    >>> verbs = run_pos_analysis_doc(dracula, 'verb', [female, male, nonbinary])
-    >>> diff_verbs = difference_pos(verbs)
-    >>> diff_verbs
-    {'Female': [('wake', 17), ('woke', 12), ('slept', 10), ('sleeping', 7), ('shuddered', 7), ('waking', 6), ('sank', 6), ('thanked', 5), ('licked', 5), ('frighten', 5)],
-    'Male': [('said', 251), ('took', 113), ('went', 93), ('asked', 85), ('come', 72), ('spoke', 63), ('see', 57), ('go', 51), ('answered', 46), ('found', 45)],
-    'Nonbinary': [('quieted', 5), ('posted', 5), ('shant', 5), ('amongst', 3), ('sweep', 3), ('dead', 3), ('rob', 3), ('shillins', 3), ('seein', 3), ('slay', 3)]}
-
-These results support the hypothesis we developed after looking at the differential adjective analysis; much of what the
-female characters in `Dracula` do has to do with sleeping or dying.
+The ``GenderProximityAnalyzer`` accepts NLTK tags to determine which part of speech to include in the results set.
+You can examine all possible NLTK tags by calling ``GenderProximityAnalyzer.list_nltk_tags()``.
 
 Frequency Analysis
 ==================
@@ -219,87 +207,92 @@ frequencies of a list of genders:
 
 .. code-block:: python
 
-    >>> from gender_analysis.analysis.gender_frequency import *
-    >>> from gender_analysis.common import MALE as male, FEMALE as female, NONBINARY as nonbinary
-    >>> dracula_freqs = doc_pronoun_freq(dracula, [female, male, nonbinary])
-    {'Female': 0.24111771399671258, 'Male': 0.6416740422303704, 'Nonbinary': 0.11720824377291691}
+    >>> from gender_analysis.analysis.frequency import GenderFrequencyAnalyzer
+    >>> from gender_analysis.gender.common import MALE as male, FEMALE as female, NONBINARY as nonbinary
+    >>> analyzer = GenderFrequencyAnalyzer(file_path=TEST_CORPUS_PATH, csv_path=TUTORIAL_TEST_CORPUS_CSV, genders=[female, male, nonbinary])
+    >>> analyzer.by_gender(format_by='relative', group_by='aggregate')
+    {
+        'Female': 0.2411177139967126,
+        'Male': 0.6416740422303705,
+        'Nonbinary': 0.11720824377291693
+    }
 
 This means that, of pronoun usages between male, female, and nonbinary (they/them) identifiers, he/him pronouns come up
 roughly 65% of the time, she/her 24% of the time, and they/them 12%.
 
-We can get more granular than this with the :ref:`document_subject_object_freq function <document_subject_object_freq>`,
-which looks at how often a given gender's subject pronouns come up relative to their object pronouns.
+We can get pass in optional keyword arguments to format and shape the data as needed. Above we've provided
+``format_by='relative'`` and ``group_by='aggregate'``. Changing ``group_by`` from ``'aggregate'`` to ``'label'``
+provides us additional helpful context:
 
 .. code-block:: python
 
-    >>> from gender_analysis.analysis.gender_frequency import document_subject_object_freq
-    >>> dracula_sub_ob_freq = document_subject_object_freq(dracula, [female, male, nonbinary])
-    >>> dracula_sub_ob_freq
-    {<Female>: {'subj': 0.4340836012861736, 'obj': 0.5659163987138264},
-    <Male>: {'subj': 0.7289156626506024, 'obj': 0.2710843373493976},
-    <Nonbinary>: {'subj': 0.49838187702265374, 'obj': 0.5016181229773463}}
+    >>> analyzer.by_gender(format_by='relative', group_by='label')
+    {
+        'Female': {'subject': 0.1024149702870148, 'object': 0.13351877607788595, 'other': 0.00518396763181186},
+        'Male': {'subject': 0.32127955493741306, 'object': 0.11948413200151727, 'other': 0.20091035529144013},
+        'Nonbinary': {'subject': 0.0584144645340751, 'object': 0.058793779238841826, 'other': 0.0}
+    }
+
 
 These results largely square with our part-of-speech results; female characters, who tend to be described as asleep or
-dead, are the subjects of sentences 43% of the time and the objects 57%; male characters, conversely, whose verbs and
-adjectives are more active, are subjects 73% of the time and objects 27%. They/them occur about evenly across the two.
+dead, are the subjects of sentences 10% of the time and the objects 13%; male characters, conversely, whose verbs and
+adjectives are more active, are subjects 32% of the time and objects 12%. They/them occur about evenly across the two.
 
-Many of the more powerful functions with :ref:`gender_frequency <gender_analysis.analysis:gender frequency module>`
-work better when they're undertaken on a corpus level, so let's give that a whirl.
+Many of the more powerful methods of these analyzers work better when they're undertaken with more than one text,
+so let's give that a whirl.
 
 ******************
 Analyzing a Corpus
 ******************
 
 Most of the analytic functions in the Gender Analysis toolkit operate on corpora as well as on ``Documents``. For
-example, we can run a full gendered adjective analysis on an entire corpus with the run_adj_analysis method, which takes
-as arguments a ``Corpus`` object and a list of ``Gender`` objects. For this example, let's use our small test corpus of
-10 Documents and the ``BINARY_GROUP`` list of ``Gender`` objects, which includes ``MALE`` and ``FEMALE``.
+example, we can run a full gendered adjective analysis on an entire corpus with the ``GenderProximityAnalyzer``,
+which takes as arguments a ``Corpus`` object or relevant filepaths and a list of ``Gender`` objects.
+For this example, let's use our small test corpus of 10 Documents. We'll not pass explicit ``Gender`` instances
+into the analyzer and instead let it default to the the ``BINARY_GROUP`` list of ``Gender`` objects,
+which includes ``MALE`` and ``FEMALE``. We'll also allow the analyzer to default to searching for adjectives.
 
 .. code-block:: python
 
-    >>> from gender_analysis.corpus import Corpus
-    >>> from gender_analysis.common import MALE, FEMALE
-    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
-    >>> from gender_analysis.testing.common import SMALL_TEST_CORPUS_CSV
-    >>> from gender_analysis.analysis.gender_adjective import run_adj_analysis
-    >>> small_corpus = Corpus(TEST_CORPUS_PATH, csv_path = SMALL_TEST_CORPUS_CSV, ignore_warnings = True)
-    >>> results = run_adj_analysis(small_corpus, [MALE, FEMALE])
+    >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, SMALL_TEST_CORPUS_CSV
+    >>> from gender_analysis.analysis.proximity import GenderProximityAnalyzer
+    >>> analyzer = GenderProximityAnalyzer(file_path=TEST_CORPUS_PATH, csv_path=SMALL_TEST_CORPUS_CSV)
+    >>> analyzer.by_document()
 
-The :ref:`run_adj_analysis <run_adj_analysis>` function returns a dictionary of result dictionaries, with one for each
-``Document`` in the ``Corpus``. It may take a little while to run. Each ``Document`` result contains one Dictionary for
-each ``Gender`` provided, with a list of adjectives and their frequencies across the ``Document``. We can access the
-values for any particular ``Document`` by using that ``Document`` as a key in our result dictionary.
+The ``by_document`` methods returns a dictionary of result dictionaries, with one for each
+``Document`` input to the analyzer. It may take a little while to run. Each ``Document`` result contains one Dictionary
+for each ``Gender`` provided, with a list of adjectives and their frequencies across the ``Document``. We can access the
+values for any particular ``Document`` by using that ``Document`` .label (which is the same
+as the filepath minus the extension) as a key in our result dictionary.
 
-However, we're now working at the ``Corpus`` level. Instead of looking at individual ``Document`` results, let's use the
-:ref:`merge_raw_results <merge_raw_results>` function, which merges all adjectives across the corpus into dictionaries
-sorted by gender.
+However, we're now working at the ``Corpus`` level. Instead of looking at individual ``Document`` results, let's
+explore some of the other methods available to us.
 
 .. code-block:: python
 
-    >>> from gender_analysis.analysis.gender_adjective import merge_raw_results
-    >>> merged_results = merge_raw_results(results)
+    >>> analyzer.by_gender()
 
 These dictionaries are a bit hard to handle, but we can print out some reasonable results with display functions:
 
 .. code-block:: python
 
-    >>> for gender in merged_results:
-    >>> 	print(gender, ":", display_gender_adjectives(merged_results[gender]))
-    Male : [('little', 480), ('good', 336), ('much', 240), ('great', 211), ('old', 193), ('young', 156), ('best', 150), ('first', 145), ('last', 136), ('many', 125)]
-    Female : [('little', 673), ('good', 302), ('much', 284), ('great', 203), ('first', 201), ('old', 172), ('last', 171), ('young', 144), ('happy', 142), ('many', 137)]
+    >>> analyzer.by_gender(sort=True)
+    {
+        'Female': [('little', 673), ('good', 302), ('much', 284), ('great', 203), ('first', 201), ('old', 172), ('last', 171), ('young', 144), ('happy', 142), ('many', 137)],
+        'Male': [('little', 480), ('good', 336), ('much', 240), ('great', 211), ('old', 193), ('young', 156), ('best', 150), ('first', 145), ('last', 136), ('many', 125)]
+    }
 
 These are the top ten adjectives associated with each gender across our test corpus! Unfortunately, as you can see, it's
 not terribly informative; the lists overlap quite a bit. If we want to see instead what adjectives are
-disproportionately associated with each gender, we can instead use the :ref:`difference_adjs <difference_adjs>`
-function:
+disproportionately associated with each gender, we can instead pass in the `diff=True` optional flag:
 
 .. code-block:: python
 
-    >>> differenced_results = difference_adjs(merged_results)
-    >>> for gender in differenced_results:
-    >>>	print(gender, ": ", differenced_results[gender])
-    Male :  [('mr', 41), ('good', 34), ('rough', 26), ('nat', 24), ('old', 21), ('fellow', 20), ('best', 18), ('french', 16), ('english', 16), ('handsome', 15)]
-    Female :  [('little', 193), ('mrs', 91), ('miss', 75), ('happy', 65), ('first', 56), ('least', 54), ('long', 45), ('amy', 45), ('much', 44), ('next', 36)]
+    >>> analyzer.by_gender(sort=True, diff=True)
+    {
+        'Female': [('little', 193), ('mrs', 91), ('miss', 75), ('happy', 65), ('first', 56), ('least', 54), ('long', 45), ('amy', 45), ('much', 44), ('next', 36)],
+        'Male': [('mr', 41), ('good', 34), ('rough', 26), ('nat', 24), ('old', 21), ('fellow', 20), ('best', 18), ('french', 16), ('english', 16), ('handsome', 15)]
+    }
 
 Gender Frequencies Across Corpora
 =================================
@@ -307,51 +300,7 @@ Gender Frequencies Across Corpora
 Before we saw how to perform frequency analysis of genders across a single document, but these functions are available
 for corpora as well. Many of the functions that act on a corpus return a dictionary mapping each of the documents to
 their individual results, which allows users to examine the corpus results on a document-by-document level. These are
-stored with the ``Document`` objects as keys to the dictionary. Take :ref:`corpus_pronoun_freq <corpus_pronoun_freq>`,
-which is one of these functions:
-
-.. code-block:: python
-
-    >>> from gender_analysis.analysis.gender_frequency import corpus_pronoun_freq
-    >>> corpus_freqs = corpus_pronoun_freq(meta_corpus, [MALE, FEMALE])
-    >>> corpus_freqs[dracula]
-    {'Female': 0.24111771399671258, 'Male': 0.6416740422303704, 'Nonbinary': 0.11720824377291691}
-
-Notice that this is the same result returned when we called ``doc_pronoun_freq`` on the `Dracula` ``Document`` itself.
-
-Subject/Object Analyses
-=======================
-
-Sometimes it’s not enough to just analyze how often gendered language comes up in a document, and we want to take a
-look at how it comes up. The toolkit has robust functionality to examine this, through the use of subject and object
-pronoun occurrences. We can see how often genders are represented across the language with the use of
-:ref:`corpus_subject_object_freq <corpus_subject_object_freq>`, which returns a dictionary mapping documents to the
-subject/object frequencies of the requested genders. Here’s an example:
-
-.. code-block:: python
-
-    >>> from gender_analysis.analysis.gender_frequency import corpus_subject_object_freq
-    >>> sub_obj_freqs = corpus_subject_object_freq(meta_corpus, [MALE, FEMALE])
-    >>> sub_obj_freqs[dracula][female]
-    {'subj': 0.4340836012861736, 'obj': 0.5659163987138264}
-
-These results match our earlier analysis.
-
-That’s quite a big difference! However, it’s worth noting that this is just a measurement of the subject/object
-frequencies within the genders themselves, and is not a direct comparison between the two. Luckily, there’s a function
-that lets us do that! The function :ref:`corpus_sub_pronouns_gender_comparison <corpus_sub_pronouns_gender_comparison>`
-allows us to perform a direct analysis between genders, by reporting the relative proportion of subject instances that
-are of a given gender. Say we wanted to find the proportion of sentence subjects that were “female” words compared to
-those that were “male”:
-
-.. code-block:: python
-
-    >>> subj_comparisons = corpus_sub_pronouns_gender_comparison(meta_corpus, female, [male])
-    >>> subj_comparisons[dracula]
-    0.24171888988361684
-
-This means that only about 24% of the subject instances are “female” words between those and “male” words -- in other
-words, males appear as the subject of a sentence more than twice as often as females.
+stored with the ``Document`` instance's ``.label`` preoperty as keys to the dictionary.
 
 *****************************
 Defining Pronouns and Genders
@@ -363,10 +312,11 @@ not provided by the toolkit, it’s actually pretty easy!
 
 .. _declaring-new-pronounseries-objects:
 
-Declaring New :ref:`PronounSeries <gender_analysis:pronouns module>` Objects
-============================================================================
+Declaring New :ref:`PronounSeries <gender_analysis.gender:pronouns module>` Objects
+===================================================================================
 
-For the purposes of this toolkit, a :ref:`PronounSeries <gender_analysis:pronouns module>` is defined by four things:
+For the purposes of this toolkit, a :ref:`PronounSeries <gender_analysis.gender:pronouns module>` is defined
+by four things:
 
 - An identifier (basically the name of the pronoun series)
 - A collection of pronouns (such as “she”, “her”, “hers”, “herself”, etc.)
@@ -379,7 +329,7 @@ Here's an example using the Xe series:
 
 .. code-block:: python
 
-    >>> from gender_analysis.pronouns import PronounSeries
+    >>> from gender_analysis.gender.pronouns import PronounSeries
     >>> xe_pronouns = {'xe', 'xem', 'xyr', 'xyrs', 'xemself'}
     >>> xe_series = PronounSeries('Xe', xe_pronouns, 'xe', 'xem')
 
@@ -436,12 +386,12 @@ something that matters, consider creating a sorted list of the pronouns as follo
 
 .. _declaring-new-gender-objects:
 
-Declaring New :ref:`Gender <gender_analysis:gender module>` Objects
-===================================================================
+Declaring New :ref:`Gender <gender_analysis.gender:gender module>` Objects
+==========================================================================
 
 While the :ref:`PronounSeries <declaring-new-pronounseries-objects>` object opens the door for a lot of potential
 analyses with the toolkit, there’s an even larger abstraction that could be made. The main tool used for analysis in the
-toolkit is the :ref:`Gender <gender_analysis:gender module>` object, which is a way of merging different
+toolkit is the :ref:`Gender <gender_analysis.gender:gender module>` object, which is a way of merging different
 ``PronounSeries`` and names into one compact bundle.
 
 We can create a new agender ``Gender`` object as follows, using the ``xe_series`` ``PronounSeries`` we
@@ -449,7 +399,7 @@ We can create a new agender ``Gender`` object as follows, using the ``xe_series`
 
 .. code-block:: python
 
-    >>> from gender_analysis.gender import Gender
+    >>> from gender_analysis.gender.gender import Gender
     >>> agender = Gender('Agender', xe_series)
 
 And that’s it! You’ve now defined a new ``Gender`` object, and you can plug this into any of the functions just as you
@@ -517,8 +467,8 @@ To get started, let’s initialize a new ``Corpus``, if you don’t have one ini
 
 .. code-block:: python
 
-    >>> from corpus_analysis.metadata_visualizations import *
-    >>> from corpus_analysis.corpus import Corpus
+    >>> from gender_analysis.analysis.metadata_visualizations import *
+    >>> from gender_analysis.text.corpus import Corpus
     >>> from gender_analysis.testing.common import TEST_CORPUS_PATH, LARGE_TEST_CORPUS_CSV
     >>> meta_corpus = Corpus(TEST_CORPUS_PATH, csv_path = LARGE_TEST_CORPUS_CSV)
 

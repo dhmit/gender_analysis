@@ -4,13 +4,12 @@
 branch = True
 
 # Run test on gender_analysis with `coverage run`
-command_line = -m pytest gender_analysis corpus_analysis
-source = gender_analysis, corpus_analysis
+command_line = -m pytest gender_analysis
+source = gender_analysis
 
 # exclude these patterns from testing/coverage analysis
 omit =
     gender_analysis/testing/*
-    corpus_analysis/testing/*
 
 [report]
 

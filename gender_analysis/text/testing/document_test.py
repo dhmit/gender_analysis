@@ -1,8 +1,10 @@
+# pylint: disable=invalid-name, missing-function-docstring
+
+import csv
 import pytest
 
-from corpus_analysis.document import Document
-from corpus_analysis.testing import common
-import csv
+from gender_analysis.text.document import Document
+from gender_analysis.testing import common
 
 
 class TestDocumentInitialization:
@@ -23,11 +25,11 @@ class TestDocumentInitialization:
 
     def test_document_initialization_wrong_parameters(self):
         with pytest.raises(TypeError):
-            d = Document([])
+            Document([])
 
     def test_document_initialization_missing_filepath_in_metadata(self):
         with pytest.raises(ValueError):
-            d = Document({})
+            Document({})
 
     def test_document_initialization_metadata_file_with_wrong_extension(self):
         with pytest.raises(ValueError):
@@ -35,7 +37,7 @@ class TestDocumentInitialization:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     row["filename"] = row["filename"].replace(".txt", "")
-                    d = Document(row)
+                    Document(row)
 
     def test_document_initialization_disallowed_field_in_metadata(self):
         with pytest.raises(KeyError):
@@ -43,7 +45,7 @@ class TestDocumentInitialization:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     row["members"] = "member"
-                    d = Document(row)
+                    Document(row)
 
     def test_document_initialization_incorrect_date(self):
         with pytest.raises(ValueError):
@@ -51,4 +53,4 @@ class TestDocumentInitialization:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     row["date"] = "foobar"
-                    d = Document(row)
+                    Document(row)

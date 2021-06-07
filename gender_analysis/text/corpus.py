@@ -1,21 +1,20 @@
 import csv
 import random
 import os
-from collections import Counter
 from copy import deepcopy
 from pathlib import Path
 
 from nltk import tokenize as nltk_tokenize
 
-from corpus_analysis import common
-from corpus_analysis.common import MissingMetadataError
-from corpus_analysis.common import load_csv_to_list
-from corpus_analysis.document import Document
+from gender_analysis.text import common
+from gender_analysis.text.common import MissingMetadataError
+from gender_analysis.text.common import load_csv_to_list
+from gender_analysis.text.document import Document
 
 
 class Corpus:
-
-    """The corpus class is used to load the metadata and full
+    """
+    The corpus class is used to load the metadata and full
     texts of all documents in a corpus
 
     Once loaded, each corpus contains a list of Document objects
@@ -26,9 +25,9 @@ class Corpus:
     :param csv_path: Optional path to a csv metadata file
     :param pickle_on_load: Filepath to save a pickled copy of the corpus
 
-    >>> from corpus_analysis.corpus import Corpus
-    >>> from gender_analysis.common import TEST_DATA_PATH
-    >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+    >>> from gender_analysis import Corpus
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
+    >>> path = TEST_DATA_DIR / 'sample_novels' / 'texts'
     >>> c = Corpus(path)
     >>> type(c.documents), len(c)
     (<class 'list'>, 99)
@@ -156,8 +155,8 @@ class Corpus:
         For convenience: returns the number of documents in
         the corpus.
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
         >>> path = TEST_CORPUS_PATH
         >>> c = Corpus(path)
         >>> len(c)
@@ -173,8 +172,8 @@ class Corpus:
 
         For convenience.
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
         >>> path = TEST_CORPUS_PATH
         >>> c = Corpus(path)
         >>> docs = []
@@ -194,9 +193,9 @@ class Corpus:
         initializing a corpus.
         Presumes the documents to be sorted. (They get sorted by the initializer)
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from gender_analysis.common import TEST_DATA_PATH
-        >>> path = TEST_DATA_PATH / 'sample_novels' / 'texts'
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> path = TEST_DATA_DIR / 'sample_novels' / 'texts'
         >>> sample_corpus = Corpus(path)
         >>> sorted_docs = sorted(sample_corpus.documents[:20])
         >>> sample_corpus.documents = sorted_docs
@@ -228,8 +227,8 @@ class Corpus:
         Adds two corpora together and returns a copy of the result
         Note: retains the name of the first corpus
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
         >>> path = TEST_CORPUS_PATH
         >>> sample_corpus = Corpus(path)
         >>> sorted_docs = sorted(sample_corpus.documents[:20])
@@ -259,8 +258,8 @@ class Corpus:
 
         :return: Corpus object
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
         >>> path = TEST_CORPUS_PATH
         >>> sample_corpus = Corpus(path)
         >>> corpus_copy = sample_corpus.clone()
@@ -279,8 +278,8 @@ class Corpus:
         :param gender: gender identifier to search for in the metadata (i.e. 'female', 'male', etc.)
         :return: Number of authors of the given gender
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
         ...     SMALL_TEST_CORPUS_CSV as path_to_csv
         ... )
@@ -307,8 +306,8 @@ class Corpus:
         :param gender: gender identifier (i.e. 'male', 'female', 'unknown', etc.)
         :return: Corpus object
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
         ...     LARGE_TEST_CORPUS_CSV as path_to_csv
         ... )
@@ -330,30 +329,6 @@ class Corpus:
 
         return self.subcorpus('author_gender', gender)
 
-    def get_wordcount_counter(self):
-        """
-        This function returns a Counter object that stores
-        how many times each word appears in the corpus.
-
-        :return: Python Counter object
-
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
-        ...     TEST_CORPUS_PATH as path,
-        ...     SMALL_TEST_CORPUS_CSV as path_to_csv
-        ... )
-        >>> c = Corpus(path, csv_path=path_to_csv, ignore_warnings = True)
-        >>> word_count = c.get_wordcount_counter()
-        >>> word_count['fire']
-        157
-
-        """
-        corpus_counter = Counter()
-        for current_document in self.documents:
-            document_counter = current_document.get_wordcount_counter()
-            corpus_counter += document_counter
-        return corpus_counter
-
     def get_field_vals(self, field):
         """
         This function returns a sorted list of the values present
@@ -362,8 +337,8 @@ class Corpus:
         :param field: field to search for (i.e. 'location', 'author_gender', etc.)
         :return: list of strings
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
         ...     LARGE_TEST_CORPUS_CSV as path_to_csv
         ... )
@@ -391,8 +366,8 @@ class Corpus:
         :param field_value: search term
         :return: Corpus object
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
         ...     LARGE_TEST_CORPUS_CSV as path_to_csv
         ... )
@@ -460,8 +435,8 @@ class Corpus:
         :param characteristic_dict: dict with metadata fields as keys and search terms as values
         :return: Corpus object
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
         ...     LARGE_TEST_CORPUS_CSV as path_to_csv
         ... )
@@ -517,9 +492,9 @@ class Corpus:
         :param field_val: search term
         :return: Document Object
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.common import MissingMetadataError
-        >>> from corpus_analysis.testing.common import (
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.text.common import MissingMetadataError
+        >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
         ...     LARGE_TEST_CORPUS_CSV as path_to_csv
         ... )
@@ -563,8 +538,8 @@ class Corpus:
         :param no_passages: number of passages to return
         :return: List of passages as strings
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
         ...     LARGE_TEST_CORPUS_CSV as path_to_csv
         ... )
@@ -613,8 +588,8 @@ class Corpus:
         :param metadata_dict: Dictionary with metadata fields as keys and search terms as values
         :return: Document object
 
-        >>> from corpus_analysis.corpus import Corpus
-        >>> from corpus_analysis.testing.common import (
+        >>> from gender_analysis import Corpus
+        >>> from gender_analysis.testing.common import (
         ...     TEST_CORPUS_PATH as path,
         ...     LARGE_TEST_CORPUS_CSV as path_to_csv
         ... )

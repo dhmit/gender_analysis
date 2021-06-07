@@ -1,5 +1,5 @@
 from pathlib import Path
-from corpus_analysis.common import BASE_PATH
+from gender_analysis.common import BASE_PATH
 
 TEST_DATA_DIR = Path(BASE_PATH, 'testing', 'test_data')
 
@@ -14,6 +14,9 @@ SMALL_TEST_CORPUS_CSV = Path(TEST_DATA_DIR, 'sample_novels', 'small_test_corpus.
 
 # A larger corpus with 99 documents
 LARGE_TEST_CORPUS_CSV = Path(TEST_DATA_DIR, 'sample_novels', 'large_test_corpus.csv')
+
+# A document set for use in the documentation
+TUTORIAL_TEST_CORPUS_CSV = Path(TEST_DATA_DIR, 'sample_novels', 'tutorial_test_corpus.csv')
 
 # A corpus that is comprised of Reddit posts and comments
 REDDIT_CORPUS_PATH = Path(TEST_DATA_DIR, 'r_starwars_data', 'posts')

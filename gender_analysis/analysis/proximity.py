@@ -4,48 +4,81 @@ from functools import reduce
 from more_itertools import windowed
 import nltk
 
-from corpus_analysis.corpus import Corpus
-from corpus_analysis.document import Document
-from corpus_analysis.common import load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES
+from gender_analysis.text.document import Document
+from gender_analysis.text.common import NLTK_TAGS, NLTK_TAGS_ADJECTIVES, SWORDS_ENG
 
-from gender_analysis.common import MALE, FEMALE, BINARY_GROUP, SWORDS_ENG
-from gender_analysis.gender import Gender
+from gender_analysis.gender.common import MALE, FEMALE, BINARY_GROUP
+from gender_analysis.gender.gender import Gender
+
+from gender_analysis.analysis.base_analyzers import CorpusAnalyzer
+from gender_analysis.analysis.common import compute_bin_year
 
 GenderTokenCounters = Dict[str, Counter]
 GenderTokenSequence = Dict[str, Sequence[Tuple[str, int]]]
 GenderTokenResponse = Union[GenderTokenCounters, GenderTokenSequence]
+KeyGenderTokenResponse = Dict[Union[str, int], GenderTokenResponse]
 
 
-def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters,
-                                sort: bool = False,
-                                limit: int = 10,
-                                remove_swords: bool = False) -> GenderTokenResponse:
+def _apply_result_filters(key_gender_token_counters: Dict[Union[str, int], GenderTokenCounters],
+                          diff: bool,
+                          sort: bool,
+                          limit: int,
+                          remove_swords: bool) -> KeyGenderTokenResponse:
+    """
+    A private helper function for applying optional keyword arguments to the output of
+    GenderProximityAnalysis methods, allowing the user to sort, diff, limit, and remove stopwords
+    from the output. These transformations do not mutate the input.
+
+    :param key_gender_token_counters: a dictionary shaped Dict[Union[str, int], GenderTokenCounters]
+    :param diff: return the difference in token occurrences across Genders.
+    :param sort: return an array of the shape Sequence[Tuple[str, int]]
+    :param limit: if sort==True, return only n=limit token occurrences.
+    :param remove_swords: remove stop words from output.
+    :return: a dictionary of the shape Dict[Union[str, int], GenderTokenResponse]
+
+    >>> test_counter_1 = Counter({'foo': 1, 'bar': 2, 'own': 2})
+    >>> test_counter_2 = Counter({'foo': 5, 'baz': 2})
+    >>> test = {'doc': {'Male': test_counter_1, 'Female': test_counter_2}}
+    >>> _apply_result_filters(test, diff=True, sort=False, limit=10, remove_swords=False).get('doc')
+    {'Male': Counter({'bar': 2, 'own': 2, 'foo': -4}), 'Female': Counter({'foo': 4, 'baz': 2})}
+    >>> _apply_result_filters(test, diff=False, sort=True, limit=10, remove_swords=False).get('doc')
+    {'Male': [('bar', 2), ('own', 2), ('foo', 1)], 'Female': [('foo', 5), ('baz', 2)]}
+    >>> _apply_result_filters(test, diff=False, sort=False, limit=10, remove_swords=True).get('doc')
+    {'Male': Counter({'bar': 2, 'foo': 1}), 'Female': Counter({'foo': 5, 'baz': 2})}
+    >>> _apply_result_filters(test, diff=True, sort=True, limit=10, remove_swords=False).get('doc')
+    {'Male': [('bar', 2), ('own', 2), ('foo', -4)], 'Female': [('foo', 4), ('baz', 2)]}
+    """
+
+    output = {}
+
+    for key, gender_token_counters in key_gender_token_counters.items():
+        if remove_swords:
+            output[key] = _remove_swords(gender_token_counters)
+        else:
+            output[key] = gender_token_counters
+
+        if diff:
+            output[key] = _diff_gender_token_counters(output[key])
+
+        if sort:
+            output[key] = _sort_gender_token_counters(output[key], limit=limit)
+
+    return output
+
+
+def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters) -> GenderTokenCounters:
     """
     A private helper function that determines the difference of token occurrences
     across multiple Genders.
 
     :param gender_token_counters: Dict[str, Counter]
-    :param sort: Optional[bool], return Dict[str, Sequence[Tuple[str, int]]]
-    :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
-    :param remove_swords: Optional[bool], remove stop words from return
 
-    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'own': 4})
-    >>> token_frequency_2 = Counter({'foo': 2, 'baz': 3, 'own': 2})
+    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'baz': 4})
+    >>> token_frequency_2 = Counter({'foo': 2, 'bar': 3, 'baz': 2})
     >>> test = {'Male': token_frequency_1, 'Female': token_frequency_2}
     >>> _diff_gender_token_counters(test).get('Male')
-    Counter({'bar': 2, 'own': 2, 'foo': -1})
-    >>> _diff_gender_token_counters(test, sort=True).get('Male')
-    [('bar', 2), ('own', 2), ('foo', -1)]
-    >>> _diff_gender_token_counters(test, sort=True, limit=2).get('Male')
-    [('bar', 2), ('own', 2)]
-    >>> _diff_gender_token_counters(test, remove_swords=True).get('Male')
-    Counter({'bar': 2, 'foo': -1})
-    >>> _diff_gender_token_counters(test, sort=True, limit=2, remove_swords=True).get('Male')
-    [('bar', 2), ('foo', -1)]
+    Counter({'baz': 2, 'foo': -1, 'bar': -1})
     """
-
-    if not isinstance(limit, int):
-        raise ValueError('limit must be of type int')
 
     difference_dict = {}
 
@@ -66,17 +99,7 @@ def _diff_gender_token_counters(gender_token_counters: GenderTokenCounters,
 
         difference_dict[gender] = current_difference
 
-    if sort:
-        return _sort_gender_token_counters(difference_dict,
-                                           limit=limit,
-                                           remove_swords=remove_swords)
-    else:
-        if remove_swords:
-            for gender in difference_dict:
-                for word in list(difference_dict[gender]):
-                    if word in SWORDS_ENG:
-                        del difference_dict[gender][word]
-        return difference_dict
+    return difference_dict
 
 
 def _generate_token_counter(document: Document,
@@ -96,9 +119,9 @@ def _generate_token_counter(document: Document,
     :param genders_to_exclude: a list containing instances of the Gender class.
     :return: a Counter instance pairing token words with occurrences.
 
-    >>> from gender_analysis.common import MALE, FEMALE
-    >>> from corpus_analysis.corpus import Corpus
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+    >>> from gender_analysis.gender.common import MALE, FEMALE
+    >>> from gender_analysis import Corpus
+    >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
     >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
     >>> doc = corpus.documents[-1]
     >>> test = _generate_token_counter(doc, FEMALE, 5, ['NN'], genders_to_exclude=[MALE])
@@ -153,9 +176,9 @@ def _generate_gender_token_counters(document: Document,
     :param word_window: number of words to search for in either direction of a Gender instance.
     :return: Dict[str, Counter], with top-level keys being Gender.label.
 
-    >>> from gender_analysis.common import BINARY_GROUP
-    >>> from corpus_analysis.corpus import Corpus
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+    >>> from gender_analysis.gender.common import BINARY_GROUP
+    >>> from gender_analysis import Corpus
+    >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
     >>> corpus = Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
     >>> doc = corpus.documents[-1]
     >>> test_1 = _generate_gender_token_counters(doc, BINARY_GROUP, ['NN'], 5)
@@ -212,168 +235,61 @@ def _merge_token_counters(token_counters: Sequence[Counter]) -> Counter:
     return reduce(lambda token_counter, total: token_counter + total, token_counters)
 
 
+def _remove_swords(gender_token_counters: GenderTokenCounters) -> GenderTokenCounters:
+    """
+    A private helper function for removing stop words from a GenderTokenCounters dictionary.
+
+    :param gender_token_counters: Dict[str, Counter].
+    :return: GenderTokenCounters.
+
+    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'bat': 4})
+    >>> token_frequency_2 = Counter({'foo': 2, 'baz': 3, 'own': 2})
+    >>> test = {'Male': token_frequency_1, 'Female': token_frequency_2}
+    >>> _remove_swords(test).get('Male').get('own') is None
+    True
+    """
+    output = {}
+    swords_eng_set = set(SWORDS_ENG)
+    for gender_label, token_counter in gender_token_counters.items():
+        sanitized_counter = Counter()
+        for token, count in token_counter.items():
+            if token in swords_eng_set:
+                continue
+            sanitized_counter[token] = count
+        output[gender_label] = sanitized_counter
+    return output
+
+
 def _sort_gender_token_counters(gender_token_counters: GenderTokenCounters,
-                                limit: int = 10,
-                                remove_swords: bool = False) -> GenderTokenSequence:
+                                limit: int = 10) -> GenderTokenSequence:
     """
     A private helper function for transforming a dictionary of token instances keyed by
     Gender.label into a sorted list of tuples.
 
     :param gender_token_counters: Dict[str, Counter].
     :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
-    :param remove_swords: Optional[bool], remove stop words from return
     :return: Dict[str, Sequence[Tuple[str, int]]]
 
-    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'bat': 4, 'own': 3})
+    >>> token_frequency_1 = Counter({'foo': 1, 'bar': 2, 'bat': 4})
     >>> token_frequency_2 = Counter({'foo': 2, 'baz': 3})
     >>> test = {'Male': token_frequency_1, 'Female': token_frequency_2}
     >>> _sort_gender_token_counters(test).get('Male')
-    [('bat', 4), ('own', 3), ('bar', 2), ('foo', 1)]
+    [('bat', 4), ('bar', 2), ('foo', 1)]
     >>> _sort_gender_token_counters(test).get('Female')
     [('baz', 3), ('foo', 2)]
     >>> _sort_gender_token_counters(test, limit=1).get('Male')
     [('bat', 4)]
-    >>> _sort_gender_token_counters(test, remove_swords=True).get('Male')
-    [('bat', 4), ('bar', 2), ('foo', 1)]
-    >>> _sort_gender_token_counters(test, limit=2, remove_swords=True).get('Male')
+    >>> _sort_gender_token_counters(test, limit=2).get('Male')
     [('bat', 4), ('bar', 2)]
     """
     output_gender_token_counters = {}
     for gender, token_counter in gender_token_counters.items():
         output_gender_token_counters[gender] = {}
-        output_gender_token_counters[gender] = _sort_token_counter(token_counter,
-                                                                   limit=limit,
-                                                                   remove_swords=remove_swords)
+        output_gender_token_counters[gender] = token_counter.most_common(limit)
     return output_gender_token_counters
 
 
-def _sort_token_counter(token_counter: Counter,
-                        limit: Optional[int] = None,
-                        remove_swords: bool = False) -> Sequence[Tuple[str, int]]:
-    """
-    A private helper function for grabbing the most common occurrences in a Counter
-    with stop words optionally removed.
-
-    :param limit: Optional[int], if sort=True, return n=limit number of items in descending order
-    :param remove_swords: Optional[bool], remove stop words from return
-    :return: Sequence[Tuple[str, int]]
-
-    >>> example = Counter({'foo': 1, 'bar': 3, 'bat': 4, 'own': 5})
-    >>> _sort_token_counter(example)
-    [('own', 5), ('bat', 4), ('bar', 3), ('foo', 1)]
-    >>> _sort_token_counter(example, limit=2)
-    [('own', 5), ('bat', 4)]
-    >>> _sort_token_counter(example, remove_swords=True)
-    [('bat', 4), ('bar', 3), ('foo', 1)]
-    >>> _sort_token_counter(example, limit=2, remove_swords=True)
-    [('bat', 4), ('bar', 3)]
-    """
-    output_token_counter = token_counter.copy()
-
-    if remove_swords:
-        for word in list(output_token_counter):
-            if word in SWORDS_ENG:
-                del output_token_counter[word]
-
-    return output_token_counter.most_common(limit)
-
-
-def find_in_document_gender(document: Document,
-                            gender: Gender,
-                            tags: Sequence[str] = None,
-                            word_window: int = 5,
-                            genders_to_exclude: Optional[Sequence[Gender]] = None) -> Counter:
-    """
-    Returns a Counter of words and occurrences found within a window of gender identifiers.
-
-    :param document: an instance of the Document class.
-    :param gender: an instance of the Gender class.
-    :param tags: a list containing NLTK token strings.
-    :param word_window: number of words to search for in either direction of a Gender instance.
-    :param genders_to_exclude: a list containing instances of the Gender class.
-    :return: a Counter instance pairing token words with occurrences.
-
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-    >>> from corpus_analysis import corpus
-    >>> from gender_analysis import common
-    >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-    >>> analyzer = GenderProximityAnalyzer(corpus)
-    >>> doc = analyzer.documents[6]
-    >>> find_in_document_gender(doc, common.FEMALE, genders_to_exclude=[common.MALE])
-    Counter({'sad': 1})
-    """
-
-    if tags is None:
-        tags = NLTK_TAGS_ADJECTIVES
-
-    return _generate_token_counter(document,
-                                   gender,
-                                   word_window,
-                                   tags,
-                                   genders_to_exclude=genders_to_exclude)
-
-
-def find_in_document_female(document: Document,
-                            tags: Sequence[str] = None,
-                            word_window: int = 5) -> Counter:
-    """
-    Returns a Counter of words and occurrences found within a window of FEMALE identifiers.
-
-    :param document: an instance of the Document class.
-    :param word_window: number of words to search for in either direction of a Gender instance.
-    :param tags: a list containing NLTK token strings.
-    :return: a Counter instance pairing token words with occurrences.
-
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-    >>> from corpus_analysis import corpus
-    >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-    >>> analyzer = GenderProximityAnalyzer(corpus)
-    >>> doc = analyzer.documents[6]
-    >>> find_in_document_female(doc)
-    Counter({'sad': 1})
-    """
-
-    if tags is None:
-        tags = NLTK_TAGS_ADJECTIVES
-
-    return _generate_token_counter(document,
-                                   FEMALE,
-                                   word_window,
-                                   tags,
-                                   genders_to_exclude=[MALE])
-
-
-def find_in_document_male(document: Document,
-                          tags: Sequence[str] = None,
-                          word_window: int = 5) -> Counter:
-    """
-    Returns a Counter of words and occurrences found within a window of MALE identifiers.
-
-    :param document: an instance of the Document class.
-    :param word_window: number of words to search for in either direction of a Gender instance.
-    :param tags: a list containing NLTK token strings.
-    :return: a Counter instance pairing token words with occurrences.
-
-    >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-    >>> from corpus_analysis import corpus
-    >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-    >>> analyzer = GenderProximityAnalyzer(corpus)
-    >>> doc = analyzer.documents[3]
-    >>> find_in_document_male(doc)
-    Counter({'deep': 1})
-    """
-
-    if tags is None:
-        tags = NLTK_TAGS_ADJECTIVES
-
-    return _generate_token_counter(document,
-                                   MALE,
-                                   word_window,
-                                   tags,
-                                   genders_to_exclude=[FEMALE])
-
-
-class GenderProximityAnalyzer:
+class GenderProximityAnalyzer(CorpusAnalyzer):
     """
     The GenderProximityAnalyzer instance finds word occurrences within a window around
     gendered pronouns. Helper methods are provided to organize and analyze those occurrences
@@ -391,20 +307,33 @@ class GenderProximityAnalyzer:
     """
 
     def __init__(self,
-                 texts: Union[Document, Corpus, Sequence[Document]],
                  tags: Optional[Sequence[str]] = None,
                  genders: Optional[Sequence[Gender]] = None,
-                 word_window: int = 5) -> None:
+                 word_window: int = 5,
+                 **kwargs) -> None:
         """
         Initializes a GenderProximityAnalyzer object that can be used for retrieving
         analyses concerning the number of occurrences of specific words within a window of
         gendered pronouns.
 
-        :param texts: a Corpus, Document, or list of Documents.
+        GenderFrequencyAnalyzer is a subclass of BaseAnalyzer and so accepts additional arguments
+        from that class.
+
+        BaseAnalyzer params:
+        :param corpus: an optional instance of the Corpus class.
+        :param file_path: a filepath to .txt files for creating a Corpus instance.
+        :param csv_path: a filepath to a .csv file containing metadata for .txt files.
+        :param name: a string name to be passed to the Corpus instance.
+        :param pickle_path: a filepath for writing the Corpus pickle file.
+        :param ignore_warnings: a boolean value indicating whether or not warnings during Corpus
+                                initialization should be displayed.
+
+        GenderProximityAnalyzer params:
         :param tags: a list of NLTK token strings, defaulting to adjectives.
         :param genders: a list of Gender instances.
         :param word_window: number of words to search for in either direction of a Gender instance.
         """
+        super().__init__(**kwargs)
 
         if genders is None:
             genders = BINARY_GROUP
@@ -412,25 +341,12 @@ class GenderProximityAnalyzer:
         if tags is None:
             tags = NLTK_TAGS_ADJECTIVES
 
-        if isinstance(texts, Corpus):
-            documents = texts.documents
-        elif isinstance(texts, Document):
-            documents = [texts]
-        elif isinstance(texts, list):
-            if all(isinstance(item, Document) for item in texts):
-                documents = texts
-            else:
-                raise ValueError('all items in list texts must be of type Document')
-        else:
-            raise ValueError('texts must be of type Document, Corpus, or a list of Documents')
-
         if not all(isinstance(item, str) for item in tags):
             raise ValueError('all items in list tags must be of type str')
 
         if not all(isinstance(item, Gender) for item in genders):
             raise ValueError('all items in list genders must be of type Gender')
 
-        self.documents = documents
         self.genders = genders
         self.gender_labels = [gender.label for gender in genders]
         self.tags = tags
@@ -438,16 +354,19 @@ class GenderProximityAnalyzer:
 
         # cached results
         self._by_gender = None
+        self._results = self._run_analysis()
 
+    def _run_analysis(self):
+        """
+        Runs _generate_gender_token_counters across each document in the corpus
+        """
         results = {}
-
-        for document in self.documents:
+        for document in self.corpus:
             results[document] = _generate_gender_token_counters(document,
-                                                                genders,
-                                                                tags,
-                                                                word_window=word_window)
-
-        self._results = results
+                                                                self.genders,
+                                                                self.tags,
+                                                                word_window=self.word_window)
+        return results
 
     @classmethod
     def list_nltk_tags(cls) -> None:
@@ -466,7 +385,7 @@ class GenderProximityAnalyzer:
                 sort: bool = False,
                 diff: bool = False,
                 limit: int = 10,
-                remove_swords: bool = False) -> Dict[int, GenderTokenResponse]:
+                remove_swords: bool = True) -> Dict[int, GenderTokenResponse]:
         """
         Return analysis organized by date (as determined by Document metadata).
 
@@ -478,10 +397,10 @@ class GenderProximityAnalyzer:
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
                  { str(Gender.label): [(str(token), int)] }
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_date((2000, 2008), 2).keys()
         dict_keys([2000, 2002, 2004, 2006])
         >>> analyzer.by_date((2000, 2010), 2).get(2002)
@@ -497,11 +416,11 @@ class GenderProximityAnalyzer:
         for bin_start_year in range(time_frame[0], time_frame[1], bin_size):
             output[bin_start_year] = {label: Counter() for label in self.gender_labels}
 
-        for document in self.documents:
+        for document in self.corpus:
             date = getattr(document, 'date', None)
             if date is None:
                 continue
-            bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
+            bin_year = compute_bin_year(date, time_frame[0], bin_size)
             if bin_year not in output:
                 continue
             for gender_label in self.gender_labels:
@@ -509,25 +428,17 @@ class GenderProximityAnalyzer:
                     [self._results[document][gender_label], output[bin_year][gender_label]]
                 )
 
-        if diff:
-            for date, gender_token_frequencies in output.items():
-                output[date] = _diff_gender_token_counters(gender_token_frequencies,
-                                                           limit=limit,
-                                                           sort=sort,
-                                                           remove_swords=remove_swords)
-        elif sort:
-            for date, gender_token_frequencies in output.items():
-                output[date] = _sort_gender_token_counters(gender_token_frequencies,
-                                                           limit=limit,
-                                                           remove_swords=remove_swords)
-
-        return output
+        return _apply_result_filters(output,
+                                     sort=sort,
+                                     diff=diff,
+                                     limit=limit,
+                                     remove_swords=remove_swords)
 
     def by_document(self,
                     sort: bool = False,
                     diff: bool = False,
                     limit: int = 10,
-                    remove_swords: bool = False) -> Dict[str, GenderTokenResponse]:
+                    remove_swords: bool = True) -> Dict[str, GenderTokenResponse]:
 
         """
         Return analysis organized by Document.
@@ -538,13 +449,13 @@ class GenderProximityAnalyzer:
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape { str(Gender.label): { str(token): int } } or
                  { str(Gender.label): [(str(token), int)] }
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
-        >>> doc = analyzer.documents[7]
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
+        >>> doc = analyzer.corpus.documents[7]
         >>> analyzer_document_labels = list(analyzer.by_document().keys())
-        >>> document_labels = list(map(lambda d: d.label, analyzer.documents))
+        >>> document_labels = list(map(lambda d: d.label, analyzer.corpus.documents))
         >>> analyzer_document_labels == document_labels
         True
         >>> analyzer.by_document().get(doc.label)
@@ -553,29 +464,20 @@ class GenderProximityAnalyzer:
 
         output = {}
 
-        if diff:
-            for document in self._results:
-                output[document.label] = _diff_gender_token_counters(self._results[document],
-                                                                     limit=limit,
-                                                                     sort=sort,
-                                                                     remove_swords=remove_swords)
-        elif sort:
-            for document in self._results:
-                token_frequencies = self._results[document]
-                output[document.label] = _sort_gender_token_counters(token_frequencies,
-                                                                     limit=limit,
-                                                                     remove_swords=remove_swords)
-        else:
-            for document in self._results:
-                output[document.label] = self._results[document]
+        for document in self._results:
+            output[document.label] = self._results[document]
 
-        return output
+        return _apply_result_filters(output,
+                                     sort=sort,
+                                     diff=diff,
+                                     limit=limit,
+                                     remove_swords=remove_swords)
 
     def by_gender(self,
                   sort: bool = False,
                   diff: bool = False,
                   limit: int = 10,
-                  remove_swords: bool = False) -> Dict[str, GenderTokenResponse]:
+                  remove_swords: bool = True) -> Dict[str, GenderTokenResponse]:
         """
         Return analysis organized by Document. Merges all words across texts
         into dictionaries sorted by gender.
@@ -586,10 +488,10 @@ class GenderProximityAnalyzer:
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape {Gender.label: {str: int, ...}, ...}
 
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_gender().keys()
         dict_keys(['Female', 'Male'])
         >>> analyzer.by_gender().get('Female')
@@ -619,15 +521,14 @@ class GenderProximityAnalyzer:
 
         output = merged_results
 
+        if remove_swords:
+            output = _remove_swords(output)
+
         if diff:
-            output = _diff_gender_token_counters(output,
-                                                 limit=limit,
-                                                 sort=sort,
-                                                 remove_swords=remove_swords)
-        elif sort:
-            output = _sort_gender_token_counters(output,
-                                                 limit=limit,
-                                                 remove_swords=remove_swords)
+            output = _diff_gender_token_counters(output)
+
+        if sort:
+            output = _sort_gender_token_counters(output, limit=limit)
 
         self._by_gender[hashed_arguments] = output
         return output
@@ -637,7 +538,7 @@ class GenderProximityAnalyzer:
                     sort: bool = False,
                     diff: bool = False,
                     limit: int = 10,
-                    remove_swords: bool = False) -> Dict[str, GenderTokenResponse]:
+                    remove_swords: bool = True) -> Dict[str, GenderTokenResponse]:
         """
         Return analysis organized by Document metadata. Merges all words across texts
         into dictionaries sorted by provided metadata_key.
@@ -649,10 +550,10 @@ class GenderProximityAnalyzer:
         :param remove_swords: Optional[bool], remove stop words from return
         :return: a dictionary of the shape {Gender.label: {str: int , ...}, ...}.
 
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_metadata('author_gender').keys()
         dict_keys(['male', 'female'])
         >>> analyzer.by_metadata('author_gender').get('female')
@@ -665,31 +566,27 @@ class GenderProximityAnalyzer:
 
         output = {}
 
-        for document in self.documents:
+        for document, gender_token_counters in self._results.items():
             matching_key = getattr(document, metadata_key, None)
             if matching_key is None:
                 continue
 
             if matching_key not in output:
-                output[matching_key] = {gender_label: [] for gender_label in self.gender_labels}
+                output[matching_key] = {}
 
             for gender_label in self.gender_labels:
-                output[matching_key][gender_label].append(self._results[document][gender_label])
+                if gender_label not in output[matching_key]:
+                    output[matching_key][gender_label] = Counter()
+                output[matching_key][gender_label] = _merge_token_counters([
+                    gender_token_counters[gender_label],
+                    output[matching_key][gender_label]
+                ])
 
-        for key in output:
-            for gender_label in self.gender_labels:
-                output[key][gender_label] = _merge_token_counters(output[key][gender_label])
-            if diff:
-                output[key] = _diff_gender_token_counters(output[key],
-                                                          limit=limit,
-                                                          sort=sort,
-                                                          remove_swords=remove_swords)
-            elif sort:
-                output[key] = _sort_gender_token_counters(output[key],
-                                                          limit=limit,
-                                                          remove_swords=remove_swords)
-
-        return output
+        return _apply_result_filters(output,
+                                     sort=sort,
+                                     diff=diff,
+                                     limit=limit,
+                                     remove_swords=remove_swords)
 
     def by_overlap(self) -> Dict[str, Sequence[int]]:
         """
@@ -698,10 +595,10 @@ class GenderProximityAnalyzer:
 
         :return: {str: [gender1, gender2, ...], ...}
 
-        >>> from corpus_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
-        >>> from corpus_analysis import corpus
-        >>> corpus = corpus.Corpus(DOCUMENT_TEST_PATH, csv_path=DOCUMENT_TEST_CSV)
-        >>> analyzer = GenderProximityAnalyzer(corpus)
+        >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
+        >>> from gender_analysis import Corpus
+        >>> analyzer = GenderProximityAnalyzer(file_path=DOCUMENT_TEST_PATH,
+        ...                                    csv_path=DOCUMENT_TEST_CSV)
         >>> analyzer.by_overlap()
         {'sad': {'Female': 14, 'Male': 14}}
         """
@@ -729,13 +626,4 @@ class GenderProximityAnalyzer:
         :param pickle_filepath: filepath to save the output.
         :return: None, saves results as pickled file with name 'gender_tokens_analysis'
         """
-
-        try:
-            load_pickle(pickle_filepath)
-            user_inp = input("results already stored. overwrite previous analysis? (y/n)")
-            if user_inp == 'y':
-                store_pickle(self, pickle_filepath)
-            else:
-                pass
-        except IOError:
-            store_pickle(self, pickle_filepath)
+        super().store(pickle_filepath=pickle_filepath)

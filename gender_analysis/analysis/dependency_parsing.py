@@ -1,7 +1,7 @@
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-from corpus_analysis import common
-from gender_analysis.common import _get_parser_download_if_not_present
+from gender_analysis.text import common
+from gender_analysis.gender.common import _get_parser_download_if_not_present
 
 
 def generate_dependency_tree(document, genders=None, pickle_filepath=None):

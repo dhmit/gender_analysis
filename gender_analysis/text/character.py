@@ -1,28 +1,22 @@
-from gender_analysis.pronouns import PronounSeries
-from gender_analysis.gender import Gender
-
-
 class Character:
     """
     Defines a character that will be operated on in analysis functions
     """
 
-    def __init__(self, name, gender=None, mentions=[]):
+    def __init__(self, name, gender=None, mentions=None):
         """Initializes a character object which is associated with a document object
         :param name: a string of the name of the character
         :param gender: a gender object which is optional
         :param mentions: a list of strings of other references of that character, optional
 
-        >>> from corpus_analysis import character
-        >>> from corpus_analysis.character import Character
-        >>> from gender_analysis import common
-        >>> from gender_analysis.common import FEMALE
+        >>> from gender_analysis.text import character
+        >>> from gender_analysis.gender.common import FEMALE
         >>> emma_name = 'Emma'
         >>> emma_gender = FEMALE
         >>> emma_mentions = ["Emma Woodhouse", "Emma", "Miss Woodhouse"]
         >>> emma = Character(emma_name, emma_gender, emma_mentions)
         >>> type(emma)
-        <class 'corpus_analysis.character.Character'>
+        <class 'gender_analysis.text.character.Character'>
         >>> emma.name
         'Emma'
         >>> emma.mentions
@@ -32,6 +26,8 @@ class Character:
         """
 
         self.name = name
+        if mentions is None:
+            mentions = []
         self.mentions = mentions
         self.gender = gender
         if not gender:
@@ -42,10 +38,8 @@ class Character:
         Overrides python print method for user-defined objects for Character class
         Returns the character name, gender, and all mentions (if applicable)
         :return: str
-        >>> from corpus_analysis import character
-        >>> from corpus_analysis.character import Character
-        >>> from gender_analysis import common
-        >>> from gender_analysis.common import FEMALE
+        >>> from gender_analysis.text.character import Character
+        >>> from gender_analysis.gender.common import FEMALE
         >>> emma_name = 'Emma'
         >>> emma_gender = FEMALE
         >>> emma_mentions = ["Emma Woodhouse", "Emma", "Miss Woodhouse"]
@@ -64,10 +58,8 @@ class Character:
         Returns the object type (character) and then the document name
             in <>.
         :return: string
-        >>> from corpus_analysis import character
-        >>> from corpus_analysis.character import Character
-        >>> from gender_analysis import common
-        >>> from gender_analysis.common import FEMALE
+        >>> from gender_analysis.text.character import Character
+        >>> from gender_analysis.gender.common import FEMALE
         >>> emma_name = 'Emma'
         >>> emma_gender = FEMALE
         >>> emma_mentions = ["Emma Woodhouse", "Emma", "Miss Woodhouse"]
@@ -85,10 +77,8 @@ class Character:
         2. If not, infer Character's gender based on coreference resolution and pronouns
         Currently, this function only retrieves user entered gender for the character objects
         :return: a gender object
-        >>> from corpus_analysis import character
-        >>> from corpus_analysis.character import Character
-        >>> from gender_analysis import common
-        >>> from gender_analysis.common import FEMALE
+        >>> from gender_analysis.text.character import Character
+        >>> from gender_analysis.gender.common import FEMALE
         >>> emma_name = 'Emma'
         >>> emma_gender = FEMALE
         >>> emma_mentions = ["Emma Woodhouse", "Emma", "Miss Woodhouse"]

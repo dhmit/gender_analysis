@@ -119,7 +119,10 @@ gender_analysis/apicache-py3/
 gender_analysis/throttle.ctrl
 
 # Test Corpora
-corpus_analysis/testing/test_data/r_starwars_data/
+gender_analysis/testing/test_data/r_starwars_data/
+
+# Test visualizations
+gender_analysis/testing/test_files/visualizations_test_dir
 
 # Stanford NLP Jar files
 gender_analysis/stanford_parser

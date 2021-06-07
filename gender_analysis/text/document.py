@@ -7,7 +7,7 @@ from gutenberg_cleaner import simple_cleaner
 from more_itertools import windowed
 import nltk
 
-from corpus_analysis import common
+from gender_analysis.text import common
 
 
 class Document:
@@ -17,14 +17,14 @@ class Document:
 
     :param metadata_dict: Dictionary with metadata fields as keys and data as values
 
-    >>> from corpus_analysis import document
+    >>> from gender_analysis import Document
     >>> from pathlib import Path
-    >>> from gender_analysis import common
+    >>> from gender_analysis.testing.common import TEST_DATA_DIR
     >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
     ...                      'filename': 'austen_persuasion.txt',
-    ...                      'filepath': Path(common.TEST_DATA_PATH,
+    ...                      'filepath': Path(TEST_DATA_DIR,
     ...                                       'sample_novels', 'texts', 'austen_persuasion.txt')}
-    >>> austen = document.Document(document_metadata)
+    >>> austen = Document(document_metadata)
     >>> type(austen.text)
     <class 'str'>
     >>> len(austen.text)
@@ -78,6 +78,9 @@ class Document:
         if 'label' not in metadata_dict:
             self.label = self.filename[0:len(self.filename) - 4]
 
+        # memoization
+        self._part_of_speech_tags = None
+
         self.text = self._load_document_text()
 
     @property
@@ -90,14 +93,14 @@ class Document:
 
         :return: Number of words in the document's text as an int
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                      'filename': 'austen_persuasion.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                      'filepath': Path(TEST_DATA_DIR, 'sample_novels',
         ...                                       'texts', 'austen_persuasion.txt')}
-        >>> austen = document.Document(document_metadata)
+        >>> austen = Document(document_metadata)
         >>> austen.word_count
         83285
 
@@ -113,20 +116,19 @@ class Document:
         Returns the filename without the extension - author and title word
         :return: str
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                      'filename': 'austen_persuasion.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                      'filepath': Path(TEST_DATA_DIR, 'sample_novels',
         ...                                       'texts', 'austen_persuasion.txt')}
-        >>> austen = document.Document(document_metadata)
+        >>> austen = Document(document_metadata)
         >>> document_string = str(austen)
         >>> document_string
         'austen_persuasion'
         """
-        name = self.filename[0:len(self.filename) - 4]
-        return name
+        return self.label
 
     def __repr__(self):
         '''
@@ -136,32 +138,30 @@ class Document:
 
         :return: string
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                      'filename': 'austen_persuasion.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                      'filepath': Path(TEST_DATA_DIR, 'sample_novels',
         ...                                       'texts', 'austen_persuasion.txt')}
-        >>> austen = document.Document(document_metadata)
+        >>> austen = Document(document_metadata)
         >>> repr(austen)
         '<Document (austen_persuasion)>'
         '''
-
-        name = self.filename[0:len(self.filename) - 4]
-        return f'<Document ({name})>'
+        return f'<Document ({self.label})>'
 
     def __eq__(self, other):
         """
         Overload the equality operator to enable comparing and sorting documents.
         Returns True if the document filenames and text are the same.
 
-        >>> from corpus_analysis.document import Document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                    'filename': 'austen_persuasion.txt',
-        ...                    'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                    'filepath': Path(TEST_DATA_DIR, 'sample_novels',
         ...                                     'texts', 'austen_persuasion.txt')}
         >>> austen = Document(austen_metadata)
         >>> austen2 = Document(austen_metadata)
@@ -199,19 +199,19 @@ class Document:
 
         If these are not available, it sorts by filenames.
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> austen_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                    'filename': 'austen_persuasion.txt',
-        ...                    'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                    'filepath': Path(TEST_DATA_DIR, 'sample_novels',
         ...                                     'texts', 'austen_persuasion.txt')}
-        >>> austen = document.Document(austen_metadata)
+        >>> austen = Document(austen_metadata)
         >>> hawthorne_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                       'date': '1850', 'filename': 'hawthorne_scarlet.txt',
-        ...                       'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                       'filepath': Path(TEST_DATA_DIR, 'sample_novels',
         ...                                        'texts', 'hawthorne_scarlet.txt')}
-        >>> hawthorne = document.Document(hawthorne_metadata)
+        >>> hawthorne = Document(hawthorne_metadata)
         >>> hawthorne < austen
         False
         >>> austen < hawthorne
@@ -242,7 +242,7 @@ class Document:
         Scans through the text and replaces all of the smart quotes and apostrophes with their
         "normal" ASCII variants
 
-        >>> from corpus_analysis.document import Document
+        >>> from gender_analysis import Document
         >>> smart_text = 'This is a “smart” phrase'
         >>> Document._clean_quotes(smart_text)
         'This is a "smart" phrase'
@@ -315,14 +315,14 @@ class Document:
 
         :return: List of each word in the Document
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
         ...                      'filename': 'test_text_1.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                      'filepath': Path(TEST_DATA_DIR,
         ...                                       'document_test_files', 'test_text_1.txt')}
-        >>> austin = document.Document(document_metadata)
+        >>> austin = Document(document_metadata)
         >>> tokenized_text = austin.get_tokenized_text()
         >>> tokenized_text
         ['allkinds', 'of', 'punctuation', 'and', 'special', 'chars']
@@ -350,14 +350,14 @@ class Document:
 
         :return: List of strings enclosed in double-quotations
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion',
         ...                      'date': '1818', 'filename': 'test_text_0.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                      'filepath': Path(TEST_DATA_DIR,
         ...                                       'document_test_files', 'test_text_0.txt')}
-        >>> document_novel = document.Document(document_metadata)
+        >>> document_novel = Document(document_metadata)
         >>> document_novel.find_quoted_text()
         ['"This is a quote"', '"This is my quote"']
 
@@ -398,14 +398,14 @@ class Document:
         :param word: word to be counted in text
         :return: Number of occurences of the word, as an int
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                      'date': '2018', 'filename': 'test_text_2.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                      'filepath': Path(TEST_DATA_DIR,
         ...                                       'document_test_files', 'test_text_2.txt')}
-        >>> scarlett = document.Document(document_metadata)
+        >>> scarlett = Document(document_metadata)
         >>> scarlett.get_count_of_word("sad")
         4
         >>> scarlett.get_count_of_word('ThisWordIsNotInTheWordCounts')
@@ -419,6 +419,25 @@ class Document:
 
         return self._word_counts_counter[word]
 
+    def get_count_of_words(self, words):
+        """
+        A helper method for retrieving the number of occurrences of a given set of words within
+        a Document.
+
+        :param words: a list of strings.
+        :return: a Counter with each word in words keyed to its number of occurrences.
+
+        >>> from gender_analysis.text.document import Document
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> document_filepath = Path(TEST_DATA_DIR, 'document_test_files', 'test_text_9.txt')
+        >>> document_metadata = {'filename': 'test_text_2.txt', 'filepath': document_filepath}
+        >>> test_document = Document(document_metadata)
+        >>> test_document.get_count_of_words(['sad', 'was', 'sadness', 'very'])
+        Counter({'was': 5, 'sad': 1, 'very': 1, 'sadness': 0})
+        """
+        return Counter({word: self.get_count_of_word(word) for word in words})
+
     def get_wordcount_counter(self):
         """
         Returns a counter object of all of the words in the text.
@@ -427,14 +446,14 @@ class Document:
 
         :return: Python Counter object
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                      'date': '2018', 'filename': 'test_text_10.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                      'filepath': Path(TEST_DATA_DIR,
         ...                                       'document_test_files', 'test_text_10.txt')}
-        >>> scarlett = document.Document(document_metadata)
+        >>> scarlett = Document(document_metadata)
         >>> scarlett.get_wordcount_counter()
         Counter({'was': 2, 'convicted': 2, 'hester': 1, 'of': 1, 'adultery': 1})
 
@@ -459,14 +478,14 @@ class Document:
         :param word: Single word to search for in the document's text
         :return: a Python Counter() object with {associated_word: occurrences}
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                      'date': '2018', 'filename': 'test_text_11.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                      'filepath': Path(TEST_DATA_DIR,
         ...                                       'document_test_files', 'test_text_11.txt')}
-        >>> scarlett = document.Document(document_metadata)
+        >>> scarlett = Document(document_metadata)
         >>> scarlett.words_associated("his")
         Counter({'cigarette': 1, 'speech': 1})
 
@@ -499,12 +518,12 @@ class Document:
         :param window_size: integer representing number of words to search for in either direction
         :return: Python Counter object
 
-        >>> from corpus_analysis.document import Document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                      'date': '2018', 'filename': 'test_text_12.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                      'filepath': Path(TEST_DATA_DIR,
         ...                                       'document_test_files', 'test_text_12.txt')}
         >>> scarlett = Document(document_metadata)
 
@@ -544,14 +563,14 @@ class Document:
         :param word: str to search for in document
         :return: float representing the portion of words in the text that are the parameter word
 
-        >>> from corpus_analysis import document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                      'date': '1900', 'filename': 'test_text_2.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                      'filepath': Path(TEST_DATA_DIR,
         ...                                       'document_test_files', 'test_text_2.txt')}
-        >>> scarlett = document.Document(document_metadata)
+        >>> scarlett = Document(document_metadata)
         >>> frequency = scarlett.get_word_freq('sad')
         >>> frequency
         0.13333333333333333
@@ -559,6 +578,26 @@ class Document:
 
         word_frequency = self.get_count_of_word(word) / self.word_count
         return word_frequency
+
+    def get_word_frequencies(self, words):
+        """
+        A helper method for retreiving the frequencies of a given set of words within a Document.
+
+        :param words: a list of strings.
+        :return: a dictionary of words keyed to float frequencies.
+
+        >>> from gender_analysis.text.document import Document
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> document_filepath = Path(TEST_DATA_DIR, 'document_test_files', 'test_text_9.txt')
+        >>> document_metadata = {'filename': 'test_text_2.txt', 'filepath': document_filepath}
+        >>> test_document = Document(document_metadata)
+        >>> test_document.get_word_frequencies(['peace', 'died', 'foobar'])
+        {'peace': 0.02702702702702703, 'died': 0.02702702702702703, 'foobar': 0.0}
+        """
+        word_frequencies = {word: self.get_count_of_word(word) / self.word_count for word in words}
+
+        return word_frequencies
 
     def get_part_of_speech_tags(self):
         """
@@ -572,12 +611,12 @@ class Document:
 
         :return: List of tuples (term, speech_tag)
 
-        >>> from corpus_analysis.document import Document
+        >>> from gender_analysis import Document
         >>> from pathlib import Path
-        >>> from gender_analysis import common
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> document_metadata = {'author': 'Hawthorne, Nathaniel', 'title': 'Scarlet Letter',
         ...                      'date': '1900', 'filename': 'test_text_13.txt',
-        ...                      'filepath': Path(common.TEST_DATA_PATH,
+        ...                      'filepath': Path(TEST_DATA_DIR,
         ...                                       'document_test_files', 'test_text_13.txt')}
         >>> document = Document(document_metadata)
         >>> document.get_part_of_speech_tags()[:4]
@@ -587,12 +626,54 @@ class Document:
 
         """
 
+        if self._part_of_speech_tags is not None:
+            return self._part_of_speech_tags
+
         common.download_nltk_package_if_not_present('tokenizers/punkt')
         common.download_nltk_package_if_not_present('taggers/averaged_perceptron_tagger')
 
         text = nltk.word_tokenize(self.text)
         pos_tags = nltk.pos_tag(text)
+
+        self._part_of_speech_tags = pos_tags
         return pos_tags
+
+    def get_part_of_speech_words(self, words, remove_swords=True):
+        """
+        A helper method for retrieving the number of occurrences of input words keyed to their
+        NLTK tag values (i.e., 'NN' for noun).
+
+        :param words: a list of strings.
+        :param remove_swords: optional boolean, remove stop words from return.
+        :return: a dictionary keying NLTK tag strings to Counter instances.
+
+        >>> from gender_analysis.text.document import Document
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> document_filepath = Path(TEST_DATA_DIR, 'document_test_files', 'test_text_9.txt')
+        >>> document_metadata = {'filename': 'test_text_2.txt', 'filepath': document_filepath}
+        >>> test_document = Document(document_metadata)
+        >>> test_document.get_part_of_speech_words(['peace', 'died', 'beautiful', 'foobar'])
+        {'JJ': Counter({'beautiful': 3}), 'VBD': Counter({'died': 1}), 'NN': Counter({'peace': 1})}
+        """
+
+        common.download_nltk_package_if_not_present('corpora/stopwords')
+        stop_words = set(nltk.corpus.stopwords.words('english'))
+        document_pos_tags = self.get_part_of_speech_tags()
+        words_set = {word.lower() for word in words}
+        output = {}
+
+        for token, tag in document_pos_tags:
+            lowered_token = token.lower()
+            if remove_swords is True and token in stop_words:
+                continue
+            if token not in words_set:
+                continue
+            if tag not in output:
+                output[tag] = Counter()
+            output[tag][lowered_token] += 1
+
+        return output
 
     def update_metadata(self, new_metadata):
         """
@@ -606,8 +687,8 @@ class Document:
 
         This can be used to correct mistakes in the metadata:
 
-        >>> from corpus_analysis.document import Document
-        >>> from corpus_analysis.testing.common import TEST_CORPUS_PATH
+        >>> from gender_analysis import Document
+        >>> from gender_analysis.testing.common import TEST_CORPUS_PATH
         >>> from pathlib import Path
         >>> metadata = {'filename': 'aanrud_longfrock.txt',
         ...             'filepath': Path(TEST_CORPUS_PATH, 'aanrud_longfrock.txt'),
