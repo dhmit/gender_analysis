@@ -115,8 +115,6 @@ def _get_stats_from_distances_by_metadata_value(
     return stats_by_metadata_value
 
 
-
-
 class GenderDistanceAnalyzer(CorpusAnalyzer):
     """
     The GenderDistanceAnalyzer finds the distance between occurances of sets of gendered
@@ -170,18 +168,7 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
 'words_instance_dist': \
 {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
 <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
-
-    You can filter on any Document metadata. Let's see if there are differences based on
-    country of publication:
-    analyzer.get_stats_by_metadata('country_publication')
-
-    Or, for convenience, by the author's gender
-    >>> analyzer.stats_by_author_gender()
-    {'female': {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, 'male': {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
-
-
     """
-
     def __init__(self,
                  genders: Optional[Sequence[Gender]] = None,
                  **kwargs) -> None:
@@ -210,6 +197,8 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
     def corpus_results(self) -> GenderDistances:
         """
         Aggregates distance results across the whole corpus
+
+        See doctest for class for usage.
         """
         corpus_distances_by_gender = {gender: [] for gender in self.genders}
 
@@ -225,6 +214,8 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
     def corpus_stats(self) -> GenderDistanceStats:
         """
         Aggregates stats across the whole corpus
+
+        See doctest for class for usage.
         """
         corpus_distances_by_gender = self.corpus_results()
 
@@ -235,15 +226,20 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         return corpus_stats
 
     def by_document(self) -> Dict[str, GenderDistances]:
+        """
+        Organizes results by document label
+
+        See doctest for class for usage.
+        """
         return {
             document.label: distances for document, distances in self._results.items()
         }
 
     def stats_by_document(self) -> Dict[str, GenderDistanceStats]:
         """
-        Computes GenderDistanceStats per document
+        Organizes stats by document label
 
-        :return: dict mapping Documents to GenderDistanceStats
+        See doctest for class for usage.
         """
         return _get_stats_from_distances_by_metadata_value(self.by_document())
 
@@ -252,6 +248,17 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         Aggregates GenderDistances based on the values of a specified Document metadata field.
 
         :param metadata_key: a string corresponding to one of the columns in the input metadata csv.
+        >>> from gender_analysis.analysis import GenderDistanceAnalyzer
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
+        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
+        >>> analyzer.by_metadata('country_publication')
+        {'United States': {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}, \
+'Canada': {<Female>: [1, 2, 3, 4], <Male>: []}}
+        >>> analyzer.by_metadata('country_publication').get('United States')
+        {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}
         """
         distances_by_metadata_value = {}
         for document, document_results_by_gender in self._results.items():
@@ -279,6 +286,24 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         Aggregates GenderDistancesStats based on the values of a specified Document metadata field.
 
         :param metadata_key: a string corresponding to one of the columns in the input metadata csv.
+
+        >>> from gender_analysis.analysis import GenderDistanceAnalyzer
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
+        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
+        >>> analyzer.stats_by_metadata('country_publication')
+        {'United States': \
+{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
+'Canada': \
+{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
+
+        >>> analyzer.stats_by_metadata('country_publication').get('United States')
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
         """
         distances_by_metadata_value = self.by_metadata(metadata_key=metadata_key)
         return _get_stats_from_distances_by_metadata_value(distances_by_metadata_value)
@@ -287,6 +312,19 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         """
         Organizes results by the 'author_gender' metadata on each Document.
         This is a convenience method wrapper for by_metadata.
+
+        >>> from gender_analysis.analysis import GenderDistanceAnalyzer
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
+        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
+        >>> analyzer.by_author_gender()
+        {'female': {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}, \
+'male': {<Female>: [1, 2, 3, 4], <Male>: []}}
+
+        >>> analyzer.by_author_gender().get('female')
+        {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}
         """
         return self.by_metadata(metadata_key='author_gender')
 
@@ -294,6 +332,24 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         """
         Organizes results by the 'author_gender' metadata on each Document.
         This is a convenience method wrapper for stats_by_metadata.
+
+        >>> from gender_analysis.analysis import GenderDistanceAnalyzer
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
+        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
+        >>> analyzer.stats_by_author_gender()
+        {'female': \
+{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
+'male': \
+{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
+
+        >>> analyzer.stats_by_author_gender().get('female')
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
         """
         return self.stats_by_metadata(metadata_key='author_gender')
 
@@ -355,7 +411,22 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         Organizes stats by the 'date' metadata on each Document.
         Optionally, can constrain those results to a given year range and can bin results.
 
-        >>> analyzer.stats_by_date(time_frame=(1900, 1920), bin_size=10)
+        >>> from gender_analysis.analysis import GenderDistanceAnalyzer
+        >>> from pathlib import Path
+        >>> from gender_analysis.testing.common import TEST_DATA_DIR
+        >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
+        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
+        >>> analyzer.stats_by_date()
+        {1900: \
+{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, \
+1901: \
+{<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, \
+<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
+1910: \
+{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
         """
         distances_by_bin = self.by_date(time_frame=time_frame, bin_size=bin_size)
         return _get_stats_from_distances_by_metadata_value(distances_by_bin)

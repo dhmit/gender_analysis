@@ -342,9 +342,9 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
 
         # cached results
         self._by_gender = None
-        self._results = self.run_analysis()
+        self._results = self._run_analysis()
 
-    def run_analysis(self):
+    def _run_analysis(self):
         """
         Runs _generate_gender_token_counters across each document in the corpus
         """
