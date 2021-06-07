@@ -5,9 +5,9 @@ name: CI Workflow
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master, summer-urop-21-refactor ]
+    branches: [ main ]
 
 jobs:
   test_coverage:
