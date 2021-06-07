@@ -1,4 +1,6 @@
-from typing import Optional, Sequence, Dict, List, Union, TypedDict, Tuple
+# doctest: +NORMALIZE_WHITESPACE
+
+from typing import Optional, Sequence, Dict, List, TypedDict, Tuple
 from statistics import median, mean
 
 from gender_analysis.gender import BINARY_GROUP, Gender
@@ -8,6 +10,7 @@ from gender_analysis.analysis.common import compute_bin_year
 
 
 class DistanceStats(TypedDict):
+    """ Holds statistics for distances. """
     mean: float
     median: float
     min: int
@@ -104,6 +107,10 @@ def _get_stats_from_distances(distance_results) -> DistanceStats:
 def _get_stats_from_distances_by_metadata_value(
     distances_by_metadata_value: Dict[any, GenderDistances]
 ) -> Dict[any, GenderDistanceStats]:
+    """
+    Private helper function to take a dict mapping any metadata key to GenderDistances
+    and returns a mapping of those keys to the GenderDistanceStats computed from the distances
+    """
 
     stats_by_metadata_value = {
         metadata_value: {} for metadata_value in distances_by_metadata_value
@@ -135,7 +142,8 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
     >>> from pathlib import Path
     >>> from gender_analysis.testing.common import TEST_DATA_DIR
     >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
-    >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+    >>> metadata_csv = Path(TEST_DATA_DIR,
+    ...                    'instance_distance', 'instance_distance_metadata.csv')
     >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
     >>> analyzer.by_document()
     {'instance_dist': {<Female>: [1, 2, 3, 4], <Male>: []}, \
@@ -150,24 +158,24 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
     on average, feminine pronouns occur more densely in this corpus than masculine pronouns.
     >>> analyzer.corpus_stats()
     {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
+    <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
 
     We can also look at results or stats for every document:
     >>> analyzer.by_document()
     {'instance_dist': {<Female>: [1, 2, 3, 4], <Male>: []}, \
-'instance_dist_masc': {<Female>: [], <Male>: [2, 3, 5, 7]}, \
-'words_instance_dist': {<Female>: [1, 2, 3, 4], <Male>: []}}
+    'instance_dist_masc': {<Female>: [], <Male>: [2, 3, 5, 7]}, \
+    'words_instance_dist': {<Female>: [1, 2, 3, 4], <Male>: []}}
 
     >>> analyzer.stats_by_document()
     {'instance_dist': \
-{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, \
-'instance_dist_masc': \
-{<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, \
-<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
-'words_instance_dist': \
-{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+        <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, \
+    'instance_dist_masc': \
+        {<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, \
+        <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
+    'words_instance_dist': \
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+        <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
     """
     def __init__(self,
                  genders: Optional[Sequence[Gender]] = None,
@@ -252,11 +260,12 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         >>> from pathlib import Path
         >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
-        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> metadata_csv = Path(TEST_DATA_DIR,
+        ...                    'instance_distance', 'instance_distance_metadata.csv')
         >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
         >>> analyzer.by_metadata('country_publication')
         {'United States': {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}, \
-'Canada': {<Female>: [1, 2, 3, 4], <Male>: []}}
+        'Canada': {<Female>: [1, 2, 3, 4], <Male>: []}}
         >>> analyzer.by_metadata('country_publication').get('United States')
         {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}
         """
@@ -291,19 +300,20 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         >>> from pathlib import Path
         >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
-        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> metadata_csv = Path(TEST_DATA_DIR,
+        ...                    'instance_distance', 'instance_distance_metadata.csv')
         >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
         >>> analyzer.stats_by_metadata('country_publication')
         {'United States': \
-{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
-'Canada': \
-{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+        <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
+        'Canada': \
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+        <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
 
         >>> analyzer.stats_by_metadata('country_publication').get('United States')
         {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
+        <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
         """
         distances_by_metadata_value = self.by_metadata(metadata_key=metadata_key)
         return _get_stats_from_distances_by_metadata_value(distances_by_metadata_value)
@@ -317,11 +327,12 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         >>> from pathlib import Path
         >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
-        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> metadata_csv = Path(TEST_DATA_DIR,
+        ...                    'instance_distance', 'instance_distance_metadata.csv')
         >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
         >>> analyzer.by_author_gender()
         {'female': {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}, \
-'male': {<Female>: [1, 2, 3, 4], <Male>: []}}
+        'male': {<Female>: [1, 2, 3, 4], <Male>: []}}
 
         >>> analyzer.by_author_gender().get('female')
         {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}
@@ -337,19 +348,20 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         >>> from pathlib import Path
         >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
-        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> metadata_csv = Path(TEST_DATA_DIR,
+        ...                    'instance_distance', 'instance_distance_metadata.csv')
         >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
         >>> analyzer.stats_by_author_gender()
         {'female': \
-{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
-'male': \
-{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+        <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
+        'male': \
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+        <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
 
         >>> analyzer.stats_by_author_gender().get('female')
         {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
+        <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
         """
         return self.stats_by_metadata(metadata_key='author_gender')
 
@@ -365,15 +377,16 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         >>> from pathlib import Path
         >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
-        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> metadata_csv = Path(TEST_DATA_DIR,
+        ...                    'instance_distance', 'instance_distance_metadata.csv')
         >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
         >>> analyzer.by_date()
         {1900: {<Female>: [1, 2, 3, 4], <Male>: []}, \
-1901: {<Female>: [], <Male>: [2, 3, 5, 7]}, \
-1910: {<Female>: [1, 2, 3, 4], <Male>: []}}
+        1901: {<Female>: [], <Male>: [2, 3, 5, 7]}, \
+        1910: {<Female>: [1, 2, 3, 4], <Male>: []}}
         >>> analyzer.by_date(time_frame=(1900, 1920), bin_size=10)
         {1900: {<Female>: [1, 2, 3, 4], <Male>: [2, 3, 5, 7]}, \
-1910: {<Female>: [1, 2, 3, 4], <Male>: []}}
+        1910: {<Female>: [1, 2, 3, 4], <Male>: []}}
         """
 
         if bin_size != 1 and time_frame is None:
@@ -415,18 +428,19 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         >>> from pathlib import Path
         >>> from gender_analysis.testing.common import TEST_DATA_DIR
         >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
-        >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
+        >>> metadata_csv = Path(TEST_DATA_DIR,
+        ...                    'instance_distance', 'instance_distance_metadata.csv')
         >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
         >>> analyzer.stats_by_date()
         {1900: \
-{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, \
-1901: \
-{<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, \
-<Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
-1910: \
-{<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
-<Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+        <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, \
+        1901: \
+        {<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, \
+        <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, \
+        1910: \
+        {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, \
+        <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
         """
         distances_by_bin = self.by_date(time_frame=time_frame, bin_size=bin_size)
         return _get_stats_from_distances_by_metadata_value(distances_by_bin)
