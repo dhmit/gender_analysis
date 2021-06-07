@@ -5,14 +5,13 @@ from more_itertools import windowed
 import nltk
 
 from gender_analysis.text.document import Document
-from gender_analysis.text.common import (
-    load_pickle, store_pickle, NLTK_TAGS, NLTK_TAGS_ADJECTIVES, SWORDS_ENG
-)
+from gender_analysis.text.common import NLTK_TAGS, NLTK_TAGS_ADJECTIVES, SWORDS_ENG
 
 from gender_analysis.gender.common import MALE, FEMALE, BINARY_GROUP
 from gender_analysis.gender.gender import Gender
 
 from gender_analysis.analysis.base_analyzers import CorpusAnalyzer
+from gender_analysis.analysis.common import compute_bin_year
 
 GenderTokenCounters = Dict[str, Counter]
 GenderTokenSequence = Dict[str, Sequence[Tuple[str, int]]]
@@ -355,16 +354,19 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
 
         # cached results
         self._by_gender = None
+        self._results = self._run_analysis()
 
+    def _run_analysis(self):
+        """
+        Runs _generate_gender_token_counters across each document in the corpus
+        """
         results = {}
-
         for document in self.corpus:
             results[document] = _generate_gender_token_counters(document,
-                                                                genders,
-                                                                tags,
-                                                                word_window=word_window)
-
-        self._results = results
+                                                                self.genders,
+                                                                self.tags,
+                                                                word_window=self.word_window)
+        return results
 
     @classmethod
     def list_nltk_tags(cls) -> None:
@@ -418,7 +420,7 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
             date = getattr(document, 'date', None)
             if date is None:
                 continue
-            bin_year = ((date - time_frame[0]) // bin_size) * bin_size + time_frame[0]
+            bin_year = compute_bin_year(date, time_frame[0], bin_size)
             if bin_year not in output:
                 continue
             for gender_label in self.gender_labels:
@@ -624,13 +626,4 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
         :param pickle_filepath: filepath to save the output.
         :return: None, saves results as pickled file with name 'gender_tokens_analysis'
         """
-
-        try:
-            load_pickle(pickle_filepath)
-            user_inp = input("results already stored. overwrite previous analysis? (y/n)")
-            if user_inp == 'y':
-                store_pickle(self, pickle_filepath)
-            else:
-                pass
-        except IOError:
-            store_pickle(self, pickle_filepath)
+        super().store(pickle_filepath=pickle_filepath)

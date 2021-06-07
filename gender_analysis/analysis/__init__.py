@@ -8,10 +8,10 @@ __all__ = [
     'base_analyzers',
 ]
 
+from .base_analyzers import CorpusAnalyzer
 from .dependency_parsing import *
 from .dunning import *
 from .frequency import GenderFrequencyAnalyzer
-from .instance_distance import *
+from .instance_distance import GenderDistanceAnalyzer
 from .metadata_visualizations import *
 from .proximity import GenderProximityAnalyzer
-from .base_analyzers import CorpusAnalyzer
