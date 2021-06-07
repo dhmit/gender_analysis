@@ -101,6 +101,22 @@ def _get_stats_from_distances(distance_results) -> DistanceStats:
     return stats
 
 
+def _get_stats_from_distances_by_metadata_value(
+    distances_by_metadata_value: Dict[any, GenderDistances]
+) -> Dict[any, GenderDistanceStats]:
+
+    stats_by_metadata_value = {
+        metadata_value: {} for metadata_value in distances_by_metadata_value
+    }
+    for metadata_value, distances_by_gender in distances_by_metadata_value.items():
+        for gender, distances in distances_by_gender.items():
+            stats_by_metadata_value[metadata_value][gender] = _get_stats_from_distances(distances)
+
+    return stats_by_metadata_value
+
+
+
+
 class GenderDistanceAnalyzer(CorpusAnalyzer):
     """
     The GenderDistanceAnalyzer finds the distance between occurances of sets of gendered
@@ -111,6 +127,9 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
     and result filters based on document-specific metadata including the gender of a document's
     author, where the document was written, and in which year the document was written.
 
+    In general, this analyzer class can return raw distance results,
+    or stats for that set of results.
+
     For a small dataset, like our instance_distance test corpus, the raw results are usable.
     Here we see that some of our documents have no masculine pronouns in them,
     and we can eyeball that feminine pronouns occur with less distance between them.
@@ -120,36 +139,35 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
     >>> data_dir = Path(TEST_DATA_DIR, 'instance_distance')
     >>> metadata_csv = Path(TEST_DATA_DIR, 'instance_distance', 'instance_distance_metadata.csv')
     >>> analyzer = GenderDistanceAnalyzer(file_path=data_dir, csv_path=metadata_csv)
-    >>> analyzer.get_results()
+    >>> analyzer.by_document()
     {<Document (instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}, <Document (instance_dist_masc)>: {<Female>: [], <Male>: [2, 3, 5, 7]}, <Document (words_instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}}
 
     We might want to aggregate these results across the whole corpus:
-    >>> analyzer.get_corpus_distances_by_gender()
+    >>> analyzer.corpus_results()
     {<Female>: [1, 1, 2, 2, 3, 3, 4, 4], <Male>: [2, 3, 5, 7]}
 
     Or take a look at corpus-wide statistics. Here we see what we suspected from the raw results:
     on average, feminine pronouns occur more densely in this corpus than masculine pronouns.
-    >>> analyzer.get_stats()
+    >>> analyzer.corpus_stats()
     {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}
 
-    We can also look at stats for every document:
-    >>> analyzer.get_stats_by_document()
-    {<Document (instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, <Document (instance_dist_masc)>: {<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, <Document (words_instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
+    We can also look at results or stats for every document:
+    >>> analyzer.by_document()
+    {<Document (instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}, <Document (instance_dist_masc)>: {<Female>: [], <Male>: [2, 3, 5, 7]}, <Document (words_instance_dist)>: {<Female>: [1, 2, 3, 4], <Male>: []}}
 
-    Or a particular document:
-    >>> analyzer.get_stats_by_document(analyzer.corpus.documents[0])
-    {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}
+    >>> analyzer.stats_by_document()
+    {<Document (instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}, <Document (instance_dist_masc)>: {<Female>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, <Document (words_instance_dist)>: {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
 
     You can filter on any Document metadata. Let's see if there are differences based on
     country of publication:
     analyzer.get_stats_by_metadata('country_publication')
 
     Or, for convenience, by the author's gender
-    >>> analyzer.get_stats_by_author_gender()
+    >>> analyzer.stats_by_author_gender()
     {'female': {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 4.0, 'mean': 4.25, 'min': 2, 'max': 7}}, 'male': {<Female>: {'median': 2.5, 'mean': 2.5, 'min': 1, 'max': 4}, <Male>: {'median': 0, 'mean': 0, 'min': 0, 'max': 0}}}
 
 
-    >>> analyzer.get_stats_by_date(time_frame=(1900, 1920), bin_size=10)
+    >>> analyzer.stats_by_date(time_frame=(1900, 1920), bin_size=10)
     """
 
     def __init__(self,
@@ -163,10 +181,10 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
 
         self._results = self.run_analysis()
 
-    def get_results(self):
-        return self._results
-
     def run_analysis(self) -> Dict[Document, GenderDistances]:
+        """
+        Basic analysis of this module: computes GenderDistances per document per gender
+        """
         results = {}
 
         for document in self.corpus:
@@ -177,8 +195,8 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
 
         return results
 
-    def get_stats(self) -> GenderDistanceStats:
-        corpus_distances_by_gender = self.get_corpus_distances_by_gender()
+    def corpus_stats(self) -> GenderDistanceStats:
+        corpus_distances_by_gender = self.corpus_results()
 
         corpus_stats = {}
         for gender, results_by_gender in corpus_distances_by_gender.items():
@@ -186,7 +204,7 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
 
         return corpus_stats
 
-    def get_corpus_distances_by_gender(self) -> GenderDistances:
+    def corpus_results(self) -> GenderDistances:
         corpus_distances_by_gender = {gender: [] for gender in self.genders}
 
         for document_results_by_gender in self._results.values():
@@ -198,43 +216,23 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
 
         return corpus_distances_by_gender
 
-    def get_stats_by_document(self,
-                              specific_document: Document = None
-                              ) -> Union[Dict[Document, GenderDistanceStats], GenderDistanceStats]:
+    def by_document(self):
+        return self._results
+
+    def stats_by_document(self) -> Dict[Document, GenderDistanceStats]:
         """
-        Computes GenderDistanceStats per document, or for a particular document in the corpus
+        Computes GenderDistanceStats per document
 
-        :param specific_document: optionally, a specific document to get stats for
-        :return: either a dict mapping Documents to GenderDistanceStats,
-                 or just GenderDistanceStats for a single Document
+        :return: dict mapping Documents to GenderDistanceStats
         """
-        results = {}
+        return _get_stats_from_distances_by_metadata_value(self._results)
 
-        for document in self.corpus:
-            document_stats = dict()
-
-            for gender in self.genders:
-                gender_results = words_instance_dist(document, gender.identifiers)
-                document_stats[gender] = _get_stats_from_distances(gender_results)
-
-            results[document] = document_stats
-
-        if specific_document:
-            return results[specific_document]
-        else:
-            return results
-
-    def get_distances_by_metadata(
-        self,
-        metadata_key: str,
-        filter_metadata_value: any = None,
-    ) -> Union[Dict[any, GenderDistances], GenderDistances]:
+    def by_metadata(self, metadata_key: str) -> Dict[any, GenderDistances]:
         """
         Return GenderDistances organized by the values of a column from the Document metadata.
         Optionally, returns a single GenderDistances for a specific lookup value in that column.
 
         :param metadata_key: a string corresponding to one of the columns in the input metadata csv.
-        :param filter_metadata_value: optionally, a particular value to filter for
 
         Returns a dictionary mapping authors' genders to GenderDistances for documents
         they wrote, or a single GenderDistances for a specified author gender.
@@ -257,57 +255,40 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
 
         return distances_by_metadata_value
 
-    def get_stats_by_metadata(
+    def stats_by_metadata(
         self,
         metadata_key: str,
-        filter_metadata_value: any = None,
-    ) -> Union[Dict[any, GenderDistanceStats], GenderDistanceStats]:
+    ) -> Dict[any, GenderDistanceStats]:
         """
         Return GenderDistanceStats organized by the values of a column from the Document metadata.
         Optionally, returns a single GenderDistanceStats for a specific lookup value in that column.
 
         :param metadata_key: a string corresponding to one of the columns in the input metadata csv.
-        :param filter_metadata_value: optionally, a particular value to filter for
 
         Returns a dictionary mapping authors' genders to GenderDistanceStats for documents
         they wrote, or a single GenderDistanceStats for a specified author gender.
         """
+        distances_by_metadata_value = self.by_metadata(metadata_key=metadata_key)
+        return _get_stats_from_distances_by_metadata_value(distances_by_metadata_value)
 
-        distances_by_metadata_value =\
-            self.get_distances_by_metadata(metadata_key=metadata_key,
-                                           filter_metadata_value=filter_metadata_value)
-
-        stats_by_metadata_value = {
-            metadata_value: {} for metadata_value in distances_by_metadata_value
-        }
-        for metadata_value, distances_by_gender in distances_by_metadata_value.items():
-            for gender, distances in distances_by_gender.items():
-                stats_by_metadata_value[metadata_value][gender] = _get_stats_from_distances(distances)
-
-        if filter_metadata_value:
-            return stats_by_metadata_value[filter_metadata_value]
-        else:
-            return stats_by_metadata_value
-
-    def get_stats_by_author_gender(
-        self,
-        specific_gender: Gender = None
-    ) -> Union[Dict[Gender, GenderDistanceStats], GenderDistanceStats]:
+    def by_author_gender(self) -> Dict[Gender, GenderDistances]:
         """
-        Returns a dictionary mapping authors' genders to GenderDistanceStats for documents
-        they wrote, or a single GenderDistanceStats for a specified author gender.
-
-        This is a convenience method wrapper for get_stats_by_metadata
+        Returns a dictionary mapping author_gender metadata to GenderDistances.
+        This is a convenience method wrapper for by_metadata.
         """
-        return self.get_stats_by_metadata(
-            metadata_key='author_gender',
-            filter_metadata_value=specific_gender,
-        )
+        return self.by_metadata(metadata_key='author_gender')
 
-    def get_stats_by_date(self,
-                          time_frame: Optional[Tuple[int, int]] = (-10000, 10000),
-                          bin_size: int = 1,
-                          ) -> Dict[int, GenderDistanceStats]:
+    def stats_by_author_gender(self) -> Dict[Gender, GenderDistanceStats]:
+        """
+        Returns a dictionary mapping author_gender metadata to GenderDistanceStats.
+        This is a convenience method wrapper for stats_by_metadata.
+        """
+        return self.stats_by_metadata(metadata_key='author_gender')
+
+    def by_date(self,
+                time_frame: Optional[Tuple[int, int]] = (-10000, 10000),
+                bin_size: int = 1,
+                ) -> Dict[int, GenderDistances]:
         """
         Organizes results by year.
         Optionally, can constrain those results to a given year range,
@@ -317,7 +298,7 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         # n.b. we implement everything with bin and time_frame, but the defaults are set
         # so that you get results by year
         start_year, end_year = time_frame
-        distances_by_year = self.get_distances_by_metadata('date')
+        distances_by_year = self.by_metadata('date')
 
         distances_by_bin = {
             bin_start_year: {
@@ -332,18 +313,15 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
                 for gender in self.genders:
                     distances_by_bin[bin_start_year][gender].extend(distances_by_gender[gender])
 
-        stats_by_bin = {
-            bin_start_year: {
-                gender: {} for gender in self.genders
-            }
-            for bin_start_year in range(start_year, end_year, bin_size)
-        }
+        return distances_by_bin
 
-        for bin_start_year, distances_by_gender in distances_by_bin.items():
-            for gender, distances in distances_by_gender.items():
-                stats_by_bin[bin_start_year][gender] = _get_stats_from_distances(distances)
+    def stats_by_date(self,
+                      time_frame: Optional[Tuple[int, int]] = (-10000, 10000),
+                      bin_size: int = 1,
+                      ) -> Dict[int, GenderDistanceStats]:
 
-        return stats_by_bin
+        distances_by_bin = self.by_date(time_frame=time_frame, bin_size=bin_size)
+        return _get_stats_from_distances_by_metadata_value(distances_by_bin)
 
     def store(self, pickle_filepath: str = 'gendered_token_distance_analysis.pgz') -> None:
         """
