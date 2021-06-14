@@ -316,10 +316,10 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
         analyses concerning the number of occurrences of specific words within a window of
         gendered pronouns.
 
-        GenderFrequencyAnalyzer is a subclass of BaseAnalyzer and so accepts additional arguments
+        GenderProximityAnalyzer is a subclass of CorpusAnalyzer and so accepts additional arguments
         from that class.
 
-        BaseAnalyzer params:
+        CorpusAnalyzer params:
         :param corpus: an optional instance of the Corpus class.
         :param file_path: a filepath to .txt files for creating a Corpus instance.
         :param csv_path: a filepath to a .csv file containing metadata for .txt files.

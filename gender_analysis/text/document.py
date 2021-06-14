@@ -131,7 +131,7 @@ class Document:
         return self.label
 
     def __repr__(self):
-        '''
+        """
         Overrides the built-in __repr__ method
         Returns the object type (Document) and then the filename without the extension
             in <>.
@@ -148,7 +148,7 @@ class Document:
         >>> austen = Document(document_metadata)
         >>> repr(austen)
         '<Document (austen_persuasion)>'
-        '''
+        """
         return f'<Document ({self.label})>'
 
     def __eq__(self, other):
