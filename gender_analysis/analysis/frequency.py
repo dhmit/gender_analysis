@@ -286,7 +286,7 @@ class GenderFrequencyAnalyzer(CorpusAnalyzer):
                          analysis with counts grouped by pronoun category ('subject' and 'object')
                          or summed, respectively.
         :return: a dictionary of gender-pronoun pairs with top-level keys corresponding to the
-                 values in the input Documents' 'date' metadatak key.
+                 values in the input Documents' 'date' metadata key.
         >>> from gender_analysis.testing.common import DOCUMENT_TEST_PATH, DOCUMENT_TEST_CSV
         >>> from gender_analysis.text.corpus import Corpus
         >>> analyzer = GenderFrequencyAnalyzer(file_path=DOCUMENT_TEST_PATH,
