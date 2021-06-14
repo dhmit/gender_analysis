@@ -20,7 +20,6 @@ class DistanceStats(TypedDict):
 GenderDistanceStats = Dict[Gender, DistanceStats]
 GenderDistances = Dict[Gender, List[int]]
 
-
 def instance_dist(document: Document, word: str):
     """
     Takes in a word and returns a list of distances between each instance of that word in
@@ -188,6 +187,9 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
 
         self._results = self._run_analysis()
 
+    def __str__(self):
+        return "This is the Gender Distance Analyzer used to find distance between occurrences of sets of gendered pronouns."
+
     def _run_analysis(self) -> Dict[Document, GenderDistances]:
         """
         Basic analysis of this module: computes GenderDistances per document per gender
@@ -201,6 +203,9 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
                 results[document][gender] = gender_results
 
         return results
+
+    def __str__(self):
+        return "This is DistanceStats class that is used to store statistics values for distances."
 
     def corpus_results(self) -> GenderDistances:
         """

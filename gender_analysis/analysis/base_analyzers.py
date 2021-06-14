@@ -35,37 +35,39 @@ class CorpusAnalyzer:
     >>> type(analyzer.corpus), len(analyzer.corpus)
     (<class 'gender_analysis.text.corpus.Corpus'>, 14)
     """
-
     def __init__(
-        self,
-        corpus: Optional[Corpus] = None,
-        file_path: str = None,
-        csv_path: str = None,
-        name: str = None,
-        pickle_path: str = None,
-        ignore_warnings: bool = False
-    ) -> None:
-        """
-        Initializes a CorpusAnalyzer.
-        Subclasses are expected to extend the initialization routine to perform any initial
-        analysis that can be run at init time and be cached for later access.
-        """
-        if corpus:
-            self.corpus = corpus
-        elif file_path:
-            # Create a new corpus
-            self.corpus = Corpus(
-                file_path,
-                csv_path=csv_path,
-                name=name,
-                pickle_on_load=pickle_path,
-                ignore_warnings=ignore_warnings,
-            )
-        else:
-            raise ValueError(
-                'You must initialize a CorpusAnalyzer with an existing corpus, '
-                'or with the file_path argument pointing to your data directory.'
-            )
+            self,
+            corpus: Optional[Corpus] = None,
+            file_path: str = None,
+            csv_path: str = None,
+            name: str = None,
+            pickle_path: str = None,
+            ignore_warnings: bool = False
+        ) -> None:
+            """
+            Initializes a CorpusAnalyzer.
+            Subclasses are expected to extend the initialization routine to perform any initial
+            analysis that can be run at init time and be cached for later access.
+            """
+            if corpus:
+                self.corpus = corpus
+            elif file_path:
+                # Create a new corpus
+                self.corpus = Corpus(
+                    file_path,
+                    csv_path=csv_path,
+                    name=name,
+                    pickle_on_load=pickle_path,
+                    ignore_warnings=ignore_warnings,
+                )
+            else:
+                raise ValueError(
+                    'You must initialize a CorpusAnalyzer with an existing corpus, '
+                    'or with the file_path argument pointing to your data directory.'
+                )
+
+    def __str__(self):
+        return "This is a base analyzer for basic Corpus analysis like getting word counts, etc."
 
     def get_word_counts(self, remove_swords: bool = False) -> Counter:
         """

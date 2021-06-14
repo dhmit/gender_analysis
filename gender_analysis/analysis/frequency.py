@@ -211,6 +211,9 @@ class GenderFrequencyAnalyzer(CorpusAnalyzer):
         self._results_by_frequencies_relative = relatives
         self._by_gender = None
 
+    def __str__(self):
+        return "This is the Gender Frequency Analyzer used to see the frequency of gendered pronouns."
+
     def _run_analysis(self):
         """
         A private helper method for running the primary analysis of GenderFrequencyAnalyzer.
