@@ -212,7 +212,7 @@ class GenderFrequencyAnalyzer(CorpusAnalyzer):
         self._by_gender = None
 
     def __str__(self):
-        return "This is the Gender Frequency Analyzer used to see the frequency of gendered pronouns."
+        return "This is the Gender Frequency Analyzer for gendered pronouns."
 
     def _run_analysis(self):
         """

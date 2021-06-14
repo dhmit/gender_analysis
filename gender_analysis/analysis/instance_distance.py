@@ -188,7 +188,7 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
         self._results = self._run_analysis()
 
     def __str__(self):
-        return "This is the Gender Distance Analyzer used to find distance between occurrences of sets of gendered pronouns."
+        return "This is the Gender Distance Analyzer for occurrences of sets of gendered pronouns."
 
     def _run_analysis(self) -> Dict[Document, GenderDistances]:
         """
@@ -203,9 +203,6 @@ class GenderDistanceAnalyzer(CorpusAnalyzer):
                 results[document][gender] = gender_results
 
         return results
-
-    def __str__(self):
-        return "This is DistanceStats class that is used to store statistics values for distances."
 
     def corpus_results(self) -> GenderDistances:
         """

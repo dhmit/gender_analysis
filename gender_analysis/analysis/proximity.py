@@ -357,7 +357,7 @@ class GenderProximityAnalyzer(CorpusAnalyzer):
         self._results = self._run_analysis()
 
     def __str__(self):
-        return "This is the Gender Proximity Analyzer used to check which words are correlated with different gendered word sets."
+        return "This is the Gender Proximity Analyzer for different gendered word sets."
 
     def _run_analysis(self):
         """
