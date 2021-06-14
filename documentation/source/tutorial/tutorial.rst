@@ -46,9 +46,9 @@ re-initialize our corpus with a second parameter, csv_path, that points to it:
     >>> len(meta_corpus)
     99
 
-Now that we have a Corpus initialized, let's take a look at some of the different functions the Toolkit can perform.
-Start by making a Document object for one novel from the collection, Bram Stoker's `Dracula`. We'll do that by using the
-:ref:`Corpus.get_document <get-document>` function, which fetches a single document using two parameters, ``metadata_field``
+Now that we have a ``Corpus`` initialized, let's take a look at some of the different functions the Toolkit can perform.
+Start by making a ``Document`` object for one novel from the collection, Bram Stoker's `Dracula`. We'll do that by using the
+:ref:`Corpus.get_document <get-document>` function, which fetches a single ``Document`` using two parameters, ``metadata_field``
 and ``field_argument``:
 
 .. code-block:: python
@@ -98,13 +98,13 @@ list of stopwords sourced from NLTK:
     >>> from gender_analysis.text.common import SWORDS_ENG as swords_eng
     >>> for word in list(sleep_associations):
     >>> 	if word in swords_eng:
-    >>>		del sleep_associations[word]
+    >>>		    del sleep_associations[word]
     >>> sleep_associations.most_common(10)
     [('well', 5), ('tonight', 3), ('without', 2), ('comes', 1), ('yesterday', 1), ('unwisely', 1), ('brings', 1), ('wind', 1), ('moaning', 1), ('began', 1)]
 
 The :ref:`get_word_windows <get-word-windows>` method is a more powerful version of ``words_associated`` that looks for
 ``window_size`` (in the example below, 4) words around the search term and returns a ``Counter``. Let’s look at the five
-most common words that appear around “sleep”
+most common words that appear around “sleep”:
 
 .. code-block:: python
 
@@ -118,7 +118,7 @@ And now we can write a loop that'll remove stopwords from our ``Counter``:
 
     >>> for word in list(sleep_windows):
     >>> 	if word in swords_eng:
-    >>>		del sleep_windows[word]
+    >>>		    del sleep_windows[word]
     >>> sleep_windows.most_common(10)
     [('go', 10), ('shall', 9), ('could', 9), ('tonight', 8), ('fear', 8), ('even', 7), ('still', 7), ('well', 6), ('though', 6), ('must', 6)]
 
@@ -126,7 +126,7 @@ Most of these make a lot of sense - "go" and "tonight," for example - but "fear"
 further analysis!
 
 The ``Document`` class also includes a part-of-speech tagger, :ref:`get_part_of_speech_tags <get-pos>`, which returns a
-list of tuples in the form ``(term, speech_tag)``. This function can take awhile, especially if you’re using it on more
+list of tuples in the form ``(term, speech_tag)``. This function can take a while, especially if you’re using it on more
 than one ``Document`` at a time. Let's do this and grab a random sentence from the results to see what it looks like.
 
 .. code-block:: python
@@ -138,7 +138,7 @@ than one ``Document`` at a time. Let's do this and grab a random sentence from t
 Of course, this is the **gender**\_analysis toolkit — so let’s do some gendered analysis!
 
 The Gender Analysis Toolkit uses a flexible object-oriented framework to represent genders as a collection of pronouns
-and other 'identifiers,' like character names. It comes pre-loaded with three Gender objects: ``MALE``, ``FEMALE``,
+and other 'identifiers,' like character names. It comes pre-loaded with three ``Gender`` objects: ``MALE``, ``FEMALE``,
 and ``NONBINARY``. Let's start by taking a look at those.
 
 .. code-block:: python
@@ -183,11 +183,11 @@ are disproportionately associated with a specific gender.
 
 
 The results here are ``(word, count)`` pairs, where the count is the number of times the word occurs near a given
-gender's pronoun minus the how often the word occurs near every other gender's pronoun. So, "dead," for example, occurs
+gender's pronoun minus the number of times the word occurs near every other gender's pronoun. So, "dead," for example, occurs
 17 times around female pronouns minus 7 times around male pronouns and 2 times around nonbinary pronouns (which, here,
 is a 'they/them' series) for a result of ``('dead', 8)``.
 
-The differences here is striking! Of the top 10 words predominantly associated with female pronouns, 7 of them are
+The differences here are striking! Of the top 10 words predominantly associated with female pronouns, 7 of them are
 somnolent and relate to either sleep, weakness, or death. Contrast that with the 'masculine' adjectives - "good,"
 "great," "strong," and "right" - and you have the beginnings of a hypothesis of the different kinds of scenarios in
 which Stoker puts his characters.
@@ -245,7 +245,7 @@ so let's give that a whirl.
 Analyzing a Corpus
 ******************
 
-Most of the analytic functions in the Gender Analysis toolkit operate on corpora as well as on ``Documents``. For
+Most of the analytic functions in the Gender Analysis toolkit operate on corpora as well as on ``Document``\ s. For
 example, we can run a full gendered adjective analysis on an entire corpus with the ``GenderProximityAnalyzer``,
 which takes as arguments a ``Corpus`` object or relevant filepaths and a list of ``Gender`` objects.
 For this example, let's use our small test corpus of 10 Documents. We'll not pass explicit ``Gender`` instances
@@ -259,10 +259,10 @@ which includes ``MALE`` and ``FEMALE``. We'll also allow the analyzer to default
     >>> analyzer = GenderProximityAnalyzer(file_path=TEST_CORPUS_PATH, csv_path=SMALL_TEST_CORPUS_CSV)
     >>> analyzer.by_document()
 
-The ``by_document`` methods returns a dictionary of result dictionaries, with one for each
-``Document`` input to the analyzer. It may take a little while to run. Each ``Document`` result contains one Dictionary
+The ``by_document`` method returns a dictionary of result dictionaries, with one for each
+``Document`` input to the analyzer. It may take a little while to run. Each ``Document`` result contains one dictionary
 for each ``Gender`` provided, with a list of adjectives and their frequencies across the ``Document``. We can access the
-values for any particular ``Document`` by using that ``Document`` .label (which is the same
+values for any particular ``Document`` by using that ``Document``'s ``.label`` property (which is the same
 as the filepath minus the extension) as a key in our result dictionary.
 
 However, we're now working at the ``Corpus`` level. Instead of looking at individual ``Document`` results, let's
@@ -300,7 +300,7 @@ Gender Frequencies Across Corpora
 Before we saw how to perform frequency analysis of genders across a single document, but these functions are available
 for corpora as well. Many of the functions that act on a corpus return a dictionary mapping each of the documents to
 their individual results, which allows users to examine the corpus results on a document-by-document level. These are
-stored with the ``Document`` instance's ``.label`` preoperty as keys to the dictionary.
+stored with the ``Document`` instance's ``.label`` property as keys to the dictionary.
 
 *****************************
 Defining Pronouns and Genders
@@ -479,11 +479,11 @@ understanding of our other analyses. We have the ability to visualize 3 main met
 - the publication countries
 - author genders
 
-If we want to visualize the author genders of the different ``Documents`` in the corpus, we can run
+If we want to visualize the author genders of the different ``Document``\ s in the corpus, we can run
 :ref:`plot_gender_breakdown <plot_gender_breakdown>` which has one required parameter, ``corpus``, which is the corpus
 that we want to visualize. We also have two optional parameters that allow us to specify an output directory and a
 special name to call the file. The default output directory will create a visualization directory in your current
-working directory, if one is not there already. The neat part of specifying the output directory is that you don’t have
+working directory if one is not there already. The neat part of specifying the output directory is that you don’t have
 to create it! All the directories that don’t exist yet will be created for you. The default name of the plot that will
 be saved is a descriptive name of what the plot represents + the name of the corpus used to create the plot.
 
