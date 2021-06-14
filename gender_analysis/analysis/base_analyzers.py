@@ -44,24 +44,24 @@ class CorpusAnalyzer:
             pickle_path: str = None,
             ignore_warnings: bool = False
         ) -> None:
-            """
-            Initializes a CorpusAnalyzer.
-            Subclasses are expected to extend the initialization routine to perform any initial
-            analysis that can be run at init time and be cached for later access.
-            """
-            if corpus:
-                self.corpus = corpus
-            elif file_path:
-                # Create a new corpus
-                self.corpus = Corpus(
+        """
+        Initializes a CorpusAnalyzer.
+        Subclasses are expected to extend the initialization routine to perform any initial
+        analysis that can be run at init time and be cached for later access.
+        """
+        if corpus:
+            self.corpus = corpus
+        elif file_path:
+            # Create a new corpus
+            self.corpus = Corpus(
                     file_path,
                     csv_path=csv_path,
                     name=name,
                     pickle_on_load=pickle_path,
                     ignore_warnings=ignore_warnings,
                 )
-            else:
-                raise ValueError(
+        else:
+            raise ValueError(
                     'You must initialize a CorpusAnalyzer with an existing corpus, '
                     'or with the file_path argument pointing to your data directory.'
                 )
