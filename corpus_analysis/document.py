@@ -12,6 +12,12 @@ from corpus_analysis import common
 # for character identification pipeline
 from corpus_analysis.character import HONORIFICS
 
+import spacy
+nlp = spacy.load('en_core_web_sm')
+
+# Add neural coref to SpaCy's pipe
+import neuralcoref
+neuralcoref.add_to_pipe(nlp)
 
 class Document:
     """
@@ -697,6 +703,121 @@ class Document:
     def filter_honr(name):
         name = name.split(' ')
         return [n for n in name if n not in HONORIFICS]
+
+    def coref_resolution(self, cutoff_num=20):
+        """Use Neuralcoref for getting coref clusters and remove 'extra' ones with no overlap with
+        char_list - a prep function for disamb
+        output: a cluster of dict type, mapping char_name to its mentions and (optional) pronouns"""
+        char_names = self.get_char_list(cutoff_num)
+        just_names = [name[0] for name in char_names]
+        doc = nlp(self.text)
+        coref_clusters = doc._.coref_clusters
+        condensed_clusters = {}
+        for clu in coref_clusters:
+            mentions_and_pronouns = clu.mentions
+            mentions_and_pronouns.append(clu.main)
+            if set(mentions_and_pronouns).intersection(set(just_names)): # get rid of extra clusters
+                condensed_clusters[clu.main] = mentions_and_pronouns
+        return condensed_clusters
+
+
+    def char_name_disambiguation(self, char_list):
+        """given a list of char names in a document, group them by potential nicknames
+        :param char_list: a list of character as well as their freq from get_char_list
+        :return: a list of list of character names and freq where the first one is the name,
+        followed by nicknames
+        >>> from corpus_analysis import document
+        >>> from pathlib import Path
+        >>> from gender_analysis import common
+        >>> document_metadata = {'author': 'Austen, Jane', 'title': 'Persuasion', 'date': '1818',
+        ...                      'filename': 'austen_persuasion.txt',
+        ...                      'filepath': Path(common.TEST_DATA_PATH, 'sample_novels',
+        ...                                       'texts', 'austen_persuasion.txt')}
+        >>> persuasion = document.Document(document_metadata)
+        >>> persuasion_chars = persuasion.get_char_list(20)
+        >>> disamb = persuasion.char_name_disambiguation(persuasion_chars)
+        >>> disamb
+        [[('Anne', 425)], [('Captain Wentworth', 119), ('Wentworth', 31)], [('Lady Russell', 116)], [('Charles', 115), ('Charles Hayter', 29)], [('Mary', 113)], [('Sir Walter', 95)], [('Elizabeth', 82)], [('Elliot', 76), ('Miss Elliot', 32)], [('Louisa', 66)], [('Henrietta', 65)], [('Mrs Musgrove', 40), ('Musgrove', 24)], [('Mrs Smith', 36)], [('Mrs Clay', 33)], [('Miss Elliot', 32)], [('Captain Benwick', 32), ('Benwick', 26)], [('Wentworth', 31)], [('Charles Hayter', 29)], [('Mrs Croft', 27)], [('Benwick', 26)], [('Musgrove', 24)], [('Uppercross', 23)], [('Lady Dalrymple', 22)]]
+        >>> len(disamb)
+        22
+        """
+        to_return = []
+        for i in range(len(char_list) - 1):
+            char_cluster = [char_list[i]]
+            for j in range(i + 1, len(char_list)):
+                if set(self.filter_honr(char_list[i][0])).intersection(
+                set(self.filter_honr(char_list[j][0]))):
+                    char_cluster.append(char_list[j])
+            to_return.append(char_cluster)
+        return to_return
+
+    def manual_disamb_pipeline(self,cutoff_num=10):
+        """creates a simple pipeline for human-computer interaction in a console-based environment
+        takes in the disambiguated results from char_name_disambiguation, enable users to manually
+        disamb, and output a json/txt/csv file
+        input format {ideal}: {
+                        char_list[0] : [(possible_match_1, probability_of_match_1), ...]
+                        char_list[1] : [(possible_match_1, probability_of_match_1), ...]
+                        ...
+                       }
+        ### Assume We don't have pronouns in the name clusters, only nicknames ###
+        """
+
+        # this is the ideal version
+        char_list = self.get_char_list(cutoff_num)
+        name_clusters = self.char_name_disambiguation(char_list)
+
+        # this is what I could do right now without the collective ideal version
+        # name_clusters = self.coref_resolution(cutoff_num)
+
+        print("Hello! Welcome to the Disambiguation Pipeline of {}".format(self.title))
+        print("{num} of characters names in total".format(num=len(name_clusters)))
+
+        resolved = {}
+
+        for name in name_clusters: # potential problem: too many name-mention pairs
+            resolved[name] = []
+            mentions = name_clusters[name] # assume no pronouns
+            for mention in mentions:
+                print('Potential Nickname: ', mention)
+                choice = input('Is {nickname} a nickname for '
+                               '{name}? y/n'.format(nickname=mention, name=name))
+                if choice == 'y':
+                    resolved[name].append(mention)
+                elif choice == 'n':
+                    pass
+                else:
+                    print('Invalid choice, please enter y/n')
+                    choice = input('Is {nickname} a nickname for '
+                                   '{name}? y/n'.format(nickname=mention, name=name))
+            print('{name} has the following nicknames: {mentions}'.format(name=name,mentions=mentions))
+            new_name_choice = input('Is there a nickname that we neglected? y/n')
+            if new_name_choice == 'y':
+                new_name = input('Please enter such a name: ')
+            print('Finished diambiguating {name}'.format(name=name))
+
+
+        # output to a file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def char_name_disambiguation(self, char_list):
         """given a list of char names in a document, group them by potential nicknames
