@@ -713,6 +713,8 @@ class Document:
         doc = nlp(self.text)
         coref_clusters = doc._.coref_clusters
         condensed_clusters = {}
+
+        # currently, this function doesn't quite work for it will only return empty clusters
         for clu in coref_clusters:
             mentions_and_pronouns = clu.mentions
             mentions_and_pronouns.append(clu.main)
@@ -741,6 +743,10 @@ class Document:
         >>> len(disamb)
         22
         """
+
+        # this function needs major reworks to take into the following into account:
+        # honorifics; substring comparison; some AI approach?; manual nickname database
+
         to_return = []
         for i in range(len(char_list) - 1):
             char_cluster = [char_list[i]]
