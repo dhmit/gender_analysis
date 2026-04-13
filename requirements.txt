@@ -13,4 +13,4 @@ requests
 seaborn
 scipy
 coverage==5.3
-pytest==6.0.2
+pytest==9.0.3
